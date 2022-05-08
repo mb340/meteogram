@@ -28,8 +28,11 @@ void Backend::writeCache(const QString &cacheContent, const QString &plasmoidId)
         outstream << cacheContent << endl;
     } else {
         qDebug() << "error opening file";
+        return;
     }
 
+    file.flush();
+    file.close();
     qDebug() << "backend: writing cache content finished";
 }
 
@@ -54,8 +57,10 @@ QString Backend::readCache(const QString &plasmoidId) {
         }
     } else {
         qDebug() << "error opening file";
+        return cacheContent;
     }
 
+    file.close();
     qDebug() << "backend: reading cache content finished";
 
     return cacheContent;
