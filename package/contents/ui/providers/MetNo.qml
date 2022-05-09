@@ -133,6 +133,23 @@ Item {
             return obj
         }
 
+        function appendObj(obj) {
+            if (!isObjectFilled(obj)) {
+                return false
+            }
+
+            for (var i = 0; i < 4; i++) {
+                if (('isPast'+i) in obj && obj['isPast'+i] === false) {
+                    continue
+                }
+                obj['temperature'+i] = NaN
+                obj['iconName'+i] = ""
+            }
+
+            nextDaysModel.append(obj)
+            return true
+        }
+
         nextDaysModel.clear()
         var readingsLength = (readingsArray.properties.timeseries.length) - 1
         var dateNow = UnitUtils.convertDate(new Date(), timezoneType)
@@ -156,9 +173,13 @@ Item {
             var temperature = reading.data.instant.details["air_temperature"]
 
             if (prevHour > hour) {
-                if (isObjectFilled(obj) && (nextDaysModel.count < 8)) {
-                    nextDaysModel.append(obj)
+                if (!appendObj(obj)) {
+                    print('Next days obj not appended to model')
                 }
+                if (nextDaysModel.count >= 8) {
+                    break;
+                }
+
                 obj = resetobj()
             }
             prevHour = hour
