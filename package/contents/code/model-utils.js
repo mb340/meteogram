@@ -20,7 +20,11 @@ function populateNextDaysObject(nextDaysObj) {
         var tempInfo = nextDaysObj.tempInfoArray[i]
         var hidden = false
         if (tempInfo === null) {
-            tempInfo = {}
+            tempInfo = {
+                temperature: NaN,
+                iconName: "",
+                isPast: true
+            }
             hidden = true
         }
         nextDaysObj['temperature' + i] = tempInfo.temperature
