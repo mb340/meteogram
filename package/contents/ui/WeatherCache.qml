@@ -31,10 +31,12 @@ Item {
         if (!cacheBackendFailedToInitialize) {
             dbgprint('initializing cacheBackend...')
             try {
-                cacheBackend = Qt.createQmlObject('import org.kde.private.weatherWidget 2.0 as WW; WW.Backend {}', weatherCache, 'cacheBackend')
+                cacheBackend = Qt.createQmlObject('import org.kde.private.weatherWidget2 2.0 as WW; WW.Backend {}', weatherCache, 'cacheBackend')
             } catch (e) {
                 print('cacheBackend failed to initialize')
+                print(e)
                 cacheBackendFailedToInitialize = true
+                return undefined
             }
             dbgprint('initializing cacheBackend...DONE ' + cacheBackend)
         }
