@@ -1,6 +1,7 @@
 import QtQuick 2.2
 import "../../code/model-utils.js" as ModelUtils
 import "../../code/data-loader.js" as DataLoader
+import "../../code/unit-utils.js" as UnitUtils
 import "../../code/db/timezoneData.js" as TZ
 
 
@@ -113,6 +114,10 @@ Item {
         return ISOdate.substr(0,10)
     }
 
+    function isObjectFilled(obj) {
+        return !obj.isPast0 || !obj.isPast1 || !obj.isPast2 || !obj.isPast3
+    }
+
     function updateNextDaysModel(readingsArray) {
 
         function resetobj() {
@@ -130,12 +135,16 @@ Item {
 
         nextDaysModel.clear()
         var readingsLength = (readingsArray.properties.timeseries.length) - 1
-        var dateNow = new Date()
+        var dateNow = UnitUtils.convertDate(new Date(), timezoneType)
         var obj = resetobj()
+        var prevHour = -1;
         for (var i = 0; i < readingsLength; i++) {
             var reading = readingsArray.properties.timeseries[i]
-            var readingDate = new Date(Date.parse(reading.time)).toLocaleDateString(locale, 'ddd d MMM')
-            var readingTime = formatTime(reading.time)
+            var date = UnitUtils.convertDate(new Date(Date.parse(reading.time)), timezoneType)
+            var readingDate = date.toLocaleDateString(locale, 'ddd d MMM')
+
+            var hour = date.getHours()
+
             if (reading.data.next_1_hours) {
                 var iconnumber = geticonNumber(reading.data.next_1_hours.summary.symbol_code)
             }
@@ -146,42 +155,54 @@ Item {
             }
             var temperature = reading.data.instant.details["air_temperature"]
 
-            if (readingTime === "00:00") {
-                if ( !(obj.isPast0 && obj.isPast1 && obj.isPast2 && obj.isPast3) && (nextDaysModel.count < 8)) {
-                nextDaysModel.append(obj) }
+            if (prevHour > hour) {
+                if (isObjectFilled(obj) && (nextDaysModel.count < 8)) {
+                    nextDaysModel.append(obj)
+                }
                 obj = resetobj()
-                obj.dayTitle = readingDate
+            }
+            prevHour = hour
+
+            if (!obj.dayTitle) {
+                if (dateNow.getDate() == date.getDate()) {
+                    obj.dayTitle = i18n('today')
+                } else {
+                    obj.dayTitle = readingDate
+                }
             }
 
-            if ((readingTime === "00:00") ||  (readingTime === "03:00")) {
+            // Match exact hour.
+            // Take the next closest if exact match isn't available.
+            if  (hour === 3 || (obj.isPast0 && 0 <= hour && hour <= 6)) {
                 obj.temperature0 = temperature
                 obj.iconName0 = iconnumber
                 obj.hidden0 = false
                 obj.isPast0 = false
+                continue;
             }
 
-            if  ((readingTime === "06:00") ||  (readingTime === "09:00")) {
+            if  (hour === 9 || (obj.isPast1 && 6 <= hour && hour <= 12)) {
                 obj.temperature1 = temperature
                 obj.iconName1 = iconnumber
                 obj.hidden1 = false
                 obj.isPast1 = false
+                continue;
             }
 
-            if  ((readingTime === "12:00") ||  (readingTime === "15:00")) {
+            if  (hour === 15 || (obj.isPast2 && 12 <= hour && hour <= 18)) {
                 obj.temperature2 = temperature
                 obj.iconName2 = iconnumber
                 obj.hidden2 = false
                 obj.isPast2 = false
+                continue;
             }
 
-            if  ((readingTime === "18:00") ||  (readingTime === "21:00")) {
+            if  (hour === 21 || (obj.isPast3 && 18 <= hour && hour <= 23)) {
                 obj.temperature3 = temperature
                 obj.iconName3 = iconnumber
                 obj.hidden3 = false
                 obj.isPast3 = false
-                if (! obj.dayTitle) {
-                    obj.dayTitle = readingDate
-                }
+                continue;
             }
         }
         main.nextDaysCount = nextDaysModel.count
