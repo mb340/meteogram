@@ -55,18 +55,8 @@ Item {
     property string creditLink
     property string creditLabel
 
-    property int reloadIntervalMin: plasmoid.configuration.reloadIntervalMin   // Download Attempt Frequency in minutes
-    property int reloadIntervalMs: reloadIntervalMin * 60 * 1000               // Download Attempt Frequency in milliseconds
-
-
-    property double lastloadingStartTime: 0       // Time download last attempted.
-    property double lastloadingSuccessTime: 0     // Time download last successful.
-    property double nextReload: 0                 // Time next download is due.
-
     property bool loadingData: false              // Download Attempt in progress Flag.
-    property int loadingDataTimeoutMs: 15000      // Download Timeout in ms.
     property var loadingXhrs: []                  // Array of Download Attempt Objects
-    property bool loadingError: false             // Whether the last Download Attempt was successful
     property bool imageLoadingError: true
     property bool alreadyLoadedFromCache: false
 
@@ -117,6 +107,10 @@ Item {
         id: providerCache
     }
 
+    ReloadTime {
+        id: reloadTime
+    }
+
     MetNo {
         id: metnoProvider
     }
@@ -143,7 +137,13 @@ Item {
         }
 
         updatingPaused = !updatingPaused
-        abortTooLongConnection(true)
+
+        if (updatingPaused) {
+            reloadTime.stop()
+        } else {
+            rearmTimer()
+        }
+
         plasmoid.setAction('toggleUpdatingPaused', updatingPaused ? i18n("Resume Updating") : i18n("Pause Updating"), updatingPaused ? 'media-playback-start' : 'media-playback-pause');
     }
 
@@ -209,7 +209,8 @@ Item {
         // fill xml cache xml
         var cacheContent = weatherCache.readCache()
         providerCache.initCache(cacheContent)
-        providerCache.init()
+
+        reloadTime.init()
 
         initialized = true
 
@@ -285,10 +286,20 @@ Item {
         reloadMeteogram()
     }
 
+    function clearLoadingXhrs() {
+        if (loadingXhrs) {
+            loadingXhrs.forEach(function (xhr) {
+                xhr.abort()
+            })
+            loadingXhrs = []
+        }
+
+        loadingData = false
+    }
+
     function dataLoadedFromInternet(contentToCache) {
         dbgprint("Data Loaded From Internet successfully.")
-        loadingData = false
-        nextReload=dateNow() + reloadIntervalMs
+        reloadTime.stopAbortTimer(cacheKey)
 
         providerCache.setContent(cacheKey, contentToCache)
         providerCache.printKeys()
@@ -296,17 +307,20 @@ Item {
         alreadyLoadedFromCache = false
         saveCache()
 
-        reloadMeteogram()
-        lastloadingSuccessTime=dateNow()
-        updateLastReloadedText()
+        reloadTime.setLastReloadedMs(cacheKey)
 
+        clearLoadingXhrs()
+
+        reloadMeteogram()
+        updateLastReloadedText()
         loadFromCache()
     }
 
     function reloadDataFailureCallback() {
         dbgprint("Failed to Load Data successfully.")
-        main.loadingData = false
-        handleLoadError()
+        clearLoadingXhrs()
+        reloadTime.setLoadingError(cacheKey, true)
+        loadFromCache(key)
     }
 
     function reloadData() {
@@ -314,17 +328,34 @@ Item {
 
         if (loadingData) {
             dbgprint('still loading')
-            return
+            return false
         }
 
         loadingData = true
-        lastloadingStartTime=dateNow()
-        loadingXhrs = currentProvider.loadDataFromInternet(dataLoadedFromInternet, reloadDataFailureCallback, { placeIdentifier: placeIdentifier, timezoneID: timezoneID })
+        reloadTime.stopAbortTimer(cacheKey)
+        reloadTime.setLoadingError(cacheKey, false)
 
+        var args = { placeIdentifier: placeIdentifier, timezoneID: timezoneID }
+        loadingXhrs = currentProvider.loadDataFromInternet(dataLoadedFromInternet, reloadDataFailureCallback, args)
+
+        reloadTime.startAbortTimer(cacheKey, () => reloadDataFailureCallback(cacheKey))
+        return true
     }
 
     function reloadMeteogram() {
         currentProvider.reloadMeteogramImage(placeIdentifier)
+    }
+
+    function rearmTimer() {
+        var t = reloadTime.getNextReloadTime(cacheKey) - (new Date()).getTime()
+        dbgprint("rearmTimer: t = " + t)
+        if (t > 0) {
+            reloadTime.stop()
+            reloadTime.start(t)
+        } else {
+            dbgprint("rearmTimer: try reload now")
+            reloadData()
+        }
     }
 
     function loadFromCache() {
@@ -343,21 +374,16 @@ Item {
             return false
         }
 
-        var content = providerCache.getContent(key)
+        var content = providerCache.getContent(cacheKey)
         var success = currentProvider.setWeatherContents(content)
         if (!success) {
             print('error: setting weather contents not successful')
             return false
         }
 
+        rearmTimer()
         alreadyLoadedFromCache = true
         return true
-    }
-
-    function handleLoadError() {
-        dbgprint('Error getting weather data. Scheduling data reload...')
-        nextReload = dateNow()
-        loadFromCache()
     }
 
     onInTrayActiveTimeoutSecChanged: {
@@ -368,11 +394,11 @@ Item {
     }
 
     function updateLastReloadedText() {
-      dbgprint("updateLastReloadedText: " + lastloadingSuccessTime)
-        if (lastloadingSuccessTime > 0) {
-            lastReloadedText = '⬇ ' + i18n("%1 ago", DataLoader.getLastReloadedTimeText(dateNow() - lastloadingSuccessTime))
-        }
-        plasmoid.status = DataLoader.getPlasmoidStatus(lastloadingSuccessTime, inTrayActiveTimeoutSec)
+        var lastReloadedMs = (new Date()).getTime() - reloadTime.getLastReloadedMs(cacheKey)
+        lastReloadedText = '⬇ ' + i18n('%1 ago',
+                            DataLoader.getLastReloadedTimeText(lastReloadedMs))
+        plasmoid.status = DataLoader.getPlasmoidStatus(lastReloadedMs,
+                                                       inTrayActiveTimeoutSec)
     }
 
     function updateAdditionalWeatherInfoText() {
@@ -457,39 +483,16 @@ Item {
             return
         }
 
-        reloadData()
-    }
+        var res = false
+        if (reloadTime.isReadyToReload(cacheKey)) {
+            dbgprint("tryReload: reloading key = " + cacheKey)
+            res = reloadData()
+        } else {
+            loadFromCache()
+        }
 
-    Timer {
-        interval: 10000
-        running: true
-        repeat: true
-        onTriggered: {
-            var now=dateNow()
-            dbgprint("*** Timer triggered")
-            dbgprint("*** loadingData Flag : " + loadingData)
-            dbgprint("*** Last Load Success: " + (lastloadingSuccessTime))
-            dbgprint("*** Next Load Due    : " + (nextReload))
-            dbgprint("*** Time Now         : " + now)
-            dbgprint("*** Next Load in     : " + Math.round((nextReload - now) / 1000) + " sec = "+ ((nextReload - now) / 60000).toFixed(2) + " min")
-
-            updateLastReloadedText()
-            if ((lastloadingSuccessTime===0) && (updatingPaused)) {
-              toggleUpdatingPaused()
-            }
-
-            if (loadingData) {
-                dbgprint("Timeout in:" + (lastloadingStartTime + loadingDataTimeoutMs - now))
-                if (now > (lastloadingStartTime + loadingDataTimeoutMs)) {
-                    console.log("Timed out downloading weather data - aborting attempt. Retrying in 60 seconds time.")
-                    abortTooLongConnection(true)
-                    nextReload=now + 60000
-                }
-            } else {
-              if (now > nextReload) {
-                tryReload()
-              }
-            }
+        if (!res) {
+            rearmTimer()
         }
     }
 
@@ -510,10 +513,6 @@ Item {
     }
 
     onTimezoneTypeChanged: {
-        if (lastloadingSuccessTime > 0) {
-            meteogramModelChanged = !meteogramModelChanged
-            updateAdditionalWeatherInfoText()
-        }
     }
 
     function dbgprint(msg) {
@@ -522,9 +521,4 @@ Item {
         }
         print('[weatherWidget] ' + msg)
     }
-
-  function dateNow() {
-    var now=new Date().getTime()
-    return now
-  }
 }
