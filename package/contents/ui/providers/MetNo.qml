@@ -14,6 +14,8 @@ Item {
 
     property bool weatherDataFlag: false
     property bool sunRiseSetFlag: false
+    property string weatherDataJson: ""
+    property string sunRiseDataJson: ""
 
     function getCreditLabel(placeIdentifier) {
         return i18n("Weather forecast data provided by The Norwegian Meteorological Institute.")
@@ -21,6 +23,40 @@ Item {
 
     function getCreditLink(placeIdentifier) {
         return urlPrefix + placeIdentifier
+    }
+
+    function setWeatherContents(cacheContent) {
+
+        var weatherData = cacheContent.weatherData
+        actualWeatherModel.clear()
+        var currentWeather = weatherData.properties.timeseries[0]
+        var futureWeather = weatherData.properties.timeseries[1]
+        var iconnumber = geticonNumber(currentWeather.data.next_1_hours.summary.symbol_code)
+        var wd = currentWeather.data.instant.details["wind_from_direction"]
+        var ws = currentWeather.data.instant.details["wind_speed"]
+        var ap = currentWeather.data.instant.details["air_pressure_at_sea_level"]
+        var hm = currentWeather.data.instant.details["relative_humidity"]
+        var cld = currentWeather.data.instant.details["cloud_area_fraction"]
+        actualWeatherModel.append({"temperature": currentWeather.data.instant.details["air_temperature"], "iconName": iconnumber, "windDirection": wd,"windSpeedMps": ws, "pressureHpa": ap, "humidity": hm, "cloudiness": cld})
+        additionalWeatherInfo.nearFutureWeather.temperature = futureWeather.data.instant.details["air_temperature"]
+        additionalWeatherInfo.nearFutureWeather.iconName = geticonNumber(futureWeather.data.next_1_hours.summary.symbol_code)
+        updateNextDaysModel(weatherData)
+        buildMetogramData(weatherData)
+
+
+        var sunRiseData = cacheContent.sunRiseData
+        if ((sunRiseData.location !== undefined)) {
+            additionalWeatherInfo.sunRiseTime = formatTime(sunRiseData.location.time[0].sunrise.time)
+            additionalWeatherInfo.sunSetTime = formatTime(sunRiseData.location.time[0].sunset.time)
+        }
+        if ((sunRiseData.results !== undefined)) {
+            additionalWeatherInfo.sunRiseTime = formatTime(sunRiseData.results.sunrise)
+            additionalWeatherInfo.sunSetTime = formatTime(sunRiseData.results.sunset)
+        }
+
+        updateAdditionalWeatherInfoText()
+
+        return true
     }
 
     function parseISOString(s) {
@@ -31,6 +67,7 @@ Item {
     function buildMetogramData(readingsArray) {
         meteogramModel.clear()
         var readingsLength = (readingsArray.properties.timeseries.length)
+        var dateNow = new Date()
         var dateFrom = parseISOString(readingsArray.properties.timeseries[0].time)
         var precipitation_unit = readingsArray.properties.meta.units["precipitation_amount"]
         var counter = 0
@@ -38,6 +75,11 @@ Item {
         while (readingsArray.properties.timeseries[i].data.next_1_hours) {
             var obj = readingsArray.properties.timeseries[i]
             var dateTo = parseISOString(obj.time)
+            if (dateTo < dateNow) {
+                dateFrom = dateTo
+                i++
+                continue
+            }
             var wd = obj.data.instant.details["wind_from_direction"]
             var ws = obj.data.instant.details["wind_speed"]
             var ap = obj.data.instant.details["air_pressure_at_sea_level"]
@@ -69,10 +111,6 @@ Item {
 
     function formatDate(ISOdate) {
         return ISOdate.substr(0,10)
-    }
-
-    function composeNextDayTitle(date) {
-        return Qt.locale().dayName(date.getDay(), Locale.ShortFormat) + ' ' + date.getDate() + '/' + (date.getMonth() + 1)
     }
 
     function updateNextDaysModel(readingsArray) {
@@ -173,22 +211,17 @@ Item {
     function loadDataFromInternet(successCallback, failureCallback, locationObject) {
         var placeIdentifier = locationObject.placeIdentifier
 
+        function loadCompleted() {
+            var cacheContent = {}
+            cacheContent["weatherData"] = JSON.parse(weatherDataJson)
+            cacheContent["sunRiseData"] = JSON.parse(sunRiseDataJson)
+            weatherDataJson = ""
+            sunRiseDataJson = ""
+            successCallback(cacheContent)
+        }
+
         function successWeather(jsonString) {
-            var readingsArray = JSON.parse(jsonString)
-            actualWeatherModel.clear()
-            var currentWeather = readingsArray.properties.timeseries[0]
-            var futureWeather = readingsArray.properties.timeseries[1]
-            var iconnumber = geticonNumber(currentWeather.data.next_1_hours.summary.symbol_code)
-            var wd = currentWeather.data.instant.details["wind_from_direction"]
-            var ws = currentWeather.data.instant.details["wind_speed"]
-            var ap = currentWeather.data.instant.details["air_pressure_at_sea_level"]
-            var hm = currentWeather.data.instant.details["relative_humidity"]
-            var cld = currentWeather.data.instant.details["cloud_area_fraction"]
-            actualWeatherModel.append({"temperature": currentWeather.data.instant.details["air_temperature"], "iconName": iconnumber, "windDirection": wd,"windSpeedMps": ws, "pressureHpa": ap, "humidity": hm, "cloudiness": cld})
-            additionalWeatherInfo.nearFutureWeather.temperature = futureWeather.data.instant.details["air_temperature"]
-            additionalWeatherInfo.nearFutureWeather.iconName = geticonNumber(futureWeather.data.next_1_hours.summary.symbol_code)
-            updateNextDaysModel(readingsArray)
-            buildMetogramData(readingsArray)
+            weatherDataJson = jsonString
             weatherDataFlag = true
             if ((weatherDataFlag) && (sunRiseSetFlag)) {
                 loadCompleted()
@@ -196,17 +229,8 @@ Item {
         }
 
         function successSRAS(jsonString) {
-            var readingsArray = JSON.parse(jsonString)
-            if ((readingsArray.location !== undefined)) {
-              additionalWeatherInfo.sunRiseTime = formatTime(readingsArray.location.time[0].sunrise.time)
-              additionalWeatherInfo.sunSetTime = formatTime(readingsArray.location.time[0].sunset.time)
-            }
-            if ((readingsArray.results !== undefined)) {
-              additionalWeatherInfo.sunRiseTime = formatTime(readingsArray.results.sunrise)
-              additionalWeatherInfo.sunSetTime = formatTime(readingsArray.results.sunset)
-            }
+            sunRiseDataJson = jsonString
             sunRiseSetFlag = true
-
             if ((weatherDataFlag) && (sunRiseSetFlag)) {
                 loadCompleted()
             }
@@ -214,11 +238,8 @@ Item {
 
         function failureCallback() {
             dbgprint("DOH!")
-        }
-
-        function loadCompleted() {
-            refreshTooltipSubText()
-            successCallback()
+            weatherDataJson = ""
+            sunRiseDataJson = ""
         }
 
         weatherDataFlag = false
