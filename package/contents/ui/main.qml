@@ -33,7 +33,6 @@ Item {
     property string cacheKey
     property int timezoneID
     property string timezoneShortName
-    property var cacheMap: {}
     property bool renderMeteogram: plasmoid.configuration.renderMeteogram
     property int temperatureType: plasmoid.configuration.temperatureType
     property int pressureType: plasmoid.configuration.pressureType
@@ -112,6 +111,10 @@ Item {
         source: '../fonts/weathericons-regular-webfont-2.0.10.ttf'
     }
 
+    ProviderCache {
+        id: providerCache
+    }
+
     MetNo {
         id: metnoProvider
     }
@@ -143,6 +146,10 @@ Item {
         cacheId: plasmoidCacheId
     }
 
+    function saveCache() {
+        var s = JSON.stringify(providerCache.cacheMap)
+        weatherCache.writeCache(s)
+    }
 
     Component.onCompleted: {
         if (plasmoid.configuration.firstRun) {
@@ -193,23 +200,12 @@ Item {
         // init contextMenu
         action_toggleUpdatingPaused()
 
-        var cacheContent = weatherCache.readCache()
-
         // fill xml cache xml
-        if (cacheContent) {
-            try {
-                cacheMap = JSON.parse(cacheContent)
-                dbgprint('cacheMap initialized - keys:')
-                for (var key in cacheMap) {
-                    dbgprint('  ' + key + ', data: ' + cacheMap[key])
-                }
-            } catch (error) {
-                dbgprint('error parsing cacheContent')
-            }
-        }
-        cacheMap = cacheMap || {}
+        var cacheContent = weatherCache.readCache()
+        providerCache.initCache(cacheContent)
+        providerCache.init()
 
-// set initial place
+        // set initial place
         setNextPlace(true)
     }
 
@@ -282,14 +278,12 @@ Item {
         dbgprint("Data Loaded From Internet successfully.")
         loadingData = false
         nextReload=dateNow() + reloadIntervalMs
-        dbgprint('saving cacheKey = ' + cacheKey)
-        cacheMap[cacheKey] = contentToCache
-        dbgprint('cacheMap now has these keys:')
-        for (var key in cacheMap) {
-            dbgprint('  ' + key)
-        }
+
+        providerCache.setContent(cacheKey, contentToCache)
+        providerCache.printKeys()
+
         alreadyLoadedFromCache = false
-        weatherCache.writeCache(JSON.stringify(cacheMap))
+        saveCache()
 
         reloadMeteogram()
         lastloadingSuccessTime=dateNow()
@@ -333,12 +327,13 @@ Item {
         creditLink = currentProvider.getCreditLink(placeIdentifier)
         creditLabel = currentProvider.getCreditLabel(placeIdentifier)
 
-        if (!cacheMap || !cacheMap[cacheKey]) {
+        if (!providerCache.hasKey(cacheKey)) {
             dbgprint('cache not available')
             return false
         }
 
-        var success = currentProvider.setWeatherContents(cacheMap[cacheKey])
+        var content = providerCache.getContent(key)
+        var success = currentProvider.setWeatherContents(content)
         if (!success) {
             dbgprint('setting weather contents not successful')
             return false
