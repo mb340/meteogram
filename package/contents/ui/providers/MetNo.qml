@@ -94,7 +94,7 @@ Item {
                 temperature: airtmp,
                 precipitationAvg: prec,
                 precipitationMax: prec,
-                precipitationLabel: (counter === 1) ? "mm" : "",
+                precipitationLabel: precipitation_unit,
                 windDirection: parseFloat(wd),
                 windSpeedMps: parseFloat(ws),
                 pressureHpa: parseFloat(ap),
