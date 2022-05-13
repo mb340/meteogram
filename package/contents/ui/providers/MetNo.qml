@@ -23,6 +23,153 @@ Item {
         return urlPrefix + placeIdentifier
     }
 
+    function parseISOString(s) {
+        var b = s.split(/\D+/)
+        return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]))
+    }
+
+    function buildMetogramData(readingsArray) {
+        meteogramModel.clear()
+        var readingsLength = (readingsArray.properties.timeseries.length)
+        var dateFrom = parseISOString(readingsArray.properties.timeseries[0].time)
+        var precipitation_unit = readingsArray.properties.meta.units["precipitation_amount"]
+        var counter = 0
+        var i = 1
+        while (readingsArray.properties.timeseries[i].data.next_1_hours) {
+            var obj = readingsArray.properties.timeseries[i]
+            var dateTo = parseISOString(obj.time)
+            var wd = obj.data.instant.details["wind_from_direction"]
+            var ws = obj.data.instant.details["wind_speed"]
+            var ap = obj.data.instant.details["air_pressure_at_sea_level"]
+            var airtmp = parseFloat(obj.data.instant.details["air_temperature"])
+            var icon = obj.data.next_1_hours.summary["symbol_code"]
+            var prec = obj.data.next_1_hours.details["precipitation_amount"]
+            counter = (prec > 0) ? counter + 1 : 0
+            meteogramModel.append({
+                from: dateFrom,
+                to: dateTo,
+                temperature: airtmp,
+                precipitationAvg: prec,
+                precipitationMax: prec,
+                precipitationLabel: (counter === 1) ? "mm" : "",
+                windDirection: parseFloat(wd),
+                windSpeedMps: parseFloat(ws),
+                pressureHpa: parseFloat(ap),
+                iconName: geticonNumber(icon)
+            })
+            dateFrom = dateTo
+            i++
+        }
+        main.meteogramModelChanged = !main.meteogramModelChanged
+    }
+
+    function formatTime(ISOdate) {
+        return ISOdate.substr(11,5)
+    }
+
+    function formatDate(ISOdate) {
+        return ISOdate.substr(0,10)
+    }
+
+    function composeNextDayTitle(date) {
+        return Qt.locale().dayName(date.getDay(), Locale.ShortFormat) + ' ' + date.getDate() + '/' + (date.getMonth() + 1)
+    }
+
+    function updateNextDaysModel(readingsArray) {
+
+        function resetobj() {
+            var obj = {}
+            obj.hidden0 = true
+            obj.isPast0 = true
+            obj.hidden1 = true
+            obj.isPast1 = true
+            obj.hidden2 = true
+            obj.isPast2 = true
+            obj.hidden3 = true
+            obj.isPast3 = true
+            return obj
+        }
+
+        nextDaysModel.clear()
+        var readingsLength = (readingsArray.properties.timeseries.length) - 1
+        var dateNow = new Date()
+        var obj = resetobj()
+        for (var i = 0; i < readingsLength; i++) {
+            var reading = readingsArray.properties.timeseries[i]
+            var readingDate = new Date(Date.parse(reading.time)).toLocaleDateString(locale, 'ddd d MMM')
+            var readingTime = formatTime(reading.time)
+            if (reading.data.next_1_hours) {
+                var iconnumber = geticonNumber(reading.data.next_1_hours.summary.symbol_code)
+            }
+            else if (reading.data.next_6_hours) {
+                var iconnumber = geticonNumber(reading.data.next_6_hours.summary.symbol_code)
+            } else {
+              var iconnumber = undefined
+            }
+            var temperature = reading.data.instant.details["air_temperature"]
+
+            if (readingTime === "00:00") {
+                if ( !(obj.isPast0 && obj.isPast1 && obj.isPast2 && obj.isPast3) && (nextDaysModel.count < 8)) {
+                nextDaysModel.append(obj) }
+                obj = resetobj()
+                obj.dayTitle = readingDate
+            }
+
+            if ((readingTime === "00:00") ||  (readingTime === "03:00")) {
+                obj.temperature0 = temperature
+                obj.iconName0 = iconnumber
+                obj.hidden0 = false
+                obj.isPast0 = false
+            }
+
+            if  ((readingTime === "06:00") ||  (readingTime === "09:00")) {
+                obj.temperature1 = temperature
+                obj.iconName1 = iconnumber
+                obj.hidden1 = false
+                obj.isPast1 = false
+            }
+
+            if  ((readingTime === "12:00") ||  (readingTime === "15:00")) {
+                obj.temperature2 = temperature
+                obj.iconName2 = iconnumber
+                obj.hidden2 = false
+                obj.isPast2 = false
+            }
+
+            if  ((readingTime === "18:00") ||  (readingTime === "21:00")) {
+                obj.temperature3 = temperature
+                obj.iconName3 = iconnumber
+                obj.hidden3 = false
+                obj.isPast3 = false
+                if (! obj.dayTitle) {
+                    obj.dayTitle = readingDate
+                }
+            }
+        }
+        main.nextDaysCount = nextDaysModel.count
+    }
+
+    function calculateOffset(seconds) {
+      let hrs = String("0" + Math.floor(Math.abs(seconds) / 3600)).slice(-2)
+      let mins = String("0" + (seconds % 3600)).slice(-2)
+      let sign = (seconds >= 0) ? "+" : "-"
+      return(sign + hrs + ":" + mins)
+    }
+
+    function isDST(DSTPeriods) {
+      if(DSTPeriods === undefined)
+        return (false)
+
+      let now = new Date().getTime() / 1000
+      let isDSTflag = false
+      for (let f = 0; f < DSTPeriods.length; f++) {
+        if ((now >= DSTPeriods[f].DSTStart) && (now <= DSTPeriods[f].DSTEnd)) {
+          isDSTflag = true
+        }
+      }
+      return(isDSTflag)
+    }
+
     function loadDataFromInternet(successCallback, failureCallback, locationObject) {
         var placeIdentifier = locationObject.placeIdentifier
 
@@ -46,132 +193,6 @@ Item {
             if ((weatherDataFlag) && (sunRiseSetFlag)) {
                 loadCompleted()
             }
-        }
-
-        function parseISOString(s) {
-            var b = s.split(/\D+/)
-            return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]))
-        }
-
-        function buildMetogramData(readingsArray) {
-            meteogramModel.clear()
-            var readingsLength = (readingsArray.properties.timeseries.length)
-            var dateFrom = parseISOString(readingsArray.properties.timeseries[0].time)
-            var precipitation_unit = readingsArray.properties.meta.units["precipitation_amount"]
-            var counter = 0
-            var i = 1
-            while (readingsArray.properties.timeseries[i].data.next_1_hours) {
-                var obj = readingsArray.properties.timeseries[i]
-                var dateTo = parseISOString(obj.time)
-                var wd = obj.data.instant.details["wind_from_direction"]
-                var ws = obj.data.instant.details["wind_speed"]
-                var ap = obj.data.instant.details["air_pressure_at_sea_level"]
-                var airtmp = parseFloat(obj.data.instant.details["air_temperature"])
-                var icon = obj.data.next_1_hours.summary["symbol_code"]
-                var prec = obj.data.next_1_hours.details["precipitation_amount"]
-                counter = (prec > 0) ? counter + 1 : 0
-                meteogramModel.append({
-                    from: dateFrom,
-                    to: dateTo,
-                    temperature: airtmp,
-                    precipitationAvg: prec,
-                    precipitationMax: prec,
-                    precipitationLabel: (counter === 1) ? "mm" : "",
-                    windDirection: parseFloat(wd),
-                    windSpeedMps: parseFloat(ws),
-                    pressureHpa: parseFloat(ap),
-                    iconName: geticonNumber(icon)
-                })
-                dateFrom = dateTo
-                i++
-            }
-            main.meteogramModelChanged = !main.meteogramModelChanged
-        }
-
-        function formatTime(ISOdate) {
-            return ISOdate.substr(11,5)
-        }
-
-        function formatDate(ISOdate) {
-            return ISOdate.substr(0,10)
-        }
-
-        function composeNextDayTitle(date) {
-            return Qt.locale().dayName(date.getDay(), Locale.ShortFormat) + ' ' + date.getDate() + '/' + (date.getMonth() + 1)
-        }
-
-        function updateNextDaysModel(readingsArray) {
-
-            function resetobj() {
-                var obj = {}
-                obj.hidden0 = true
-                obj.isPast0 = true
-                obj.hidden1 = true
-                obj.isPast1 = true
-                obj.hidden2 = true
-                obj.isPast2 = true
-                obj.hidden3 = true
-                obj.isPast3 = true
-                return obj
-            }
-
-            nextDaysModel.clear()
-            var readingsLength = (readingsArray.properties.timeseries.length) - 1
-            var dateNow = new Date()
-            var obj = resetobj()
-            for (var i = 0; i < readingsLength; i++) {
-                var reading = readingsArray.properties.timeseries[i]
-                var readingDate = new Date(Date.parse(reading.time)).toLocaleDateString(locale, 'ddd d MMM')
-                var readingTime = formatTime(reading.time)
-                if (reading.data.next_1_hours) {
-                    var iconnumber = geticonNumber(reading.data.next_1_hours.summary.symbol_code)
-                }
-                else if (reading.data.next_6_hours) {
-                    var iconnumber = geticonNumber(reading.data.next_6_hours.summary.symbol_code)
-                } else {
-                  var iconnumber = undefined
-                }
-                var temperature = reading.data.instant.details["air_temperature"]
-
-                if (readingTime === "00:00") {
-                    if ( !(obj.isPast0 && obj.isPast1 && obj.isPast2 && obj.isPast3) && (nextDaysModel.count < 8)) {
-                    nextDaysModel.append(obj) }
-                    obj = resetobj()
-                    obj.dayTitle = readingDate
-                }
-
-                if ((readingTime === "00:00") ||  (readingTime === "03:00")) {
-                    obj.temperature0 = temperature
-                    obj.iconName0 = iconnumber
-                    obj.hidden0 = false
-                    obj.isPast0 = false
-                }
-
-                if  ((readingTime === "06:00") ||  (readingTime === "09:00")) {
-                    obj.temperature1 = temperature
-                    obj.iconName1 = iconnumber
-                    obj.hidden1 = false
-                    obj.isPast1 = false
-                }
-
-                if  ((readingTime === "12:00") ||  (readingTime === "15:00")) {
-                    obj.temperature2 = temperature
-                    obj.iconName2 = iconnumber
-                    obj.hidden2 = false
-                    obj.isPast2 = false
-                }
-
-                if  ((readingTime === "18:00") ||  (readingTime === "21:00")) {
-                    obj.temperature3 = temperature
-                    obj.iconName3 = iconnumber
-                    obj.hidden3 = false
-                    obj.isPast3 = false
-                    if (! obj.dayTitle) {
-                        obj.dayTitle = readingDate
-                    }
-                }
-            }
-            main.nextDaysCount = nextDaysModel.count
         }
 
         function successSRAS(jsonString) {
@@ -198,27 +219,6 @@ Item {
         function loadCompleted() {
             refreshTooltipSubText()
             successCallback()
-        }
-
-        function calculateOffset(seconds) {
-          let hrs = String("0" + Math.floor(Math.abs(seconds) / 3600)).slice(-2)
-          let mins = String("0" + (seconds % 3600)).slice(-2)
-          let sign = (seconds >= 0) ? "+" : "-"
-          return(sign + hrs + ":" + mins)
-        }
-
-        function isDST(DSTPeriods) {
-          if(DSTPeriods === undefined)
-            return (false)
-
-          let now = new Date().getTime() / 1000
-          let isDSTflag = false
-          for (let f = 0; f < DSTPeriods.length; f++) {
-            if ((now >= DSTPeriods[f].DSTStart) && (now <= DSTPeriods[f].DSTEnd)) {
-              isDSTflag = true
-            }
-          }
-          return(isDSTflag)
         }
 
         weatherDataFlag = false
