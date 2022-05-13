@@ -28,6 +28,8 @@ import "providers"
 Item {
     id: main
 
+    property bool initialized: false
+
     property string placeIdentifier
     property string placeAlias
     property string cacheKey
@@ -136,6 +138,10 @@ Item {
     }
 
     function action_toggleUpdatingPaused() {
+        if (!initialized) {
+            return
+        }
+
         updatingPaused = !updatingPaused
         abortTooLongConnection(true)
         plasmoid.setAction('toggleUpdatingPaused', updatingPaused ? i18n("Resume Updating") : i18n("Pause Updating"), updatingPaused ? 'media-playback-start' : 'media-playback-pause');
@@ -205,11 +211,16 @@ Item {
         providerCache.initCache(cacheContent)
         providerCache.init()
 
+        initialized = true
+
         // set initial place
         setNextPlace(true)
     }
 
     onPlacesJsonStrChanged: {
+        if (!initialized) {
+            return
+        }
         if (placesJsonStr === '') {
             return
         }
