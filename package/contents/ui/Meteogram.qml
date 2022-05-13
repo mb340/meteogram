@@ -544,6 +544,7 @@ Item {
             var airtmp = parseFloat(obj.temperature)
             var icon = obj.iconName
             var prec = obj.precipitationAvg
+            var preclabel = obj.precipitationLabel
 
             for (var j = 0; j < differenceHours; j++) {
                 counter = (prec > 0) ? counter + 1 : 0
@@ -554,7 +555,7 @@ Item {
                                       iconName: j === differenceHoursMid ? icon : '',
                                       temperature: airtmp,
                                       precipitationAvg: parseFloat(prec / differenceHours).toFixed(1),
-                                      precipitationLabel: (counter === 1) ? "mm" : "",
+                                      precipitationLabel: (counter === 1) ? preclabel : "",
                                       precipitationMax: parseFloat(prec / differenceHours).toFixed(1),
                                       canShowDay: true,
                                       canShowPrec: true,
