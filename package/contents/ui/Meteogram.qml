@@ -357,12 +357,11 @@ Item {
                 }
                 text: localisePrecipitationUnit(precipitationLabel)
                 width: parent.width
-                //                verticalAlignment: Text.AlignTop
+                verticalAlignment: Text.AlignBottom
                 //                horizontalAlignment: Text.AlignHCenter
                 anchors.left: verticalLine.left
-                anchors.bottom: verticalLine.bottom
+                anchors.bottom: hourText.top
                 //                anchors.bottom: verticalLine.bottom
-                anchors.bottomMargin: -precipitationLabelMargin
                 //                anchors.horizontalCenter: precipitationMaxRect.horizontalCenter
                 font.pixelSize: precipitationFontPixelSize
                 font.pointSize: -1
