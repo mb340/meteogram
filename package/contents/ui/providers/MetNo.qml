@@ -15,6 +15,7 @@ Item {
 
     property bool weatherDataFlag: false
     property bool sunRiseSetFlag: false
+    property bool weatherDataFailFlag: false
     property string weatherDataJson: ""
     property string sunRiseDataJson: ""
 
@@ -278,14 +279,19 @@ Item {
             }
         }
 
-        function failureCallback() {
+        function failureCb() {
             dbgprint("DOH!")
             weatherDataJson = ""
             sunRiseDataJson = ""
+            if (!weatherDataFailFlag) {
+                weatherDataFailFlag = true
+                failureCallback(cacheKey)
+            }
         }
 
         weatherDataFlag = false
         sunRiseSetFlag = false
+        weatherDataFailFlag = false
         var TZURL = ""
 
         if (locationObject.timezoneID === -1) {
@@ -307,8 +313,8 @@ Item {
         }
         console.log(TZURL)
 
-        var xhr1 = DataLoader.fetchJsonFromInternet(urlPrefix + placeIdentifier, successWeather, failureCallback)
-        var xhr2 = DataLoader.fetchJsonFromInternet(TZURL, successSRAS, failureCallback)
+        var xhr1 = DataLoader.fetchJsonFromInternet(urlPrefix + placeIdentifier, successWeather, failureCb)
+        var xhr2 = DataLoader.fetchJsonFromInternet(TZURL, successSRAS, failureCb)
 //         var xhr1 = DataLoader.fetchJsonFromInternet('http://localhost/weather.json', successWeather, failureCallback)
 //         var xhr2 = DataLoader.fetchJsonFromInternet('http://localhost/sunrisesunset.json?' + TZURL, successSRAS, failureCallback)
         return [xhr1, xhr2]
