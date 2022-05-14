@@ -262,7 +262,7 @@ Item {
             function precipitationFormat(precFloat) {
                 if (precFloat >= 0.1) {
                     var result = Math.round(precFloat * 10) / 10
-                    return String(result)
+                    return result.toFixed(1)
                 }
                 return ''
             }
@@ -543,7 +543,7 @@ Item {
             var ap = obj.pressureHpa
             var airtmp = parseFloat(obj.temperature)
             var icon = obj.iconName
-            var prec = parseFloat(obj.precipitationAvg / differenceHours).toFixed(1)
+            var prec = parseFloat(obj.precipitationAvg) / differenceHours
             var preclabel = obj.precipitationLabel
 
             for (var j = 0; j < differenceHours; j++) {
