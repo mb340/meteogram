@@ -542,6 +542,7 @@ Item {
      */
     function loadDataFromInternet(successCallback, failureCallback, locationObject) {
         var placeIdentifier = locationObject.placeIdentifier
+        var cacheKey = locationObject.cacheKey
 
         var loadedCounter = 0
 
@@ -555,7 +556,7 @@ Item {
 
         function successLongTerm(xmlString) {
             loadedData.longTerm = xmlString
-            successCallback(loadedData)
+            successCallback(loadedData, cacheKey)
         }
 
         function successHourByHour(xmlString) {

@@ -253,6 +253,7 @@ Item {
 
     function loadDataFromInternet(successCallback, failureCallback, locationObject) {
         var placeIdentifier = locationObject.placeIdentifier
+        var cacheKey = locationObject.cacheKey
 
         function loadCompleted() {
             var cacheContent = {}
@@ -260,7 +261,7 @@ Item {
             cacheContent["sunRiseData"] = JSON.parse(sunRiseDataJson)
             weatherDataJson = ""
             sunRiseDataJson = ""
-            successCallback(cacheContent)
+            successCallback(cacheContent, cacheKey)
         }
 
         function successWeather(jsonString) {

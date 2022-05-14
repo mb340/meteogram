@@ -297,7 +297,7 @@ Item {
         loadingData = false
     }
 
-    function dataLoadedFromInternet(contentToCache) {
+    function dataLoadedFromInternet(contentToCache, cacheKey) {
         dbgprint("Data Loaded From Internet successfully.")
         reloadTime.stopAbortTimer(cacheKey)
 
@@ -311,16 +311,20 @@ Item {
 
         clearLoadingXhrs()
 
-        reloadMeteogram()
-        updateLastReloadedText()
-        loadFromCache()
+        if (main.cacheKey === cacheKey) {
+            loadFromCache()
+            reloadMeteogram()
+            updateLastReloadedText()
+        }
     }
 
-    function reloadDataFailureCallback() {
+    function reloadDataFailureCallback(cacheKey) {
         dbgprint("Failed to Load Data successfully.")
         clearLoadingXhrs()
         reloadTime.setLoadingError(cacheKey, true)
-        loadFromCache(key)
+        if (main.cacheKey === cacheKey) {
+            loadFromCache()
+        }
     }
 
     function reloadData() {
@@ -335,7 +339,11 @@ Item {
         reloadTime.stopAbortTimer(cacheKey)
         reloadTime.setLoadingError(cacheKey, false)
 
-        var args = { placeIdentifier: placeIdentifier, timezoneID: timezoneID }
+        var args = {
+            placeIdentifier: placeIdentifier,
+            timezoneID: timezoneID,
+            cacheKey, cacheKey
+        }
         loadingXhrs = currentProvider.loadDataFromInternet(dataLoadedFromInternet, reloadDataFailureCallback, args)
 
         reloadTime.startAbortTimer(cacheKey, () => reloadDataFailureCallback(cacheKey))
@@ -361,6 +369,8 @@ Item {
     function loadFromCache() {
          dbgprint('loading from cache, config key: ' + cacheKey)
 
+         rearmTimer()
+
         if (alreadyLoadedFromCache) {
             dbgprint('already loaded from cache')
             return true
@@ -381,7 +391,6 @@ Item {
             return false
         }
 
-        rearmTimer()
         alreadyLoadedFromCache = true
         return true
     }
