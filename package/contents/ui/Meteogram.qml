@@ -543,7 +543,7 @@ Item {
             var ap = obj.pressureHpa
             var airtmp = parseFloat(obj.temperature)
             var icon = obj.iconName
-            var prec = obj.precipitationAvg
+            var prec = parseFloat(obj.precipitationAvg / differenceHours).toFixed(1)
             var preclabel = obj.precipitationLabel
 
             for (var j = 0; j < differenceHours; j++) {
@@ -554,9 +554,9 @@ Item {
                                       dateFrom: UnitUtils.convertDate(preparedDate, timezoneType),
                                       iconName: j === differenceHoursMid ? icon : '',
                                       temperature: airtmp,
-                                      precipitationAvg: parseFloat(prec / differenceHours).toFixed(1),
+                                      precipitationAvg: prec,
                                       precipitationLabel: (counter === 1) ? preclabel : "",
-                                      precipitationMax: parseFloat(prec / differenceHours).toFixed(1),
+                                      precipitationMax: prec,
                                       canShowDay: true,
                                       canShowPrec: true,
                                       windDirection: parseFloat(wd),
