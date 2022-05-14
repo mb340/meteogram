@@ -60,7 +60,7 @@ function getPressureNumber(hpa, pressureType) {
     if (pressureType === PressureType.MMHG) {
         return Math.round(hpa * 0.750061683)
     }
-    return hpa
+    return Math.round(hpa)
 }
 
 function getPressureText(hpa, pressureType) {

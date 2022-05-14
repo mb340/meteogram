@@ -44,7 +44,7 @@ Item {
     property double temperatureIncrementPixels: imageHeight / (temperatureYGridCount - 1)  // Major Step - How much each Temperature grid element rises by in Pixels
 
     property int pressureSizeY: 101     // Number of virtual grid Pressure Elements
-    property int pressureMultiplier: Math.round((pressureSizeY - 1) / (temperatureYGridCount - 1)) // Major Step - How much each Pressure grid element rises by in HPa
+    property double pressureMultiplier: (pressureSizeY - 1) / (temperatureYGridCount - 1) // Major Step - How much each Pressure grid element rises by in HPa
 
     property int pressureOffsetY: -950 // Move Pressure Graph down by 950
     property double pressureMultiplierY: imageHeight / (pressureSizeY - 1)// Major Step - How much each Pressure grid element rises by in Pixels
