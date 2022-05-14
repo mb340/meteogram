@@ -366,7 +366,7 @@ Item {
             return true
         }
 
-        creditLink = currentProvider.getCreditLink(placeIdentifier)
+        creditLink = currentProvider.getCreditLink(placeIdentifier, placeAlias)
         creditLabel = currentProvider.getCreditLabel(placeIdentifier)
 
         if (!providerCache.hasKey(cacheKey)) {
