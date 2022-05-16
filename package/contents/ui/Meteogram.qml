@@ -333,7 +333,6 @@ Item {
                 color: rainColor
                 anchors.left: verticalLine.left
                 anchors.bottom: verticalLine.bottom
-                anchors.bottomMargin: precipitationLabelMargin
                 visible: !isLastHour
             }
             PlasmaComponents.Label {
@@ -341,7 +340,7 @@ Item {
                 text: precMaxStr || precAvgStr
                 verticalAlignment: Text.AlignBottom
                 horizontalAlignment: Text.AlignHCenter
-                anchors.bottom: precipitationMaxRect.top
+                anchors.bottom: precipitationUnitVisible ? precLabel.top : precipitationMaxRect.top
                 anchors.horizontalCenter: precipitationMaxRect.horizontalCenter
                 font.pixelSize: precipitationFontPixelSize
                 font.pointSize: -1
@@ -360,17 +359,19 @@ Item {
                         return unitText
                     }
                 }
+                id: precLabel
                 text: localisePrecipitationUnit(precipitationLabel)
                 width: parent.width
+                height: precipitationFontPixelSize
                 verticalAlignment: Text.AlignBottom
-                //                horizontalAlignment: Text.AlignHCenter
+                horizontalAlignment: Text.AlignHCenter
                 anchors.left: verticalLine.left
-                anchors.bottom: hourText.top
+                anchors.bottom: precipitationMaxRect.top
                 //                anchors.bottom: verticalLine.bottom
                 //                anchors.horizontalCenter: precipitationMaxRect.horizontalCenter
                 font.pixelSize: precipitationFontPixelSize
                 font.pointSize: -1
-                visible: precLabelVisible && !isLastHour
+                visible: precLabelVisible && precipitationUnitVisible && !isLastHour
             }
             PlasmaComponents.Label {
                 font.pixelSize: 14 * units.devicePixelRatio
@@ -563,7 +564,8 @@ Item {
                                       iconName: j === differenceHoursMid ? icon : '',
                                       temperature: airtmp,
                                       precipitationAvg: prec,
-                                      precipitationLabel: (counter === 1) ? preclabel : "",
+                                      precipitationLabel: preclabel,
+                                      precipitationUnitVisible: counter === 1,
                                       precipitationMax: prec,
                                       canShowDay: true,
                                       windDirection: parseFloat(wd),
