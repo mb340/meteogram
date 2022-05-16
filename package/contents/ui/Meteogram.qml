@@ -564,7 +564,6 @@ Item {
                                       precipitationLabel: (counter === 1) ? preclabel : "",
                                       precipitationMax: prec,
                                       canShowDay: true,
-                                      canShowPrec: true,
                                       windDirection: parseFloat(wd),
                                       windSpeedMps: parseFloat(ws),
                                       pressureHpa: parseFloat(ap),
@@ -576,7 +575,6 @@ Item {
         for (i = hourGridModel.count - 5; i < hourGridModel.count; i++) {
             hourGridModel.setProperty(i, 'canShowDay', false)
         }
-        hourGridModel.setProperty(hourGridModel.count - 1, 'canShowPrec', false)
     }
     function buildCurves() {
         var newPathElements = []
