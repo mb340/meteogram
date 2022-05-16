@@ -185,6 +185,17 @@ Item {
         anchors.bottom: graphArea.top
         anchors.bottomMargin: 6
     }
+    PlasmaComponents.Label {
+        text: UnitUtils.getTemperatureEnding(temperatureType)
+        height: labelHeight
+        width: labelWidth
+        horizontalAlignment: Text.AlignHCenter
+        anchors.right: (graphArea.left)
+        font.pixelSize: 11 * units.devicePixelRatio
+        font.pointSize: -1
+        anchors.bottom: graphArea.top
+        anchors.bottomMargin: 6
+    }
     ListView {
         id: hourGrid
         model: hourGridModel
