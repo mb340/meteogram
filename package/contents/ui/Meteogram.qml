@@ -201,6 +201,7 @@ Item {
             property string hourFromEnding: twelveHourClockEnabled ? UnitUtils.getAmOrPm(hourFrom) : '00'
             property bool dayBegins: hourFrom === 0
             property bool hourVisible: hourFrom % 2 === 0
+            property bool isLastHour: index === hourGridModel.count-1
             property bool textVisible: hourVisible && index < hourGridModel.count-1
             property int timePeriod: hourFrom >= 6 && hourFrom <= 18 ? 0 : 1
 
@@ -333,6 +334,7 @@ Item {
                 anchors.left: verticalLine.left
                 anchors.bottom: verticalLine.bottom
                 anchors.bottomMargin: precipitationLabelMargin
+                visible: !isLastHour
             }
             PlasmaComponents.Label {
                 width: parent.width
@@ -343,7 +345,7 @@ Item {
                 anchors.horizontalCenter: precipitationMaxRect.horizontalCenter
                 font.pixelSize: precipitationFontPixelSize
                 font.pointSize: -1
-                visible: precLabelVisible
+                visible: precLabelVisible && !isLastHour
             }
             PlasmaComponents.Label {
                 function localisePrecipitationUnit(unitText) {
@@ -368,7 +370,7 @@ Item {
                 //                anchors.horizontalCenter: precipitationMaxRect.horizontalCenter
                 font.pixelSize: precipitationFontPixelSize
                 font.pointSize: -1
-                visible: precLabelVisible
+                visible: precLabelVisible && !isLastHour
             }
             PlasmaComponents.Label {
                 font.pixelSize: 14 * units.devicePixelRatio
