@@ -50,6 +50,8 @@ Item {
     property double pressureMultiplierY: imageHeight / (pressureSizeY - 1)// Major Step - How much each Pressure grid element rises by in Pixels
     property double topBottomCanvasMargin: (imageHeight / temperatureYGridCount) * 0.5
 
+    readonly property double precipitationMinVisible: 0.05
+
     property int dataArraySize: 2
 
 
@@ -206,7 +208,8 @@ Item {
             property double precAvg: parseFloat(precipitationAvg) || 0
             property double precMax: parseFloat(precipitationMax) || 0
 
-            property bool precLabelVisible: precAvg >= 0.1 || precMax >= 0.1
+            property bool precLabelVisible: precAvg >= precipitationMinVisible ||
+                                            precMax >= precipitationMinVisible
 
             property string precAvgStr: precipitationFormat(precAvg)
             property string precMaxStr: precipitationFormat(precMax)
@@ -260,7 +263,7 @@ Item {
                 return img
             }
             function precipitationFormat(precFloat) {
-                if (precFloat >= 0.1) {
+                if (precFloat >= precipitationMinVisible) {
                     var result = Math.round(precFloat * 10) / 10
                     return result.toFixed(1)
                 }
@@ -550,7 +553,7 @@ Item {
             var preclabel = obj.precipitationLabel
 
             for (var j = 0; j < differenceHours; j++) {
-                counter = (prec > 0) ? counter + 1 : 0
+                counter = (prec >= precipitationMinVisible) ? counter + 1 : 0
                 var preparedDate = new Date(dateFrom.getTime() + (j * oneHourMs))
 
                 hourGridModel.append({
