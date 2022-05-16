@@ -572,7 +572,7 @@ Item {
             }
             i++
         }
-        for (i = hourGridModel.count - 5; i < hourGridModel.count; i++) {
+        for (i = Math.max(0, hourGridModel.count - 5); i < hourGridModel.count; i++) {
             hourGridModel.setProperty(i, 'canShowDay', false)
         }
     }
