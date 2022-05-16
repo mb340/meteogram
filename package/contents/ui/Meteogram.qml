@@ -446,6 +446,7 @@ Item {
             }
 
             onPaint: {
+                var context = getContext("2d")
                 context.clearRect(0, 0, width, height)
 
                 context.strokeStyle = pressureColor
@@ -473,6 +474,7 @@ Item {
             }
 
             onPaint: {
+                var context = getContext("2d")
                 context.clearRect(0, 0, width, height)
                 context.strokeStyle = temperatureWarmColor
                 context.lineWidth = 2 * units.devicePixelRatio;
@@ -500,6 +502,7 @@ Item {
                 }
 
                 onPaint: {
+                    var context = getContext("2d")
                     context.clearRect(0, 0, width, height)
 
                     context.strokeStyle = temperatureColdColor
