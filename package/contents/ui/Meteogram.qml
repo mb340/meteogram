@@ -212,8 +212,8 @@ Item {
             property bool precLabelVisible: precAvg >= precipitationMinVisible ||
                                             precMax >= precipitationMinVisible
 
-            property string precAvgStr: precipitationFormat(precAvg)
-            property string precMaxStr: precipitationFormat(precMax)
+            property string precAvgStr: precipitationFormat(precAvg, precipitationLabel)
+            property string precMaxStr: precipitationFormat(precMax, precipitationLabel)
 
 
 
@@ -263,7 +263,10 @@ Item {
                 img += Math.min(5,Math.trunc(windspeed / 5) + 1)
                 return img
             }
-            function precipitationFormat(precFloat) {
+            function precipitationFormat(precFloat, precipitationLabel) {
+                if (precipitationLabel === i18n('%')) {
+                    return (precFloat * 100).toFixed(0)
+                }
                 if (precFloat >= precipitationMinVisible) {
                     var result = Math.round(precFloat * 10) / 10
                     return result.toFixed(1)
