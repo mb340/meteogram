@@ -372,7 +372,7 @@ Item {
                 anchors.bottom: precipitationMaxRect.top
                 //                anchors.bottom: verticalLine.bottom
                 //                anchors.horizontalCenter: precipitationMaxRect.horizontalCenter
-                font.pixelSize: precipitationFontPixelSize
+                font.pixelSize: precipitationFontPixelSize - 1
                 font.pointSize: -1
                 visible: precLabelVisible && precipitationUnitVisible && !isLastHour
             }
