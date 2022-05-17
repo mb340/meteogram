@@ -169,3 +169,17 @@ function convertDate(date, timezoneType) {
     }
     return date
 }
+
+/*
+ * PRECIPITATION
+ */
+function precipitationFormat(precFloat, precipitationLabel) {
+    if (precipitationLabel === i18n('%')) {
+        return (precFloat * 100).toFixed(0)
+    }
+    if (precFloat >= precipitationMinVisible) {
+        var result = Math.round(precFloat * 10) / 10
+        return result.toFixed(1)
+    }
+    return ''
+}
