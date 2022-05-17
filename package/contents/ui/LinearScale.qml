@@ -1,0 +1,30 @@
+import QtQuick 2.0
+
+/*
+ * Linear translate data coordinate to drawing coordinate.
+ */
+QtObject {
+
+    property var domain: [0, 1]     // data coordinate
+    property var range: [0, 1]      // drawing coordinate
+
+    function setDomain(d0, d1) {
+        domain = [d0, d1]
+    }
+
+    function setRange(r0, r1) {
+        range = [r0, r1]
+    }
+
+    /* Translate a data value into drawing coordinates */
+    function translate(val) {
+        var scale = (val - domain[0]) / (domain[1] - domain[0])
+        return range[0] + (scale * (range[1] - range[0]))
+    }
+
+    /* Translate a drawing coordinate to data value */
+    function invert(val) {
+        var scale = (val - range[0]) / (range[1] - range[0])
+        return domain[0] + (scale * (domain[1] - domain[0]))
+    }
+}

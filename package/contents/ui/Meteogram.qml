@@ -40,14 +40,7 @@ Item {
 
 
     property int temperatureYGridCount: 21   // Number of vertical grid Temperature elements
-    property double temperatureIncrementDegrees: 0 // Major Step - How much each Temperature grid element rises by in Degrees
-    property double temperatureIncrementPixels: imageHeight / (temperatureYGridCount - 1)  // Major Step - How much each Temperature grid element rises by in Pixels
 
-    property int pressureSizeY: 101     // Number of virtual grid Pressure Elements
-    property double pressureMultiplier: (pressureSizeY - 1) / (temperatureYGridCount - 1) // Major Step - How much each Pressure grid element rises by in HPa
-
-    property int pressureOffsetY: -950 // Move Pressure Graph down by 950
-    property double pressureMultiplierY: imageHeight / (pressureSizeY - 1)// Major Step - How much each Pressure grid element rises by in Pixels
     property double topBottomCanvasMargin: (imageHeight / temperatureYGridCount) * 0.5
 
     readonly property double precipitationMinVisible: 0.05
@@ -146,7 +139,7 @@ Item {
                 color: gridColor
             }
             PlasmaComponents.Label {
-                text: UnitUtils.getTemperatureNumberExt(-temperatureIncrementDegrees + (temperatureYGridCount - num), temperatureType)
+                text: UnitUtils.getTemperatureNumberExt(temperatureAxisScale.invert(num), temperatureType)
                 height: labelHeight
                 width: labelWidth
                 horizontalAlignment: Text.AlignRight
@@ -158,7 +151,7 @@ Item {
                 font.pointSize: -1
             }
             PlasmaComponents.Label {
-                text: String(UnitUtils.getPressureNumber((pressureSizeY - 1 - num * pressureMultiplier) -pressureOffsetY, pressureType))
+                text: String(UnitUtils.getPressureNumber(pressureAxisScale.invert(num), pressureType))
                 height: labelHeight
                 width: labelWidth
                 anchors.top: gridLine.top
@@ -392,16 +385,13 @@ Item {
                 font.pointSize: -1
                 width: parent.width
                 anchors.top: parent.top
-                anchors.topMargin: (temperatureYGridCount - (temperature + temperatureIncrementDegrees)) * temperatureIncrementPixels - font.pixelSize * 2.5
+                anchors.topMargin: temperatureScale.translate(temperature, temperatureType) - (font.pixelSize * 2.5)
                 anchors.left: verticalLine.left
                 anchors.leftMargin: -8
                 z: 999
                 font.family: 'weathericons'
                 text: (differenceHours === 1 && textVisible) || index === hourGridModel.count-1 || index === 0 || iconName === '' ? '' : IconTools.getIconCode(iconName, currentProvider.providerId, timePeriod)
                 visible: iconName != "\uf07b"
-                Component.onCompleted: {
-//                   console.log(temperatureYGridCount +" - " + "(" + temperature + " + " + temperatureIncrementDegrees + ") * " +temperatureIncrementPixels + " - " +  font.pixelSize + " * 2.5")
-                }
             }
             /*
             Item {
@@ -455,6 +445,27 @@ Item {
         id: canvases
         anchors.fill: graphArea
         anchors.topMargin: 0
+
+        LinearScale {
+            id: temperatureScale
+            range: [imageHeight, 0]
+        }
+
+        LinearScale {
+            id: temperatureAxisScale
+            range: [1, 0]
+        }
+
+        LinearScale {
+            id: pressureScale
+            range: [imageHeight, 0]
+        }
+
+        LinearScale {
+            id: pressureAxisScale
+            range: [1, 0]
+        }
+
         Canvas {
             id: meteogramCanvas
             anchors.fill: parent
@@ -490,7 +501,7 @@ Item {
                 context.beginPath()
                 context.strokeStyle = 'transparent'
                 context.lineWidth = 0
-                context.rect(0, 0, width, height - temperatureIncrementPixels * (temperatureIncrementDegrees - 1) + 0);
+                context.rect(0, 0, width, temperatureScale.translate(0));
                 context.closePath()
                 context.stroke();
                 context.clip();
@@ -507,7 +518,7 @@ Item {
                 context.beginPath()
                 context.strokeStyle = 'transparent'
                 context.lineWidth = 0
-                context.rect(0, height - temperatureIncrementPixels * (temperatureIncrementDegrees - 1) + 0, width, height);
+                context.rect(0, temperatureScale.translate(0), width, height);
                 context.closePath()
                 context.stroke();
                 context.clip();
@@ -591,10 +602,8 @@ Item {
         for (var i = 0; i < meteogramModel.count; i++) {
             var dataObj = meteogramModel.get(i)
 
-            var rawTempY = temperatureYGridCount - (dataObj.temperature + temperatureIncrementDegrees)
-            var temperatureY = rawTempY * temperatureIncrementPixels
-            var rawPressY = pressureSizeY - (dataObj.pressureHpa + pressureOffsetY)
-            var pressureY = rawPressY * pressureMultiplierY
+            var temperatureY = temperatureScale.translate(dataObj.temperature, temperatureType)
+            var pressureY = pressureScale.translate(dataObj.pressureHpa, pressureType)
             if (i === 0) {
                 temperaturePathWarm.startY = temperatureY
                 temperaturePathCold.startY = temperatureY
@@ -642,7 +651,12 @@ Item {
         var mid = (maxValue - minValue) / 2 + minValue
         var halfSize = temperatureYGridCount / 2
 
-        temperatureIncrementDegrees = Math.round(- (mid - halfSize))
+        temperatureScale.setDomain(mid - halfSize, mid + halfSize)
+        temperatureAxisScale.setDomain(mid - halfSize, mid + halfSize)
+        temperatureAxisScale.setRange(temperatureYGridCount - 1, 0)
 
+        pressureScale.setDomain(950, 1050)
+        pressureAxisScale.setDomain(950, 1050)
+        pressureAxisScale.setRange(temperatureYGridCount - 1, 0)
     }
 }
