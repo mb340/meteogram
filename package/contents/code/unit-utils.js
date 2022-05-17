@@ -15,6 +15,19 @@ function toKelvin(celsia) {
     return celsia + 273.15
 }
 
+function convertTemperature(celsia, temperatureType) {
+    if (temperatureType === TemperatureType.FAHRENHEIT) {
+        return toFahrenheit(celsia)
+    } else if (temperatureType === TemperatureType.KELVIN) {
+        return toKelvin(celsia)
+    }
+    return celsia
+}
+
+function formatTemperatureStr(temperature, temperatureType) {
+    return temperature.toFixed(0)
+}
+
 function getTemperatureNumberExt(temperatureStr, temperatureType) {
     return getTemperatureNumber(temperatureStr, temperatureType) + (temperatureType === TemperatureType.CELSIUS || temperatureType === TemperatureType.FAHRENHEIT ? '°' : '')
 }
@@ -51,6 +64,20 @@ var PressureType = {
     HPA: 0,
     INHG: 1,
     MMHG: 2
+}
+
+function convertPressure(hpa, pressureType) {
+    if (pressureType === PressureType.INHG) {
+        return hpa * 0.0295299830714
+    }
+    if (pressureType === PressureType.MMHG) {
+        return hpa * 0.750061683
+    }
+    return hpa
+}
+
+function formatPressureStr(val, pressureDecimals) {
+    return val.toFixed(pressureDecimals)
 }
 
 function getPressureNumber(hpa, pressureType) {

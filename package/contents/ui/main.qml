@@ -507,10 +507,12 @@ Item {
 
     onTemperatureTypeChanged: {
         refreshTooltipSubText()
+        meteogramModelChanged = !meteogramModelChanged
     }
 
     onPressureTypeChanged: {
         refreshTooltipSubText()
+        meteogramModelChanged = !meteogramModelChanged
     }
 
     onWindSpeedTypeChanged: {
