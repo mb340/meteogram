@@ -462,6 +462,11 @@ Item {
             range: [1, 0]
         }
 
+        LinearScale {
+            id: timeScale
+            range: [0, imageWidth]
+        }
+
         Canvas {
             id: meteogramCanvas
             anchors.fill: parent
@@ -526,6 +531,86 @@ Item {
                     context.stroke()
                 context.restore()
                 context.restore()
+            }
+        }
+
+        MeteogramInfo {
+            id: meteogramInfo
+        }
+
+        Canvas {
+            id: meteogramInfoCanvas
+            anchors.fill: parent
+            contextType: '2d'
+
+            onPaint: {
+                var context = getContext("2d")
+                context.clearRect(0, 0, width, height)
+                if (!meteogramInfo.visible) {
+                    return
+                }
+
+                var rectWidth = timeScale.translate(1) - timeScale.translate(0)
+                context.fillStyle = Qt.rgba(theme.highlightColor.r,
+                                            theme.highlightColor.g,
+                                            theme.highlightColor.b,
+                                            0.25)
+                var x0 = timeScale.translate(meteogramInfo.idx)
+                context.fillRect(x0, 0, rectWidth, height);
+            }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+
+            onPressed: {
+                meteogramInfo.visible = true
+                update(mouse)
+                meteogramInfoCanvas.requestPaint()
+            }
+
+            onReleased: {
+                meteogramInfo.visible = false
+                meteogramInfoCanvas.requestPaint()
+            }
+
+            onExited: {
+                if (meteogramInfo.visible) {
+                    meteogramInfo.idx = -1
+                    meteogramInfo.visible = false
+                    meteogramInfoCanvas.requestPaint()
+                }
+            }
+
+            onPositionChanged: {
+                update(mouse)
+                if (meteogramInfo.visible) {
+                    meteogramInfoCanvas.requestPaint()
+                }
+            }
+
+            function update(mouse) {
+                var idx = Math.round(timeScale.invert(mouse.x) - 0.5)
+                if (idx < 0 || idx >= hourGridModel.count) {
+                    return
+                }
+
+                var x0 = timeScale.translate(meteogramInfo.idx)
+                var x1 = timeScale.translate(meteogramInfo.idx + 1)
+                var rectWidth = x1 - x0
+
+                meteogramInfo.x = mouse.x
+                meteogramInfo.y = mouse.y
+
+                meteogramInfo.isAnchorLeft = mouse.x < (imageWidth - meteogramInfo.boxWidth - rectWidth)
+                meteogramInfo.isAnchorTop = mouse.y > (imageHeight - meteogramInfo.boxHeight - rectWidth)
+
+                if (meteogramInfo.idx !== idx) {
+                    meteogramInfo.anchorsMargins = 1.5 * rectWidth
+
+                    meteogramInfo.idx = idx
+                    meteogramInfo.hourModel = hourGridModel.get(idx)
+                }
             }
         }
     }
@@ -680,6 +765,8 @@ Item {
         temperatureScale.setDomain(minValue, maxValue)
         temperatureAxisScale.setDomain(minValue, maxValue)
         temperatureAxisScale.setRange(temperatureYGridCount, 0)
+
+        timeScale.setDomain(0, hourGridModel.count - 1)
 
         horizontalGridModel.clear()
         for (var i = 0; i <= temperatureYGridCount; i++) {
