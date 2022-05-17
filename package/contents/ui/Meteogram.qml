@@ -456,7 +456,7 @@ Item {
         anchors.fill: graphArea
         anchors.topMargin: 0
         Canvas {
-            id: meteogramCanvasPressure
+            id: meteogramCanvas
             anchors.fill: parent
             contextType: '2d'
 
@@ -464,79 +464,66 @@ Item {
                 id: pressurePath
                 startX: 0
             }
-
-            onPaint: {
-                var context = getContext("2d")
-                context.clearRect(0, 0, width, height)
-
-                context.strokeStyle = pressureColor
-                context.lineWidth = 1 * units.devicePixelRatio;
-                context.path = pressurePath
-                context.stroke()
-            }
-        }
-        Canvas {
-            id: meteogramCanvasWarmTemp
-            anchors.top: imageWidth.top
-            width: parent.width
-            height: parent.height - temperatureIncrementPixels * (temperatureIncrementDegrees - 1) + 0
-
-            onWidthChanged: {
-
-                meteogramCanvasWarmTemp.requestPaint()
-            }
-
-            contextType: '2d'
-
             Path {
                 id: temperaturePathWarm
+                startX: 0
+            }
+
+            Path {
+                id: temperaturePathCold
                 startX: 0
             }
 
             onPaint: {
                 var context = getContext("2d")
                 context.clearRect(0, 0, width, height)
-                context.strokeStyle = temperatureWarmColor
-                context.lineWidth = 2 * units.devicePixelRatio;
-                context.path = temperaturePathWarm
+
+                context.save()
+                context.beginPath()
+                context.strokeStyle = pressureColor
+                context.lineWidth = 1 * units.devicePixelRatio;
+                context.path = pressurePath
                 context.stroke()
-            }
-        }
+                context.restore()
 
-        Item {
+                context.save()
+                context.beginPath()
+                context.strokeStyle = 'transparent'
+                context.lineWidth = 0
+                context.rect(0, 0, width, height - temperatureIncrementPixels * (temperatureIncrementDegrees - 1) + 0);
+                context.closePath()
+                context.stroke();
+                context.clip();
+                context.save()
+                    context.beginPath();
+                    context.strokeStyle = temperatureWarmColor
+                    context.lineWidth = 2 * units.devicePixelRatio;
+                    context.path = temperaturePathWarm
+                    context.stroke()
+                context.restore()
+                context.restore()
 
-            anchors.fill: parent
-            anchors.topMargin: meteogramCanvasWarmTemp.height
-            clip: true
-            Canvas {
-                id: meteogramCanvasColdTemp
-                anchors.top: parent.top
-                width: imageWidth
-                height: imageHeight
-                anchors.topMargin: -parent.anchors.topMargin
-                contextType: '2d'
-
-                Path {
-                    id: temperaturePathCold
-                    startX: 0
-                }
-
-                onPaint: {
-                    var context = getContext("2d")
-                    context.clearRect(0, 0, width, height)
-
+                context.save()
+                context.beginPath()
+                context.strokeStyle = 'transparent'
+                context.lineWidth = 0
+                context.rect(0, height - temperatureIncrementPixels * (temperatureIncrementDegrees - 1) + 0, width, height);
+                context.closePath()
+                context.stroke();
+                context.clip();
+                context.save()
+                    context.beginPath();
                     context.strokeStyle = temperatureColdColor
                     context.lineWidth = 2 * units.devicePixelRatio;
                     context.path = temperaturePathCold
                     context.stroke()
-                }
+                context.restore()
+                context.restore()
             }
         }
     }
     function repaintCanvas() {
-        meteogramCanvasWarmTemp.requestPaint()
-        meteogramCanvasColdTemp.requestPaint()
-        meteogramCanvasPressure.requestPaint()
+        meteogramCanvas.requestPaint()
     }
 
     function parseISOString(s) {
