@@ -154,7 +154,7 @@ Item {
         height: nextDaysHeight - defaultFontPixelSize
 
         PlasmaComponents.Label {
-            text: twelveHourClockEnabled ? '3AM' : '3h'
+            text: twelveHourClockEnabled ? '3' + Qt.locale().amText : '3h'
             width: parent.width
             height: parent.height / 4
             font.pixelSize: defaultFontPixelSize * 0.8
@@ -163,7 +163,7 @@ Item {
             opacity: 0.6
         }
         PlasmaComponents.Label {
-            text: twelveHourClockEnabled ? '9AM' : '9h'
+            text: twelveHourClockEnabled ? '9' + Qt.locale().amText : '9h'
             width: parent.width
             height: parent.height / 4
             font.pixelSize: defaultFontPixelSize * 0.8
@@ -172,7 +172,7 @@ Item {
             opacity: 0.6
         }
         PlasmaComponents.Label {
-            text: twelveHourClockEnabled ? '3PM' : '15h'
+            text: twelveHourClockEnabled ? '3' + Qt.locale().pmText : '15h'
             width: parent.width
             height: parent.height / 4
             font.pixelSize: defaultFontPixelSize * 0.8
@@ -181,7 +181,7 @@ Item {
             opacity: 0.6
         }
         PlasmaComponents.Label {
-            text: twelveHourClockEnabled ? '9PM' : '21h'
+            text: twelveHourClockEnabled ? '9' + Qt.locale().pmText : '21h'
             width: parent.width
             height: parent.height / 4
             font.pixelSize: defaultFontPixelSize * 0.8
