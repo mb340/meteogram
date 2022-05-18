@@ -48,6 +48,7 @@ Item {
     property int pressureDecimals: 0
 
     readonly property double precipitationMinVisible: 0.05
+    property double precipitationMaxGraphY: 10
 
     property int dataArraySize: 2
 
@@ -336,7 +337,8 @@ Item {
                 color: rainColor
                 anchors.left: verticalLine.left
                 anchors.bottom: verticalLine.bottom
-                visible: !isLastHour
+                // visible: !isLastHour
+                visible: false
             }
             PlasmaComponents.Label {
                 width: parent.width
@@ -347,7 +349,8 @@ Item {
                 anchors.horizontalCenter: precipitationMaxRect.horizontalCenter
                 font.pixelSize: precipitationFontPixelSize
                 font.pointSize: -1
-                visible: precLabelVisible && !isLastHour
+                // visible: precLabelVisible && !isLastHour
+                visible: false
             }
             PlasmaComponents.Label {
                 function localisePrecipitationUnit(unitText) {
@@ -374,7 +377,8 @@ Item {
                 //                anchors.horizontalCenter: precipitationMaxRect.horizontalCenter
                 font.pixelSize: precipitationFontPixelSize - 1
                 font.pointSize: -1
-                visible: precLabelVisible && precipitationUnitVisible && !isLastHour
+                // visible: precLabelVisible && precipitationUnitVisible && !isLastHour
+                visible: false
             }
             PlasmaComponents.Label {
                 font.pixelSize: 14 * units.devicePixelRatio
@@ -387,7 +391,8 @@ Item {
                 z: 999
                 font.family: 'weathericons'
                 text: (differenceHours === 1 && textVisible) || index === hourGridModel.count-1 || index === 0 || iconName === '' ? '' : IconTools.getIconCode(iconName, currentProvider.providerId, timePeriod)
-                visible: iconName != "\uf07b"
+                // visible: iconName != "\uf07b"
+                visible: false
             }
             /*
             Item {
@@ -463,6 +468,11 @@ Item {
         }
 
         LinearScale {
+            id: precipitationScale
+            range: [imageHeight, 0]
+        }
+
+        LinearScale {
             id: timeScale
             range: [0, imageWidth]
         }
@@ -471,6 +481,9 @@ Item {
             id: meteogramCanvas
             anchors.fill: parent
             contextType: '2d'
+
+            readonly property double weatherFontSize: (14 * units.devicePixelRatio)
+            property var precLabelPositions: ({})
 
             Path {
                 id: pressurePath
@@ -486,18 +499,126 @@ Item {
                 startX: 0
             }
 
-            onPaint: {
-                var context = getContext("2d")
-                context.clearRect(0, 0, width, height)
+            function drawPrecipitationBars(context, rectWidth) {
+                precLabelPositions = ({})
+                for (var i = 0; i < hourGridModel.count; i++) {
+                    var hourModel = hourGridModel.get(i)
+                    if (hourModel.precipitationAvg <= 0) {
+                        continue
+                    }
+                    var x = timeScale.translate(i) + (0.5 * units.devicePixelRatio)
+                    var prec = Math.min(precipitationMaxGraphY, hourModel.precipitationAvg)
+                    var y = precipitationScale.translate(prec)
+                    context.fillStyle = rainColor
+                    var h = (precipitationScale.range[0]) - y
+                    var w = rectWidth - (0.5 * units.devicePixelRatio)
+                    context.fillRect(x, y, w, h)
 
+                    precLabelPositions[i] = y - precipitationFontPixelSize
+                }
+            }
+
+            function drawShadowText(context, str, x, y) {
+                context.strokeStyle = theme.textColor
+                context.shadowColor = textColorLight ? 'black' : 'white';
+                context.shadowBlur = 0.5;
+                context.lineWidth = 0.5;
+                context.strokeText(str, x, y)
+                context.shadowBlur = 0;
+            }
+
+            function drawPrecipitationText(context, rectWidth) {
                 context.save()
-                context.beginPath()
-                context.strokeStyle = pressureColor
-                context.lineWidth = 1 * units.devicePixelRatio;
-                context.path = pressurePath
-                context.stroke()
-                context.restore()
+                var counter = 0
+                context.font =  precipitationFontPixelSize + "px " + theme.defaultFont.family
 
+                var prevIdx = -1
+                var prevY = NaN
+                var prevShowPrecUnit = false
+                var prevPrecStr = undefined
+
+                for (var i = 0; i < hourGridModel.count; i++) {
+                    var hourModel = hourGridModel.get(i)
+                    var prec = hourModel.precipitationAvg
+                    var showPrecExcess = prec > precipitationMaxGraphY
+                    var showPrec = prec > 0
+
+                    // Show precipitation unit on first hour with non-zero value
+                    counter = showPrec ? counter + 1 : 0
+                    var showPrecUnit = counter === 1
+
+
+                    if (!showPrec) {
+                        continue
+                    }
+
+                    var x = timeScale.translate(i)
+                    var y = precipitationScale.translate(Math.min(precipitationMaxGraphY, prec))
+                    var precStr = UnitUtils.precipitationFormat(prec, hourModel.precipitationLabel)
+                    const textPad = 2
+                    var y0 = y - textPad
+
+                    // Stagger vertically when two labels are consecutively in the same y position
+                    const marginPx = 0
+                    if (i - prevIdx === 1 && (prevY-marginPx <= y0 && y0 <= prevY+marginPx)) {
+                        y0 -= precipitationFontPixelSize / 2
+                    }
+                    prevIdx = i
+                    prevY = y0
+
+                    // if (prevShowPrecUnit) {
+                    //     y0 -= precipitationFontPixelSize / 2
+                    // }
+                    prevShowPrecUnit = showPrecUnit
+
+                    if (precStr === prevPrecStr && counter > 1) {
+                        prevPrecStr = precStr
+                        continue
+                    }
+                    prevPrecStr = precStr
+
+                    if (showPrecUnit) {
+                        var precUnitStr = UnitUtils.localisePrecipitationUnit(
+                                            hourModel.precipitationLabel)
+                        var metrics = context.measureText(precUnitStr)
+                        var x0 = x - (metrics.width / 2) + (rectWidth / 2)
+
+                        drawShadowText(context, precUnitStr, x0, y0)
+                        context.fillStyle = theme.textColor
+                        context.fillText(precUnitStr, x0, y0)
+
+                        y0 -= precipitationFontPixelSize
+                    }
+
+                    var metrics = context.measureText(precStr)
+                    var x0 = x - (metrics.width / 2) + (rectWidth / 2)
+                    drawShadowText(context, precStr, x0, y0)
+                    context.fillStyle = theme.textColor
+                    context.fillText(precStr, x0, y0)
+                    y0 -= precipitationFontPixelSize
+
+                    // Show arrow to indicate truncation at max value
+                    if (showPrecExcess) {
+                        var precExcessStr = '\u25B2'
+                        var metrics = context.measureText(precExcessStr)
+                        var x0 = x - (metrics.width / 2) + (rectWidth / 2)
+                        drawShadowText(context, precExcessStr, x0, y0)
+                        context.fillStyle = theme.textColor
+                        context.fillText(precExcessStr, x0, y0)
+                    }
+                }
+                context.restore()
+            }
+
+            function drawPath(context, path, color, lineWidth) {
+                context.beginPath()
+                context.strokeStyle = color
+                context.lineWidth = lineWidth;
+                context.path = path
+                context.stroke()
+            }
+
+            function drawWarmTemp(context, path, color, lineWidth) {
                 context.save()
                 context.beginPath()
                 context.strokeStyle = 'transparent'
@@ -506,15 +627,11 @@ Item {
                 context.closePath()
                 context.stroke();
                 context.clip();
-                context.save()
-                    context.beginPath();
-                    context.strokeStyle = temperatureWarmColor
-                    context.lineWidth = 2 * units.devicePixelRatio;
-                    context.path = temperaturePathWarm
-                    context.stroke()
+                drawPath(context, path, color, lineWidth)
                 context.restore()
-                context.restore()
+            }
 
+            function drawColdTemp(context, path, color, lineWidth) {
                 context.save()
                 context.beginPath()
                 context.strokeStyle = 'transparent'
@@ -523,14 +640,83 @@ Item {
                 context.closePath()
                 context.stroke();
                 context.clip();
-                context.save()
-                    context.beginPath();
-                    context.strokeStyle = temperatureColdColor
-                    context.lineWidth = 2 * units.devicePixelRatio;
-                    context.path = temperaturePathCold
-                    context.stroke()
+                drawPath(context, path, color, lineWidth)
                 context.restore()
-                context.restore()
+            }
+
+            function drawWeatherIcons(context, rectWidth) {
+                context.font =  weatherFontSize + 'px "%1"'.arg(weatherIconFont.name)
+
+                for (var i = 0; i < hourGridModel.count; i++) {
+                    var hourModel = hourGridModel.get(i)
+                    var iconName = hourModel.iconName
+                    var hourFrom = hourModel.dateFrom.getHours()
+                    var textVisible = (hourFrom % 2 === 1)
+                    if (!textVisible) {
+                        continue
+                    }
+
+                    var x = timeScale.translate(i - 1)
+                    var y = temperatureScale.translate(UnitUtils.convertTemperature(
+                                                        hourModel.temperature, temperatureType))
+                    var timePeriod = hourFrom >= 6 && hourFrom <= 18 ? 0 : 1
+                    var str = IconTools.getIconCode(iconName, currentProvider.providerId, timePeriod)
+
+                    var metrics = context.measureText(str)
+                    var textWidth = metrics.width
+                    var x0 = x - (textWidth / 2.0) + (rectWidth)
+                    var y0 = y - rectWidth
+
+                    // Avoid overlapping precipitation labels.
+                    // Shifting from one label position may result in overlap of other label or vice
+                    // versa. Hence peform the check twice to cover both cases.
+                    var labelPosY0 = precLabelPositions[i - 1]
+                    var labelPosY1 = precLabelPositions[i]
+                    var newY0 = y0
+                    var newY1 = y0
+                    if (labelPosY0 - (2 * rectWidth) <= y0 && y0 <= labelPosY0 + (2 * rectWidth)) {
+                        newY0 = Math.min(y0, labelPosY0 - (1.0 * rectWidth))
+                        if (labelPosY1 - (2 * rectWidth) <= newY0 && newY0 <= labelPosY1 + (1 * rectWidth)) {
+                            newY0 = Math.min(newY0, labelPosY1 - (1.0 * rectWidth))
+                        }
+                    }
+                    if (labelPosY1 - (2 * rectWidth) <= y0 && y0 <= labelPosY1 + (2 * rectWidth)) {
+                        newY1 = Math.min(y0, labelPosY1 - (1.0 * rectWidth))
+                        if (labelPosY0 - (2 * rectWidth) <= newY1 && newY1 <= labelPosY0 + (1 * rectWidth)) {
+                            newY1 = Math.min(newY1, labelPosY0 - (1.0 * rectWidth))
+                        }
+                    }
+                    y0 = Math.min(newY0, newY1)
+
+                    context.fillStyle = theme.textColor
+                    context.fillText(str, x0, y0)
+                }
+            }
+
+            onPaint: {
+                var context = getContext("2d")
+                context.clearRect(0, 0, width, height)
+                context.globalCompositeOperation = "source-over"
+
+                var rectWidth = timeScale.translate(1) - timeScale.translate(0)
+
+                drawPrecipitationBars(context, rectWidth)
+
+                // Carve out negative space when weather icons overlap precipitation bars
+                context.globalCompositeOperation = "xor"
+                drawWeatherIcons(context, rectWidth)
+
+                context.globalCompositeOperation = "source-over"
+                drawPath(context, pressurePath, pressureColor, 1 * units.devicePixelRatio)
+                drawWarmTemp(context, temperaturePathWarm, temperatureWarmColor, 2 * units.devicePixelRatio)
+                drawColdTemp(context, temperaturePathCold, temperatureColdColor, 2 * units.devicePixelRatio)
+
+                // Ensure weather icons atop graph lines without drawing over carve out
+                context.globalCompositeOperation = "source-atop"
+                drawWeatherIcons(context, rectWidth)
+
+                context.globalCompositeOperation = "source-over"
+                drawPrecipitationText(context, rectWidth)
             }
         }
 
@@ -671,6 +857,17 @@ Item {
         }
         for (i = Math.max(0, hourGridModel.count - 5); i < hourGridModel.count; i++) {
             hourGridModel.setProperty(i, 'canShowDay', false)
+        }
+
+        if (hourGridModel.count > 0) {
+            var model = hourGridModel.get(0)
+            if (model.precipitationLabel === i18n("%")) {
+                precipitationScale.setDomain(0, 8.0)
+                precipitationMaxGraphY = 100
+            } else {
+                precipitationScale.setDomain(0, 25)
+                precipitationMaxGraphY = 15
+            }
         }
     }
 
