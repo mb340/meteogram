@@ -183,3 +183,16 @@ function precipitationFormat(precFloat, precipitationLabel) {
     }
     return ''
 }
+
+function localisePrecipitationUnit(unitText) {
+    switch (unitText) {
+    case "mm":
+        return i18n("mm")
+    case "cm":
+        return i18n("cm")
+    case "in":
+        return i18n("in")
+    default:
+        return unitText
+    }
+}
