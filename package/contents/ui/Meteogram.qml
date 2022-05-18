@@ -212,21 +212,7 @@ Item {
             property string hourFromEnding: twelveHourClockEnabled ? UnitUtils.getAmOrPm(hourFrom) : '00'
             property bool dayBegins: hourFrom === 0
             property bool hourVisible: hourFrom % 2 === 0
-            property bool isLastHour: index === hourGridModel.count-1
             property bool textVisible: hourVisible && index < hourGridModel.count-1
-            property int timePeriod: hourFrom >= 6 && hourFrom <= 18 ? 0 : 1
-
-
-            property double precAvg: parseFloat(precipitationAvg) || 0
-            property double precMax: parseFloat(precipitationMax) || 0
-
-            property bool precLabelVisible: precAvg >= precipitationMinVisible ||
-                                            precMax >= precipitationMinVisible
-
-            property string precAvgStr: UnitUtils.precipitationFormat(precAvg, precipitationLabel)
-            property string precMaxStr: UnitUtils.precipitationFormat(precMax, precipitationLabel)
-
-
 
             Rectangle {
                 id: verticalLine
@@ -330,114 +316,6 @@ Item {
                 font.pointSize: -1
                 visible: dayBegins && canShowDay
             }
-            Rectangle {
-                id: precipitationMaxRect
-                width: parent.width
-                height: (precMax < precAvg ? precAvg : precMax) * precipitationHeightMultiplier
-                color: rainColor
-                anchors.left: verticalLine.left
-                anchors.bottom: verticalLine.bottom
-                // visible: !isLastHour
-                visible: false
-            }
-            PlasmaComponents.Label {
-                width: parent.width
-                text: precMaxStr || precAvgStr
-                verticalAlignment: Text.AlignBottom
-                horizontalAlignment: Text.AlignHCenter
-                anchors.bottom: precipitationUnitVisible ? precLabel.top : precipitationMaxRect.top
-                anchors.horizontalCenter: precipitationMaxRect.horizontalCenter
-                font.pixelSize: precipitationFontPixelSize
-                font.pointSize: -1
-                // visible: precLabelVisible && !isLastHour
-                visible: false
-            }
-            PlasmaComponents.Label {
-                function localisePrecipitationUnit(unitText) {
-                    switch (unitText) {
-                    case "mm":
-                        return i18n("mm")
-                    case "cm":
-                        return i18n("cm")
-                    case "in":
-                        return i18n("in")
-                    default:
-                        return unitText
-                    }
-                }
-                id: precLabel
-                text: localisePrecipitationUnit(precipitationLabel)
-                width: parent.width
-                height: precipitationFontPixelSize
-                verticalAlignment: Text.AlignBottom
-                horizontalAlignment: Text.AlignHCenter
-                anchors.left: verticalLine.left
-                anchors.bottom: precipitationMaxRect.top
-                //                anchors.bottom: verticalLine.bottom
-                //                anchors.horizontalCenter: precipitationMaxRect.horizontalCenter
-                font.pixelSize: precipitationFontPixelSize - 1
-                font.pointSize: -1
-                // visible: precLabelVisible && precipitationUnitVisible && !isLastHour
-                visible: false
-            }
-            PlasmaComponents.Label {
-                font.pixelSize: 14 * units.devicePixelRatio
-                font.pointSize: -1
-                width: parent.width
-                anchors.top: parent.top
-                anchors.topMargin: temperatureScale.translate(UnitUtils.convertTemperature(temperature, temperatureType)) - (font.pixelSize * 2.5)
-                anchors.left: verticalLine.left
-                anchors.leftMargin: -8
-                z: 999
-                font.family: 'weathericons'
-                text: (differenceHours === 1 && textVisible) || index === hourGridModel.count-1 || index === 0 || iconName === '' ? '' : IconTools.getIconCode(iconName, currentProvider.providerId, timePeriod)
-                // visible: iconName != "\uf07b"
-                visible: false
-            }
-            /*
-            Item {
-                visible: canShowPrec
-//                anchors.fill: parent
-                anchors.bottom: verticalLine.bottom
-
-
-
-                Rectangle {
-                    id: precipitationAvgRect
-                    width: parent.width
-                    height: precAvg * precipitationHeightMultiplier
-                    color: theme.highlightColor
-                    anchors.left: parent.horizontalCenter
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: precipitationLabelMargin
-                }
-
-                PlasmaComponents.Label {
-                    function localisePrecipitationUnit(unitText) {
-                        switch (unitText) {
-                        case "mm":
-                            return i18n("mm")
-                        case "cm":
-                            return i18n("cm")
-                        case "in":
-                            return i18n("in")
-                        default:
-                            return unitText
-                        }
-                    }
-                    text: localisePrecipitationUnit(precipitationLabel)
-                    verticalAlignment: Text.AlignTop
-                    horizontalAlignment: Text.AlignHCenter
-                    anchors.top: parent.bottom
-                    anchors.topMargin: -precipitationLabelMargin
-                    anchors.horizontalCenter: precipitationAvgRect.horizontalCenter
-                    font.pixelSize: precipitationFontPixelSize
-                    font.pointSize: -1
-                    visible: precLabelVisible
-                }
-        }
-*/
-
         }
     }
 
