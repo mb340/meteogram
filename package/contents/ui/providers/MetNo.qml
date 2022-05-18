@@ -23,8 +23,11 @@ Item {
         return i18n("Weather forecast data provided by The Norwegian Meteorological Institute.")
     }
 
-    function getCreditLink(placeIdentifier) {
-        return urlPrefix + placeIdentifier
+    function getCreditLink(placeIdentifier, placeAlias) {
+        placeAlias = placeAlias.replace(", ", ",")
+        var lang = Qt.locale().name.substr(0,2)
+        var url = 'https://yr.no/' + lang + '/search?q=' + placeAlias
+        return url
     }
 
     function setWeatherContents(cacheContent) {
