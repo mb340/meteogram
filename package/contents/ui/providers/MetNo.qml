@@ -50,9 +50,17 @@ Item {
 
 
         var sunRiseData = cacheContent.sunRiseData
-        if ((sunRiseData.location !== undefined)) {
+        if (sunRiseData.location !== undefined && sunRiseData.location.time !== undefined &&
+            sunRiseData.location.time.length > 0 && sunRiseData.location.time[0].sunrise) {
             additionalWeatherInfo.sunRiseTime = formatTime(sunRiseData.location.time[0].sunrise.time)
+        } else {
+            additionalWeatherInfo.sunSetTime = ""
+        }
+        if (sunRiseData.location !== undefined && sunRiseData.location.time !== undefined &&
+            sunRiseData.location.time.length > 0 && sunRiseData.location.time[0].sunset) {
             additionalWeatherInfo.sunSetTime = formatTime(sunRiseData.location.time[0].sunset.time)
+        } else {
+            additionalWeatherInfo.sunSetTime = ""
         }
         if ((sunRiseData.results !== undefined)) {
             additionalWeatherInfo.sunRiseTime = formatTime(sunRiseData.results.sunrise)
