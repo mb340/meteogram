@@ -9,6 +9,7 @@ Item {
     property alias cfg_inTrayActiveTimeoutSec: inTrayActiveTimeoutSec.value
     property string cfg_widgetFontName: plasmoid.configuration.widgetFontName
     property string cfg_widgetFontSize: plasmoid.configuration.widgetFontSize
+    property bool cfg_graphCurvedLine: plasmoid.configuration.graphCurvedLine
 
     onCfg_layoutTypeChanged: {
         switch (cfg_layoutType) {
@@ -58,6 +59,31 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         columns: 3
+
+        Item {
+            width: 2
+            height: 10
+            Layout.columnSpan: 3
+        }
+
+        Label {
+            text: i18n("Meteogram")
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            font.bold: true
+            Layout.columnSpan: 3
+        }
+
+        Label {
+            text: i18n("Smooth Graph Line:")
+            Layout.alignment: Qt.AlignVCenter|Qt.AlignRight
+        }
+
+        CheckBox {
+            checked: cfg_graphCurvedLine
+            onCheckedChanged: {
+                cfg_graphCurvedLine = checked
+            }
+        }
 
         Item {
             width: 2

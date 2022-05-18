@@ -59,6 +59,9 @@
         <entry name="widgetFontSize" type="Int">
             <default>32</default>
         </entry>
+        <entry name="graphCurvedLine" type="Bool">
+            <default>true</default>
+        </entry>
     </group>
 
     <group name="Units">

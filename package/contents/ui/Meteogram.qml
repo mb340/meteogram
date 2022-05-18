@@ -674,12 +674,22 @@ Item {
         }
     }
 
+    property bool graphCurvedLine: plasmoid.configuration.graphCurvedLine
+
+    onGraphCurvedLineChanged: {
+        main.meteogramModelChanged = !main.meteogramModelChanged
+    }
+
     function buildCurves() {
         var newPathElements = []
         var newPressureElements = []
 
         if (meteogramModel.count === 0) {
             return
+        }
+        var pathType = 'PathCurve'
+        if (!graphCurvedLine) {
+            pathType = 'PathLine'
         }
         for (var i = 0; i < meteogramModel.count; i++) {
             var dataObj = meteogramModel.get(i)
@@ -691,8 +701,12 @@ Item {
                 temperaturePathCold.startY = temperatureY
                 pressurePath.startY = pressureY
             }
-            newPathElements.push(Qt.createQmlObject('import QtQuick 2.0; PathCurve { x: ' + (i * sampleWidth) + '; y: ' + temperatureY + ' }', graphArea, "dynamicTemperature" + i))
-            newPressureElements.push(Qt.createQmlObject('import QtQuick 2.0; PathCurve { x: ' + (i * sampleWidth) + '; y: ' + pressureY + ' }', graphArea, "dynamicPressure" + i))
+            newPathElements.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
+                                 '{ x: ' + (i * sampleWidth) + '; y: ' + temperatureY + ' }',
+                                 graphArea, "dynamicTemperature" + i))
+            newPressureElements.push(Qt.createQmlObject('import QtQuick 2.0; '+ pathType +
+                                     '{ x: ' + (i * sampleWidth) + '; y: ' + pressureY + ' }',
+                                     graphArea, "dynamicPressure" + i))
         }
         temperaturePathWarm.pathElements = newPathElements
         temperaturePathCold.pathElements = newPathElements
