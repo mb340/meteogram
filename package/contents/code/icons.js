@@ -199,6 +199,11 @@ function getIconCode(iconName, providerId, partOfDay) {
         iconCodeParts = WeatherFont.iconNameByOwmCode[iconName]
     } else if (providerId === 'metno') {
         iconCodeParts = WeatherFont.iconNameByYrNoCode[iconName]
+    } else if (providerId === 'phonyprovider') {
+        if (!iconName || iconName === "") {
+            return '\uf07b'
+        }
+        return WeatherFont.codeByName[iconName]
     }
     if (!iconCodeParts) {
         return '\uf07b'

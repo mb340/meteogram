@@ -120,6 +120,10 @@ Item {
         id: owmProvider
     }
 
+    PhonyProvider {
+        id: phonyProvider
+    }
+
     ListModel {
         id: actualWeatherModel
     }
@@ -239,6 +243,9 @@ Item {
             dbgprint('setting provider metno')
             currentProvider = metnoProvider
         }
+        if (providerId === 'phonyprovider') {
+            currentProvider = phonyProvider
+        }
      }
 
     function setNextPlace(initial,direction) {
@@ -250,6 +257,18 @@ Item {
         }
 
         var places = ConfigUtils.getPlacesArray()
+        print(JSON.stringify(places))
+
+        var phony = {
+            providerId: "phonyprovider",
+            placeIdentifier: "Phony Place",
+            placeAlias: "Phony Place",
+            timezoneID: 88
+        }
+        places.push(phony)
+        // places = [places[0], phony]
+
+
         onlyOnePlace = places.length === 1
         dbgprint('places count=' + places.length + ', placeIndex=' + plasmoid.configuration.placeIndex)
         var placeIndex = plasmoid.configuration.placeIndex
