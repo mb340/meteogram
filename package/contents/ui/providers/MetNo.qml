@@ -99,6 +99,8 @@ Item {
             var airtmp = parseFloat(obj.data.instant.details["air_temperature"])
             var icon = obj.data.next_1_hours.summary["symbol_code"]
             var prec = obj.data.next_1_hours.details["precipitation_amount"]
+            var hm = obj.data.instant.details["relative_humidity"]
+            var cld = obj.data.instant.details["cloud_area_fraction"]
             counter = (prec > 0) ? counter + 1 : 0
             meteogramModel.append({
                 from: dateFrom,
@@ -110,7 +112,9 @@ Item {
                 windDirection: parseFloat(wd),
                 windSpeedMps: parseFloat(ws),
                 pressureHpa: parseFloat(ap),
-                iconName: geticonNumber(icon)
+                iconName: geticonNumber(icon),
+                humidity: parseFloat(hm),
+                cloudArea: parseFloat(cld)
             })
             dateFrom = dateTo
             i++
