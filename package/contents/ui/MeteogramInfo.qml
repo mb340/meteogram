@@ -210,6 +210,16 @@ Item {
             })
         }
 
+        var humidityStr = ""
+        if (isFinite(hourModel.humidity)) {
+            humidityStr = hourModel.humidity + " %"
+            model.append({
+                nameStr: i18n("Relative humidity:"),
+                valueStr: humidityStr,
+                valueColor: humidityColor.toString()
+            })
+        }
+
         var precipitationStr = ""
         if (hourModel.precipitationAvg >= precipitationMinVisible) {
             precipitationStr = UnitUtils.precipitationFormat(hourModel.precipitationAvg,
