@@ -100,6 +100,7 @@ Item {
     property bool debugLogging: plasmoid.configuration.debugLogging
 
     FontLoader {
+        id: weatherIconFont
         source: '../fonts/weathericons-regular-webfont-2.0.10.ttf'
     }
 
