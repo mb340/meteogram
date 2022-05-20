@@ -61,6 +61,8 @@ Item {
     property color rainColor: textColorLight ? Qt.rgba(0.33, 0.66, 1, 1) : Qt.rgba(0, 0.33, 1, 1)
     property color cloudAreaColor: textColorLight ? Qt.rgba(1.0, 1.0, 1.0, 0.2) : Qt.rgba(0.5, 0.5, 0.5, 0.2)
     property color cloudAreaColor2: textColorLight ? Qt.rgba(0.5, 0.5, 0.5, 0.2) : Qt.rgba(0.0, 0.0, 0.0, 0.2)
+    property color humidityColor: textColorLight ?  Qt.rgba(0.0/255, 206/255, 209/255, 1.0) : // DarkTurquoise
+                                                    Qt.rgba(0.0/255, 98/255, 134/255, 1.0)   // Cerulean
 
 
     property int precipitationFontPixelSize: 8 * units.devicePixelRatio
@@ -360,6 +362,12 @@ Item {
         }
 
         LinearScale {
+            id: humidityScale
+            domain: [0, 100]
+            range: [imageHeight, 0]
+        }
+
+        LinearScale {
             id: timeScale
             range: [0, imageWidth]
         }
@@ -388,6 +396,11 @@ Item {
 
             Path {
                 id: cloudAreaPath
+                startX: 0
+            }
+
+            Path {
+                id: humidityPath
                 startX: 0
             }
 
@@ -618,6 +631,7 @@ Item {
 
                 context.globalCompositeOperation = "source-over"
                 drawCloudArea(context)
+                drawPath(context, humidityPath, humidityColor, 1 * units.devicePixelRatio)
                 drawPath(context, pressurePath, pressureColor, 1 * units.devicePixelRatio)
                 drawWarmTemp(context, temperaturePathWarm, temperatureWarmColor, 2 * units.devicePixelRatio)
                 drawColdTemp(context, temperaturePathCold, temperatureColdColor, 2 * units.devicePixelRatio)
@@ -797,6 +811,7 @@ Item {
         var newPressureElements = []
         var newCloudElements = []
         var newCloudElements2 = []
+        var newHumidityElements = []
 
         if (meteogramModel.count === 0) {
             return
@@ -810,10 +825,12 @@ Item {
 
             var temperatureY = temperatureScale.translate(UnitUtils.convertTemperature(dataObj.temperature, temperatureType))
             var pressureY = pressureScale.translate(UnitUtils.convertPressure(dataObj.pressureHpa, pressureType))
+            var humidityY = humidityScale.translate(dataObj.humidity)
             if (i === 0) {
                 temperaturePathWarm.startY = temperatureY
                 temperaturePathCold.startY = temperatureY
                 pressurePath.startY = pressureY
+                humidityPath.startY = isFinite(humidityY) ? humidityY : 0
             }
             newPathElements.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
                                  '{ x: ' + (i * sampleWidth) + '; y: ' + temperatureY + ' }',
@@ -835,11 +852,17 @@ Item {
                                      '{ x: ' + (i * sampleWidth) + '; y: ' + cloudY1 + ' }',
                                      graphArea, "dynamicCloudArea" + (meteogramModel.count + i)))
             }
+            if (isFinite(humidityY)) {
+                newHumidityElements.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
+                                         '{ x: ' + (i * sampleWidth) + '; y: ' + humidityY + ' }',
+                                         graphArea, "dynamicHumidity" + i))
+            }
         }
         temperaturePathWarm.pathElements = newPathElements
         temperaturePathCold.pathElements = newPathElements
         pressurePath.pathElements = newPressureElements
         cloudAreaPath.pathElements = newCloudElements.concat(newCloudElements2.reverse())
+        humidityPath.pathElements = newHumidityElements
 
         repaintCanvas()
     }
