@@ -59,6 +59,8 @@ Item {
     property color temperatureWarmColor: textColorLight ? Qt.rgba(1, 0.3, 0.3, 1) : Qt.rgba(1, 0.0, 0.0, 1)
     property color temperatureColdColor: textColorLight ? Qt.rgba(0.2, 0.7, 1, 1) : Qt.rgba(0.1, 0.5, 1, 1)
     property color rainColor: textColorLight ? Qt.rgba(0.33, 0.66, 1, 1) : Qt.rgba(0, 0.33, 1, 1)
+    property color cloudAreaColor: textColorLight ? Qt.rgba(1.0, 1.0, 1.0, 0.2) : Qt.rgba(0.5, 0.5, 0.5, 0.2)
+    property color cloudAreaColor2: textColorLight ? Qt.rgba(0.5, 0.5, 0.5, 0.2) : Qt.rgba(0.0, 0.0, 0.0, 0.2)
 
 
     property int precipitationFontPixelSize: 8 * units.devicePixelRatio
@@ -351,6 +353,13 @@ Item {
         }
 
         LinearScale {
+            id: cloudAreaScale
+            property var offset: 5
+            domain: [0, 100]
+            range: [offset + (imageHeight / 8), offset]
+        }
+
+        LinearScale {
             id: timeScale
             range: [0, imageWidth]
         }
@@ -374,6 +383,11 @@ Item {
 
             Path {
                 id: temperaturePathCold
+                startX: 0
+            }
+
+            Path {
+                id: cloudAreaPath
                 startX: 0
             }
 
@@ -571,6 +585,23 @@ Item {
                 }
             }
 
+            function drawCloudArea(context) {
+                if (cloudAreaPath.pathElements.length === 0) {
+                    return
+                }
+                context.beginPath()
+
+                var y0 = cloudAreaScale.translate(50 - (100 / 2))
+                var y1 = cloudAreaScale.translate(50 + (100 / 4))
+                var gradient = context.createLinearGradient(0, y1, 0, y0);
+                gradient.addColorStop(0, cloudAreaColor);
+                gradient.addColorStop(1, cloudAreaColor2);
+                context.fillStyle = gradient;
+                context.path = cloudAreaPath
+                context.closePath()
+                context.fill()
+            }
+
             onPaint: {
                 var context = getContext("2d")
                 context.clearRect(0, 0, width, height)
@@ -578,6 +609,7 @@ Item {
 
                 var rectWidth = timeScale.translate(1) - timeScale.translate(0)
 
+                context.globalCompositeOperation = "source-over"
                 drawPrecipitationBars(context, rectWidth)
 
                 // Carve out negative space when weather icons overlap precipitation bars
@@ -585,6 +617,7 @@ Item {
                 drawWeatherIcons(context, rectWidth)
 
                 context.globalCompositeOperation = "source-over"
+                drawCloudArea(context)
                 drawPath(context, pressurePath, pressureColor, 1 * units.devicePixelRatio)
                 drawWarmTemp(context, temperaturePathWarm, temperatureWarmColor, 2 * units.devicePixelRatio)
                 drawColdTemp(context, temperaturePathCold, temperatureColdColor, 2 * units.devicePixelRatio)
@@ -762,6 +795,8 @@ Item {
     function buildCurves() {
         var newPathElements = []
         var newPressureElements = []
+        var newCloudElements = []
+        var newCloudElements2 = []
 
         if (meteogramModel.count === 0) {
             return
@@ -786,10 +821,26 @@ Item {
             newPressureElements.push(Qt.createQmlObject('import QtQuick 2.0; '+ pathType +
                                      '{ x: ' + (i * sampleWidth) + '; y: ' + pressureY + ' }',
                                      graphArea, "dynamicPressure" + i))
+
+            if (isFinite(dataObj.cloudArea)) {
+                var cloudY0 = cloudAreaScale.translate(50 + (dataObj.cloudArea / 4))
+                var cloudY1 = cloudAreaScale.translate(50 - ((dataObj.cloudArea) / 2))
+                if (i === 0) {
+                    cloudAreaPath.startY = cloudY0
+                }
+                newCloudElements.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
+                                     '{ x: ' + (i * sampleWidth) + '; y: ' + cloudY0 + ' }',
+                                     graphArea, "dynamicCloudArea" + i))
+                newCloudElements2.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
+                                     '{ x: ' + (i * sampleWidth) + '; y: ' + cloudY1 + ' }',
+                                     graphArea, "dynamicCloudArea" + (meteogramModel.count + i)))
+            }
         }
         temperaturePathWarm.pathElements = newPathElements
         temperaturePathCold.pathElements = newPathElements
         pressurePath.pathElements = newPressureElements
+        cloudAreaPath.pathElements = newCloudElements.concat(newCloudElements2.reverse())
+
         repaintCanvas()
     }
 
