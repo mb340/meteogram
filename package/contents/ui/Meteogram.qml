@@ -711,6 +711,8 @@ Item {
             var icon = obj.iconName
             var prec = parseFloat(obj.precipitationAvg) / differenceHours
             var preclabel = obj.precipitationLabel
+            var hm = obj.humidity
+            var cld = obj.cloudArea
 
             for (var j = 0; j < differenceHours; j++) {
                 counter = (prec >= precipitationMinVisible) ? counter + 1 : 0
@@ -728,6 +730,8 @@ Item {
                                       windDirection: parseFloat(wd),
                                       windSpeedMps: parseFloat(ws),
                                       pressureHpa: parseFloat(ap),
+                                      humidity: hm,
+                                      cloudArea: cld,
                                       differenceHours: differenceHours
                                   })
             }
