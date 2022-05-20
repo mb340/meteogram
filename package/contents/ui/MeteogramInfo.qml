@@ -201,6 +201,15 @@ Item {
             valueStr: windStr
         })
 
+        var cloudAreaStr = ""
+        if (isFinite(hourModel.cloudArea)) {
+            cloudAreaStr = hourModel.cloudArea + " %"
+            model.append({
+                nameStr: i18n("Cloud area:"),
+                valueStr: cloudAreaStr,
+            })
+        }
+
         var precipitationStr = ""
         if (hourModel.precipitationAvg >= precipitationMinVisible) {
             precipitationStr = UnitUtils.precipitationFormat(hourModel.precipitationAvg,
