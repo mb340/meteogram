@@ -50,21 +50,23 @@ Item {
 
 
         var sunRiseData = cacheContent.sunRiseData
-        if (sunRiseData.location !== undefined && sunRiseData.location.time !== undefined &&
-            sunRiseData.location.time.length > 0 && sunRiseData.location.time[0].sunrise) {
-            additionalWeatherInfo.sunRiseTime = formatTime(sunRiseData.location.time[0].sunrise.time)
-        } else {
-            additionalWeatherInfo.sunSetTime = ""
-        }
-        if (sunRiseData.location !== undefined && sunRiseData.location.time !== undefined &&
-            sunRiseData.location.time.length > 0 && sunRiseData.location.time[0].sunset) {
-            additionalWeatherInfo.sunSetTime = formatTime(sunRiseData.location.time[0].sunset.time)
-        } else {
-            additionalWeatherInfo.sunSetTime = ""
+        additionalWeatherInfo.sunRise = undefined
+        additionalWeatherInfo.sunSet = undefined
+        if (sunRiseData.location !== undefined && sunRiseData.location.time !== undefined) {
+            if (sunRiseData.location.time.length > 0 && sunRiseData.location.time[0].sunrise) {
+                additionalWeatherInfo.sunRise = sunRiseData.location.time[0].sunrise.time
+            }
+            if (sunRiseData.location.time.length > 0 && sunRiseData.location.time[0].sunset) {
+                additionalWeatherInfo.sunSet = sunRiseData.location.time[0].sunset.time
+            }
         }
         if ((sunRiseData.results !== undefined)) {
-            additionalWeatherInfo.sunRiseTime = formatTime(sunRiseData.results.sunrise)
-            additionalWeatherInfo.sunSetTime = formatTime(sunRiseData.results.sunset)
+            if (sunRiseData.results.sunrise !== undefined) {
+                additionalWeatherInfo.sunRise = sunRiseData.results.sunrise
+            }
+            if (sunRiseData.results.sunset !== undefined) {
+                additionalWeatherInfo.sunSet = sunRiseData.results.sunset
+            }
         }
 
         updateAdditionalWeatherInfoText()
