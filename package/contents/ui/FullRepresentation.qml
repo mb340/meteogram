@@ -214,6 +214,13 @@ Item {
             verticalAlignment: Text.AlignBottom
 
             text: lastReloadedText
+
+            Connections {
+                target: plasmoid
+                function onExpandedChanged() {
+                    main.updateLastReloadedText()
+                }
+            }
         }
 
         PlasmaComponents.Label {
