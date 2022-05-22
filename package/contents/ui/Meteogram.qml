@@ -55,7 +55,7 @@ Item {
     property bool textColorLight: ((theme.textColor.r + theme.textColor.g + theme.textColor.b) / 3) > 0.5
     property color gridColor: textColorLight ? Qt.tint(theme.textColor, '#80000000') : Qt.tint(theme.textColor, '#80FFFFFF')
     property color gridColorHighlight: textColorLight ? Qt.tint(theme.textColor, '#50000000') : Qt.tint(theme.textColor, '#50FFFFFF')
-    property color pressureColor: textColorLight ? Qt.rgba(0.3, 1, 0.3, 1) : Qt.rgba(0.0, 0.6, 0.0, 1)
+/*    property color pressureColor: textColorLight ? Qt.rgba(0.3, 1, 0.3, 1) : Qt.rgba(0.0, 0.6, 0.0, 1)
     property color temperatureWarmColor: textColorLight ? Qt.rgba(1, 0.3, 0.3, 1) : Qt.rgba(1, 0.0, 0.0, 1)
     property color temperatureColdColor: textColorLight ? Qt.rgba(0.2, 0.7, 1, 1) : Qt.rgba(0.1, 0.5, 1, 1)
     property color rainColor: textColorLight ? Qt.rgba(0.33, 0.66, 1, 1) : Qt.rgba(0, 0.33, 1, 1)
@@ -63,7 +63,7 @@ Item {
     property color cloudAreaColor2: textColorLight ? Qt.rgba(0.5, 0.5, 0.5, 0.2) : Qt.rgba(0.0, 0.0, 0.0, 0.2)
     property color humidityColor: textColorLight ?  Qt.rgba(0.0/255, 206/255, 209/255, 1.0) : // DarkTurquoise
                                                     Qt.rgba(0.0/255, 98/255, 134/255, 1.0)   // Cerulean
-
+*/
 
     property int precipitationFontPixelSize: 8 * units.devicePixelRatio
     property int precipitationHeightMultiplier: 15 * units.devicePixelRatio
@@ -83,6 +83,10 @@ Item {
         buildMetogramData()
         processMeteogramData()
         buildCurves()
+    }
+
+    MeteogramColors {
+        id: palette
     }
 
 
@@ -124,7 +128,7 @@ Item {
         anchors.rightMargin: labelWidth
         anchors.topMargin: labelHeight  + cloudarea
         border.color:gridColor
-        color: "transparent"
+        color: textColorLight ? 'black' : 'white'
     }
     ListView {
         id: horizontalLines1
@@ -172,7 +176,7 @@ Item {
                 horizontalAlignment: Text.AlignLeft
                 font.pixelSize: 11 * units.devicePixelRatio
                 font.pointSize: -1
-                color: pressureColor
+                color: palette.pressureColor()
             }
         }
     }
@@ -185,7 +189,7 @@ Item {
         anchors.rightMargin: -labelWidth
         font.pixelSize: 11 * units.devicePixelRatio
         font.pointSize: -1
-        color: pressureColor
+        color: palette.pressureColor()
         anchors.bottom: graphArea.top
         anchors.bottomMargin: 6
     }
@@ -414,7 +418,7 @@ Item {
                     var x = timeScale.translate(i) + (0.5 * units.devicePixelRatio)
                     var prec = Math.min(precipitationMaxGraphY, hourModel.precipitationAvg)
                     var y = precipitationScale.translate(prec)
-                    context.fillStyle = rainColor
+                    context.fillStyle = palette.rainColor()
                     var h = (precipitationScale.range[0]) - y
                     var w = rectWidth - (0.5 * units.devicePixelRatio)
                     context.fillRect(x, y, w, h)
@@ -607,8 +611,8 @@ Item {
                 var y0 = cloudAreaScale.translate(50 - (100 / 2))
                 var y1 = cloudAreaScale.translate(50 + (100 / 4))
                 var gradient = context.createLinearGradient(0, y1, 0, y0);
-                gradient.addColorStop(0, cloudAreaColor);
-                gradient.addColorStop(1, cloudAreaColor2);
+                gradient.addColorStop(0, palette.cloudAreaColor());
+                gradient.addColorStop(1, palette.cloudAreaColor2());
                 context.fillStyle = gradient;
                 context.path = cloudAreaPath
                 context.closePath()
@@ -631,10 +635,10 @@ Item {
 
                 context.globalCompositeOperation = "source-over"
                 drawCloudArea(context)
-                drawPath(context, humidityPath, humidityColor, 1 * units.devicePixelRatio)
-                drawPath(context, pressurePath, pressureColor, 1 * units.devicePixelRatio)
-                drawWarmTemp(context, temperaturePathWarm, temperatureWarmColor, 2 * units.devicePixelRatio)
-                drawColdTemp(context, temperaturePathCold, temperatureColdColor, 2 * units.devicePixelRatio)
+                drawPath(context, humidityPath, palette.humidityColor(), 1 * units.devicePixelRatio)
+                drawPath(context, pressurePath, palette.pressureColor(), 1 * units.devicePixelRatio)
+                drawWarmTemp(context, temperaturePathWarm, palette.temperatureWarmColor(), 2 * units.devicePixelRatio)
+                drawColdTemp(context, temperaturePathCold, palette.temperatureColdColor(), 2 * units.devicePixelRatio)
 
                 // Ensure weather icons atop graph lines without drawing over carve out
                 context.globalCompositeOperation = "source-atop"

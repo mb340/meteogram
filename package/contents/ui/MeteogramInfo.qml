@@ -183,8 +183,8 @@ Item {
             nameStr: i18n("Temperature:"),
             valueStr: hourModel.temperature.toFixed(2) +
                         UnitUtils.getTemperatureEnding(temperatureType),
-            valueColor: (hourModel.temperature >= 0 ? temperatureWarmColor :
-                                                      temperatureColdColor).toString()
+            valueColor: (hourModel.temperature >= 0 ? palette.temperatureWarmColor() :
+                                                     palette.temperatureColdColor()).toString()
         })
 
 
@@ -192,7 +192,7 @@ Item {
         model.append({
             nameStr: i18n("Pressure:"),
             valueStr: pressureStr + " " + UnitUtils.getPressureEnding(pressureType),
-            valueColor: pressureColor.toString()
+            valueColor: palette.pressureColor().toString()
         })
 
         var windStr = UnitUtils.getWindSpeedText(hourModel.windSpeedMps, windSpeedType)
@@ -216,7 +216,7 @@ Item {
             model.append({
                 nameStr: i18n("Relative humidity:"),
                 valueStr: humidityStr,
-                valueColor: humidityColor.toString()
+                valueColor: palette.humidityColor().toString()
             })
         }
 
@@ -228,7 +228,7 @@ Item {
             model.append({
                 nameStr: i18n("Precipitation:"),
                 valueStr: precipitationStr,
-                valueColor: rainColor.toString()
+                valueColor: palette.rainColor().toString()
             })
         }
     }
