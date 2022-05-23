@@ -49,24 +49,29 @@ Item {
         buildMetogramData(weatherData)
 
 
+        var sunRise = undefined
+        var sunSet = undefined
         var sunRiseData = cacheContent.sunRiseData
-        additionalWeatherInfo.sunRise = undefined
-        additionalWeatherInfo.sunSet = undefined
         if (sunRiseData.location !== undefined && sunRiseData.location.time !== undefined) {
             if (sunRiseData.location.time.length > 0 && sunRiseData.location.time[0].sunrise) {
-                additionalWeatherInfo.sunRise = sunRiseData.location.time[0].sunrise.time
+                sunRise = sunRiseData.location.time[0].sunrise.time
             }
             if (sunRiseData.location.time.length > 0 && sunRiseData.location.time[0].sunset) {
-                additionalWeatherInfo.sunSet = sunRiseData.location.time[0].sunset.time
+                sunSet = sunRiseData.location.time[0].sunset.time
             }
         }
         if ((sunRiseData.results !== undefined)) {
             if (sunRiseData.results.sunrise !== undefined) {
-                additionalWeatherInfo.sunRise = sunRiseData.results.sunrise
+                sunRise = sunRiseData.results.sunrise
             }
             if (sunRiseData.results.sunset !== undefined) {
-                additionalWeatherInfo.sunSet = sunRiseData.results.sunset
+                sunSet = sunRiseData.results.sunset
             }
+        }
+
+        if (sunRise && sunSet) {
+            additionalWeatherInfo.sunRise = UnitUtils.convertDate(sunRise, timezoneType)
+            additionalWeatherInfo.sunSet = UnitUtils.convertDate(sunSet, timezoneType)
         }
 
         updateAdditionalWeatherInfoText()
@@ -82,14 +87,15 @@ Item {
     function buildMetogramData(readingsArray) {
         meteogramModel.clear()
         var readingsLength = (readingsArray.properties.timeseries.length)
-        var dateNow = new Date()
-        var dateFrom = parseISOString(readingsArray.properties.timeseries[0].time)
+        var dateNow = UnitUtils.dateNow(timezoneType)
+        var t = readingsArray.properties.timeseries[0].time
+        var dateFrom = UnitUtils.convertDate(t, timezoneType)
         var precipitation_unit = readingsArray.properties.meta.units["precipitation_amount"]
         var counter = 0
         var i = 1
         while (readingsArray.properties.timeseries[i].data.next_1_hours) {
             var obj = readingsArray.properties.timeseries[i]
-            var dateTo = parseISOString(obj.time)
+            var dateTo = UnitUtils.convertDate(obj.time, timezoneType)
             if (dateTo < dateNow) {
                 dateFrom = dateTo
                 i++
@@ -170,7 +176,7 @@ Item {
 
         nextDaysModel.clear()
         var readingsLength = (readingsArray.properties.timeseries.length) - 1
-        var dateNow = UnitUtils.convertDate(new Date(), timezoneType)
+        var dateNow = UnitUtils.dateNow(timezoneType)
         var obj = resetobj()
         var prevHour = -1;
         for (var i = 0; i < readingsLength; i++) {
@@ -258,7 +264,7 @@ Item {
       if(DSTPeriods === undefined)
         return (false)
 
-      let now = new Date().getTime() / 1000
+      let now = UnitUtils.dateNow(timezoneType).getTime() / 1000
       let isDSTflag = false
       for (let f = 0; f < DSTPeriods.length; f++) {
         if ((now >= DSTPeriods[f].DSTStart) && (now <= DSTPeriods[f].DSTEnd)) {
