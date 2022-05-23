@@ -166,6 +166,14 @@ var TimezoneType = {
 }
 
 function convertDate(date, timezoneType) {
+    if (typeof(date) === "string") {
+        date = new Date(Date.parse(date))
+    } else if (typeof(date) === "number") {
+        if (!isFinite(date)) {
+            return date
+        }
+        date = new Date(date)
+    }
     if (timezoneType === TimezoneType.UTC) {
         return new Date(date.getTime() + (date.getTimezoneOffset() * 60000))
     }
