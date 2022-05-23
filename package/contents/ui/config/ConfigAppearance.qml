@@ -156,6 +156,9 @@ Item {
             textRole: "text"
 
             onCurrentIndexChanged: {
+                if (model.count === undefined || model.count === 0) {
+                    return
+                }
                 var current = model.get(currentIndex)
                 if (current) {
                     cfg_widgetFontName = currentIndex === 0 ? "" : current.value
