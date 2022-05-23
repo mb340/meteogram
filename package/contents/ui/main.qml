@@ -422,8 +422,6 @@ Item {
         }
         var sunRise = additionalWeatherInfo.sunRise
         var sunSet = additionalWeatherInfo.sunSet
-        sunRise = UnitUtils.convertDate(sunRise, timezoneType)
-        sunSet = UnitUtils.convertDate(sunSet, timezoneType)
         additionalWeatherInfo.sunRiseTime = Qt.formatTime(sunRise, Qt.locale().timeFormat(Locale.ShortFormat))
         additionalWeatherInfo.sunSetTime = Qt.formatTime(sunSet, Qt.locale().timeFormat(Locale.ShortFormat))
         refreshTooltipSubText()
