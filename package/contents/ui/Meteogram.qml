@@ -770,7 +770,7 @@ Item {
                 var preparedDate = new Date(dateFrom.getTime() + (j * oneHourMs))
 
                 hourGridModel.append({
-                                      dateFrom: UnitUtils.convertDate(preparedDate, timezoneType),
+                                      dateFrom: preparedDate,
                                       iconName: j === differenceHoursMid ? icon : '',
                                       temperature: airtmp,
                                       precipitationAvg: prec,
