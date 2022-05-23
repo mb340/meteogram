@@ -10,6 +10,7 @@ Item {
     property string cfg_widgetFontName: plasmoid.configuration.widgetFontName
     property string cfg_widgetFontSize: plasmoid.configuration.widgetFontSize
     property bool cfg_graphCurvedLine: plasmoid.configuration.graphCurvedLine
+    property int cfg_colorPaletteType: plasmoid.configuration.colorPaletteType
 
     onCfg_layoutTypeChanged: {
         switch (cfg_layoutType) {
@@ -23,6 +24,24 @@ Item {
             layoutTypeGroup.current = layoutTypeRadioCompact;
             break;
         default:
+        }
+    }
+
+    onCfg_colorPaletteTypeChanged: {
+        switch (cfg_colorPaletteType) {
+            default:
+            case 0:
+                colorPaletteTypeGroup.current = colorPaletteTypeDefault
+                break;
+            case 1:
+                colorPaletteTypeGroup.current = colorPaletteTypeProt
+                break;
+            case 2:
+                colorPaletteTypeGroup.current = colorPaletteTypeDeut
+                break;
+            case 3:
+                colorPaletteTypeGroup.current = colorPaletteTypeTrit
+                break;
         }
     }
 
@@ -49,10 +68,15 @@ Item {
 
     Component.onCompleted: {
         cfg_layoutTypeChanged()
+        cfg_colorPaletteTypeChanged()
     }
 
     ExclusiveGroup {
         id: layoutTypeGroup
+    }
+
+    ExclusiveGroup {
+        id: colorPaletteTypeGroup
     }
 
     GridLayout {
@@ -89,6 +113,55 @@ Item {
             width: 2
             height: 10
             Layout.columnSpan: 3
+        }
+
+        Label {
+            text: i18n("Color palette")
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+        }
+        RadioButton {
+            id: colorPaletteTypeDefault
+            exclusiveGroup: colorPaletteTypeGroup
+            text: i18n("Default")
+            onCheckedChanged: if (checked) cfg_colorPaletteType = 0
+        }
+        Item {
+            width: 2
+            height: 2
+            Layout.rowSpan: 1
+        }
+        Item {
+            width: 2
+            height: 2
+            Layout.rowSpan: 2
+        }
+        RadioButton {
+            id: colorPaletteTypeProt
+            exclusiveGroup: colorPaletteTypeGroup
+            text: i18n("Protanopia")
+            onCheckedChanged: if (checked) cfg_colorPaletteType = 1
+        }
+        Item {
+            width: 2
+            height: 2
+            Layout.rowSpan: 2
+        }
+        RadioButton {
+            id: colorPaletteTypeDeut
+            exclusiveGroup: colorPaletteTypeGroup
+            text: i18n("Deuteranopia")
+            onCheckedChanged: if (checked) cfg_colorPaletteType = 2
+        }
+        Item {
+            width: 2
+            height: 2
+            Layout.rowSpan: 2
+        }
+        RadioButton {
+            id: colorPaletteTypeTrit
+            exclusiveGroup: colorPaletteTypeGroup
+            text: i18n("Tritanopia")
+            onCheckedChanged: if (checked) cfg_colorPaletteType = 3
         }
 
         Label {
