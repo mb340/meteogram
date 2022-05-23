@@ -564,7 +564,7 @@ Item {
                     var x = timeScale.translate(i - 1)
                     var y = temperatureScale.translate(UnitUtils.convertTemperature(
                                                         hourModel.temperature, temperatureType))
-                    var timePeriod = hourFrom >= 6 && hourFrom <= 18 ? 0 : 1
+                    var timePeriod = UnitUtils.isSunRisen(hourModel.dateFrom) ? 0 : 1
                     var str = IconTools.getIconCode(iconName, currentProvider.providerId, timePeriod)
 
                     var metrics = context.measureText(str)

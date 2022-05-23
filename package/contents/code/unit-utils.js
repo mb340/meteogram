@@ -170,6 +170,62 @@ function convertDate(date, timezoneType) {
     return date
 }
 
+function hasSunriseSunsetData() {
+    if (!main.additionalWeatherInfo) {
+        return false
+    }
+    if (main.additionalWeatherInfo.sunRise === undefined ||
+        main.additionalWeatherInfo.sunSet === undefined)
+    {
+        return false
+    }
+    if (typeof(main.additionalWeatherInfo.sunRise) === "number" &&
+        isNaN(main.additionalWeatherInfo.sunRise))
+    {
+        return false
+    }
+    if (typeof(main.additionalWeatherInfo.sunSet) === "number" &&
+        isNaN(main.additionalWeatherInfo.sunSet))
+    {
+        return false
+    }
+    return true
+
+}
+
+function isSunRisen(t) {
+    var hourFrom = t.getHours()
+    if (!hasSunriseSunsetData()) {
+        return 6 <= hourFrom && hourFrom <= 18
+    }
+
+    var sunRise = main.additionalWeatherInfo.sunRise
+    var sunSet = main.additionalWeatherInfo.sunSet
+
+    var res = undefined
+    // print('isSunRisen: sunRise = ' + sunRise)
+    // print('isSunRisen: sunSet = ' + sunSet)
+
+    var isSameDate = sunRise.getDate() === sunSet.getDate()
+
+    if (isSameDate) {
+        if (sunRise <= sunSet) {
+            // Sun rise and set on same day
+            res = hourFrom > sunRise.getHours() && hourFrom < sunSet.getHours()
+        } else {
+            // Sun set on next day
+            res = hourFrom > sunRise.getHours() || hourFrom < sunSet.getHours()
+        }
+    } else  if (!isSameDate && sunSet > sunRise) {
+        // Sun set on next day
+        res = hourFrom > sunRise.getHours() || hourFrom < sunSet.getHours()
+    } else {
+        throw new Error("Unhandled sunrise / sunset case")
+    }
+    // print('isSunRisen: t = ' + t + ', res = ' + res)
+    return res
+}
+
 /*
  * PRECIPITATION
  */
