@@ -160,7 +160,9 @@ function getAmOrPm(hourNumber) {
  */
 var TimezoneType = {
     USER_LOCAL_TIME: 0,
-    UTC: 1
+    UTC: 1,
+    LOCATION_LOCAL_TIME: 2,
+}
 }
 
 function convertDate(date, timezoneType) {
