@@ -62,6 +62,9 @@ Item {
         case 1:
             timezoneTypeGroup.current = timezoneTypeRadioUtc;
             break;
+        case 2:
+            timezoneTypeGroup.current = timezoneTypeRadioLocationLocalTime;
+            break;
         default:
         }
     }
@@ -219,6 +222,17 @@ Item {
             exclusiveGroup: timezoneTypeGroup
             text: i18n("UTC")
             onCheckedChanged: if (checked) cfg_timezoneType = 1
+        }
+        Item {
+            width: 2
+            height: 2
+            Layout.rowSpan: 1
+        }
+        RadioButton {
+            id: timezoneTypeRadioLocationLocalTime
+            exclusiveGroup: timezoneTypeGroup
+            text: i18n("Location local-time")
+            onCheckedChanged: if (checked) cfg_timezoneType = 2
         }
     }
 
