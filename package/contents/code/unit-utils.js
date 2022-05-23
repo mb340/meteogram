@@ -1,3 +1,5 @@
+.import "./db/timezoneData.js" as TZ
+
 /*
  * TEMPERATURE
  */
@@ -163,6 +165,22 @@ var TimezoneType = {
     UTC: 1,
     LOCATION_LOCAL_TIME: 2,
 }
+function isDST(DSTPeriods, timezoneType) {
+    if(DSTPeriods === undefined) {
+        return (false)
+    }
+    if (timezoneType === undefined) {
+        timezoneType = main.timezoneType
+    }
+
+    let now = (new Date).getTime() / 1000
+    let isDSTflag = false
+    for (let f = 0; f < DSTPeriods.length; f++) {
+        if ((now >= DSTPeriods[f].DSTStart) && (now <= DSTPeriods[f].DSTEnd)) {
+           isDSTflag = true
+        }
+    }
+    return(isDSTflag)
 }
 
 function convertDate(date, timezoneType) {
