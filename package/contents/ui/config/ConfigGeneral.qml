@@ -891,11 +891,11 @@ Item {
             }
 
             onEntered: {
-                owmLink.font.underline = true
+                attribution1.font.underline = true
             }
 
             onExited: {
-                owmLink.font.underline = false
+                attribution1.font.underline = false
             }
         }
         MouseArea {
@@ -909,11 +909,11 @@ Item {
             }
 
             onEntered: {
-                owmLink.font.underline = true
+                attribution2.font.underline = true
             }
 
             onExited: {
-                owmLink.font.underline = false
+                attribution2.font.underline = false
             }
         }
         MouseArea {
@@ -927,11 +927,11 @@ Item {
             }
 
             onEntered: {
-                owmLink.font.underline = true
+                attribution3.font.underline = true
             }
 
             onExited: {
-                owmLink.font.underline = false
+                attribution3.font.underline = false
             }
         }
         MouseArea {
@@ -945,11 +945,11 @@ Item {
             }
 
             onEntered: {
-                owmLink.font.underline = true
+                attribution4.font.underline = true
             }
 
             onExited: {
-                owmLink.font.underline = false
+                attribution4.font.underline = false
             }
         }
     }
