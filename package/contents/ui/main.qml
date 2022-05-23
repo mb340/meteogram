@@ -523,6 +523,11 @@ Item {
     }
 
     onTimezoneTypeChanged: {
+        if (!initialized) {
+            return
+        }
+        alreadyLoadedFromCache = false
+        loadFromCache()
     }
 
     function dbgprint(msg) {
