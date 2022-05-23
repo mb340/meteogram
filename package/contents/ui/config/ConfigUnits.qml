@@ -209,7 +209,7 @@ Item {
         RadioButton {
             id: timezoneTypeRadioUserLocalTime
             exclusiveGroup: timezoneTypeGroup
-            text: i18n("My local-time")
+            text: i18n("System local-time")
             onCheckedChanged: if (checked) cfg_timezoneType = 0
         }
         Item {
