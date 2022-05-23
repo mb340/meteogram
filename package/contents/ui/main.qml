@@ -79,7 +79,7 @@ Item {
     // 2 - compact
     property int layoutType: plasmoid.configuration.layoutType
 
-    property bool updatingPaused: true
+    property bool updatingPaused: false
 
     property var currentProvider: null
 
@@ -131,20 +131,20 @@ Item {
         id: meteogramModel
     }
 
+    function initPausedAction() {
+        plasmoid.setAction('toggleUpdatingPaused',
+                           updatingPaused ? i18n("Resume Updating") : i18n("Pause Updating"),
+                           updatingPaused ? 'media-playback-start' : 'media-playback-pause');
+    }
+
     function action_toggleUpdatingPaused() {
-        if (!initialized) {
-            return
-        }
-
         updatingPaused = !updatingPaused
-
+        initPausedAction()
         if (updatingPaused) {
             reloadTime.stop()
         } else {
             rearmTimer()
         }
-
-        plasmoid.setAction('toggleUpdatingPaused', updatingPaused ? i18n("Resume Updating") : i18n("Pause Updating"), updatingPaused ? 'media-playback-start' : 'media-playback-pause');
     }
 
     WeatherCache {
@@ -204,7 +204,7 @@ Item {
         }
 
         // init contextMenu
-        action_toggleUpdatingPaused()
+        initPausedAction()
 
         // fill xml cache xml
         var cacheContent = weatherCache.readCache()
