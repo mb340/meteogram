@@ -386,25 +386,30 @@ Item {
             Path {
                 id: pressurePath
                 startX: 0
+                pathElements: []
             }
             Path {
                 id: temperaturePathWarm
                 startX: 0
+                pathElements: []
             }
 
             Path {
                 id: temperaturePathCold
                 startX: 0
+                pathElements: []
             }
 
             Path {
                 id: cloudAreaPath
                 startX: 0
+                pathElements: []
             }
 
             Path {
                 id: humidityPath
                 startX: 0
+                pathElements: []
             }
 
             function drawPrecipitationBars(context, rectWidth) {
@@ -810,11 +815,11 @@ Item {
     }
 
     function buildCurves() {
-        var newPathElements = []
-        var newPressureElements = []
-        var newCloudElements = []
+        var newPathElements = temperaturePathWarm.pathElements
+        var newPressureElements = pressurePath.pathElements
+        var newCloudElements = cloudAreaPath.pathElements
         var newCloudElements2 = []
-        var newHumidityElements = []
+        var newHumidityElements = humidityPath.pathElements
 
         if (meteogramModel.count === 0) {
             return
@@ -823,6 +828,16 @@ Item {
         if (!graphCurvedLine) {
             pathType = 'PathLine'
         }
+
+        var reuse = meteogramModel.count <= newPathElements.length
+        if (!reuse) {
+            newPathElements = []
+            newPressureElements = []
+            newCloudElements = []
+            newCloudElements2 = []
+            newHumidityElements = []
+        }
+
         for (var i = 0; i < meteogramModel.count; i++) {
             var dataObj = meteogramModel.get(i)
 
@@ -835,12 +850,24 @@ Item {
                 pressurePath.startY = pressureY
                 humidityPath.startY = isFinite(humidityY) ? humidityY : 0
             }
-            newPathElements.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
-                                 '{ x: ' + (i * sampleWidth) + '; y: ' + temperatureY + ' }',
-                                 graphArea, "dynamicTemperature" + i))
-            newPressureElements.push(Qt.createQmlObject('import QtQuick 2.0; '+ pathType +
-                                     '{ x: ' + (i * sampleWidth) + '; y: ' + pressureY + ' }',
-                                     graphArea, "dynamicPressure" + i))
+
+            if (!reuse) {
+                newPathElements.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
+                                     '{ x: ' + (i * sampleWidth) + '; y: ' + temperatureY + ' }',
+                                     graphArea, "dynamicTemperature" + i))
+            } else {
+                newPathElements[i].x = i * sampleWidth
+                newPathElements[i].y = temperatureY
+            }
+
+            if (!reuse) {
+                newPressureElements.push(Qt.createQmlObject('import QtQuick 2.0; '+ pathType +
+                                         '{ x: ' + (i * sampleWidth) + '; y: ' + pressureY + ' }',
+                                         graphArea, "dynamicPressure" + i))
+            } else {
+                newPressureElements[i].x = i * sampleWidth
+                newPressureElements[i].y = pressureY
+            }
 
             if (isFinite(dataObj.cloudArea)) {
                 var cloudY0 = cloudAreaScale.translate(50 + (dataObj.cloudArea / 4))
@@ -848,25 +875,56 @@ Item {
                 if (i === 0) {
                     cloudAreaPath.startY = cloudY0
                 }
-                newCloudElements.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
-                                     '{ x: ' + (i * sampleWidth) + '; y: ' + cloudY0 + ' }',
-                                     graphArea, "dynamicCloudArea" + i))
-                newCloudElements2.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
-                                     '{ x: ' + (i * sampleWidth) + '; y: ' + cloudY1 + ' }',
-                                     graphArea, "dynamicCloudArea" + (meteogramModel.count + i)))
+
+                if (!reuse) {
+                    newCloudElements.push(Qt.createQmlObject('import QtQuick 2.0; ' + 'PathCurve' +
+                                         '{ x: ' + (i * sampleWidth) + '; y: ' + cloudY1 + ' }',
+                                         graphArea, "dynamicCloudArea" + i))
+                    newCloudElements2.push(Qt.createQmlObject('import QtQuick 2.0; ' + 'PathLine' +
+                                         '{ x: ' + (i * sampleWidth) + '; y: ' + cloudY0 + ' }',
+                                         graphArea, "dynamicCloudArea" + (meteogramModel.count + i)))
+                } else {
+                    newCloudElements[i].x = i * sampleWidth
+                    newCloudElements[i].y = cloudY1
+                    newCloudElements[(2 * meteogramModel.count) - 1 - i].x = i * sampleWidth
+                    newCloudElements[(2 * meteogramModel.count) - 1 - i].y = cloudY0
+                }
             }
             if (isFinite(humidityY)) {
-                newHumidityElements.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
-                                         '{ x: ' + (i * sampleWidth) + '; y: ' + humidityY + ' }',
-                                         graphArea, "dynamicHumidity" + i))
+                if (!reuse) {
+                    newHumidityElements.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
+                                             '{ x: ' + (i * sampleWidth) + '; y: ' + humidityY + ' }',
+                                             graphArea, "dynamicHumidity" + i))
+                } else {
+                    newHumidityElements[i].x = i * sampleWidth
+                    newHumidityElements[i].y = humidityY
+                }
             }
         }
-        temperaturePathWarm.pathElements = newPathElements
-        temperaturePathCold.pathElements = newPathElements
-        pressurePath.pathElements = newPressureElements
-        cloudAreaPath.pathElements = newCloudElements.concat(newCloudElements2.reverse())
-        humidityPath.pathElements = newHumidityElements
 
+        // Don't paint unused elements
+        for (var i = meteogramModel.count; i < newCloudElements.length; i++) {
+            if (i < newPathElements.length) {
+                newPathElements[i].x = NaN
+                newPathElements[i].y = NaN
+                newPressureElements[i].x = NaN
+                newPressureElements[i].y = NaN
+                newHumidityElements[i].x = NaN
+                newHumidityElements[i].y = NaN
+            }
+            if (i >= 2 * meteogramModel.count) {
+                newCloudElements[i].x = NaN
+                newCloudElements[i].y = NaN
+            }
+        }
+
+        if (!reuse) {
+            temperaturePathWarm.pathElements = newPathElements
+            temperaturePathCold.pathElements = newPathElements
+            pressurePath.pathElements = newPressureElements
+            cloudAreaPath.pathElements = newCloudElements.concat(newCloudElements2.reverse())
+            humidityPath.pathElements = newHumidityElements
+        }
     }
 
     function processMeteogramData() {
