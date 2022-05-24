@@ -25,11 +25,9 @@ import "../code/icons.js" as IconTools
 
 Item {
     visible: true
-    width: imageWidth
-    height: imageHeight + labelHeight// Day Label + Time Label
 
-    property int imageWidth: 800 * units.devicePixelRatio - (labelWidth * 2)
-    property int imageHeight: 320 * units.devicePixelRatio  - labelHeight - cloudarea - windarea
+    property int imageWidth: width - (labelWidth * 2)
+    property int imageHeight: height - labelHeight - cloudarea - windarea
     property int labelWidth: textMetrics.width
     property int labelHeight: textMetrics.height
 

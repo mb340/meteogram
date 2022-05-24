@@ -117,8 +117,10 @@ Item {
         id: meteogram2
         anchors.top: parent.top
         anchors.topMargin: headingHeight
-        width: imageWidth
-        height: imageHeight
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: nextDaysView.top
+        anchors.bottomMargin: 14 /* wind area */
      }
   /*
      *
