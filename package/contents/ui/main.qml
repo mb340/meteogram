@@ -221,15 +221,6 @@ Item {
         setNextPlace(true)
     }
 
-    function showData() {
-        var ok = loadFromCache()
-        if (!ok) {
-            reloadData()
-        }
-        updateLastReloadedText()
-        reloadMeteogram()
-    }
-
     function setCurrentProviderAccordingId(providerId) {
         if (providerId === 'owm') {
             dbgprint('setting provider OpenWeatherMap')
@@ -279,7 +270,12 @@ Item {
 
         setCurrentProviderAccordingId(placeObject.providerId)
 
-        showData()
+        var ok = loadFromCache()
+        if (!ok) {
+            reloadData()
+        }
+        updateLastReloadedText()
+        reloadMeteogram()
     }
 
     function dataLoadedFromInternet(contentToCache) {
