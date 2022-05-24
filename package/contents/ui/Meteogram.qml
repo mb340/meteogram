@@ -81,6 +81,7 @@ Item {
         buildMetogramData()
         processMeteogramData()
         buildCurves()
+        repaintCanvas()
     }
 
     MeteogramColors {
@@ -866,7 +867,6 @@ Item {
         cloudAreaPath.pathElements = newCloudElements.concat(newCloudElements2.reverse())
         humidityPath.pathElements = newHumidityElements
 
-        repaintCanvas()
     }
 
     function processMeteogramData() {
