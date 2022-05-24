@@ -328,14 +328,14 @@ Item {
         creditLabel = currentProvider.getCreditLabel(placeIdentifier)
 
         if (!providerCache.hasKey(cacheKey)) {
-            dbgprint('cache not available')
+            print('error: cache not available')
             return false
         }
 
         var content = providerCache.getContent(key)
         var success = currentProvider.setWeatherContents(content)
         if (!success) {
-            dbgprint('setting weather contents not successful')
+            print('error: setting weather contents not successful')
             return false
         }
 
