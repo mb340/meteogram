@@ -45,8 +45,6 @@ Item {
     readonly property double precipitationMinVisible: 0.05
     property double precipitationMaxGraphY: 10
 
-    property int dataArraySize: 2
-
     property bool textColorLight: ((theme.textColor.r + theme.textColor.g + theme.textColor.b) / 3) > 0.5
     property color gridColor: textColorLight ? Qt.tint(theme.textColor, '#80000000') : Qt.tint(theme.textColor, '#80FFFFFF')
     property color gridColorHighlight: textColorLight ? Qt.tint(theme.textColor, '#50000000') : Qt.tint(theme.textColor, '#50FFFFFF')
@@ -954,9 +952,7 @@ Item {
     }
 
     function processMeteogramData() {
-        dataArraySize = meteogramModel.count
-
-        if (dataArraySize === 0) {
+        if (meteogramModel.count === 0) {
             dbgprint('model is empty -> clearing canvas and exiting')
             clearCanvas()
             return
@@ -967,7 +963,7 @@ Item {
         var minPressure = +Infinity
         var maxPressure = -Infinity
 
-        for (var i = 0; i < dataArraySize; i++) {
+        for (var i = 0; i < meteogramModel.count; i++) {
             var obj = meteogramModel.get(i)
             minValue = Math.min(minValue,  obj.temperature)
             maxValue = Math.max(maxValue, obj.temperature)
