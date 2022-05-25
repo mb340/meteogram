@@ -34,9 +34,6 @@ Item {
     property int cloudarea: 0
     property int windarea: 28
 
-        property bool meteogramModelChanged: main.meteogramModelChanged
-
-
     readonly property int minTemperatureYGridCount: 20
     readonly property int minPressureYGridCount: 30
     property double temperatureYGridStep: 1.0
@@ -76,12 +73,15 @@ Item {
 */
     property double sampleWidth: imageWidth / (meteogramModel.count - 1)
 
-    onMeteogramModelChangedChanged: {
-        dbgprint('meteogram changed')
-        buildMetogramData()
-        processMeteogramData()
-        buildCurves()
-        repaintCanvas()
+    Connections {
+        target: main
+        function onMeteogramModelChangedChanged() {
+            dbgprint('meteogram changed')
+            buildMetogramData()
+            processMeteogramData()
+            buildCurves()
+            repaintCanvas()
+        }
     }
 
     MeteogramColors {
