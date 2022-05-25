@@ -645,6 +645,31 @@ Item {
                 context.globalCompositeOperation = "source-over"
                 drawPrecipitationText(context, rectWidth)
             }
+
+            /*
+             * Repaint canvas on resize.
+             */
+            onWidthChanged: redrawTimer.restart()
+            onHeightChanged: redrawTimer.restart()
+
+            Timer {
+                id: redrawTimer
+                interval: 300
+                repeat: true
+                running: false
+                triggeredOnStart: true
+                property double prevHeight: -1
+                property double prevWidth: -1
+                onTriggered: {
+                    if (prevHeight === height && prevWidth === width) {
+                        buildCurves()
+                        repaintCanvas()
+                        stop()
+                    }
+                    prevWidth = width
+                    prevHeight = height
+                }
+            }
         }
 
         MeteogramInfo {
