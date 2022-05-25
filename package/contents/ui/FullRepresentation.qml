@@ -31,7 +31,7 @@ Item {
     property int nextDaysHeight: defaultFontPixelSize * 9
     property int nextDaysVerticalMargin: defaultFontPixelSize
     property int hourLegendMargin: defaultFontPixelSize * 2
-    property double nextDayItemWidth: (imageWidth / nextDaysCount) - nextDayItemSpacing - hourLegendMargin / nextDaysCount
+    property double nextDayItemWidth: (width / nextDaysCount) - (2 * nextDayItemSpacing)
     property int headingHeight: defaultFontPixelSize * 2
     property double hourLegendBottomMargin: defaultFontPixelSize * 0.2
 
@@ -134,7 +134,9 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: hourLegendMargin
         anchors.right: parent.right
+        anchors.rightMargin: hourLegendMargin
         height: nextDaysHeight
+        clip: true
 
         model: nextDaysModel
         orientation: Qt.Horizontal
