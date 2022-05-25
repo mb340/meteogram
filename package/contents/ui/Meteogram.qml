@@ -60,10 +60,6 @@ Item {
                                                     Qt.rgba(0.0/255, 98/255, 134/255, 1.0)   // Cerulean
 */
 
-    property int precipitationFontPixelSize: 8 * units.devicePixelRatio
-    property int precipitationHeightMultiplier: 15 * units.devicePixelRatio
-    property int precipitationLabelMargin: 8 * units.devicePixelRatio
-
 /*
     property int temperatureType: 0
     property int pressureType: 0
@@ -381,6 +377,7 @@ Item {
             contextType: '2d'
 
             readonly property double weatherFontSize: (14 * units.devicePixelRatio)
+            property double fontSize: 14 * units.devicePixelRatio
             property var precLabelPositions: ({})
 
             Path {
@@ -406,6 +403,14 @@ Item {
                 pathElements: []
             }
 
+            function computeFontSize() {
+                var rectWidth = timeScale.translate(1) - timeScale.translate(0)
+                var rectHeight = Math.abs(temperatureScale.translate(temperatureYGridStep) -
+                                          temperatureScale.translate(0))
+                var dim = Math.min(rectWidth, rectHeight / 2)
+                fontSize = Math.round(dim) * units.devicePixelRatio
+            }
+
             function drawPrecipitationBars(context, rectWidth) {
                 precLabelPositions = ({})
                 for (var i = 0; i < hourGridModel.count; i++) {
@@ -421,7 +426,8 @@ Item {
                     var w = rectWidth - (0.5 * units.devicePixelRatio)
                     context.fillRect(x, y, w, h)
 
-                    precLabelPositions[i] = y - precipitationFontPixelSize
+                    var fontSize = Math.round(rectWidth / 2) + 1
+                    precLabelPositions[i] = y - fontSize
                 }
             }
 
@@ -437,7 +443,8 @@ Item {
             function drawPrecipitationText(context, rectWidth) {
                 context.save()
                 var counter = 0
-                context.font =  precipitationFontPixelSize + "px " + theme.defaultFont.family
+
+                context.font = ((fontSize / 2) + 1) + 'px "' + theme.defaultFont.family + '"'
 
                 var prevIdx = -1
                 var prevY = NaN
@@ -468,13 +475,13 @@ Item {
                     // Stagger vertically when two labels are consecutively in the same y position
                     const marginPx = 0
                     if (i - prevIdx === 1 && (prevY-marginPx <= y0 && y0 <= prevY+marginPx)) {
-                        y0 -= precipitationFontPixelSize / 2
+                        y0 = y0 - (fontSize / 2)
                     }
                     prevIdx = i
                     prevY = y0
 
                     // if (prevShowPrecUnit) {
-                    //     y0 -= precipitationFontPixelSize / 2
+                    //     y0 -= fontSize / 2
                     // }
                     prevShowPrecUnit = showPrecUnit
 
@@ -494,7 +501,7 @@ Item {
                         context.fillStyle = theme.textColor
                         context.fillText(precUnitStr, x0, y0)
 
-                        y0 -= precipitationFontPixelSize
+                        y0 -= fontSize/2
                     }
 
                     var metrics = context.measureText(precStr)
@@ -502,7 +509,7 @@ Item {
                     drawShadowText(context, precStr, x0, y0)
                     context.fillStyle = theme.textColor
                     context.fillText(precStr, x0, y0)
-                    y0 -= precipitationFontPixelSize
+                    y0 -= fontSize/2
 
                     // Show arrow to indicate truncation at max value
                     if (showPrecExcess) {
@@ -552,7 +559,7 @@ Item {
             }
 
             function drawWeatherIcons(context, rectWidth) {
-                context.font =  weatherFontSize + 'px "%1"'.arg(weatherIconFont.name)
+                context.font =  (fontSize + 1) + 'px "%1"'.arg(weatherIconFont.name)
 
                 for (var i = 0; i < hourGridModel.count; i++) {
                     var hourModel = hourGridModel.get(i)
@@ -618,6 +625,8 @@ Item {
             }
 
             onPaint: {
+                computeFontSize()
+
                 var context = getContext("2d")
                 context.clearRect(0, 0, width, height)
                 context.globalCompositeOperation = "source-over"
