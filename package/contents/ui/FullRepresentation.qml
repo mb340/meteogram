@@ -15,14 +15,23 @@
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
 import QtQuick 2.2
+import QtQuick.Layouts 1.1
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
 Item {
     id: fullRepresentation
 
-    property int imageWidth: 800 * units.devicePixelRatio // Makes yr.no images grainy,
-    property int imageHeight: 320 * units.devicePixelRatio + defaultFontPixelSize// prefer rendering meteograms
+    property int preferredImageWidth: 800 * units.devicePixelRatio // Makes yr.no images grainy,
+    property int preferredImageHeight: 320 * units.devicePixelRatio + defaultFontPixelSize// prefer rendering meteograms
+
+    Layout.preferredWidth: preferredImageWidth
+    Layout.preferredHeight: headingHeight + preferredImageHeight + footerHeight + nextDaysHeight + 14
+    Layout.minimumWidth: Layout.preferredWidth * 3 / 4
+    Layout.minimumHeight: Layout.preferredHeight * 3 / 4
+
+    width: Layout.preferredWidth
+    height: Layout.preferredHeight
 
     property double defaultFontPixelSize: theme.defaultFont.pixelSize
     property double footerHeight: defaultFontPixelSize
@@ -33,12 +42,6 @@ Item {
     property int hourLegendMargin: defaultFontPixelSize * 2
     property double nextDayItemWidth: (width / nextDaysCount) - (2 * nextDayItemSpacing)
     property int headingHeight: defaultFontPixelSize * 2
-    property double hourLegendBottomMargin: defaultFontPixelSize * 0.2
-
-    width: imageWidth
-    height: headingHeight + imageHeight + footerHeight + nextDaysHeight + 14
-
-
 
     PlasmaComponents.Label {
         id: currentLocationText
