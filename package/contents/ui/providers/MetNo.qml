@@ -127,7 +127,6 @@ Item {
             dateFrom = dateTo
             i++
         }
-        main.meteogramModelChanged = !main.meteogramModelChanged
     }
 
     function formatTime(ISOdate) {
