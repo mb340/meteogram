@@ -389,13 +389,7 @@ Item {
                 pathElements: []
             }
             Path {
-                id: temperaturePathWarm
-                startX: 0
-                pathElements: []
-            }
-
-            Path {
-                id: temperaturePathCold
+                id: temperaturePath
                 startX: 0
                 pathElements: []
             }
@@ -641,8 +635,8 @@ Item {
                 drawCloudArea(context)
                 drawPath(context, humidityPath, palette.humidityColor(), 1 * units.devicePixelRatio)
                 drawPath(context, pressurePath, palette.pressureColor(), 1 * units.devicePixelRatio)
-                drawWarmTemp(context, temperaturePathWarm, palette.temperatureWarmColor(), 2 * units.devicePixelRatio)
-                drawColdTemp(context, temperaturePathCold, palette.temperatureColdColor(), 2 * units.devicePixelRatio)
+                drawWarmTemp(context, temperaturePath, palette.temperatureWarmColor(), 2 * units.devicePixelRatio)
+                drawColdTemp(context, temperaturePath, palette.temperatureColdColor(), 2 * units.devicePixelRatio)
 
                 // Ensure weather icons atop graph lines without drawing over carve out
                 context.globalCompositeOperation = "source-atop"
@@ -815,7 +809,7 @@ Item {
     }
 
     function buildCurves() {
-        var newPathElements = temperaturePathWarm.pathElements
+        var newPathElements = temperaturePath.pathElements
         var newPressureElements = pressurePath.pathElements
         var newCloudElements = cloudAreaPath.pathElements
         var newCloudElements2 = []
@@ -845,8 +839,7 @@ Item {
             var pressureY = pressureScale.translate(UnitUtils.convertPressure(dataObj.pressureHpa, pressureType))
             var humidityY = humidityScale.translate(dataObj.humidity)
             if (i === 0) {
-                temperaturePathWarm.startY = temperatureY
-                temperaturePathCold.startY = temperatureY
+                temperaturePath.startY = temperatureY
                 pressurePath.startY = pressureY
                 humidityPath.startY = isFinite(humidityY) ? humidityY : 0
             }
@@ -919,8 +912,7 @@ Item {
         }
 
         if (!reuse) {
-            temperaturePathWarm.pathElements = newPathElements
-            temperaturePathCold.pathElements = newPathElements
+            temperaturePath.pathElements = newPathElements
             pressurePath.pathElements = newPressureElements
             cloudAreaPath.pathElements = newCloudElements.concat(newCloudElements2.reverse())
             humidityPath.pathElements = newHumidityElements
