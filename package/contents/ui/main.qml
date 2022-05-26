@@ -91,7 +91,11 @@ Item {
     property Component cr: CompactRepresentation { }
 
     property Component frInTray: FullRepresentationInTray { }
-    property Component fr: FullRepresentation { }
+    property Component fr: FullRepresentation {
+        Component.onCompleted: {
+            main.onMeteogramModelChangedChanged.connect(this.meteogram.fullRedraw)
+        }
+    }
 
     Plasmoid.preferredRepresentation: Plasmoid.compactRepresentation
     Plasmoid.compactRepresentation: cr

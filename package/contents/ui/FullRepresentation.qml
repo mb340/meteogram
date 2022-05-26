@@ -43,6 +43,8 @@ Item {
     property double nextDayItemWidth: (width / nextDaysCount) - (2 * nextDayItemSpacing)
     property int headingHeight: defaultFontPixelSize * 2
 
+    property alias meteogram: meteogram2
+
     PlasmaComponents.Label {
         id: currentLocationText
 

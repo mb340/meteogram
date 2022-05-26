@@ -84,13 +84,6 @@ Item {
         repaintCanvas()
     }
 
-    Connections {
-        target: main
-        function onMeteogramModelChangedChanged() {
-            fullRedraw()
-        }
-    }
-
     MeteogramColors {
         id: palette
     }
