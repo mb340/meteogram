@@ -24,7 +24,10 @@ import "../code/unit-utils.js" as UnitUtils
 import "../code/icons.js" as IconTools
 
 Item {
+    id: root
     visible: true
+
+    property bool initialized: false
 
     property int imageWidth: width - (labelWidth * 2)
     property int imageHeight: height - labelHeight - cloudarea - windarea
@@ -67,14 +70,22 @@ Item {
 */
     property double sampleWidth: imageWidth / (meteogramModel.count - 1)
 
+    Component.onCompleted: {
+        fullRedraw()
+    }
+
+    function fullRedraw() {
+        buildMetogramData()
+        processMeteogramData()
+        buildCurves()
+        initialized = true
+        repaintCanvas()
+    }
+
     Connections {
         target: main
         function onMeteogramModelChangedChanged() {
-            dbgprint('meteogram changed')
-            buildMetogramData()
-            processMeteogramData()
-            buildCurves()
-            repaintCanvas()
+            fullRedraw()
         }
     }
 
@@ -623,6 +634,11 @@ Item {
             }
 
             onPaint: {
+                if (!root.initialized) {
+                    root.fullRedraw()
+                    return
+                }
+
                 computeFontSize()
 
                 var context = getContext("2d")
