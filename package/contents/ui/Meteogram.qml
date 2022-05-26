@@ -70,6 +70,8 @@ Item {
 */
     property double sampleWidth: imageWidth / (meteogramModel.count - 1)
 
+    property bool hasGraphCurvedLineChanged: false
+
     Component.onCompleted: {
         fullRedraw()
     }
@@ -853,7 +855,8 @@ Item {
     property bool graphCurvedLine: plasmoid.configuration.graphCurvedLine
 
     onGraphCurvedLineChanged: {
-        main.meteogramModelChanged = !main.meteogramModelChanged
+        hasGraphCurvedLineChanged = true
+        fullRedraw()
     }
 
     function buildCurves() {
@@ -872,6 +875,9 @@ Item {
         }
 
         var reuse = meteogramModel.count <= newPathElements.length
+        reuse &= !hasGraphCurvedLineChanged
+        hasGraphCurvedLineChanged = false
+
         if (!reuse) {
             newPathElements = []
             newPressureElements = []
