@@ -352,6 +352,7 @@ Item {
     }
 
     function reloadMeteogram() {
+        meteogramModelChanged = !meteogramModelChanged
         currentProvider.reloadMeteogramImage(placeIdentifier)
     }
 
