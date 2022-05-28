@@ -208,7 +208,10 @@ Item {
             newMetnoCityLatitudeField.text=data["latitude"]
             newMetnoCityLongitudeField.text=data["longitude"]
             newMetnoCityAltitudeField.text=data["altitude"]
-            newMetnoUrl.text="lat="+data["latitude"]+"&lon="+data["longitude"]+"&altitude="+data["altitude"]
+            print("saveSearchedData: providerId = " +  addMetnoCityIdDialog.providerId)
+            if (addMetnoCityIdDialog.providerId === 'metno') {
+                newMetnoUrl.text="lat="+data["latitude"]+"&lon="+data["longitude"]+"&altitude="+data["altitude"]
+            }
             let loc=data["locationName"]+", "+Helper.getshortCode(countryList.textAt(countryList.currentIndex))
             newMetnoCityAlias.text=loc
             addMetnoCityIdDialog.timezoneID=data["timezoneId"]
@@ -223,222 +226,15 @@ Item {
         }
     }
 
-    Dialog {
+    property alias newMetnoCityAlias: addMetnoCityIdDialog.newMetnoCityAlias
+    property alias newMetnoCityLatitudeField: addMetnoCityIdDialog.newMetnoCityLatitudeField
+    property alias newMetnoCityLongitudeField: addMetnoCityIdDialog.newMetnoCityLongitudeField
+    property alias newMetnoCityAltitudeField: addMetnoCityIdDialog.newMetnoCityAltitudeField
+    property alias newMetnoUrl: addMetnoCityIdDialog.newMetnoUrl
+    property alias tzComboBox: addMetnoCityIdDialog.tzComboBox
+
+    MetNoDialog {
         id: addMetnoCityIdDialog
-        title: i18n("Add Met.no Map Place")
-
-        property int timezoneID: -1
-
-        width: 500
-
-        standardButtons: StandardButton.Ok | StandardButton.Cancel
-        onActionChosen: {
-
-            function between(x, min, max) {
-                return x >= min && x <= max;
-            }
-
-            if (action.button === Dialog.Ok) {
-                var reason=""
-                var reasoncount=0;
-                var latValid = newMetnoCityLatitudeField.acceptableInput
-                var longValid = newMetnoCityLongitudeField.acceptableInput
-                var altValid = newMetnoCityAltitudeField.acceptableInput
-
-                action.accepted = false
-
-                if (!(latValid)) {
-                    reason+=i18n("The Latitude is not valid.")+"\n"
-                    reason+=i18n("The Latitude is not between -90 and 90.")+"\n"
-                    reasoncount++
-                }
-
-                if (!(longValid)) {
-                    reason+=i18n("The Longitude is not valid.")+"\n"
-                    reason+=i18n("The Longitude is not between -180 and 180.")+"\n"
-                    reasoncount++
-                }
-
-                if (! altValid) {
-                    reason+=i18n("The Altitude is not valid.")+"\n"
-                    reason+=i18n("The Altitude is not between -999 and 5000.")+"\n"
-                    reasoncount++
-                }
-
-                if (newMetnoCityAlias.text.length === 0) {
-                    reason+=i18n("The Place Name is empty.")+"\n"
-                    reasoncount++
-                }
-
-                if (reasoncount === 0 ) {
-                    action.accepted = true
-                } else {
-                    action.accepted = false
-                    invalidData.text=i18np("There is an error!", "There are %1 errors!",reasoncount)
-                    invalidData.informativeText=reason
-                    invalidData.open()
-                }
-            }
-        }
-
-        onAccepted: {
-            var resultString = newMetnoUrl.text
-            if (resultString.length === 0) {
-                resultString="lat="+newMetnoCityLatitudeField.text+"&lon="+newMetnoCityLongitudeField.text+"&altitude="+newMetnoCityAltitudeField.text
-            }
-            if (editEntryNumber === -1) {
-                placesModel.append({
-                                       providerId: 'metno',
-                                       placeIdentifier: resultString,
-                                       placeAlias: newMetnoCityAlias.text,
-                                       timezoneID: addMetnoCityIdDialog.timezoneID
-                                   })
-            } else {
-                placesModel.set(editEntryNumber,{
-                                    providerId: 'metno',
-                                    placeIdentifier: resultString,
-                                    placeAlias: newMetnoCityAlias.text,
-                                    timezoneID: addMetnoCityIdDialog.timezoneID
-                                })
-            }
-            placesModelChanged()
-            close()
-        }
-
-        GridLayout {
-            id: metNoRowLayout
-            anchors.fill: parent
-            columns: 8
-            Label {
-                id: newMetnoCityLatitudeLabel
-                text: i18n("Latitude")+":"
-            }
-
-            TextField {
-                id: newMetnoCityLatitudeField
-                Layout.fillWidth: true
-                validator: DoubleValidator { bottom: -90; top: 90; decimals: 5 }
-                textColor: acceptableInput ? newMetnoCityLatitudeLabel.color : "red"
-                onTextChanged: {
-                    updateUrl()
-                }
-            }
-
-            Item {
-                width: 20
-            }
-
-            Label {
-                id: newMetnoCityLongitudeLabel
-                text: i18n("Longitude")+":"
-            }
-
-            TextField {
-                id: newMetnoCityLongitudeField
-                Layout.fillWidth: true
-                validator: DoubleValidator { bottom: -180; top: 180; decimals: 5 }
-                textColor: acceptableInput ? newMetnoCityLongitudeLabel.color : "red"
-                onTextChanged: {
-                    updateUrl()
-                }
-
-            }
-
-            Item {
-                width: 20
-            }
-
-            Label {
-                id: newMetnoCityAltitudeLabel
-                text: i18n("Altitude")+":"
-            }
-
-            TextField {
-                id: newMetnoCityAltitudeField
-                Layout.fillWidth: true
-                validator: IntValidator { bottom: -999; top: 5000 }
-                textColor: acceptableInput ? newMetnoCityAltitudeLabel.color : "red"
-                onTextChanged: {
-                    updateUrl()
-                }
-            }
-
-            Label {
-                text: i18n("URL")+":"
-            }
-            TextField {
-                id: newMetnoUrl
-                placeholderText: i18n("URL")
-                Layout.columnSpan: 5
-                Layout.fillWidth: true
-                textColor: acceptableInput ? newMetnoCityAltitudeLabel.color : "red"
-
-                function updateFields() {
-                    function localiseFloat(data) {
-                        return Number(data).toLocaleString(Qt.locale(),"f",5)
-                    }
-
-                    var data=newMetnoUrl.text.match(RegExp("([+-]?[0-9]{1,5}[.]?[0-9]{0,5})","g"))
-                    if (data === undefined)
-                        return
-                    if (data.length === 3) {
-                        var newlat = localiseFloat(data[0])
-                        var newlon = localiseFloat(data[1])
-                        var newalt = Number(data[2])
-                        if ((! newMetnoCityLatitudeField.acceptableInput) || (newMetnoCityLatitudeField.text.length === 0) || (newMetnoCityLatitudeField.text !== newlat)) {
-                            newMetnoCityLatitudeField.text = newlat
-                        }
-                        if ((! newMetnoCityLongitudeField.acceptableInput) || (newMetnoCityLongitudeField.text.length === 0) || (newMetnoCityLongitudeField.text !== newlon)) {
-                            newMetnoCityLongitudeField.text = newlon
-                        }
-                        if ((! newMetnoCityAltitudeField.acceptableInput) || (newMetnoCityAltitudeField.text.length === 0)  || (newMetnoCityAltitudeField.text !== data[2])) {
-//                             if ((newalt >= newMetnoCityAltitudeField.validator.bottom) && (newalt <= newMetnoCityAltitudeField.validator.top)) {
-                                newMetnoCityAltitudeField.text = data[2]
-//                             }
-                        }
-                    }
-                }
-
-
-
-                onTextChanged: {
-                    updateFields()
-                }
-
-                onEditingFinished: {
-                    updateFields()
-                }
-            }
-            ComboBox {
-                id: tzComboBox
-                model: timezoneDataModel
-                currentIndex: -1
-                textRole: "displayName"
-                Layout.columnSpan: 2
-                Layout.fillWidth: true
-                onCurrentIndexChanged: {
-                    if (tzComboBox.currentIndex > 0) {
-                        addMetnoCityIdDialog.timezoneID = timezoneDataModel.get(tzComboBox.currentIndex).id
-                    }
-                }
-            }
-            Label {
-                text: i18n("Place Identifier")+":"
-            }
-            TextField {
-                id: newMetnoCityAlias
-                placeholderText: i18n("City alias")
-                Layout.columnSpan: 6
-                Layout.fillWidth: true
-            }
-            Button {
-                text: i18n("Search")
-                Layout.alignment: Qt.AlignRight
-                onClicked: {
-                    searchWindow.open()
-                }
-            }
-        }
     }
 
     Dialog {
@@ -462,155 +258,14 @@ Item {
         }
     }
 
-    Dialog {
-        title: i18n("Location Search")
+    property alias countryCodesModel: searchWindow.countryCodesModel
+    property alias filteredCSVData: searchWindow.filteredCSVData
+    property alias timezoneDataModel: searchWindow.timezoneDataModel
+    property alias tableView: searchWindow.tableView
+    property alias countryList: searchWindow.countryList
+
+    LocationSearch {
         id: searchWindow
-        width: 640
-        height: 400
-        standardButtons: StandardButton.Ok | StandardButton.Cancel
-        onAccepted: {
-            if(tableView.currentRow > -1) {
-                saveSearchedData.open()
-            }
-        }
-        Component.onCompleted: {
-            let locale=Qt.locale().name.substr(3,2)
-            let userCountry=Helper.getDisplayName(locale)
-            let tmpDB=Helper.getDisplayNames()
-            for (var i=0; i < tmpDB.length - 1 ; i++) {
-                countryCodesModel.append({ id: tmpDB[i] })
-                if (tmpDB[i] === userCountry) {
-                    countryList.currentIndex = i
-                }
-            }
-        }
-        TableView {
-            id: tableView
-            height: 140
-            verticalScrollBarPolicy: Qt.ScrollBarAsNeeded
-            highlightOnFocus: true
-            anchors.bottom: row2.top
-            anchors.right: parent.right
-            anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.bottomMargin: 10
-            model: filteredCSVData
-            TableViewColumn { role: "locationName"; title: i18n("Location") }
-            TableViewColumn { role: "region"; title: i18n("Area"); width :75 }
-            TableViewColumn { role: "latitude"; title: i18n("Latitude"); width :75 }
-            TableViewColumn { role: "longitude"; title: i18n("Longitude"); width :75 }
-            TableViewColumn { role: "altitude"; title: i18n("Altitude"); width :75}
-            TableViewColumn { role: "timezoneName"; title: i18n("Timezone"); width :100}
-            onDoubleClicked: {
-                saveSearchedData.open()
-            }
-        }
-        Item {
-            id: row1
-            anchors.bottom: parent.bottom
-            height: 20
-            width: parent.width
-            Label {
-                id:locationDataCredit
-                text: i18n("Search data extracted from data provided by Geonames.org.")
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-        }
-        MouseArea {
-            cursorShape: Qt.PointingHandCursor
-            anchors.fill: row1
-
-            hoverEnabled: true
-
-            onClicked: {
-                Qt.openUrlExternally("https://www.geonames.org/")
-            }
-
-            onEntered: {
-                locationDataCredit.font.underline = true
-            }
-
-            onExited: {
-                locationDataCredit.font.underline = false
-            }
-        }
-
-        Item {
-            id: row2
-            x: 0
-            y: 0
-            height: 54
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-            anchors.bottom: row1.top
-            anchors.bottomMargin: 0
-            Label {
-                id: countryLabel
-                text: i18n("Country:")
-                anchors.left: parent.left
-                anchors.leftMargin: 10
-                anchors.verticalCenter: parent.verticalCenter
-            }
-
-            ComboBox {
-                id: countryList
-                anchors.left: countryLabel.right
-                anchors.leftMargin: 20
-                anchors.verticalCenterOffset: 0
-                anchors.verticalCenter: parent.verticalCenter
-                model: countryCodesModel
-                width: 200
-                editable: false
-                onCurrentIndexChanged: {
-                    if (countryList.currentIndex > 0) {
-                        Helper.loadCSVDatabase(countryList.textAt(countryList.currentIndex))
-                    }
-                }
-            }
-            Label {
-                id: locationLabel
-                anchors.right: locationEdit.left
-                anchors.rightMargin: 10
-                anchors.verticalCenter: parent.verticalCenter
-                text: i18n("Filter:")
-            }
-            TextField {
-                id: locationEdit
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                verticalAlignment: Text.AlignVCenter
-                width: 160
-                height: 31
-                text: ""
-                focus: true
-                font.capitalization: Font.Capitalize
-                selectByMouse: true
-                clip: false
-                Keys.onReturnPressed: {
-                    event.accepted = true
-                }
-                onTextChanged: {
-                    Helper.updateListView(locationEdit.text)
-                }
-            }
-        }
-
-
-
-        ListModel {
-            id: myCSVData
-        }
-        ListModel {
-            id: countryCodesModel
-        }
-        ListModel {
-            id: filteredCSVData
-        }
-        ListModel {
-            id: timezoneDataModel
-        }
     }
 
     ColumnLayout{
@@ -764,6 +419,7 @@ Item {
                                         }
                                     }
                                     newMetnoCityAlias.text = entry.placeAlias
+                                    addMetnoCityIdDialog.providerId = entry.providerId
                                     addMetnoCityIdDialog.open()
                                 }
                                 if (entry.providerId === "owm") {
@@ -809,6 +465,7 @@ Item {
                     newMetnoCityAltitudeField.text = ''
                     newMetnoUrl.text = ''
                     newMetnoCityLatitudeField.focus = true
+                    addMetnoCityIdDialog.providerId = 'metno'
                     addMetnoCityIdDialog.open()
                 }
             }
