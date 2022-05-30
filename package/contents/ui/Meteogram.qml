@@ -371,7 +371,7 @@ Item {
         }
 
         LinearScale {
-            id: timeScale
+            id: xIndexScale
             range: [0, imageWidth]
         }
 
@@ -415,7 +415,7 @@ Item {
             }
 
             function computeFontSize() {
-                var rectWidth = timeScale.translate(1) - timeScale.translate(0)
+                var rectWidth = xIndexScale.translate(1) - xIndexScale.translate(0)
                 var rectHeight = Math.abs(temperatureScale.translate(temperatureYGridStep) -
                                           temperatureScale.translate(0))
                 var dim = Math.min(rectWidth, rectHeight / 2)
@@ -429,7 +429,7 @@ Item {
                     if (hourModel.precipitationAvg <= 0) {
                         continue
                     }
-                    var x = timeScale.translate(i) + (0.5 * units.devicePixelRatio)
+                    var x = xIndexScale.translate(i) + (0.5 * units.devicePixelRatio)
                     var prec = Math.min(precipitationMaxGraphY, hourModel.precipitationAvg)
                     var y = precipitationScale.translate(prec)
                     context.fillStyle = palette.rainColor()
@@ -477,7 +477,7 @@ Item {
                         continue
                     }
 
-                    var x = timeScale.translate(i)
+                    var x = xIndexScale.translate(i)
                     var y = precipitationScale.translate(Math.min(precipitationMaxGraphY, prec))
                     var precStr = UnitUtils.precipitationFormat(prec, hourModel.precipitationLabel)
                     const textPad = 2
@@ -581,7 +581,7 @@ Item {
                         continue
                     }
 
-                    var x = timeScale.translate(i - 1)
+                    var x = xIndexScale.translate(i - 1)
                     var y = temperatureScale.translate(UnitUtils.convertTemperature(
                                                         hourModel.temperature, temperatureType))
                     var timePeriod = UnitUtils.isSunRisen(hourModel.dateFrom) ? 0 : 1
@@ -647,7 +647,7 @@ Item {
                 context.clearRect(0, 0, width, height)
                 context.globalCompositeOperation = "source-over"
 
-                var rectWidth = timeScale.translate(1) - timeScale.translate(0)
+                var rectWidth = xIndexScale.translate(1) - xIndexScale.translate(0)
 
                 context.globalCompositeOperation = "source-over"
                 drawPrecipitationBars(context, rectWidth)
@@ -713,12 +713,12 @@ Item {
                     return
                 }
 
-                var rectWidth = timeScale.translate(1) - timeScale.translate(0)
+                var rectWidth = xIndexScale.translate(1) - xIndexScale.translate(0)
                 context.fillStyle = Qt.rgba(theme.highlightColor.r,
                                             theme.highlightColor.g,
                                             theme.highlightColor.b,
                                             0.25)
-                var x0 = timeScale.translate(meteogramInfo.idx)
+                var x0 = xIndexScale.translate(meteogramInfo.idx)
                 context.fillRect(x0, 0, rectWidth, height);
             }
         }
@@ -753,13 +753,13 @@ Item {
             }
 
             function update(mouse) {
-                var idx = Math.round(timeScale.invert(mouse.x) - 0.5)
+                var idx = Math.round(xIndexScale.invert(mouse.x) - 0.5)
                 if (idx < 0 || idx >= hourGridModel.count) {
                     return
                 }
 
-                var x0 = timeScale.translate(meteogramInfo.idx)
-                var x1 = timeScale.translate(meteogramInfo.idx + 1)
+                var x0 = xIndexScale.translate(meteogramInfo.idx)
+                var x1 = xIndexScale.translate(meteogramInfo.idx + 1)
                 var rectWidth = x1 - x0
 
                 meteogramInfo.x = mouse.x
@@ -1037,7 +1037,7 @@ Item {
         temperatureAxisScale.setDomain(minValue, maxValue)
         temperatureAxisScale.setRange(temperatureYGridCount, 0)
 
-        timeScale.setDomain(0, hourGridModel.count - 1)
+        xIndexScale.setDomain(0, hourGridModel.count - 1)
 
         horizontalGridModel.clear()
         for (var i = 0; i <= temperatureYGridCount; i++) {
