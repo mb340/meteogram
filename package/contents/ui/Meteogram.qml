@@ -407,6 +407,13 @@ Item {
                 pathElements: []
             }
 
+            Connections {
+                target: plasmoid
+                function onExpandedChanged() {
+                    meteogramCanvas.requestPaint()
+                }
+            }
+
             function computeFontSize() {
                 var rectWidth = timeScale.translate(1) - timeScale.translate(0)
                 var rectHeight = Math.abs(temperatureScale.translate(temperatureYGridStep) -
