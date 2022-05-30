@@ -427,8 +427,10 @@ Item {
         }
         var sunRise = additionalWeatherInfo.sunRise
         var sunSet = additionalWeatherInfo.sunSet
-        additionalWeatherInfo.sunRiseTime = Qt.formatTime(sunRise, Qt.locale().timeFormat(Locale.ShortFormat))
-        additionalWeatherInfo.sunSetTime = Qt.formatTime(sunSet, Qt.locale().timeFormat(Locale.ShortFormat))
+        if (UnitUtils.hasSunriseSunsetData()) {
+            additionalWeatherInfo.sunRiseTime = Qt.formatTime(sunRise, Qt.locale().timeFormat(Locale.ShortFormat))
+            additionalWeatherInfo.sunSetTime = Qt.formatTime(sunSet, Qt.locale().timeFormat(Locale.ShortFormat))
+        }
         refreshTooltipSubText()
     }
 
@@ -453,10 +455,12 @@ Item {
             subText += '</tr>'
             subText += '<tr><td>&nbsp;</td><td></td></tr>'
         }
-        subText += '<tr>'
-        subText += '<td><font size="4"><font style="font-family: weathericons">\uf051</font>&nbsp;' + additionalWeatherInfo.sunRiseTime + ' '+timezoneShortName + '&nbsp;&nbsp;&nbsp;</font></td>'
-        subText += '<td><font size="4"><font style="font-family: weathericons">\uf052</font>&nbsp;' + additionalWeatherInfo.sunSetTime + ' '+timezoneShortName + '</font></td>'
-        subText += '</tr>'
+        if (UnitUtils.hasSunriseSunsetData()) {
+            subText += '<tr>'
+            subText += '<td><font size="4"><font style="font-family: weathericons">\uf051</font>&nbsp;' + additionalWeatherInfo.sunRiseTime + ' '+timezoneShortName + '&nbsp;&nbsp;&nbsp;</font></td>'
+            subText += '<td><font size="4"><font style="font-family: weathericons">\uf052</font>&nbsp;' + additionalWeatherInfo.sunSetTime + ' '+timezoneShortName + '</font></td>'
+            subText += '</tr>'
+        }
         subText += '</table>'
 
         subText += '<br /><br />'
