@@ -162,6 +162,13 @@ Item {
         weatherCache.writeCache(s)
     }
 
+    Connections {
+        target: plasmoid
+        function onExpandedChanged() {
+            rearmTimer()
+        }
+    }
+
     Component.onCompleted: {
         if (plasmoid.configuration.firstRun) {
           if (plasmoid.configuration.widgetFontSize === undefined) {
