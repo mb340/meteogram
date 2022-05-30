@@ -287,8 +287,6 @@ Item {
         if (!ok) {
             reloadData()
         }
-        updateLastReloadedText()
-        reloadMeteogram()
     }
 
     function clearLoadingXhrs() {
@@ -318,8 +316,6 @@ Item {
 
         if (main.cacheKey === cacheKey) {
             loadFromCache()
-            reloadMeteogram()
-            updateLastReloadedText()
         }
     }
 
@@ -397,6 +393,8 @@ Item {
             return false
         }
 
+        updateAdditionalWeatherInfoText()
+        reloadMeteogram()
         alreadyLoadedFromCache = true
         return true
     }

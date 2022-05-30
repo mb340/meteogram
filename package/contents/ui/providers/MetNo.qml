@@ -74,8 +74,6 @@ Item {
             additionalWeatherInfo.sunSet = UnitUtils.convertDate(sunSet, timezoneType)
         }
 
-        updateAdditionalWeatherInfoText()
-
         return true
     }
 
