@@ -369,6 +369,7 @@ Item {
         if (t > 0) {
             reloadTime.stop()
             reloadTime.start(t)
+            updateLastReloadedText()
         } else {
             dbgprint("rearmTimer: try reload now")
             reloadData()
@@ -400,6 +401,7 @@ Item {
             return false
         }
 
+        updateLastReloadedText()
         updateAdditionalWeatherInfoText()
         reloadMeteogram()
         alreadyLoadedFromCache = true
