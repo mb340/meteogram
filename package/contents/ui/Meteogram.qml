@@ -410,7 +410,7 @@ Item {
             Connections {
                 target: plasmoid
                 function onExpandedChanged() {
-                    meteogramCanvas.requestPaint()
+                    meteogramCanvas.markDirty(Qt.rect(0, 0, width, height))
                 }
             }
 
