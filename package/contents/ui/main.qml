@@ -136,6 +136,11 @@ Item {
         id: meteogramModel
     }
 
+
+    ListModel {
+        id: weatherAlertsModel
+    }
+
     function initPausedAction() {
         plasmoid.setAction('toggleUpdatingPaused',
                            updatingPaused ? i18n("Resume Updating") : i18n("Pause Updating"),
@@ -414,6 +419,8 @@ Item {
             print('error: cache not available')
             return false
         }
+
+        weatherAlertsModel.clear()
 
         var content = providerCache.getContent(cacheKey)
         var success = currentProvider.setWeatherContents(content)

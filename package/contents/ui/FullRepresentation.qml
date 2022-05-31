@@ -45,6 +45,10 @@ Item {
 
     property alias meteogram: meteogram2
 
+    property bool isShowAlertClicked: false
+    property bool hasAlerts: weatherAlertsModel.count > 0
+    property bool isShowAlert: isShowAlertClicked && hasAlerts
+
     PlasmaComponents.Label {
         id: currentLocationText
 
@@ -53,6 +57,37 @@ Item {
         verticalAlignment: Text.AlignTop
 
         text: main.placeAlias
+    }
+
+    PlasmaComponents.Label {
+        id: weatherAlertNotifierText
+
+        anchors.left: currentLocationText.right
+        anchors.leftMargin: 5 * units.devicePixelRatio
+        verticalAlignment: Text.AlignTop
+
+        text: "\u26A0"
+        color: "#986f00"
+        visible: hasAlerts
+    }
+
+    MouseArea {
+        cursorShape: Qt.PointingHandCursor
+        anchors.fill: weatherAlertNotifierText
+
+        hoverEnabled: true
+
+        onClicked: {
+            isShowAlertClicked = !isShowAlertClicked
+        }
+
+        onEntered: {
+            weatherAlertNotifierText.font.bold = true
+        }
+
+        onExited: {
+            weatherAlertNotifierText.font.bold = false
+        }
     }
 
     PlasmaComponents.Label {
@@ -126,7 +161,60 @@ Item {
         anchors.right: parent.right
         anchors.bottom: nextDaysView.top
         anchors.bottomMargin: 14 /* wind area */
+        visible: !isShowAlert
      }
+
+    Rectangle {
+        anchors.top: weatherAlertsView.top
+        anchors.left: weatherAlertsView.left
+        anchors.right: weatherAlertsView.right
+        anchors.bottom: weatherAlertsView.bottom
+
+        color: 'transparent'
+        border.color: theme.borderColor ? theme.borderColor : "black"
+        border.width: 1
+
+        visible: isShowAlert
+    }
+
+    ColumnLayout {
+        id: weatherAlertsView
+        visible: isShowAlert
+
+        anchors.fill: meteogram2
+
+        ListView {
+            model: weatherAlertsModel
+            clip: true
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.margins: 5
+
+            header: Rectangle {
+                width: weatherAlertsView.width - 10
+                height: childrenRect.height
+
+                border.width: 1
+                border.color: 'red'
+                color: 'transparent'
+
+                Text {
+                    text: i18n("Weather Alerts")
+                    color: theme.textColor
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors.centerIn: parent
+                }
+
+            }
+
+
+            delegate: AlertItem {
+                width: weatherAlertsView.width
+            }
+        }
+    }
+
   /*
      *
      * NEXT DAYS
