@@ -381,6 +381,11 @@ Item {
             range: [0, imageWidth]
         }
 
+        LinearScale {
+            id: timeScale
+            range: [0, imageWidth]
+        }
+
         Canvas {
             id: meteogramCanvas
             anchors.fill: parent
@@ -735,6 +740,23 @@ Item {
                 context.fill()
             }
 
+            function drawAlerts(context) {
+                if (!weatherAlertsModel || weatherAlertsModel.count === 0) {
+                    return
+                }
+
+                for (var i = 0; i < weatherAlertsModel.count; i++) {
+                    var a = weatherAlertsModel.get(i)
+                    context.fillStyle = textColorLight ? "#33ff7751" :  "#22ee3800"
+                    var x0 = timeScale.translate(a.alertStart.getTime())
+                    var x1 = timeScale.translate(a.alertEnd.getTime())
+                    var w = x1 - x0
+                    var y = 0
+                    var h = imageHeight
+                    context.fillRect(x0, y, w, h)
+                }
+            }
+
             onPaint: {
                 if (!root.initialized) {
                     root.fullRedraw()
@@ -755,6 +777,7 @@ Item {
                 var rectWidth = xIndexScale.translate(1) - xIndexScale.translate(0)
 
                 context.globalCompositeOperation = "source-over"
+                drawAlerts(context)
                 drawPrecipitationBars(context, rectWidth)
 
                 // Carve out negative space when weather icons overlap precipitation bars
@@ -902,9 +925,12 @@ Item {
         const oneHourMs = 3600000
         hourGridModel.clear()
 
+        var dateFrom = undefined
+        var startTime = undefined
+
         while (i < meteogramModel.count) {
             var obj = meteogramModel.get(i)
-            var dateFrom = obj.from
+            dateFrom = obj.from
             var dateTo = obj.to
             dateFrom.setMinutes(0)
             dateFrom.setSeconds(0)
@@ -943,6 +969,11 @@ Item {
                                       differenceHours: differenceHours
                                   })
             }
+
+            if (i === 0) {
+                startTime = dateFrom
+            }
+
             i++
         }
         for (i = Math.max(0, hourGridModel.count - 5); i < hourGridModel.count; i++) {
@@ -959,6 +990,8 @@ Item {
                 precipitationMaxGraphY = 15
             }
         }
+
+        timeScale.setDomain(startTime.getTime(), dateFrom.getTime())
     }
 
     property bool graphCurvedLine: plasmoid.configuration.graphCurvedLine
