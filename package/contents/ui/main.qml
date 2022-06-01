@@ -228,6 +228,8 @@ Item {
 
         // set initial place
         setNextPlace(true)
+
+        updateViewsTimer.init()
     }
 
     onPlacesJsonStrChanged: {
@@ -316,7 +318,6 @@ Item {
         providerCache.setContent(cacheKey, contentToCache)
         providerCache.printKeys()
 
-        alreadyLoadedFromCache = false
         saveCache()
 
         reloadTime.setLastReloadedMs(cacheKey)
@@ -324,6 +325,7 @@ Item {
         clearLoadingXhrs()
 
         if (main.cacheKey === cacheKey) {
+            alreadyLoadedFromCache = false
             loadFromCache()
             rearmTimer()
         }
@@ -383,7 +385,7 @@ Item {
          dbgprint('loading from cache, config key: ' + cacheKey)
 
         if (alreadyLoadedFromCache) {
-            dbgprint('already loaded from cache')
+            print('already loaded from cache')
             return true
         }
 
@@ -552,5 +554,41 @@ Item {
             return
         }
         print('[weatherWidget] ' + msg)
+    }
+
+    Timer {
+        id: updateViewsTimer
+        interval: 60 * 60 * 1000
+        repeat: false
+        running: false
+        triggeredOnStart: false
+        onTriggered: {
+            alreadyLoadedFromCache = false
+            if (!loadFromCache()) {
+                print('updateViewsTimer error')
+            } else {
+                print('updateViewsTimer loaded from cache')
+            }
+            init()
+        }
+
+        function init() {
+            const ONE_HOUR = (60 * 60 * 1000)
+            var dt = ONE_HOUR - (Date.now() % ONE_HOUR)
+            updateViewsTimer.interval = dt
+            updateViewsTimer.restart()
+
+            print('updateViewsTimer: ' + (new Date(Date.now() + dt)))
+        }
+    }
+
+    Connections {
+        target: plasmoid
+        function onExpandedChanged() {
+            if (!alreadyLoadedFromCache) {
+                alreadyLoadedFromCache = true
+                loadFromCache()
+            }
+        }
     }
 }
