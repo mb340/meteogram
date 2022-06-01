@@ -229,7 +229,8 @@ Item {
             anchors.bottom: parent.bottom
             verticalAlignment: Text.AlignBottom
 
-            text: '\u21bb '+ i18n("Reload")
+            text: !pressAndHoldTimer.running ? '\u21bb '+ i18n("Reload") :
+                                               '\u21bb '+ i18n("Reloading in ") + pressCountdownTimer.reloadTimerTs
             visible: false
         }
 
@@ -241,10 +242,47 @@ Item {
         onExited: {
             lastReloadedTextComponent.visible = true
             reloadTextComponent.visible = false
+            pressAndHoldTimer.stop()
         }
 
         onClicked: {
-            main.reloadData()
+            main.tryReload()
+        }
+
+        onPressed: {
+            pressCountdownTimer.reloadTimerStartTs = Date.now() + (pressAndHoldTimer.interval)
+            pressAndHoldTimer.restart()
+        }
+
+        onReleased: {
+            pressAndHoldTimer.stop()
+        }
+
+        Timer {
+            id: pressAndHoldTimer
+            interval: 5 * 1000
+            repeat: false
+            running: false
+            triggeredOnStart: false
+            onTriggered: {
+                main.reloadData()
+            }
+        }
+
+        Timer {
+            id: pressCountdownTimer
+            interval: 100
+            repeat: true
+            running: pressAndHoldTimer.running
+            triggeredOnStart: true
+
+
+            property double reloadTimerStartTs: 0
+            property double reloadTimerTs: 0
+
+            onTriggered: {
+                reloadTimerTs = Math.round((reloadTimerStartTs - Date.now()) / 100) / 10
+            }
         }
     }
 

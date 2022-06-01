@@ -267,10 +267,30 @@ Item {
         onExited: {
             lastReloadedTextComponent.visible = true
             reloadTextComponent.visible = false
+            pressAndHoldTimer.stop()
         }
 
         onClicked: {
-            main.reloadData()
+            main.tryReload()
+        }
+
+        onPressed: {
+            pressAndHoldTimer.restart()
+        }
+
+        onReleased: {
+            pressAndHoldTimer.stop()
+        }
+
+        Timer {
+            id: pressAndHoldTimer
+            interval: 2 * 1000
+            repeat: false
+            running: false
+            triggeredOnStart: false
+            onTriggered: {
+                main.reloadData()
+            }
         }
     }
 

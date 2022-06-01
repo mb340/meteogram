@@ -66,7 +66,7 @@ Item {
 
         onClicked: {
             if (mouse.button == Qt.MiddleButton) {
-                main.reloadData()
+                main.tryReload()
             } else {
                 plasmoid.expanded = !plasmoid.expanded
                 lastReloadedNotifier.visible = !plasmoid.expanded
