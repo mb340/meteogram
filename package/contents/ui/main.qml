@@ -327,7 +327,7 @@ Item {
     }
 
     function reloadDataFailureCallback(cacheKey) {
-        dbgprint("Failed to Load Data successfully.")
+        print("Failed to load data. cacheKey = " + cacheKey)
         clearLoadingXhrs()
         reloadTime.setLoadingError(cacheKey, true)
         if (main.cacheKey === cacheKey) {
