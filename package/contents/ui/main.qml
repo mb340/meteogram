@@ -294,6 +294,8 @@ Item {
         if (!ok) {
             reloadData()
         }
+
+        rearmTimer()
     }
 
     function clearLoadingXhrs() {
@@ -323,6 +325,7 @@ Item {
 
         if (main.cacheKey === cacheKey) {
             loadFromCache()
+            rearmTimer()
         }
     }
 
@@ -331,7 +334,7 @@ Item {
         clearLoadingXhrs()
         reloadTime.setLoadingError(cacheKey, true)
         if (main.cacheKey === cacheKey) {
-            loadFromCache()
+            rearmTimer()
         }
     }
 
@@ -378,8 +381,6 @@ Item {
 
     function loadFromCache() {
          dbgprint('loading from cache, config key: ' + cacheKey)
-
-         rearmTimer()
 
         if (alreadyLoadedFromCache) {
             dbgprint('already loaded from cache')
