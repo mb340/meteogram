@@ -917,8 +917,8 @@ Item {
             }
 
             if (isFinite(dataObj.cloudArea)) {
-                var cloudY0 = cloudAreaScale.translate(50 + (dataObj.cloudArea / 4))
-                var cloudY1 = cloudAreaScale.translate(50 - ((dataObj.cloudArea) / 2))
+                var cloudY0 = cloudAreaScale.translate(50 + (dataObj.cloudArea / 2))
+                var cloudY1 = cloudAreaScale.translate(50 - ((dataObj.cloudArea) / 4))
                 if (i === 0) {
                     cloudAreaPath.startY = cloudY0
                 }
