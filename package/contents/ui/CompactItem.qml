@@ -103,7 +103,7 @@ Item {
 
             horizontalAlignment: layoutType === 2 ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            fontSizeMode:  layoutType === 2 ? Text.FixedSize : Text.HorizontalFit
+            fontSizeMode:  Text.Fit
             font.family: 'weathericons'
             text: iconNameStr
 
@@ -130,7 +130,7 @@ Item {
 
             font.family: plasmoid.configuration.widgetFontName === "" ? (theme.defaultFont) : plasmoid.configuration.widgetFontName
 
-            fontSizeMode:  layoutType === 2 ? Text.Fit : Text.HorizontalFit
+            fontSizeMode:  Text.Fit
             font.pixelSize: plasmoid.configuration.widgetFontSize * (layoutType === 2 ? 0.7 : 1)
             font.pointSize: -1
         }
