@@ -86,35 +86,29 @@ Item {
 
             spacing: 0
 
-            implicitWidth: dateLabel.width
             implicitHeight: contentItem.childrenRect.height
 
             model: model
 
             interactive: false
 
-            delegate: Item {
-                height: valueItem.implicitHeight
-                width: dateLabel.width + textPad
+            delegate: GridLayout {
+                id: valueItem
+                width: hoverItem.width
 
-                GridLayout {
-                    id: valueItem
-                    width: parent.width
-
-                    PlasmaComponents.Label {
-                        id: nameLabel
-                        text: nameStr
-                        font.pixelSize: 11 * units.devicePixelRatio
-                        font.pointSize: -1
-                    }
-                    PlasmaComponents.Label {
-                        id: valueLabel
-                        text: valueStr
-                        color: valueColor ? valueColor : theme.textColor
-                        font.pixelSize: 11 * units.devicePixelRatio
-                        font.pointSize: -1
-                        Layout.alignment: Qt.AlignRight
-                    }
+                PlasmaComponents.Label {
+                    id: nameLabel
+                    text: nameStr
+                    font.pixelSize: 11 * units.devicePixelRatio
+                    font.pointSize: -1
+                }
+                PlasmaComponents.Label {
+                    id: valueLabel
+                    text: valueStr
+                    color: valueColor ? valueColor : theme.textColor
+                    font.pixelSize: 11 * units.devicePixelRatio
+                    font.pointSize: -1
+                    Layout.alignment: Qt.AlignRight
                 }
             }
         }
