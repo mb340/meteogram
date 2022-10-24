@@ -109,6 +109,7 @@ Item {
 
         onClicked: {
             dbgprint('clicked next location')
+            isShowAlertClicked = false
             main.setNextPlace(false,"+")
         }
 
@@ -141,6 +142,7 @@ Item {
 
         onClicked: {
             dbgprint('clicked previous location')
+            isShowAlertClicked = false
             main.setNextPlace(false,"-")
         }
 
@@ -315,6 +317,7 @@ Item {
             Connections {
                 target: plasmoid
                 function onExpandedChanged() {
+                    isShowAlertClicked = false
                     main.updateLastReloadedText()
                 }
             }
