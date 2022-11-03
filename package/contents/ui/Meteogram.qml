@@ -557,11 +557,13 @@ Item {
             }
 
             function drawColdTemp(context, path, color, lineWidth) {
+                var y0 = temperatureScale.translate(0);
+                var h = imageHeight - y0;
                 context.save()
                 context.beginPath()
                 context.strokeStyle = 'transparent'
                 context.lineWidth = 0
-                context.rect(0, temperatureScale.translate(0), width, height);
+                context.rect(0, y0, width, h);
                 context.closePath()
                 context.stroke();
                 context.clip();
