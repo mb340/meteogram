@@ -60,6 +60,55 @@ var WeatherFont = {
         'wi-sunset': '\uf052'
     },
 
+    descriptionByName: {
+        'wi-day-sunny': i18n('Sunny'),
+        'wi-night-clear': i18n('Clear'),
+        'wi-day-sunny-overcast': i18n('Sunny Overcast'),
+        'wi-night-partly-cloudy': i18n('Partly Cloudy'),
+        'wi-day-cloudy': i18n('Cloudy'),
+        'wi-night-cloudy': i18n('Cloudy'),
+        'wi-cloudy': i18n('Cloudy'),
+        'wi-day-showers': i18n('Showers'),
+        'wi-night-showers': i18n('Showers'),
+        'wi-day-storm-showers': i18n('Storm Showers'),
+        'wi-night-storm-showers': i18n('Storm Showers'),
+        'wi-day-rain-mix': i18n('Rain Mix'),
+        'wi-night-rain-mix': i18n('Rain Mix'),
+        'wi-day-snow': i18n('Snow'),
+        'wi-night-snow': i18n('Snow'),
+        'wi-showers': i18n('Showers'),
+        'wi-rain': i18n('Rain'),
+        'wi-thunderstorm': i18n('Thunderstorm'),
+        'wi-rain-mix': i18n('Rain Mix'),
+        'wi-snow': i18n('Snow'),
+        'wi-day-snow-thunderstorm': i18n('Snow Thunderstorm'),
+        'wi-night-snow-thunderstorm': i18n('Snow Thunderstorm'),
+        'wi-dust': i18n('Dust'),
+        'wi-day-sleet-storm': i18n('Sleet Storm'),
+        'wi-night-sleet-storm': i18n('Sleet Storm'),
+        'wi-storm-showers': i18n('Storm Showers'),
+        'wi-day-sprinkle': i18n('Sprinkle'),
+        'wi-night-sprinkle': i18n('Sprinkle'),
+        'wi-day-thunderstorm': i18n('Thunderstorm'),
+        'wi-night-thunderstorm': i18n('Thunderstorm'),
+        'wi-sprinkle': i18n('Sprinkle'),
+        'wi-day-rain': i18n('Rain'),
+        'wi-night-rain': i18n('Rain'),
+        'wi-lightning': i18n('Lightning'),
+        'wi-sleet': i18n('Sleet'),
+        'wi-fog': i18n('Fog'),
+        'wi-smoke': i18n('Smoke'),
+        'wi-volcano': i18n('Volcano'),
+        'wi-strong-wind': i18n('Strong Wind'),
+        'wi-tornado': i18n('Tornado'),
+        'wi-windy': i18n('Windy'),
+        'wi-hurricane': i18n('Hurricane'),
+        'wi-snowflake-cold': i18n('Snowflake Cold'),
+        'wi-hot': i18n('Hot'),
+        'wi-hail': i18n('Hail'),
+        'wi-sunset': i18n('Sunset')
+    },
+
     iconNameByYrNoCode: {
         '1':  ['wi-day-sunny', 'wi-night-clear'],
         '2':  ['wi-day-sunny-overcast', 'wi-night-partly-cloudy'],
@@ -212,4 +261,19 @@ function getSunriseIcon() {
 
 function getSunsetIcon() {
     return '\uf051'
+}
+
+function getIconDescription(iconName, providerId, partOfDay) {
+    var iconCodeParts = null
+    if (providerId === 'yrno') {
+        iconCodeParts = WeatherFont.iconNameByYrNoCode[iconName]
+    } else if (providerId === 'owm') {
+        iconCodeParts = WeatherFont.iconNameByOwmCode[iconName]
+    } else if (providerId === 'metno') {
+        iconCodeParts = WeatherFont.iconNameByYrNoCode[iconName]
+    }
+    if (!iconCodeParts) {
+        return 'N/A'
+    }
+    return WeatherFont.descriptionByName[iconCodeParts[partOfDay]]
 }
