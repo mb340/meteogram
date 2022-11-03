@@ -1143,7 +1143,7 @@ Item {
         minPressure = mid - (pressureRange / 2.0)
         minPressure = Math.ceil(minPressure * mult) / mult
         maxPressure = mid + (pressureRange / 2.0)
-        maxPressure = Math.ceil(maxPressure * mult) / mult
+        maxPressure = Math.floor(maxPressure * mult) / mult
 
         // print("stepSize = " + stepSize)
         // print("nSteps = " + nSteps)
