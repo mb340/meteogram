@@ -18,6 +18,7 @@ import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import "../code/unit-utils.js" as UnitUtils
+import "../code/icons.js" as IconTools
 
 
 Item {
@@ -172,6 +173,17 @@ Item {
                             UnitUtils.getHourText(hourFrom, twelveHourClockEnabled) + " " +
                             (twelveHourClockEnabled ? UnitUtils.getAmOrPm(hourFrom) : '00')
         dateLabel.text = dateStr
+
+        var iconNameStr = ""
+        if (hourModel.iconName) {
+            var timePeriod = UnitUtils.isSunRisen(hourModel.dateFrom) ? 0 : 1
+            var iconNameStr = IconTools.getIconDescription(hourModel.iconName,
+                                                    currentProvider.providerId, timePeriod)
+            model.append({
+                nameStr: i18n("Conditions:"),
+                valueStr: iconNameStr,
+            })
+        }
 
         model.append({
             nameStr: i18n("Temperature:"),
