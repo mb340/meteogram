@@ -38,7 +38,12 @@ Item {
     property int windarea: 28
 
     readonly property int minTemperatureYGridCount: 20
-    readonly property int minPressureYGridCount: 30
+    property var minPressureYGridCount: ({
+        0: 30,
+        1: 30,
+        2: 20,
+    })
+
     property double temperatureYGridStep: 1.0
     property int temperatureYGridCount: minTemperatureYGridCount   // Number of vertical grid Temperature elements
 
@@ -1088,7 +1093,7 @@ Item {
         decimalPlace = Math.min(4, decimalPlace)
 
         const pad = 1.25
-        var minP = UnitUtils.convertPressure(minPressureYGridCount, pressureType)
+        var minP = UnitUtils.convertPressure(minPressureYGridCount[pressureType], pressureType)
         dP = Math.max(minP, pad * dP)
         dP = Math.ceil(dP * mult * 10) / (mult * 10)
         // print("minP = " + minP + ", dP = " + dP)
