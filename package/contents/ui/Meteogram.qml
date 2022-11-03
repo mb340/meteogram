@@ -1106,7 +1106,7 @@ Item {
                 var ns = Math.round(c / temperatureYGridCount) * temperatureYGridCount
                 var pr = s * ns
 
-                if (count >= temperatureYGridCount && pressureRange >= dP) {
+                if (count >= temperatureYGridCount || pressureRange >= dP) {
                     break
                 }
 
