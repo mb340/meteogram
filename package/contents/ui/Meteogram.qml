@@ -1159,7 +1159,15 @@ Item {
         /*
          * Round min/max pressure at one higher order of magnitude
          */
-        mult = (mult > 1) ? (10 / mult) : (10 * mult)
+        var decimalPlace_ = Math.floor(Math.log10(stepSize))
+        var mult = decimalPlace_ + 1
+        if (decimalPlace_ >= 0) {
+            mult = Math.pow(10, mult)
+        } else {
+            // Whole numbers are the upper bound for rounding when the step size is less than zero.
+            mult = mult < 1 ? Math.pow(10, mult) : mult
+        }
+
         var ceilMaxP = Math.ceil(maxPressure / mult) * mult
         var floorMaxP = Math.floor(maxPressure / mult) * mult
         if (maxPressure - floorMaxP <= ceilMaxP - maxPressure) {
