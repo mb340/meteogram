@@ -33,7 +33,7 @@ Item {
     property double idx: -1
     property var hourModel: undefined
 
-    readonly property double textPad: 24 * units.devicePixelRatio
+    readonly property double textPad: 32 * units.devicePixelRatio
 
     property alias boxWidth: hoverItem.width
     property alias boxHeight: hoverItem.height
