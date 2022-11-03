@@ -121,23 +121,23 @@ var WeatherFont = {
         '9':  ['wi-showers', 'wi-showers'],
         '10': ['wi-rain', 'wi-rain'],
         '11': ['wi-thunderstorm', 'wi-thunderstorm'],
-        '12': ['wi-rain-mix', 'wi-rain-mix'],
+        '12': ['wi-sleet', 'wi-sleet'],
         '13': ['wi-snow', 'wi-snow'],
         '14': ['wi-day-snow-thunderstorm', 'wi-night-snow-thunderstorm'], //TODO no icon in fonts! using SnowSunThunder
-        '15': ['wi-dust', 'wi-dust'],
+        '15': ['wi-fog', 'wi-fog'],
         '20': ['wi-day-sleet-storm', 'wi-night-sleet-storm'],
         '21': ['wi-day-snow-thunderstorm', 'wi-night-snow-thunderstorm'],
         '22': ['wi-storm-showers', 'wi-storm-showers'],
-        '23': ['wi-storm-showers', 'wi-storm-showers'], //TODO used LightRainThunder
-        '24': ['wi-day-sprinkle', 'wi-night-sprinkle'], //TODO used DrizzleSun
+        '23': ['wi-day-sleet-storm', 'wi-night-sleet-storm'],
+        '24': ['wi-day-storm-showers', 'wi-night-storm-showers'],
         '25': ['wi-day-thunderstorm', 'wi-night-thunderstorm'],
         '26': ['wi-day-sleet-storm', 'wi-night-sleet-storm'], //TODO used SleetSunThunder
         '27': ['wi-day-sleet-storm', 'wi-night-sleet-storm'], //TODO used SleetSunThunder
         '28': ['wi-day-snow-thunderstorm', 'wi-night-snow-thunderstorm'], //TODO no icon in fonts! using SnowSunThunder
         '29': ['wi-day-snow-thunderstorm', 'wi-night-snow-thunderstorm'], //TODO no icon in fonts! using SnowSunThunder
         '30': ['wi-sprinkle', 'wi-sprinkle'], //TODO used Drizzle
-        '31': ['wi-storm-showers', 'wi-storm-showers'], //TODO used LightRainThunder
-        '32': ['wi-storm-showers', 'wi-storm-showers'], //TODO used LightRainThunder
+        '31': ['wi-day-sleet-storm', 'wi-night-sleet-storm'],
+        '32': ['wi-day-sleet-storm', 'wi-night-sleet-storm'],
         '33': ['wi-day-snow-thunderstorm', 'wi-night-snow-thunderstorm'], //TODO no icon in fonts! using SnowSunThunder
         '34': ['wi-day-snow-thunderstorm', 'wi-night-snow-thunderstorm'], //TODO no icon in fonts! using SnowSunThunder
         '40': ['wi-day-sprinkle', 'wi-night-sprinkle'],
@@ -147,8 +147,8 @@ var WeatherFont = {
         '44': ['wi-day-snow', 'wi-night-snow'], //TODO used SnowSun
         '45': ['wi-day-snow', 'wi-night-snow'], //TODO used SnowSun
         '46': ['wi-sprinkle', 'wi-sprinkle'],
-        '47': ['wi-rain-mix', 'wi-rain-mix'], //TODO same as Sleet for now
-        '48': ['wi-rain-mix', 'wi-rain-mix'], //TODO same as Sleet for now
+        '47': ['wi-sleet', 'wi-sleet'], //TODO same as Sleet for now
+        '48': ['wi-sleet', 'wi-sleet'], //TODO same as Sleet for now
         '49': ['wi-snow', 'wi-snow'], //TODO used Snow
         '50': ['wi-snow', 'wi-snow']  //TODO used Snow
     },
