@@ -544,11 +544,15 @@ Item {
             }
 
             function drawWarmTemp(context, path, color, lineWidth) {
+                var h = temperatureScale.translate(0);
+                if (h <= 0.0) {
+                    return;
+                }
                 context.save()
                 context.beginPath()
                 context.strokeStyle = 'transparent'
                 context.lineWidth = 0
-                context.rect(0, 0, width, temperatureScale.translate(0));
+                context.rect(0, 0, width, h);
                 context.closePath()
                 context.stroke();
                 context.clip();
@@ -559,6 +563,9 @@ Item {
             function drawColdTemp(context, path, color, lineWidth) {
                 var y0 = temperatureScale.translate(0);
                 var h = imageHeight - y0;
+                if (h <= 0.0) {
+                    return;
+                }
                 context.save()
                 context.beginPath()
                 context.strokeStyle = 'transparent'
