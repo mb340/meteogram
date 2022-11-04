@@ -1,5 +1,5 @@
-import QtQuick 2.2
-import QtQuick.Controls 1.3
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
 import org.kde.plasma.core 2.0 as PlasmaCore
@@ -12,8 +12,7 @@ Item {
     property string cfg_places
     property alias cfg_debugLogging: debugLogging.checked
 
-
-    property int editEntryNumber: -1
+    property var editEntryNumber: -1
 
     ListModel {
         id: placesModel
@@ -26,7 +25,8 @@ Item {
                                    providerId: placeObj.providerId,
                                    placeIdentifier: placeObj.placeIdentifier,
                                    placeAlias: placeObj.placeAlias,
-                                   timezoneID: (placeObj.timezoneID !== undefined) ? placeObj.timezoneID : -1
+                                   timezoneID: (placeObj.timezoneID !== undefined) ? placeObj.timezoneID : -1,
+                                   selected: false
                                })
         })
         let timezoneArray = TZData.TZData.sort(dynamicSort("displayName"))
@@ -222,7 +222,7 @@ Item {
                 }
             }
             searchWindow.close()
-            addMetnoCityIdDialog.open()
+            // addMetnoCityIdDialog.open()
         }
     }
 
@@ -272,6 +272,7 @@ Item {
         id: rhsColumn
         width: parent.width
 
+
         Label {
             text: i18n("Plasmoid version:") + ' 2.2.4'
             Layout.alignment: Qt.AlignRight
@@ -283,165 +284,115 @@ Item {
             Layout.alignment: Qt.AlignLeft
         }
 
-        TableView {
-            id: placesTable
-            width: parent.width
-
-            TableViewColumn {
-                id: providerIdCol
-                role: 'providerId'
-                title: i18n("Source")
-                width: parent.width * 0.1
-
-                delegate: Label {
-                    text: styleData.value
-                    elide: Text.ElideRight
-                    anchors.left: parent ? parent.left : undefined
-                    anchors.leftMargin: 5
-                    anchors.right: parent ? parent.right : undefined
-                    anchors.rightMargin: 5
-                }
-            }
-
-            TableViewColumn {
-                id: placeIdentifierCol
-                role: 'placeIdentifier'
-                title: i18n("Place Identifier")
-                width: parent.width * 0.4
-
-                delegate: Label {
-                    text: styleData.value
-                    elide: Text.ElideRight
-                    anchors.left: parent ? parent.left : undefined
-                    anchors.leftMargin: 5
-                    anchors.right: parent ? parent.right : undefined
-                    anchors.rightMargin: 5
-                }
-            }
-
-            TableViewColumn {
-                role: 'placeAlias'
-                title: i18n("Displayed as")
-                width: parent.width * 0.2
-
-                delegate: MouseArea {
-
-                    anchors.fill: parent
-
-                    Label {
-                        id: placeAliasText
-                        text: styleData.value
-                        height: parent.height
-                        anchors.left: parent.left
-                        anchors.leftMargin: 5
-                        anchors.right: parent.right
-                        anchors.rightMargin: 5
-                    }
-
-                    PlasmaCore.IconItem {
-                        id: noAliasWarningIcon
-                        anchors.left: parent.left
-                        anchors.leftMargin: 5
-                        visible: placeAliasText.text === ''
-                        height: parent.height
-                        width: height
-                        source: 'document-edit'
-                    }
-
-                    cursorShape: Qt.PointingHandCursor
-
-                    onClicked: {
-                        changePlaceAliasDialog.open()
-                        changePlaceAliasDialog.tableIndex = styleData.row
-                        newPlaceAliasField.text = placeAliasText.text
-                        newPlaceAliasField.focus = true
-                    }
-                }
-            }
-
-            TableViewColumn {
-                title: i18n("Action")
-                width: parent.width * 0.2
-
-                delegate: Item {
-
-                    GridLayout {
-                        height: parent.height
-                        columns: 4
-                        rowSpacing: 0
-
-                        Button {
-                            iconName: 'go-up'
-                            Layout.fillHeight: true
-                            onClicked: {
-                                placesModel.move(styleData.row, styleData.row - 1, 1)
-                                placesModelChanged()
-                            }
-                            enabled: styleData.row > 0
-                        }
-
-                        Button {
-                            iconName: 'go-down'
-                            Layout.fillHeight: true
-                            onClicked: {
-                                placesModel.move(styleData.row, styleData.row + 1, 1)
-                                placesModelChanged()
-                            }
-                            enabled: styleData.row < placesModel.count - 1
-                        }
-
-                        Button {
-                            iconName: 'list-remove'
-                            Layout.fillHeight: true
-                            onClicked: {
-                                placesModel.remove(styleData.row)
-                                placesModelChanged()
-                            }
-                        }
-                        Button {
-                            iconName: 'entry-edit'
-                            Layout.fillHeight: true
-                            onClicked: {
-                                editEntryNumber = styleData.row
-                                let entry = placesModel.get(styleData.row)
-                                if (entry.providerId === "metno") {
-                                    let url=entry.placeIdentifier
-                                    newMetnoUrl.text = url
-                                    var data = url.match(RegExp("([+-]?[0-9]{1,5}[.]?[0-9]{0,5})","g"))
-                                    newMetnoCityLatitudeField.text = Number(data[0]).toLocaleString(Qt.locale(),"f",5)
-                                    newMetnoCityLongitudeField.text = Number(data[1]).toLocaleString(Qt.locale(),"f",5)
-                                    newMetnoCityAltitudeField.text = (data[2] === undefined) ? 0:data[2]
-                                    for (var i = 0; i < timezoneDataModel.count; i++) {
-                                        if (timezoneDataModel.get(i).id == Number(entry.timezoneID)) {
-                                            tzComboBox.currentIndex = i
-                                            addMetnoCityIdDialog.timezoneID = entry.timezoneID
-                                            break
-                                        }
-                                    }
-                                    newMetnoCityAlias.text = entry.placeAlias
-                                    addMetnoCityIdDialog.providerId = entry.providerId
-                                    addMetnoCityIdDialog.open()
-                                }
-                                if (entry.providerId === "owm") {
-                                    newOwmCityIdField.text = "https://openweathermap.org/city/"+entry.placeIdentifier
-                                    newOwmCityAlias.text = entry.placeAlias
-                                    addOwmCityIdDialog.open()
-                                }
-                            }
-                        }
-                    }
-                }
-
-            }
-            model: placesModel
-            Layout.preferredHeight: 150
+        HorizontalHeaderView {
+            id: horizontalHeader
+            syncView: tableView
+            Layout.preferredHeight: contentHeight
             Layout.preferredWidth: parent.width
-            Layout.columnSpan: 2
+
+            model: [
+                i18n("Source"),
+                i18n("Displayed as"),
+                i18n("Place Identifier"),
+            ]
         }
 
-        Row {
+        TableView {
+            id: tableView
+            Layout.minimumHeight: 150
+            Layout.preferredWidth: parent.width
+            clip: true
+
+            property int currentRow: -1
+
+            ScrollBar.vertical: ScrollBar {
+                policy: ScrollBar.AsNeeded 
+            }
+
+            model: placesModel
+
+            property var columnWidths: [0.1, 0.3, 0.6]
+            columnWidthProvider: function (column) {
+                return tableView.width * columnWidths[column]
+            }
+
+            onWidthChanged: tableView.forceLayout()
+
+            component TableRow: Label {
+                property int column: -1
+
+                text: text
+                elide: Text.ElideRight
+                Layout.fillHeight: true
+                Layout.preferredWidth: tableView.width * tableView.columnWidths[column]
+
+                background: Rectangle {
+                    anchors.fill: parent
+                    color: selected ? PlasmaCore.Theme.highlightColor :
+                                     ((row % 2 === 0) ? PlasmaCore.Theme.viewBackgroundColor :
+                                        Qt.darker(PlasmaCore.Theme.viewBackgroundColor, 1.05))
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        var prevRow = tableView.currentRow
+                        tableView.clearSelection()
+                        if (prevRow !== row) {
+                            selected = true
+                            tableView.currentRow = row
+                        }
+                    }
+                    onDoubleClicked: {
+                    }
+                }
+            }
+
+            delegate: Rectangle {
+                id: rowRoot
+                implicitHeight: providerIdLabel.contentHeight + (11 * units.devicePixelRatio)
+                implicitWidth: tableView.width
+
+                RowLayout {
+                    id: tableRow
+                    spacing: 1
+                    anchors.fill: parent
+
+                    TableRow {
+                        id: providerIdLabel
+                        text: providerId
+                        column: 0
+                    }
+
+                    TableRow {
+                        text: placeAlias
+                        column: 1
+                    }
+
+                    TableRow {
+                        text: placeIdentifier
+                        column: 2
+                    }
+                }
+            }
+
+            function clearSelection() {
+                if (tableView.currentRow < 0) {
+                    return;
+                }
+                let data = placesModel.get(tableView.currentRow)
+                if (!data) {
+                    return
+                }
+                data.selected = false
+                tableView.currentRow = -1
+            }
+
+        }
+
+        RowLayout {
             Button {
-                iconName: 'list-add'
+                icon.name: 'list-add'
                 text: 'OWM'
                 width: 100
                 onClicked: {
@@ -454,7 +405,7 @@ Item {
             }
 
             Button {
-                iconName: 'list-add'
+                icon.name: 'list-add'
                 text: 'metno'
                 width: 100
                 onClicked: {
@@ -467,6 +418,91 @@ Item {
                     newMetnoCityLatitudeField.focus = true
                     addMetnoCityIdDialog.providerId = 'metno'
                     addMetnoCityIdDialog.open()
+                }
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+            }
+
+            GridLayout {
+                height: parent.height
+                columns: 4
+                rowSpacing: 0
+
+                Button {
+                    icon.name: 'go-up'
+                    Layout.fillHeight: true
+                    onClicked: {
+                        var row = tableView.currentRow
+                        placesModel.move(row, row - 1, 1)
+                        placesModelChanged()
+                        tableView.currentRow = tableView.currentRow - 1
+                    }
+                    enabled: tableView.currentRow > 0
+                }
+
+                Button {
+                    icon.name: 'go-down'
+                    Layout.fillHeight: true
+                    onClicked: {
+                        var row = tableView.currentRow
+                        placesModel.move(row, row + 1, 1)
+                        placesModelChanged()
+                        tableView.currentRow = tableView.currentRow + 1
+                    }
+                    enabled: (tableView.currentRow > -1 &&
+                                tableView.currentRow < placesModel.count - 1)
+                }
+
+                Button {
+                    icon.name: 'list-remove'
+                    Layout.fillHeight: true
+                    onClicked: {
+                        if (tableView.currentRow < 0) {
+                            return
+                        }
+                        placesModel.remove(tableView.currentRow)
+                        placesModelChanged()
+
+                        tableView.currentRow = -1
+                    }
+                    enabled: (tableView.currentRow > -1 &&
+                                tableView.currentRow < placesModel.count)
+                }
+
+                Button {
+                    icon.name: 'entry-edit'
+                    Layout.fillHeight: true
+                    enabled: (tableView.currentRow > -1 &&
+                                tableView.currentRow < placesModel.count)
+                    onClicked: {
+                        editEntryNumber = tableView.currentRow
+                        let entry = placesModel.get(editEntryNumber)
+                        if (entry.providerId === "metno") {
+                            let url=entry.placeIdentifier
+                            newMetnoUrl.text = url
+                            var data = url.match(RegExp("([+-]?[0-9]{1,5}[.]?[0-9]{0,5})","g"))
+                            newMetnoCityLatitudeField.text = Number(data[0]).toLocaleString(Qt.locale(),"f",5)
+                            newMetnoCityLongitudeField.text = Number(data[1]).toLocaleString(Qt.locale(),"f",5)
+                            newMetnoCityAltitudeField.text = (data[2] === undefined) ? 0:data[2]
+                            for (var i = 0; i < timezoneDataModel.count; i++) {
+                                if (timezoneDataModel.get(i).id == Number(entry.timezoneID)) {
+                                    tzComboBox.currentIndex = i
+                                    addMetnoCityIdDialog.timezoneID = entry.timezoneID
+                                    break
+                                }
+                            }
+                            newMetnoCityAlias.text = entry.placeAlias
+                            addMetnoCityIdDialog.providerId = entry.providerId
+                            addMetnoCityIdDialog.open()
+                        }
+                        if (entry.providerId === "owm") {
+                            newOwmCityIdField.text = "https://openweathermap.org/city/"+entry.placeIdentifier
+                            newOwmCityAlias.text = entry.placeAlias
+                            addOwmCityIdDialog.open()
+                        }
+                    }
                 }
             }
         }
@@ -488,11 +524,15 @@ Item {
             }
             SpinBox {
                 id: reloadIntervalMin
-                decimals: 0
+                property int decimals: 0
                 stepSize: 10
-                minimumValue: 20
-                maximumValue: 120
-                suffix: i18nc("Abbreviation for minutes", "min")
+                from: 20
+                to: 120
+                textFromValue: function(value, locale) {
+                    var num = Number(value).toLocaleString(locale, 'f', reloadIntervalMin.decimals)
+                    var suffix = i18nc("Abbreviation for minutes", "min")
+                    return qsTr("%1 %2").arg(num).arg(suffix)
+                }
             }
         }
 

@@ -1,5 +1,5 @@
 import QtQuick 2.2
-import QtQuick.Controls 1.3
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
 import org.kde.plasma.core 2.0 as PlasmaCore
@@ -114,7 +114,7 @@ Dialog {
             id: newMetnoCityLatitudeField
             Layout.fillWidth: true
             validator: DoubleValidator { bottom: -90; top: 90; decimals: 5 }
-            textColor: acceptableInput ? newMetnoCityLatitudeLabel.color : "red"
+            color: acceptableInput ? newMetnoCityLatitudeLabel.color : "red"
             onTextChanged: {
                 updateUrl()
             }
@@ -133,7 +133,7 @@ Dialog {
             id: newMetnoCityLongitudeField
             Layout.fillWidth: true
             validator: DoubleValidator { bottom: -180; top: 180; decimals: 5 }
-            textColor: acceptableInput ? newMetnoCityLongitudeLabel.color : "red"
+            color: acceptableInput ? newMetnoCityLongitudeLabel.color : "red"
             onTextChanged: {
                 updateUrl()
             }
@@ -153,7 +153,7 @@ Dialog {
             id: newMetnoCityAltitudeField
             Layout.fillWidth: true
             validator: IntValidator { bottom: -999; top: 5000 }
-            textColor: acceptableInput ? newMetnoCityAltitudeLabel.color : "red"
+            color: acceptableInput ? newMetnoCityAltitudeLabel.color : "red"
             onTextChanged: {
                 updateUrl()
             }
@@ -167,7 +167,7 @@ Dialog {
             placeholderText: i18n("URL")
             Layout.columnSpan: 5
             Layout.fillWidth: true
-            textColor: acceptableInput ? newMetnoCityAltitudeLabel.color : "red"
+            color: acceptableInput ? newMetnoCityAltitudeLabel.color : "red"
 
             function updateFields() {
                 function localiseFloat(data) {
