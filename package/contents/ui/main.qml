@@ -18,7 +18,7 @@ import QtQuick 2.2
 import QtQuick.Layouts 1.1
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
-import QtQuick.Controls 1.0
+import QtQuick.Controls 2.15
 import "../code/data-loader.js" as DataLoader
 import "../code/config-utils.js" as ConfigUtils
 import "../code/icons.js" as IconTools
