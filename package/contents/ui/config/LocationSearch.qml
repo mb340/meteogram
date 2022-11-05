@@ -149,9 +149,7 @@ Dialog {
         }
     }
 
-    ListModel {
-        id: myCSVData
-    }
+    property var myCSVData: ([])
     ListModel {
         id: countryCodesModel
     }

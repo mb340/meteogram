@@ -270,10 +270,10 @@ function getDisplayName(shortCode) {
 }
 function updateListView(filter) {
     filteredCSVData.clear()
-    for (var f = 0; f < myCSVData.rowCount(); f++) {
-        let lc = myCSVData.get(f).locationName.toLowerCase()
-        if (myCSVData.get(f).locationName.toLowerCase().indexOf(filter.toLowerCase()) === 0) {
-            filteredCSVData.append(myCSVData.get(f))
+    for (var f = 0; f < myCSVData.length; f++) {
+        let lc = myCSVData[f].locationName.toLowerCase()
+        if (myCSVData[f].locationName.toLowerCase().indexOf(filter.toLowerCase()) === 0) {
+            filteredCSVData.append(myCSVData[f])
         }
     }
 }
@@ -281,7 +281,7 @@ function loadCSVDatabase(countryName) {
     if (countryName.length === 0) {
         return
     }
-    myCSVData.clear()
+    myCSVData = []
     let filename = Qt.resolvedUrl("./db/" + getshortCode(countryName) + ".csv")
     var xhr = new XMLHttpRequest
     xhr.open("GET", filename)
@@ -290,7 +290,7 @@ function loadCSVDatabase(countryName) {
             var response = xhr.responseText
             var tmpDB = response.split(/\r?\n/)
             for (var i = 0; i < tmpDB.length - 1; i++) {
-                myCSVData.append(parseCSVLine(tmpDB[i]))
+                myCSVData.push(parseCSVLine(tmpDB[i]))
             }
             updateListView(locationEdit.text)
         }
