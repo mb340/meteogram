@@ -224,6 +224,9 @@ Item {
             searchWindow.close()
             // addMetnoCityIdDialog.open()
         }
+        onNo: {
+            searchWindow.close()
+        }
     }
 
     property alias newMetnoCityAlias: addMetnoCityIdDialog.newMetnoCityAlias
