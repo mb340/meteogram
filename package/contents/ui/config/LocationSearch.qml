@@ -1,5 +1,5 @@
-import QtQuick 2.2
-import QtQuick.Controls 1.3
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
 import org.kde.plasma.core 2.0 as PlasmaCore
@@ -36,25 +36,131 @@ Dialog {
             }
         }
     }
+
+    HorizontalHeaderView {
+        id: horizontalHeader
+        syncView: tableView
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.left: parent.left
+        implicitHeight: contentHeight
+
+        model: [
+            i18n("Location"),
+            i18n("Area"),
+            i18n("Latitude"),
+            i18n("Longitude"),
+            i18n("Altitude"),
+            i18n("Timezone")
+        ]
+    }
+
     TableView {
         id: tableView
         height: 140
-        verticalScrollBarPolicy: Qt.ScrollBarAsNeeded
-        highlightOnFocus: true
         anchors.bottom: row2.top
         anchors.right: parent.right
         anchors.left: parent.left
-        anchors.top: parent.top
+        anchors.top: horizontalHeader.bottom
         anchors.bottomMargin: 10
+        clip: true
+
+        property int currentRow: -1
+
+        ScrollBar.vertical: ScrollBar {
+            policy: ScrollBar.AsNeeded
+        }
+
         model: filteredCSVData
-        TableViewColumn { role: "locationName"; title: i18n("Location") }
-        TableViewColumn { role: "region"; title: i18n("Area"); width :75 }
-        TableViewColumn { role: "latitude"; title: i18n("Latitude"); width :75 }
-        TableViewColumn { role: "longitude"; title: i18n("Longitude"); width :75 }
-        TableViewColumn { role: "altitude"; title: i18n("Altitude"); width :75}
-        TableViewColumn { role: "timezoneName"; title: i18n("Timezone"); width :100}
-        onDoubleClicked: {
-            saveSearchedData.open()
+
+        property var columnWidths: [0.3, 0.1, 0.1, 0.1, 0.1, 0.3]
+        columnWidthProvider: function (column) {
+            return tableView.width * columnWidths[column]
+        }
+
+        onWidthChanged: tableView.forceLayout()
+
+        component TableRow: Label {
+            property int column: -1
+
+            text: text
+            elide: Text.ElideRight
+            Layout.fillHeight: true
+            Layout.preferredWidth: tableView.width * tableView.columnWidths[column]
+
+            background: Rectangle {
+                anchors.fill: parent
+                color: selected ? PlasmaCore.Theme.highlightColor :
+                                 ((row % 2 === 0) ? PlasmaCore.Theme.viewBackgroundColor :
+                                    Qt.darker(PlasmaCore.Theme.viewBackgroundColor, 1.05))
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    tableView.clearSelection()
+                    selected = true
+                    tableView.currentRow = row
+                }
+                onDoubleClicked: {
+                    saveSearchedData.open()
+                }
+            }
+        }
+
+        delegate: Rectangle {
+            id: rowRoot
+            implicitHeight: providerIdLabel.contentHeight + (11 * units.devicePixelRatio)
+            implicitWidth: tableView.width
+
+            RowLayout {
+                id: tableRow
+                spacing: 0
+                anchors.fill: parent
+
+                TableRow {
+                    id: providerIdLabel
+                    text: locationName
+                    column: 0
+                }
+
+                TableRow {
+                    text: region
+                    column: 1
+                }
+
+                TableRow {
+                    text: latitude
+                    column: 2
+                }
+
+                TableRow {
+                    text: longitude
+                    column: 3
+                }
+
+                TableRow {
+                    text: altitude
+                    column: 4
+                }
+
+                TableRow {
+                    text: timezoneName
+                    column: 5
+                }
+            }
+        }
+
+        function clearSelection() {
+            if (tableView.currentRow < 0) {
+                return;
+            }
+            let data = filteredCSVData.get(tableView.currentRow)
+            if (!data) {
+                return
+            }
+            data.selected = false
+            tableView.currentRow = -1
         }
     }
     Item {
@@ -116,6 +222,7 @@ Dialog {
             width: 200
             editable: false
             onCurrentIndexChanged: {
+                tableView.clearSelection()
                 if (countryList.currentIndex > 0) {
                     Helper.loadCSVDatabase(countryList.textAt(countryList.currentIndex))
                 }
@@ -144,6 +251,7 @@ Dialog {
                 event.accepted = true
             }
             onTextChanged: {
+                tableView.clearSelection()
                 Helper.updateListView(locationEdit.text)
             }
         }

@@ -310,6 +310,7 @@ function parseCSVLine(csvLine) {
                 longitude: parseFloat(items[3]),
                 altitude: parseInt(items[4]),
                 timezoneId: parseInt(items[5]),
-                timezoneName: TZData.TZData[items[5]].displayName
+                timezoneName: TZData.TZData[items[5]].displayName,
+                selected: false
             })
 }
