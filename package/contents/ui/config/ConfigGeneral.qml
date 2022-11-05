@@ -204,7 +204,7 @@ Item {
         informativeText: ""
         visible: false
         onYes: {
-            let data=filteredCSVData.get(tableView.currentRow)
+            let data=filteredCSVData.get(searchWindow.tableView.currentRow)
             newMetnoCityLatitudeField.text=data["latitude"]
             newMetnoCityLongitudeField.text=data["longitude"]
             newMetnoCityAltitudeField.text=data["altitude"]
