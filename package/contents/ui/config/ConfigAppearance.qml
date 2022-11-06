@@ -1,5 +1,5 @@
 import QtQuick 2.2
-import QtQuick.Controls 1.3
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.1
 
 Item {
@@ -15,13 +15,13 @@ Item {
     onCfg_layoutTypeChanged: {
         switch (cfg_layoutType) {
         case 0:
-            layoutTypeGroup.current = layoutTypeRadioHorizontal;
+            layoutTypeRadioHorizontal.checked = true;
             break;
         case 1:
-            layoutTypeGroup.current = layoutTypeRadioVertical;
+            layoutTypeRadioVertical.checked = true;
             break;
         case 2:
-            layoutTypeGroup.current = layoutTypeRadioCompact;
+            layoutTypeRadioCompact.checked = true;
             break;
         default:
         }
@@ -31,16 +31,16 @@ Item {
         switch (cfg_colorPaletteType) {
             default:
             case 0:
-                colorPaletteTypeGroup.current = colorPaletteTypeDefault
+                colorPaletteTypeDefault.checked = true
                 break;
             case 1:
-                colorPaletteTypeGroup.current = colorPaletteTypeProt
+                colorPaletteTypeProt.checked = true
                 break;
             case 2:
-                colorPaletteTypeGroup.current = colorPaletteTypeDeut
+                colorPaletteTypeDeut.checked = true
                 break;
             case 3:
-                colorPaletteTypeGroup.current = colorPaletteTypeTrit
+                colorPaletteTypeTrit.checked = true
                 break;
         }
     }
@@ -71,11 +71,11 @@ Item {
         cfg_colorPaletteTypeChanged()
     }
 
-    ExclusiveGroup {
+    ButtonGroup {
         id: layoutTypeGroup
     }
 
-    ExclusiveGroup {
+    ButtonGroup {
         id: colorPaletteTypeGroup
     }
 
@@ -121,7 +121,7 @@ Item {
         }
         RadioButton {
             id: colorPaletteTypeDefault
-            exclusiveGroup: colorPaletteTypeGroup
+            ButtonGroup.group: colorPaletteTypeGroup
             text: i18n("Default")
             onCheckedChanged: if (checked) cfg_colorPaletteType = 0
         }
@@ -137,7 +137,7 @@ Item {
         }
         RadioButton {
             id: colorPaletteTypeProt
-            exclusiveGroup: colorPaletteTypeGroup
+            ButtonGroup.group: colorPaletteTypeGroup
             text: i18n("Protanopia")
             onCheckedChanged: if (checked) cfg_colorPaletteType = 1
         }
@@ -148,7 +148,7 @@ Item {
         }
         RadioButton {
             id: colorPaletteTypeDeut
-            exclusiveGroup: colorPaletteTypeGroup
+            ButtonGroup.group: colorPaletteTypeGroup
             text: i18n("Deuteranopia")
             onCheckedChanged: if (checked) cfg_colorPaletteType = 2
         }
@@ -159,7 +159,7 @@ Item {
         }
         RadioButton {
             id: colorPaletteTypeTrit
-            exclusiveGroup: colorPaletteTypeGroup
+            ButtonGroup.group: colorPaletteTypeGroup
             text: i18n("Tritanopia")
             onCheckedChanged: if (checked) cfg_colorPaletteType = 3
         }
@@ -176,7 +176,7 @@ Item {
         }
         RadioButton {
             id: layoutTypeRadioHorizontal
-            exclusiveGroup: layoutTypeGroup
+            ButtonGroup.group: layoutTypeGroup
             text: i18n("Horizontal")
             onCheckedChanged: if (checked) cfg_layoutType = 0;
         }
@@ -193,13 +193,13 @@ Item {
         }
         RadioButton {
             id: layoutTypeRadioVertical
-            exclusiveGroup: layoutTypeGroup
+            ButtonGroup.group: layoutTypeGroup
             text: i18n("Vertical")
             onCheckedChanged: if (checked) cfg_layoutType = 1;
         }
         RadioButton {
             id: layoutTypeRadioCompact
-            exclusiveGroup: layoutTypeGroup
+            ButtonGroup.group: layoutTypeGroup
             text: i18n("Compact")
             onCheckedChanged: if (checked) cfg_layoutType = 2;
         }
@@ -224,11 +224,15 @@ Item {
 
         SpinBox {
             id: inTrayActiveTimeoutSec
-            decimals: 0
+            property int decimals: 0
             stepSize: 10
-            minimumValue: 10
-            maximumValue: 8000
-            suffix: i18nc("Abbreviation for seconds", "sec")
+            from: 10
+            to: 8000
+            textFromValue: function(value, locale) {
+                var num = Number(value).toLocaleString(locale, 'f', inTrayActiveTimeoutSec.decimals)
+                var suffix = i18nc("Abbreviation for seconds", "sec")
+                return qsTr("%1 %2").arg(num).arg(suffix)
+            }
         }
 
         Label {
@@ -275,14 +279,18 @@ Item {
         }
         SpinBox {
             id: widgetFontSize
-            decimals: 0
+            property int decimals: 0
             stepSize: 1
-            minimumValue: 4
+            from: 4
+            to: 48
             value: cfg_widgetFontSize
-            maximumValue: 48
-            suffix: i18nc("pixels", "px")
             onValueChanged: {
                 cfg_widgetFontSize = widgetFontSize.value
+            }
+            textFromValue: function(value, locale) {
+                var num = Number(value).toLocaleString(locale, 'f', inTrayActiveTimeoutSec.decimals)
+                var suffix = i18nc("pixels", "px")
+                return qsTr("%1 %2").arg(num).arg(suffix)
             }
         }
     }
