@@ -40,8 +40,8 @@ Item {
     readonly property int minTemperatureYGridCount: 20
     property var minPressureYGridCount: ({
         0: 30,
-        1: 30,
-        2: 20,
+        1: 1.0,
+        2: 10,
     })
 
     property double temperatureYGridStep: 1.0
@@ -1085,6 +1085,7 @@ Item {
     function processPressureData(minPressure, maxPressure) {
         var dP = maxPressure - minPressure
         var [decimalPlace, mult] = getMagnitude(dP)
+        // print(" ")
         // print("maxPressure = " + maxPressure + ", minPressure = " + minPressure)
         // print("dP = " + dP)
         // print("decimalPlace = " + decimalPlace + ", mult = " + mult)
@@ -1092,69 +1093,51 @@ Item {
         decimalPlace = Math.max(-2, decimalPlace)
         decimalPlace = Math.min(4, decimalPlace)
 
-        const pad = 1.25
-        var minP = UnitUtils.convertPressure(minPressureYGridCount[pressureType], pressureType)
+        const pad = 1.1
+        var minP = minPressureYGridCount[pressureType]
         dP = Math.max(minP, pad * dP)
         dP = Math.ceil(dP * mult * 10) / (mult * 10)
         // print("minP = " + minP + ", dP = " + dP)
 
         var stepSize = 1 / mult
-        var count = Math.floor(dP / stepSize)
-        var nSteps = Math.round(count / temperatureYGridCount) * temperatureYGridCount
+        var count = Math.ceil(dP / stepSize)
+        var nSteps = Math.ceil(count / temperatureYGridCount) * temperatureYGridCount
         var pressureRange = stepSize * nSteps
+        // print("pressureRange = " + pressureRange)
+        // print("temperatureYGridCount = " + temperatureYGridCount)
 
-        // print("initial: stepSize = " + stepSize + ", count = " + count)
-        if (count < temperatureYGridCount && pressureRange < dP) {
-            while (true) {
-                var s = stepSize / 2
-                var c = Math.floor(dP / s)
-                var ns = Math.round(c / temperatureYGridCount) * temperatureYGridCount
-                var pr = s * ns
+        while (true) {
+            var s = stepSize * 2
+            var c = Math.floor(dP / s)
+            var ns = Math.ceil(c / temperatureYGridCount) * temperatureYGridCount
+            var pr = s * ns
 
-                if (count >= temperatureYGridCount || pressureRange >= dP) {
-                    break
-                }
-
-                stepSize = s
-                count = c
-                nSteps = ns
-                pressureRange = pr
-                decimalPlace -= 1
-                // print("stepSize = " + s + ", count = " + count)
-                // print("pressureRange = " + pressureRange + ", dP = " + dP)
+            // print("stepSize = " + stepSize + ", nSteps = " + nSteps +
+            //       ", pressureRange = " + pressureRange + ", dP = " + dP)
+            if (c <= 0 || ns <= 0) {
+                print("c = " + c + ", ns = " + ns)
+                break
             }
-        } else if (count >= temperatureYGridCount && pressureRange < dP) {
-            while (true) {
-                var s = stepSize * 2
-                var c = Math.floor(dP / s)
-                var ns = Math.round(c / temperatureYGridCount) * temperatureYGridCount
-                var pr = s * ns
-
-                if (count < temperatureYGridCount && pressureRange >= dP) {
-                    break
-                }
-                stepSize = s
-                count = c
-                nSteps = ns
-                pressureRange = pr
-                // print("stepSize = " + stepSize + ", count = " + count)
+            if (nSteps <= temperatureYGridCount && pressureRange >= dP) {
+                break
             }
+            stepSize = s
+            count = c
+            nSteps = ns
+            pressureRange = pr
         }
-        // print("final: stepSize = " + stepSize + ", count = " + count)
 
         // Pressure scale domain
         var mid = minPressure + ((maxPressure - minPressure) / 2.0)
         mid = Math.round(mid * mult) / mult
         minPressure = mid - (pressureRange / 2.0)
-        minPressure = Math.ceil(minPressure * mult) / mult
         maxPressure = mid + (pressureRange / 2.0)
-        maxPressure = Math.floor(maxPressure * mult) / mult
+        if (mult != 1) {
+            minPressure = Math.ceil(minPressure * mult) / mult
+            maxPressure = Math.floor(maxPressure * mult) / mult
+        }
 
-        // print("stepSize = " + stepSize)
-        // print("nSteps = " + nSteps)
-        // print("pressureRange = " + pressureRange)
-        // print("mid = " + mid)
-        // print("maxPressure = " + maxPressure + ", minPressure = " + minPressure)
+        // print("mid = " + mid + ", maxPressure = " + maxPressure + ", minPressure = " + minPressure)
 
         /*
          * Round min/max pressure at one higher order of magnitude
@@ -1170,6 +1153,8 @@ Item {
 
         var ceilMaxP = Math.ceil(maxPressure / mult) * mult
         var floorMaxP = Math.floor(maxPressure / mult) * mult
+        // print("ceilMaxP = " + ceilMaxP)
+        // print("floorMaxP = " + floorMaxP)
         if (maxPressure - floorMaxP <= ceilMaxP - maxPressure) {
             var dp = maxPressure - floorMaxP
             maxPressure = maxPressure - dp
@@ -1187,6 +1172,5 @@ Item {
         pressureAxisScale.setRange(temperatureYGridCount, 0)
 
         pressureDecimals = -1 * Math.min(0, decimalPlace)
-        // pressureDecimals = 3
     }
 }
