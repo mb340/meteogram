@@ -1,5 +1,5 @@
 import QtQuick 2.2
-import QtQuick.Controls 1.3
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.1
 
 Item {
@@ -12,13 +12,13 @@ Item {
     onCfg_temperatureTypeChanged: {
         switch (cfg_temperatureType) {
         case 0:
-            temperatureTypeGroup.current = temperatureTypeRadioCelsius;
+            temperatureTypeRadioCelsius.checked = true;
             break;
         case 1:
-            temperatureTypeGroup.current = temperatureTypeRadioFahrenheit;
+            temperatureTypeRadioFahrenheit.checked = true;
             break;
         case 2:
-            temperatureTypeGroup.current = temperatureTypeRadioKelvin;
+            temperatureTypeRadioKelvin.checked = true;
             break;
         default:
         }
@@ -27,13 +27,13 @@ Item {
     onCfg_pressureTypeChanged: {
         switch (cfg_pressureType) {
         case 0:
-            pressureTypeGroup.current = pressureTypeRadioHpa;
+            pressureTypeRadioHpa.checked = true;
             break;
         case 1:
-            pressureTypeGroup.current = pressureTypeRadioInhg;
+            pressureTypeRadioInhg.checked = true;
             break;
         case 2:
-            pressureTypeGroup.current = pressureTypeRadioMmhg;
+            pressureTypeRadioMmhg.checked = true;
             break;
         default:
         }
@@ -42,13 +42,13 @@ Item {
     onCfg_windSpeedTypeChanged: {
         switch (cfg_windSpeedType) {
         case 0:
-            windSpeedTypeGroup.current = windSpeedTypeRadioMps;
+            windSpeedTypeRadioMps.checked = true;
             break;
         case 1:
-            windSpeedTypeGroup.current = windSpeedTypeRadioMph;
+            windSpeedTypeRadioMph.checked = true;
             break;
         case 2:
-            windSpeedTypeGroup.current = windSpeedTypeRadioKmh;
+            windSpeedTypeRadioKmh.checked = true;
             break;
         default:
         }
@@ -57,13 +57,13 @@ Item {
     onCfg_timezoneTypeChanged: {
         switch (cfg_timezoneType) {
         case 0:
-            timezoneTypeGroup.current = timezoneTypeRadioUserLocalTime;
+            timezoneTypeRadioUserLocalTime.checked = true;
             break;
         case 1:
-            timezoneTypeGroup.current = timezoneTypeRadioUtc;
+            timezoneTypeRadioUtc.checked = true;
             break;
         case 2:
-            timezoneTypeGroup.current = timezoneTypeRadioLocationLocalTime;
+            timezoneTypeRadioLocationLocalTime.checked = true;
             break;
         default:
         }
@@ -76,19 +76,19 @@ Item {
         cfg_timezoneTypeChanged()
     }
 
-    ExclusiveGroup {
+    ButtonGroup {
         id: temperatureTypeGroup
     }
 
-    ExclusiveGroup {
+    ButtonGroup {
         id: pressureTypeGroup
     }
 
-    ExclusiveGroup {
+    ButtonGroup {
         id: windSpeedTypeGroup
     }
 
-    ExclusiveGroup {
+    ButtonGroup {
         id: timezoneTypeGroup
     }
 
@@ -101,7 +101,7 @@ Item {
         }
         RadioButton {
             id: temperatureTypeRadioCelsius
-            exclusiveGroup: temperatureTypeGroup
+            ButtonGroup.group: temperatureTypeGroup
             text: i18n("°C")
             onCheckedChanged: if (checked) cfg_temperatureType = 0
         }
@@ -112,7 +112,7 @@ Item {
         }
         RadioButton {
             id: temperatureTypeRadioFahrenheit
-            exclusiveGroup: temperatureTypeGroup
+            ButtonGroup.group: temperatureTypeGroup
             text: i18n("°F")
             onCheckedChanged: if (checked) cfg_temperatureType = 1
         }
@@ -123,7 +123,7 @@ Item {
         }
         RadioButton {
             id: temperatureTypeRadioKelvin
-            exclusiveGroup: temperatureTypeGroup
+            ButtonGroup.group: temperatureTypeGroup
             text: i18n("K")
             onCheckedChanged: if (checked) cfg_temperatureType = 2
         }
@@ -140,7 +140,7 @@ Item {
         }
         RadioButton {
             id: pressureTypeRadioHpa
-            exclusiveGroup: pressureTypeGroup
+            ButtonGroup.group: pressureTypeGroup
             text: i18n("hPa")
             onCheckedChanged: if (checked) cfg_pressureType = 0
         }
@@ -151,13 +151,13 @@ Item {
         }
         RadioButton {
             id: pressureTypeRadioInhg
-            exclusiveGroup: pressureTypeGroup
+            ButtonGroup.group: pressureTypeGroup
             text: i18n("inHg")
             onCheckedChanged: if (checked) cfg_pressureType = 1
         }
         RadioButton {
             id: pressureTypeRadioMmhg
-            exclusiveGroup: pressureTypeGroup
+            ButtonGroup.group: pressureTypeGroup
             text: i18n("mmHg")
             onCheckedChanged: if (checked) cfg_pressureType = 2
         }
@@ -174,7 +174,7 @@ Item {
         }
         RadioButton {
             id: windSpeedTypeRadioMps
-            exclusiveGroup: windSpeedTypeGroup
+            ButtonGroup.group: windSpeedTypeGroup
             text: i18n("m/s")
             onCheckedChanged: if (checked) cfg_windSpeedType = 0
         }
@@ -185,13 +185,13 @@ Item {
         }
         RadioButton {
             id: windSpeedTypeRadioMph
-            exclusiveGroup: windSpeedTypeGroup
+            ButtonGroup.group: windSpeedTypeGroup
             text: i18n("mph")
             onCheckedChanged: if (checked) cfg_windSpeedType = 1
         }
         RadioButton {
             id: windSpeedTypeRadioKmh
-            exclusiveGroup: windSpeedTypeGroup
+            ButtonGroup.group: windSpeedTypeGroup
             text: i18n("km/h")
             onCheckedChanged: if (checked) cfg_windSpeedType = 2
         }
@@ -208,7 +208,7 @@ Item {
         }
         RadioButton {
             id: timezoneTypeRadioUserLocalTime
-            exclusiveGroup: timezoneTypeGroup
+            ButtonGroup.group: timezoneTypeGroup
             text: i18n("System local-time")
             onCheckedChanged: if (checked) cfg_timezoneType = 0
         }
@@ -219,7 +219,7 @@ Item {
         }
         RadioButton {
             id: timezoneTypeRadioUtc
-            exclusiveGroup: timezoneTypeGroup
+            ButtonGroup.group: timezoneTypeGroup
             text: i18n("UTC")
             onCheckedChanged: if (checked) cfg_timezoneType = 1
         }
@@ -230,7 +230,7 @@ Item {
         }
         RadioButton {
             id: timezoneTypeRadioLocationLocalTime
-            exclusiveGroup: timezoneTypeGroup
+            ButtonGroup.group: timezoneTypeGroup
             text: i18n("Location local-time")
             onCheckedChanged: if (checked) cfg_timezoneType = 2
         }
