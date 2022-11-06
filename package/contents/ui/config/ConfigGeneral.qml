@@ -518,11 +518,10 @@ Item {
             Layout.alignment: Qt.AlignLeft
         }
 
-        Row {
+        RowLayout {
             Label {
                 text: i18n("Reload interval:")
-                Layout.alignment: Qt.AlignLeft
-                anchors.verticalCenter: parent.verticalCenter
+                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                 rightPadding: 6
             }
             SpinBox {
