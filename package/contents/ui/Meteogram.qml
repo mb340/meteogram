@@ -1090,6 +1090,14 @@ Item {
         // print("dP = " + dP)
         // print("decimalPlace = " + decimalPlace + ", mult = " + mult)
 
+        var stepSize = 1 / mult
+        if ((dP / stepSize) < 2) {
+            // Ensure at least 2 steps
+            mult *= 100
+            decimalPlace -= 2
+            // print("decimalPlace = " + decimalPlace + ", mult = " + mult)
+        }
+
         decimalPlace = Math.max(-2, decimalPlace)
         decimalPlace = Math.min(4, decimalPlace)
 
