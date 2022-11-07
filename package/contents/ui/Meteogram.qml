@@ -1101,9 +1101,13 @@ Item {
         decimalPlace = Math.max(-2, decimalPlace)
         decimalPlace = Math.min(4, decimalPlace)
 
-        const pad = 1.1
         var minP = minPressureYGridCount[pressureType]
-        dP = Math.max(minP, pad * dP)
+        dP = Math.max(minP, dP)
+        if (decimalPlace >= 0) {
+             dP += (2 * (mult * 100) / temperatureYGridCount)
+        } else {
+             dP += (2 * (mult / 100) / temperatureYGridCount)
+        }
         dP = Math.ceil(dP * mult * 10) / (mult * 10)
         // print("minP = " + minP + ", dP = " + dP)
 
