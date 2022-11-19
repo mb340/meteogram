@@ -40,7 +40,7 @@ Item {
     readonly property int minTemperatureYGridCount: 20
     property var minPressureYGridCount: ({
         0: 30,
-        1: 1.0,
+        1: 0.5,
         2: 10,
     })
 
