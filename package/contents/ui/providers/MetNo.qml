@@ -1,6 +1,7 @@
 import QtQuick 2.2
 import "../../code/model-utils.js" as ModelUtils
 import "../../code/data-loader.js" as DataLoader
+import "../../code/icons.js" as IconTools
 import "../../code/unit-utils.js" as UnitUtils
 import "../../code/db/timezoneData.js" as TZ
 
@@ -349,54 +350,12 @@ Item {
     }
 
     function geticonNumber(text) {
-    var codes = {
-            "clearsky":    "1",
-            "cloudy":    "4",
-            "fair":    "2",
-            "fog":    "15",
-            "heavyrain":    "10",
-            "heavyrainandthunder":    "11",
-            "heavyrainshowers":    "41",
-            "heavyrainshowersandthunder":    "25",
-            "heavysleet":    "48",
-            "heavysleetandthunder":    "32",
-            "heavysleetshowers":    "43",
-            "heavysleetshowersandthunder":    "27",
-            "heavysnow":    "50",
-            "heavysnowandthunder":    "34",
-            "heavysnowshowers":    "45",
-            "heavysnowshowersandthunder":    "29",
-            "lightrain":    "46",
-            "lightrainandthunder":    "30",
-            "lightrainshowers":    "40",
-            "lightrainshowersandthunder":    "24",
-            "lightsleet":    "47",
-            "lightsleetandthunder":    "31",
-            "lightsleetshowers":    "42",
-            "lightsnow":    "49",
-            "lightsnowandthunder":    "33",
-            "lightsnowshowers":    "44",
-            "lightssleetshowersandthunder":    "26",
-            "lightssnowshowersandthunder":    "28",
-            "partlycloudy":    "3",
-            "rain":    "9",
-            "rainandthunder":    "22",
-            "rainshowers":    "5",
-            "rainshowersandthunder":    "6",
-            "sleet":    "12",
-            "sleetandthunder":    "23",
-            "sleetshowers":    "7",
-            "sleetshowersandthunder":    "20",
-            "snow":    "13",
-            "snowandthunder":    "14",
-            "snowshowers":    "8",
-            "snowshowersandthunder":    "21"
-        }
+
         var underscore = text.indexOf("_")
         if (underscore > -1) {
             text = text.substr(0,underscore)
         }
-        var num = codes[text]
+        var num = IconTools.MetNo.NameToCode[text]
         return num
     }
 
