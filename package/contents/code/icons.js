@@ -197,6 +197,7 @@ var WeatherFont = {
 }
 
 var MetNo = {
+    IconCode: null,
     NameToCode: {
         "clearsky":    "1",
         "cloudy":    "4",
@@ -239,6 +240,76 @@ var MetNo = {
         "snowandthunder":    "14",
         "snowshowers":    "8",
         "snowshowersandthunder":    "21"
+    }
+}
+
+MetNo.IconCode = Object.keys(MetNo.NameToCode).map(function(iconName){
+    return parseInt(MetNo.NameToCode[iconName]);
+});
+
+var MetNoWeatherIcon = {
+    iconIdByOwmCode: {
+        200: /*rainshowersandthunder*/ 6,
+        201: /*lightrainshowersandthunder*/ 24,
+        202: /*heavyrainshowersandthunder*/ 25,
+        210: /*rainshowersandthunder*/ 6,
+        211: /*lightrainshowersandthunder*/ 24,
+        212: /*heavyrainshowersandthunder*/ 25,
+        221: /*heavyrainshowersandthunder*/ 25,
+        230: /*rainshowersandthunder*/ 6,
+        231: /*lightrainshowersandthunder*/ 24,
+        232: /*heavyrainshowersandthunder*/ 25,
+
+        300: /*lightrainshowers*/ 40,
+        301: /*rainshowers*/ 5,
+        302: /*heavyrainshowers*/ 41,
+        310: /*lightrainshowers*/ 40,
+        311: /*rainshowers*/ 5,
+        312: /*heavyrainshowers*/ 41,
+        313: /*rainshowers*/ 5,
+        314: /*heavyrainshowers*/ 41,
+        321: /*rainshowers*/ 5,
+
+        500: /*lightrainshowers*/ 40,
+        501: /*rainshowers*/ 5,
+        502: /*heavyrainshowers*/ 41,
+        503: /*heavyrainshowers*/ 41,
+        504: /*heavyrainshowers*/ 41,
+        511: /*sleetshowers*/ 7,
+        520: /*lightrainshowers*/ 40,
+        521: /*rainshowers*/ 5,
+        522: /*heavyrainshowers*/ 41,
+        531: /*heavyrainshowers*/ 41,
+
+        600: /*lightsnowshowers*/ 44,
+        601: /*snowshowers*/ 8,
+        602: /*heavysnowshowers*/ 45,
+        611: /*sleet*/ 12,
+        612: /*lightsleetshowers*/ 42,
+        613: /*sleetshowers*/ 7,
+        615: /*lightsleetshowers*/ 42,
+        616: /*sleetshowers*/ 7,
+        620: /*lightsnowshowers*/ 44,
+        621: /*snowshowers*/ 8,
+        622: /*heavysnowshowers*/ 45,
+
+        701: /*fog*/ 15,
+        711: /*fog*/ 15,
+        721: /*fog*/ 15,
+        731: /*fog*/ 15,
+        741: /*fog*/ 15,
+        751: /*fog*/ 15,
+        761: /*fog*/ 15,
+        762: /*fog*/ 15,
+        771: /*fog*/ 15,
+        781: /*fog*/ 15,
+
+        800: /*clearsky*/ 1,
+
+        801: /*partlycloudy*/ 4,
+        802: /*partlycloudy*/ 4,
+        803: /*partlycloudy*/ 4,
+        804: /*partlycloudy*/ 4
     }
 }
 
@@ -382,4 +453,28 @@ function getIconDescription(iconName, providerId, partOfDay) {
         return getYrNoDescription(iconName)
     }
     return 'N/A'
+}
+
+function hasMetNoPartOfDay(iconId) {
+    const p = [1, 2, 3, 5, 6, 7, 8, 20, 21, 24, 25, 26, 27, 28, 29, 40, 41, 42, 43, 44, 45]
+    return p.includes(iconId)
+}
+
+function getMetNoIconImage(iconName, providerId, partOfDay) {
+    let iconId = null
+
+    if (providerId === 'yrno' || providerId === 'metno') {
+        iconId = parseInt(iconName)
+    } else if (providerId === 'owm') {
+        iconId = MetNoWeatherIcon.iconIdByOwmCode[iconName]
+    }
+
+    if (!MetNo.IconCode.includes(iconId)) {
+        return null
+    }
+
+    let filename = iconId.toString().padStart(2, '0')
+    let pod = !hasMetNoPartOfDay(iconId) ? "" : (partOfDay == 0 ? "d" : "n")
+    let path = "yr-weather-symbols/" + filename + pod + ".png"
+    return path
 }
