@@ -69,7 +69,7 @@ function fetchXmlFromInternet(getUrl, successCallback, failureCallback) {
 //        dbgprint('responseText: ' + xhr.responseText)
 
         var xmlString = xhr.responseText
-        if (!DataLoader.isXmlStringValid(xmlString)) {
+        if (!isXmlStringValid(xmlString)) {
             dbgprint('incoming xmlString is not valid: ' + xmlString)
             return
         }
@@ -106,7 +106,7 @@ function fetchJsonFromInternet(getUrl, successCallback, failureCallback) {
 //        dbgprint('responseText: ' + xhr.responseText)
 
         var jsonString = xhr.responseText
-        if (!DataLoader.IsJsonString(jsonString)) {
+        if (!IsJsonString(jsonString)) {
             print('incoming jsonString is not valid: ' + jsonString)
             return
         }
