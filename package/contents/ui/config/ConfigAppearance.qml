@@ -11,6 +11,7 @@ Item {
     property string cfg_widgetFontSize: plasmoid.configuration.widgetFontSize
     property bool cfg_graphCurvedLine: plasmoid.configuration.graphCurvedLine
     property int cfg_colorPaletteType: plasmoid.configuration.colorPaletteType
+    property int cfg_iconSetType: plasmoid.configuration.iconSetType
 
     onCfg_layoutTypeChanged: {
         switch (cfg_layoutType) {
@@ -41,6 +42,20 @@ Item {
                 break;
             case 3:
                 colorPaletteTypeTrit.checked = true
+        }
+    }
+
+    onCfg_iconSetTypeChanged: {
+        switch (cfg_iconSetType) {
+            default:
+            case 0:
+                iconSetErikFlowers.checked = true
+                break;
+            case 1:
+                iconSetMetNo.checked = true
+                break;
+            case 2:
+                iconSetBasmilius.checked = true
                 break;
         }
     }
@@ -69,6 +84,7 @@ Item {
     Component.onCompleted: {
         cfg_layoutTypeChanged()
         cfg_colorPaletteTypeChanged()
+        cfg_iconSetTypeChanged()
     }
 
     ButtonGroup {
@@ -77,6 +93,10 @@ Item {
 
     ButtonGroup {
         id: colorPaletteTypeGroup
+    }
+
+    ButtonGroup {
+        id: iconSetTypeGroup
     }
 
     GridLayout {
@@ -162,6 +182,61 @@ Item {
             ButtonGroup.group: colorPaletteTypeGroup
             text: i18n("Tritanopia")
             onCheckedChanged: if (checked) cfg_colorPaletteType = 3
+            Layout.rowSpan: 1
+        }
+
+        /* spacer */
+        Item {
+            width: 2
+            height: 10
+            Layout.columnSpan: 3
+        }
+
+        /* Icon Set - Erik Flowers */
+        Label {
+            text: i18n("Icon Set")
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            Layout.rowSpan: 1
+        }
+        RadioButton {
+            id: iconSetErikFlowers
+            ButtonGroup.group: iconSetTypeGroup
+            text: i18n("Erik Flowers Weather Icons")
+            onCheckedChanged: if (checked) cfg_iconSetType = 0
+            Layout.rowSpan: 1
+        }
+        Item {
+            width: 2
+            height: 2
+            Layout.rowSpan: 1
+        }
+
+        /* Icon Set - Yr.no */
+        Item {
+            width: 2
+            height: 2
+            Layout.rowSpan: 2
+        }
+        RadioButton {
+            id: iconSetMetNo
+            ButtonGroup.group: iconSetTypeGroup
+            text: i18n("Yr.no Weather Symbols")
+            onCheckedChanged: if (checked) cfg_iconSetType = 1
+            Layout.rowSpan: 1
+        }
+
+        /* Icon Set - Basmilius */
+        Item {
+            width: 2
+            height: 2
+            Layout.rowSpan: 2
+        }
+        RadioButton {
+            id: iconSetBasmilius
+            ButtonGroup.group: iconSetTypeGroup
+            text: i18n("Basmilius Meteocons")
+            onCheckedChanged: if (checked) cfg_iconSetType = 2
+            Layout.rowSpan: 1
         }
 
         Label {
