@@ -313,6 +313,142 @@ var MetNoWeatherIcon = {
     }
 }
 
+var BasmiliusWeatherIcon = {
+    IconNames: null,
+    iconNameByYrNoCode: {
+        '1':  ['clear-day', 'clear-night'],
+        '2':  ['overcast-day', 'overcast-night'],
+        '3':  ['partly-cloudy-day', 'partly-cloudy-night'],
+        '4':  ['cloudy', 'cloudy'],
+        '5':  ['partly-cloudy-day-rain', 'partly-cloudy-night-rain'],
+        '6':  ['thunderstorms-day-overcast-rain', 'thunderstorms-night-overcast-rain'],
+        '7':  ['overcast-day-sleet', 'overcast-night-sleet'],
+        '8':  ['overcast-day-snow', 'overcast-night-snow'],
+        '9':  ['rain', 'rain'],
+        '10': ['extreme-rain', 'extreme-rain'],
+        '11': ['thunderstorms-extreme-rain', 'thunderstorms-extreme-rain'],
+        '12': ['sleet', 'sleet'],
+        '13': ['snow', 'snow'],
+        '14': ['thunderstorms-snow', 'thunderstorms-snow'],
+        '15': ['fog', 'fog'],
+        '20': ['overcast-day-sleet', 'overcast-night-sleet'],
+        '21': ['thunderstorms-day-snow', 'thunderstorms-night-snow'],
+        '22': ['thunderstorms-rain', 'thunderstorms-rain'],
+        '23': ['thunderstorms-rain', 'thunderstorms-rain'],   // TODO no icon for Sleet and thunder
+        '24': ['thunderstorms-day-rain', 'thunderstorms-night-rain'],
+        '25': ['thunderstorms-day-extreme-rain', 'thunderstorms-night-extreme-rain'],
+        '26': ['thunderstorms-day-rain', 'thunderstorms-night-rain'], //TODO no icon for Light sleet showers and thunder
+        '27': ['thunderstorms-day-extreme-rain', 'thunderstorms-night-extreme-rain'], // TODO no icon for Heavy sleet showers and thunder
+        '28': ['thunderstorms-day-snow', 'thunderstorms-night-snow'],
+        '29': ['thunderstorms-day-extreme-snow', 'thunderstorms-night-extreme-snow'],
+        '30': ['thunderstorms-rain', 'thunderstorms-rain'],
+        '31': ['thunderstorms-rain', 'thunderstorms-rain'], // TODO no icon for Light sleet and thunder
+        '32': ['thunderstorms-extreme-rain', 'thunderstorms-extreme-rain'], // TODO no icon for Heavy sleet and thunder
+        '33': ['thunderstorms-snow', 'thunderstorms-snow'],
+        '34': ['thunderstorms-extreme-snow', 'thunderstorms-extreme-snow'],
+        '40': ['overcast-day-rain', 'overcast-night-rain'],
+        '41': ['extreme-day-rain', 'extreme-night-rain'],
+        '42': ['partly-cloudy-day-sleet', 'partly-cloudy-night-sleet'],
+        '43': ['extreme-day-sleet', 'extreme-night-sleet'],
+        '44': ['overcast-day-sleet', 'overcast-night-sleet'],
+        '45': ['extreme-day-snow', 'extreme-night-snow'],
+        '46': ['rain', 'rain'],
+        '47': ['sleet', 'sleet'],
+        '48': ['extreme-sleet', 'extreme-sleet'],
+        '49': ['snow', 'snow'],
+        '50': ['extreme-snow', 'extreme-snow']
+    },
+
+    iconNameByOwmCode: {
+        200: ['thunderstorms-day-rain', 'thunderstorms-night-rain'],
+        201: ['thunderstorms-day-overcast-rain', 'thunderstorms-night-overcast-rain'],
+        202: ['thunderstorms-day-extreme-rain', 'thunderstorms-day-extreme-rain'],
+        210: ['thunderstorms-day', 'thunderstorms-night'],
+        211: ['thunderstorms-day-overcast', 'thunderstorms-night-overcast'],
+        212: ['thunderstorms-day-extreme', 'thunderstorms-night-extreme'],
+        221: ['thunderstorms-day-extreme', 'thunderstorms-night-extreme'],
+        230: ['thunderstorms-day-rain', 'thunderstorms-night-rain'],
+        231: ['thunderstorms-day-overcast-rain', 'thunderstorms-night-overcast-rain'],
+        232: ['thunderstorms-day-extreme-rain', 'thunderstorms-day-extreme-rain'],
+
+        300: ['partly-cloudy-day-rain', 'partly-cloudy-night-rain'],
+        301: ['overcast-day-rain', 'overcast-night-rain'],
+        302: ['extreme-day-rain', 'extreme-night-rain'],
+        310: ['extreme-day-rain', 'extreme-night-rain'],
+        311: ['partly-cloudy-day-rain', 'partly-cloudy-night-rain'],
+        312: ['extreme-day-rain', 'extreme-night-rain'],
+        313: ['overcast-day-rain', 'overcast-night-rain'],
+        314: ['extreme-day-rain', 'extreme-night-rain'],
+        321: ['overcast-day-rain', 'overcast-night-rain'],
+
+        500: ['partly-cloudy-day-rain', 'partly-cloudy-night-rain'],
+        501: ['overcast-day-rain', 'overcast-night-rain'],
+        502: ['extreme-day-rain', 'extreme-night-rain'],
+        503: ['extreme-day-rain', 'extreme-night-rain'],
+        504: ['extreme-day-rain', 'extreme-night-rain'],
+        511: ['overcast-day-sleet', 'overcast-night-sleet'],
+        520: ['partly-cloudy-day-rain', 'partly-cloudy-night-rain'],
+        521: ['overcast-day-rain', 'overcast-night-rain'],
+        522: ['extreme-day-rain', 'extreme-night-rain'],
+        531: ['extreme-day-rain', 'extreme-night-rain'],
+
+        600: ['partly-cloudy-day-snow', 'partly-cloudy-night-snow'],
+        601: ['overcast-day-snow', 'overcast-night-snow'],
+        602: ['extreme-day-snow', 'extreme-night-snow'],
+        611: ['extreme-day-snow', 'extreme-night-snow'],
+        612: ['partly-cloudy-day-sleet', 'partly-cloudy-night-sleet'],
+        613: ['overcast-day-sleet', 'overcast-night-sleet'],
+        615: ['partly-cloudy-day-sleet', 'partly-cloudy-night-sleet'],
+        616: ['overcast-day-sleet', 'overcast-night-sleet'],
+        620: ['partly-cloudy-day-sleet', 'partly-cloudy-night-sleet'],
+        621: ['overcast-day-sleet', 'overcast-night-sleet'],
+        622: ['extreme-day-sleet', 'extreme-night-sleet'],
+
+        701: ['mist', 'mist'],
+        711: ['partly-cloudy-day-smoke', 'partly-cloudy-night-smoke'],
+        721: ['partly-cloudy-day-haze', 'partly-cloudy-night-haze'],
+        731: ['dust-day', 'dust-night'],
+        741: ['fog-day', 'fog-night'],
+        751: ['dust-day', 'dust-night'],
+        761: ['dust-day', 'dust-night'],
+        762: ['dust-day', 'dust-night'],
+        771: ['dust-day', 'dust-night'],
+        781: ['tornado', 'tornado'],
+
+        800: ['clear-day', 'clear-night'],
+        801: ['partly-cloudy-day', 'partly-cloudy-night'],
+        802: ['partly-cloudy-day', 'partly-cloudy-night'],
+        803: ['partly-cloudy-day', 'partly-cloudy-night'],
+        804: ['partly-cloudy-day', 'partly-cloudy-night'],
+    }
+}
+
+if (BasmiliusWeatherIcon.IconNames === null) {
+    print("BasmiliusWeatherIcon.IconNames")
+    BasmiliusWeatherIcon.IconNames = []
+    Object.keys(BasmiliusWeatherIcon.iconNameByYrNoCode).forEach(function(yrNoCode){
+        let iconName = BasmiliusWeatherIcon.iconNameByYrNoCode[yrNoCode][0]
+        if (!BasmiliusWeatherIcon.IconNames.includes(iconName)) {
+            BasmiliusWeatherIcon.IconNames.push(iconName)
+        }
+        iconName = BasmiliusWeatherIcon.iconNameByYrNoCode[yrNoCode][1]
+        if (!BasmiliusWeatherIcon.IconNames.includes(iconName)) {
+            BasmiliusWeatherIcon.IconNames.push(iconName)
+        }
+    });
+
+    Object.keys(BasmiliusWeatherIcon.iconNameByOwmCode).forEach(function(yrNoCode){
+        let iconName = BasmiliusWeatherIcon.iconNameByOwmCode[yrNoCode][0]
+        if (!BasmiliusWeatherIcon.IconNames.includes(iconName)) {
+            BasmiliusWeatherIcon.IconNames.push(iconName)
+        }
+        iconName = BasmiliusWeatherIcon.iconNameByOwmCode[yrNoCode][1]
+        if (!BasmiliusWeatherIcon.IconNames.includes(iconName)) {
+            BasmiliusWeatherIcon.IconNames.push(iconName)
+        }
+    });
+}
+
 function getIconCode(iconName, providerId, partOfDay) {
     var iconCodeParts = null
     if (providerId === 'yrno') {
@@ -477,4 +613,24 @@ function getMetNoIconImage(iconName, providerId, partOfDay) {
     let pod = !hasMetNoPartOfDay(iconId) ? "" : (partOfDay == 0 ? "d" : "n")
     let path = "yr-weather-symbols/" + filename + pod + ".png"
     return path
+}
+
+function getBasmiliusIconImage(iconName, providerId, partOfDay) {
+    var iconCodeParts = null
+    if (providerId === 'yrno' || providerId === 'metno') {
+        iconCodeParts = BasmiliusWeatherIcon.iconNameByYrNoCode[iconName]
+    } else if (providerId === 'owm') {
+        iconCodeParts = BasmiliusWeatherIcon.iconNameByOwmCode[iconName]
+    }
+
+    if (!iconCodeParts) {
+        return null
+    }
+
+    let filename = iconCodeParts[partOfDay]
+    if (!BasmiliusWeatherIcon.IconNames.includes(filename)) {
+        return null
+    }
+
+    return "basmilius/weather-icons/" + filename + ".png"
 }
