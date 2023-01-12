@@ -1,3 +1,8 @@
+.pragma library
+
+var initialized = false
+var i18n = null
+var dbgprint = null
 
 function getLastReloadedTimeText(lastReloaded) {
     var mins = lastReloaded / 60000

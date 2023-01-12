@@ -1,4 +1,10 @@
+.pragma library
 .import "./db/timezoneData.js" as TZ
+
+var initialized = false
+var main = null
+var i18n = null
+var precipitationMinVisible = null
 
 /*
  * TEMPERATURE

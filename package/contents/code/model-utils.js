@@ -1,3 +1,5 @@
+.pragma library
+
 var hourDurationMs = 1000 * 60 * 60
 var wholeDayDurationMs = hourDurationMs * 24
 

@@ -1,4 +1,11 @@
+.pragma library
 .import "./db/timezoneData.js" as TZData
+
+var initialized = false
+var myCSVData = null
+var locationEdit = null
+var filteredCSVData = null
+
 var countries = Array(
             {shortCode: "AD" , displayName: "Andorra"},
             {shortCode: "AE" , displayName: "United Arab Emirates"},

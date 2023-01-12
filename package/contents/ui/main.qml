@@ -169,7 +169,25 @@ Item {
         }
     }
 
+    function initUtils() {
+        if (!DataLoader.initialized) {
+            DataLoader.i18n = i18n
+            DataLoader.dbgprint = dbgprint
+            DataLoader.initialized = true
+        }
+        if (!UnitUtils.initialized) {
+            UnitUtils.main = main
+            UnitUtils.i18n = i18n
+            UnitUtils.initialized = true
+        }
+        if (!IconTools.initialized) {
+            IconTools.i18n = i18n
+            IconTools.initialized = true
+        }
+    }
+
     Component.onCompleted: {
+        initUtils()
         if (plasmoid.configuration.firstRun) {
           if (plasmoid.configuration.widgetFontSize === undefined) {
             plasmoid.configuration.widgetFontSize = 32
@@ -412,6 +430,7 @@ Item {
     }
 
     onInTrayActiveTimeoutSecChanged: {
+        initUtils()
         if (placesJsonStr === '') {
             return
         }

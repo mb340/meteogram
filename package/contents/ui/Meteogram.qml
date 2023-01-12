@@ -78,6 +78,7 @@ Item {
     property bool hasGraphCurvedLineChanged: false
 
     Component.onCompleted: {
+        UnitUtils.precipitationMinVisible = precipitationMinVisible
         fullRedraw()
     }
 

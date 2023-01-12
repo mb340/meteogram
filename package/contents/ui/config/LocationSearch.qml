@@ -25,7 +25,19 @@ Dialog {
             saveSearchedData.open()
         }
     }
+
+    function initPlaceSearchHelper() {
+        if (!Helper.initialized) {
+            Helper.myCSVData = searchWindow.myCSVData
+            Helper.locationEdit = locationEdit
+            Helper.filteredCSVData = searchWindow.filteredCSVData
+            Helper.initialized = true
+        }
+    }
+
     Component.onCompleted: {
+        initPlaceSearchHelper()
+
         let locale=Qt.locale().name.substr(3,2)
         let userCountry=Helper.getDisplayName(locale)
         let tmpDB=Helper.getDisplayNames()
