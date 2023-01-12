@@ -420,6 +420,63 @@ Item {
                 }
             }
 
+            property int iconSetType: (plasmoid && plasmoid.configuration && plasmoid.configuration.iconSetType) ?
+                                        plasmoid.configuration.iconSetType : 0
+
+            property int nLoadingImages: 0
+            property int nLoadedImages: 0
+
+            function loadBasmiliusIcons(doLoad) {
+                let iconNames = IconTools.BasmiliusWeatherIcon.IconNames
+                let func = doLoad ? loadImage : unloadImage
+                for (const value in iconNames) {
+                    func("image://basmilius/weather-icons/" + value + '.png')
+                }
+            }
+
+            function loadYrNoIcons(doLoad) {
+                let func = doLoad ? loadImage : unloadImage
+                for (const iconId in IconTools.MetNo.IconCode) {
+                    let stem = iconId.toString().padStart(2, '0')
+                    if (IconTools.hasMetNoPartOfDay(iconId)) {
+                        func("image://yr-weather-symbols/" + stem + "d" + ".png")
+                        func("image://yr-weather-symbols/" + stem + "n" + ".png")
+                    } else {
+                        func("image://yr-weather-symbols/" + stem + ".png")
+                    }
+                }
+            }
+
+            onIconSetTypeChanged: {
+                nLoadedImages = 0
+
+                if (iconSetType === 0) {
+                    loadYrNoIcons(false)
+                    loadBasmiliusIcons(false)
+                }
+
+                if (iconSetType === 1) {
+                    nLoadingImages = IconTools.MetNo.IconCode.length
+                    loadYrNoIcons(true)
+                    loadBasmiliusIcons(false)
+                }
+
+                if (iconSetType === 2) {
+                    nLoadingImages = IconTools.BasmiliusWeatherIcon.IconNames.length
+                    loadBasmiliusIcons(true)
+                    loadYrNoIcons(false)
+                }
+            }
+
+            onImageLoaded: {
+                nLoadedImages++
+                if (nLoadedImages > 0 && nLoadedImages === nLoadingImages) {
+                    nLoadingImages = 0
+                    nLoadedImages = 0
+                }
+                meteogramCanvas.markDirty(Qt.rect(0, 0, width, height))
+            }
+
             function computeFontSize() {
                 var rectWidth = xIndexScale.translate(1) - xIndexScale.translate(0)
                 var rectHeight = Math.abs(temperatureScale.translate(temperatureYGridStep) -
@@ -628,8 +685,36 @@ Item {
                     }
                     y0 = Math.min(newY0, newY1)
 
-                    context.fillStyle = theme.textColor
-                    context.fillText(str, x0, y0)
+                    if (iconSetType === 0) {
+                        context.fillStyle = theme.textColor
+                        context.fillText(str, x0, y0)
+                    } else {
+                        var imgPath = iconSetType === 1 ? IconTools.getMetNoIconImage(iconName, currentProvider.providerId, timePeriod) :
+                                        (iconSetType === 2 ? IconTools.getBasmiliusIconImage(iconName, currentProvider.providerId, timePeriod) :
+                                            null)
+
+                        if (imgPath != null) {
+                            let dim = (iconSetType === 1) ? (1.75 * rectWidth) :
+                                        ((iconSetType === 2) ? (2.5 * rectWidth) : 1.0)
+
+                            x0 = x - (dim / 2.0) + (rectWidth)
+                            y0 -= dim
+
+                            // Draw drop shadow
+                            context.save()
+                            context.shadowOffsetX = 0;
+                            context.shadowOffsetY = 0;
+                            context.shadowColor = !textColorLight ? 'black' : 'white';
+                            context.shadowBlur = 1.0;
+                            context.drawImage(imgPath, x0, y0, dim, dim)
+                            context.restore()
+
+                            // Draw actual image
+                            context.drawImage(imgPath, x0, y0, dim, dim)
+                        }
+                    }
+
+
                 }
             }
 
