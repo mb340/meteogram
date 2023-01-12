@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
 import QtQuick 2.2
+import QtGraphicalEffects 1.0
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import "../code/icons.js" as IconTools
 import "../code/unit-utils.js" as UnitUtils
@@ -26,6 +27,9 @@ Item {
     property bool past
     property int partOfDay
     property double pixelFontSize
+
+    property int iconSetType: (plasmoid && plasmoid.configuration && plasmoid.configuration.iconSetType) ?
+                               plasmoid.configuration.iconSetType : 0
     
     onPixelFontSizeChanged: {
         if (pixelFontSize > 0) {
@@ -71,6 +75,41 @@ Item {
             
             font.family: 'weathericons'
             text: hidden ? '' : IconTools.getIconCode(iconName, currentProvider.providerId, partOfDay)
+            visible: iconSetType === 0
+        }
+
+        Image {
+            id: weatherIcon
+            visible: (iconSetType === 1 || iconSetType === 2)
+
+            property var imgSrc: (iconSetType === 1 ?
+                                    IconTools.getMetNoIconImage(iconName, currentProvider.providerId, partOfDay) :
+                                    (iconSetType === 2 ?
+                                        IconTools.getBasmiliusIconImage(iconName, currentProvider.providerId, partOfDay) :
+                                        null))
+
+
+            source: imgSrc ? imgSrc : "images/placeholder.svg"
+            property double dim: iconSetType === 1 ? (Math.min(parent.width, parent.height) * 1.00) :
+                                    (iconSetType === 2 ? (Math.min(parent.width, parent.height) * 1.25) : 1.00)
+
+
+            width: dim
+            height: dim
+
+            anchors.centerIn: parent
+        }
+
+
+        DropShadow {
+            anchors.fill: weatherIcon
+            horizontalOffset: 0
+            verticalOffset: 0
+            radius: 8.0
+            samples: 17
+            color: "#80000000"
+            source: weatherIcon
+            visible: weatherIcon.visible
         }
     }
     
