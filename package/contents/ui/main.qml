@@ -418,12 +418,20 @@ Item {
         updateLastReloadedText()
     }
 
+    function getPlasmoidStatus(lastReloaded, inTrayActiveTimeoutSec) {
+        var reloadedAgoMs = DataLoader.getReloadedAgoMs(lastReloaded)
+        if (reloadedAgoMs < inTrayActiveTimeoutSec * 1000) {
+            return PlasmaCore.Types.ActiveStatus
+        } else {
+            return PlasmaCore.Types.PassiveStatus
+        }
+    }
+
     function updateLastReloadedText() {
         var lastReloadedMs = (new Date()).getTime() - reloadTime.getLastReloadedMs(cacheKey)
         lastReloadedText = '⬇ ' + i18n('%1 ago',
                             DataLoader.getLastReloadedTimeText(lastReloadedMs))
-        plasmoid.status = DataLoader.getPlasmoidStatus(lastReloadedMs,
-                                                       inTrayActiveTimeoutSec)
+        plasmoid.status = getPlasmoidStatus(lastReloadedMs, inTrayActiveTimeoutSec)
     }
 
     function updateAdditionalWeatherInfoText() {

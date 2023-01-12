@@ -31,15 +31,6 @@ function getReloadedAgoMs(lastReloaded) {
     return new Date().getTime() - lastReloaded
 }
 
-function getPlasmoidStatus(lastReloaded, inTrayActiveTimeoutSec) {
-    var reloadedAgoMs = getReloadedAgoMs(lastReloaded)
-    if (reloadedAgoMs < inTrayActiveTimeoutSec * 1000) {
-        return PlasmaCore.Types.ActiveStatus
-    } else {
-        return PlasmaCore.Types.PassiveStatus
-    }
-}
-
 function generateCacheKey(placeIdentifier) {
     return 'cache_' + Qt.md5(placeIdentifier)
 }
