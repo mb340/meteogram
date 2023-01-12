@@ -60,55 +60,6 @@ var WeatherFont = {
         'wi-sunset': '\uf052'
     },
 
-    descriptionByName: {
-        'wi-day-sunny': i18n('Sunny'),
-        'wi-night-clear': i18n('Clear'),
-        'wi-day-sunny-overcast': i18n('Sunny Overcast'),
-        'wi-night-partly-cloudy': i18n('Partly Cloudy'),
-        'wi-day-cloudy': i18n('Cloudy'),
-        'wi-night-cloudy': i18n('Cloudy'),
-        'wi-cloudy': i18n('Cloudy'),
-        'wi-day-showers': i18n('Showers'),
-        'wi-night-showers': i18n('Showers'),
-        'wi-day-storm-showers': i18n('Storm Showers'),
-        'wi-night-storm-showers': i18n('Storm Showers'),
-        'wi-day-rain-mix': i18n('Rain Mix'),
-        'wi-night-rain-mix': i18n('Rain Mix'),
-        'wi-day-snow': i18n('Snow'),
-        'wi-night-snow': i18n('Snow'),
-        'wi-showers': i18n('Showers'),
-        'wi-rain': i18n('Rain'),
-        'wi-thunderstorm': i18n('Thunderstorm'),
-        'wi-rain-mix': i18n('Rain Mix'),
-        'wi-snow': i18n('Snow'),
-        'wi-day-snow-thunderstorm': i18n('Snow Thunderstorm'),
-        'wi-night-snow-thunderstorm': i18n('Snow Thunderstorm'),
-        'wi-dust': i18n('Dust'),
-        'wi-day-sleet-storm': i18n('Sleet Storm'),
-        'wi-night-sleet-storm': i18n('Sleet Storm'),
-        'wi-storm-showers': i18n('Storm Showers'),
-        'wi-day-sprinkle': i18n('Sprinkle'),
-        'wi-night-sprinkle': i18n('Sprinkle'),
-        'wi-day-thunderstorm': i18n('Thunderstorm'),
-        'wi-night-thunderstorm': i18n('Thunderstorm'),
-        'wi-sprinkle': i18n('Sprinkle'),
-        'wi-day-rain': i18n('Rain'),
-        'wi-night-rain': i18n('Rain'),
-        'wi-lightning': i18n('Lightning'),
-        'wi-sleet': i18n('Sleet'),
-        'wi-fog': i18n('Fog'),
-        'wi-smoke': i18n('Smoke'),
-        'wi-volcano': i18n('Volcano'),
-        'wi-strong-wind': i18n('Strong Wind'),
-        'wi-tornado': i18n('Tornado'),
-        'wi-windy': i18n('Windy'),
-        'wi-hurricane': i18n('Hurricane'),
-        'wi-snowflake-cold': i18n('Snowflake Cold'),
-        'wi-hot': i18n('Hot'),
-        'wi-hail': i18n('Hail'),
-        'wi-sunset': i18n('Sunset')
-    },
-
     iconNameByYrNoCode: {
         '1':  ['wi-day-sunny', 'wi-night-clear'],
         '2':  ['wi-day-sunny-overcast', 'wi-night-partly-cloudy'],
@@ -263,17 +214,121 @@ function getSunsetIcon() {
     return '\uf051'
 }
 
+function getYrNoDescription(code) {
+    const descriptionByCode = {
+        1: i18n("Clear sky"),
+        4: i18n("Cloudy"),
+        2: i18n("Fair"),
+        15: i18n("Fog"),
+        10: i18n("Heavy rain"),
+        11: i18n("Heavy rain and thunder"),
+        41: i18n("Heavy rain showers"),
+        25: i18n("Heavy rain showers and thunder"),
+        48: i18n("Heavy sleet"),
+        32: i18n("Heavy sleet and thunder"),
+        43: i18n("Heavy sleet showers"),
+        27: i18n("Heavy sleet showers and thunder"),
+        50: i18n("Heavy snow"),
+        34: i18n("Heavy snow and thunder"),
+        45: i18n("Heavy snow showers"),
+        29: i18n("Heavy snow showers and thunder"),
+        46: i18n("Light rain"),
+        30: i18n("Light rain and thunder"),
+        40: i18n("Light rain showers"),
+        24: i18n("Light rain showers and thunder"),
+        47: i18n("Light sleet"),
+        31: i18n("Light sleet and thunder"),
+        42: i18n("Light sleet showers"),
+        49: i18n("Light snow"),
+        33: i18n("Light snow and thunder"),
+        44: i18n("Light snow showers"),
+        26: i18n("Light sleet showers and thunder"),
+        28: i18n("Light snow showers and thunder"),
+        3: i18n("Partly cloudy"),
+        9: i18n("Rain"),
+        22: i18n("Rain and thunder"),
+        5: i18n("Rain showers"),
+        6: i18n("Rain showers and thunder"),
+        12: i18n("Sleet"),
+        23: i18n("Sleet and thunder"),
+        7: i18n("Sleet showers"),
+        20: i18n("Sleet showers and thunder"),
+        13: i18n("Snow"),
+        14: i18n("Snow and thunder"),
+        8: i18n("Snow showers"),
+        21: i18n("Snow showers and thunder")
+    }
+    return descriptionByCode[code]
+}
+
+function getOwmDescription(code) {
+    const descriptionByCode = {
+        200: i18n("thunderstorm with light rain"),
+        201: i18n("thunderstorm with rain"),
+        202: i18n("thunderstorm with heavy rain"),
+        210: i18n("light thunderstorm"),
+        211: i18n("thunderstorm"),
+        212: i18n("heavy thunderstorm"),
+        221: i18n("ragged thunderstorm"),
+        230: i18n("thunderstorm with light drizzle"),
+        231: i18n("thunderstorm with drizzle"),
+        232: i18n("thunderstorm with heavy drizzle "),
+        300: i18n("light intensity drizzle"),
+        301: i18n("drizzle"),
+        302: i18n("heavy intensity drizzle"),
+        310: i18n("light intensity drizzle rain"),
+        311: i18n("drizzle rain"),
+        312: i18n("heavy intensity drizzle rain"),
+        313: i18n("shower rain and drizzle"),
+        314: i18n("heavy shower rain and drizzle"),
+        321: i18n("shower drizzle "),
+        500: i18n("light rain"),
+        501: i18n("moderate rain"),
+        502: i18n("heavy intensity rain"),
+        503: i18n("very heavy rain"),
+        504: i18n("extreme rain"),
+        511: i18n("freezing rain"),
+        520: i18n("light intensity shower rain"),
+        521: i18n("shower rain"),
+        522: i18n("heavy intensity shower rain"),
+        531: i18n("ragged shower rain "),
+        600: i18n("light snow"),
+        601: i18n("Snow"),
+        602: i18n("Heavy snow"),
+        611: i18n("Sleet"),
+        612: i18n("Light shower sleet"),
+        613: i18n("Shower sleet"),
+        615: i18n("Light rain and snow"),
+        616: i18n("Rain and snow"),
+        620: i18n("Light shower snow"),
+        621: i18n("Shower snow"),
+        622: i18n("Heavy shower snow "),
+        701: i18n("mist"),
+        711: i18n("Smoke"),
+        721: i18n("Haze"),
+        731: i18n("sand/ dust whirls"),
+        741: i18n("fog"),
+        751: i18n("sand"),
+        761: i18n("dust"),
+        762: i18n("volcanic ash"),
+        771: i18n("squalls"),
+        781: i18n("tornado "),
+        800: i18n("clear sky "),
+        801: i18n("few clouds: 11-25%"),
+        802: i18n("scattered clouds: 25-50%"),
+        803: i18n("broken clouds: 51-84%"),
+        804: i18n("overcast clouds: 85-100%")
+    }
+    return descriptionByCode[code]
+}
+
 function getIconDescription(iconName, providerId, partOfDay) {
-    var iconCodeParts = null
     if (providerId === 'yrno') {
-        iconCodeParts = WeatherFont.iconNameByYrNoCode[iconName]
+        return getYrNoDescription(iconName)
     } else if (providerId === 'owm') {
-        iconCodeParts = WeatherFont.iconNameByOwmCode[iconName]
+        return getOwmDescription(iconName)
     } else if (providerId === 'metno') {
-        iconCodeParts = WeatherFont.iconNameByYrNoCode[iconName]
+        return getYrNoDescription(iconName)
     }
-    if (!iconCodeParts) {
-        return 'N/A'
-    }
-    return WeatherFont.descriptionByName[iconCodeParts[partOfDay]]
+    return 'N/A'
 }
