@@ -102,6 +102,9 @@ Item {
                     text: nameStr
                     font.pixelSize: 11 * units.devicePixelRatio
                     font.pointSize: -1
+                    verticalAlignment: Text.AlignTop
+
+                    Layout.fillHeight: true
                 }
                 PlasmaComponents.Label {
                     id: valueLabel
@@ -109,7 +112,17 @@ Item {
                     color: valueColor ? valueColor : theme.textColor
                     font.pixelSize: 11 * units.devicePixelRatio
                     font.pointSize: -1
+                    wrapMode: Text.WordWrap
+
                     Layout.alignment: Qt.AlignRight
+                    Layout.maximumWidth: hoverItem.width - textMetrics.width
+                }
+
+                TextMetrics {
+                    id: textMetrics
+                    font.family: nameLabel.font.family
+                    font.pixelSize: nameLabel.font.pixelSize
+                    text: nameStr
                 }
             }
         }
