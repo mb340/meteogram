@@ -518,7 +518,9 @@ Item {
                 windDirection: obj.windDirection,
                 windSpeedMps: parseFloat(obj.windSpeedMps),
                 pressureHpa: parseFloat(obj.pressureHpa),
-                iconName: obj.iconName
+                iconName: obj.iconName,
+                humidity: NaN,
+                cloudArea: NaN
             })
 
             if (firstFromMs === null) {
