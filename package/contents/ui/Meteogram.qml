@@ -391,6 +391,8 @@ Item {
             anchors.fill: parent
             contextType: '2d'
 
+            renderStrategy: Canvas.Threaded
+
             readonly property double weatherFontSize: (14 * units.devicePixelRatio)
             property double fontSize: 14 * units.devicePixelRatio
             property var precLabelPositions: ({})
