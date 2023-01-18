@@ -128,14 +128,15 @@ Item {
         meteogramModel.clear()
         var readingsLength = (readingsArray.properties.timeseries.length)
         var dateNow = UnitUtils.dateNow(timezoneType)
-        var t = readingsArray.properties.timeseries[0].time
-        var dateFrom = UnitUtils.convertDate(t, timezoneType)
         var precipitation_unit = readingsArray.properties.meta.units["precipitation_amount"]
         var counter = 0
-        var i = 1
-        while (readingsArray.properties.timeseries[i].data.next_1_hours) {
-            var obj = readingsArray.properties.timeseries[i]
-            var dateTo = UnitUtils.convertDate(obj.time, timezoneType)
+        var i = 0
+        var timeseries = readingsArray.properties.timeseries
+        while (i < timeseries.length - 2 && timeseries[i].data.next_1_hours) {
+            var obj = timeseries[i]
+            var dateFrom = UnitUtils.convertDate(obj.time, timezoneType)
+            var nextObj = timeseries[i + 1]
+            var dateTo = UnitUtils.convertDate(nextObj.time, timezoneType)
             if (dateTo < dateNow) {
                 dateFrom = dateTo
                 i++
@@ -164,7 +165,6 @@ Item {
                 humidity: parseFloat(hm),
                 cloudArea: parseFloat(cld)
             })
-            dateFrom = dateTo
             i++
         }
     }
