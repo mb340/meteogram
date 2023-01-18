@@ -887,6 +887,10 @@ Item {
     }
 
     function buildMetogramData() {
+        if (meteogramModel.count <= 0) {
+            return
+        }
+
         var precipitation_unit = meteogramModel.get(0).precipitationLabel
         var counter = 0
         var i = 0
