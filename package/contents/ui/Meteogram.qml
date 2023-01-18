@@ -741,10 +741,15 @@ Item {
                     return
                 }
 
-                computeFontSize()
-
                 var context = getContext("2d")
                 context.clearRect(0, 0, width, height)
+
+                if (meteogramModel.count == 0) {
+                    return
+                }
+
+                computeFontSize()
+
                 context.globalCompositeOperation = "source-over"
 
                 var rectWidth = xIndexScale.translate(1) - xIndexScale.translate(0)
@@ -1092,7 +1097,7 @@ Item {
     function processMeteogramData() {
         if (meteogramModel.count === 0) {
             dbgprint('model is empty -> clearing canvas and exiting')
-            clearCanvas()
+            repaintCanvas()
             return
         }
 
