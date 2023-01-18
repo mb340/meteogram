@@ -182,14 +182,15 @@ Item {
 
         function resetobj() {
             var obj = {}
-            obj.hidden0 = true
-            obj.isPast0 = true
-            obj.hidden1 = true
-            obj.isPast1 = true
-            obj.hidden2 = true
-            obj.isPast2 = true
-            obj.hidden3 = true
-            obj.isPast3 = true
+
+            for (var i = 0; i < 4; i++) {
+                obj['temperature' + i] = NaN
+                obj['temperature_min' + i] = NaN
+                obj['temperature_max' + i] = NaN
+                obj['iconName' + i] = ""
+                obj['hidden' + i] = true
+                obj['isPast' + i] = true
+            }
             return obj
         }
 
@@ -203,6 +204,8 @@ Item {
                     continue
                 }
                 obj['temperature'+i] = NaN
+                obj['temperature_min'+i] = NaN
+                obj['temperature_max'+i] = NaN
                 obj['iconName'+i] = ""
             }
 
@@ -216,6 +219,7 @@ Item {
         var obj = resetobj()
         var prevHour = -1;
         var nearestHour = [NaN, NaN, NaN, NaN]
+        var hourCount = [0, 0, 0, 0]
         for (var i = 0; i < readingsLength; i++) {
             var reading = readingsArray.properties.timeseries[i]
             var date = UnitUtils.convertDate(new Date(Date.parse(reading.time)), timezoneType)
@@ -243,6 +247,7 @@ Item {
 
                 obj = resetobj()
                 nearestHour = [NaN, NaN, NaN, NaN]
+                hourCount = [0, 0, 0, 0]
             }
             prevHour = hour
 
@@ -271,6 +276,15 @@ Item {
             // Take the next closest if exact match isn't available.
             if  (0 <= hour && hour < 6) {
                 obj.temperature0 = isNearestHour(0, 3, hour) ? temperature : obj.temperature0
+                hourCount[0]++
+                if (hourCount[0] > 1) {
+                    obj.temperature_min0 = isNaN(obj.temperature_min0) ?
+                                            Math.min(obj.temperature0, temperature) :
+                                            Math.min(obj.temperature_min0, temperature)
+                    obj.temperature_max0 = isNaN(obj.temperature_max0) ?
+                                            Math.max(obj.temperature0, temperature) :
+                                            Math.max(obj.temperature_max0, temperature)
+                }
                 obj.iconName0 = iconnumber
                 obj.hidden0 = false
                 obj.isPast0 = false
@@ -279,6 +293,15 @@ Item {
 
             if  (6 <= hour && hour < 12) {
                 obj.temperature1 = isNearestHour(1, 9, hour) ? temperature : obj.temperature1
+                hourCount[1]++
+                if (hourCount[1] > 1) {
+                    obj.temperature_min1 = isNaN(obj.temperature_min1) ?
+                                            Math.min(obj.temperature1, temperature) :
+                                            Math.min(obj.temperature_min1, temperature)
+                    obj.temperature_max1 = isNaN(obj.temperature_max1) ?
+                                            Math.max(obj.temperature1, temperature) :
+                                            Math.max(obj.temperature_max1, temperature)
+                }
                 obj.iconName1 = iconnumber
                 obj.hidden1 = false
                 obj.isPast1 = false
@@ -287,6 +310,15 @@ Item {
 
             if  (12 <= hour && hour < 18) {
                 obj.temperature2 = isNearestHour(2, 15, hour) ? temperature : obj.temperature2
+                hourCount[2]++
+                if (hourCount[2] > 1) {
+                    obj.temperature_min2 = isNaN(obj.temperature_min2) ?
+                                            Math.min(obj.temperature2, temperature) :
+                                            Math.min(obj.temperature_min2, temperature)
+                    obj.temperature_max2 = isNaN(obj.temperature_max2) ?
+                                            Math.max(obj.temperature2, temperature) :
+                                            Math.max(obj.temperature_max2, temperature)
+                }
                 obj.iconName2 = iconnumber
                 obj.hidden2 = false
                 obj.isPast2 = false
@@ -295,6 +327,15 @@ Item {
 
             if  (18 <= hour && hour <= 23) {
                 obj.temperature3 = isNearestHour(3, 21, hour) ? temperature : obj.temperature3
+                hourCount[3]++
+                if (hourCount[3] > 1) {
+                    obj.temperature_min3 = isNaN(obj.temperature_min3) ?
+                                            Math.min(obj.temperature3, temperature) :
+                                            Math.min(obj.temperature_min3, temperature)
+                    obj.temperature_max3 = isNaN(obj.temperature_max3) ?
+                                            Math.max(obj.temperature3, temperature) :
+                                            Math.max(obj.temperature_max3, temperature)
+                }
                 obj.iconName3 = iconnumber
                 obj.hidden3 = false
                 obj.isPast3 = false
