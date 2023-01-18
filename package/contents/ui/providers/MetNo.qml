@@ -215,6 +215,7 @@ Item {
         var dateNow = UnitUtils.dateNow(timezoneType)
         var obj = resetobj()
         var prevHour = -1;
+        var nearestHour = [NaN, NaN, NaN, NaN]
         for (var i = 0; i < readingsLength; i++) {
             var reading = readingsArray.properties.timeseries[i]
             var date = UnitUtils.convertDate(new Date(Date.parse(reading.time)), timezoneType)
@@ -241,6 +242,7 @@ Item {
                 }
 
                 obj = resetobj()
+                nearestHour = [NaN, NaN, NaN, NaN]
             }
             prevHour = hour
 
@@ -252,34 +254,47 @@ Item {
                 }
             }
 
+            function isNearestHour(obj_num, target_hour, hour) {
+                if (isNaN(nearestHour[obj_num])) {
+                    nearestHour[obj_num] = hour
+                    return true
+                }
+
+                if (Math.abs(target_hour - hour) < Math.abs(nearestHour[obj_num] - hour)) {
+                    nearestHour[obj_num] = hour
+                    return true
+                }
+                return false
+            }
+
             // Match exact hour.
             // Take the next closest if exact match isn't available.
-            if  (hour === 3 || (obj.isPast0 && 0 <= hour && hour <= 6)) {
-                obj.temperature0 = temperature
+            if  (0 <= hour && hour < 6) {
+                obj.temperature0 = isNearestHour(0, 3, hour) ? temperature : obj.temperature0
                 obj.iconName0 = iconnumber
                 obj.hidden0 = false
                 obj.isPast0 = false
                 continue;
             }
 
-            if  (hour === 9 || (obj.isPast1 && 6 <= hour && hour <= 12)) {
-                obj.temperature1 = temperature
+            if  (6 <= hour && hour < 12) {
+                obj.temperature1 = isNearestHour(1, 9, hour) ? temperature : obj.temperature1
                 obj.iconName1 = iconnumber
                 obj.hidden1 = false
                 obj.isPast1 = false
                 continue;
             }
 
-            if  (hour === 15 || (obj.isPast2 && 12 <= hour && hour <= 18)) {
-                obj.temperature2 = temperature
+            if  (12 <= hour && hour < 18) {
+                obj.temperature2 = isNearestHour(2, 15, hour) ? temperature : obj.temperature2
                 obj.iconName2 = iconnumber
                 obj.hidden2 = false
                 obj.isPast2 = false
                 continue;
             }
 
-            if  (hour === 21 || (obj.isPast3 && 18 <= hour && hour <= 23)) {
-                obj.temperature3 = temperature
+            if  (18 <= hour && hour <= 23) {
+                obj.temperature3 = isNearestHour(3, 21, hour) ? temperature : obj.temperature3
                 obj.iconName3 = iconnumber
                 obj.hidden3 = false
                 obj.isPast3 = false
