@@ -34,24 +34,28 @@ Item {
          return forecastPrefix + extLongLat(placeIdentifier)
     }
 
-    function setWeatherContents(cacheContent) {
+    function getIndexOfCurrentHour(weatherData) {
+        let i = 0
+        let timeseries = weatherData.properties.timeseries
+        var dateNow = UnitUtils.dateNow(timezoneType)
+        var hour = dateNow.getHours()
 
+        while (i < timeseries.length) {
+            let weather = timeseries[i]
+            var date = UnitUtils.convertDate(weather.time, timezoneType)
+            if (Math.abs(dateNow - date) < 60 * 60 * 1000) {
+                return i
+            }
+            i++
+        }
+        return -1
+    }
+
+    function setWeatherContents(cacheContent) {
         var weatherData = cacheContent.weatherData
-        actualWeatherModel.clear()
-        var currentWeather = weatherData.properties.timeseries[0]
-        var futureWeather = weatherData.properties.timeseries[1]
-        var iconnumber = geticonNumber(currentWeather.data.next_1_hours.summary.symbol_code)
-        var wd = currentWeather.data.instant.details["wind_from_direction"]
-        var ws = currentWeather.data.instant.details["wind_speed"]
-        var ap = currentWeather.data.instant.details["air_pressure_at_sea_level"]
-        var hm = currentWeather.data.instant.details["relative_humidity"]
-        var cld = currentWeather.data.instant.details["cloud_area_fraction"]
-        actualWeatherModel.append({"temperature": currentWeather.data.instant.details["air_temperature"], "iconName": iconnumber, "windDirection": wd,"windSpeedMps": ws, "pressureHpa": ap, "humidity": hm, "cloudiness": cld})
-        additionalWeatherInfo.nearFutureWeather.temperature = futureWeather.data.instant.details["air_temperature"]
-        additionalWeatherInfo.nearFutureWeather.iconName = geticonNumber(futureWeather.data.next_1_hours.summary.symbol_code)
+        updateCurrentWeather(weatherData)
         updateNextDaysModel(weatherData)
         buildMetogramData(weatherData)
-
 
         var sunRise = undefined
         var sunSet = undefined
@@ -79,6 +83,40 @@ Item {
         }
 
         return true
+    }
+
+    function updateCurrentWeather(weatherData) {
+        var currentIndex = getIndexOfCurrentHour(weatherData)
+        if (currentIndex === -1) {
+            print("error: weather data doesn't contain current hour data")
+            return
+        }
+        actualWeatherModel.clear()
+        var currentWeather = weatherData.properties.timeseries[currentIndex]
+        var iconnumber = geticonNumber(currentWeather.data.next_1_hours.summary.symbol_code)
+        var temperature = currentWeather.data.instant.details["air_temperature"]
+        var wd = currentWeather.data.instant.details["wind_from_direction"]
+        var ws = currentWeather.data.instant.details["wind_speed"]
+        var ap = currentWeather.data.instant.details["air_pressure_at_sea_level"]
+        var hm = currentWeather.data.instant.details["relative_humidity"]
+        var cld = currentWeather.data.instant.details["cloud_area_fraction"]
+        actualWeatherModel.append({
+            "temperature": temperature,
+            "iconName": iconnumber,
+            "windDirection": wd,
+            "windSpeedMps": ws,
+            "pressureHpa": ap,
+            "humidity": hm,
+            "cloudiness": cld
+        })
+
+        if (currentIndex + 1 < weatherData.properties.timeseries.length) {
+            let futureWeather = weatherData.properties.timeseries[currentIndex + 1]
+            temperature = futureWeather.data.instant.details["air_temperature"]
+            iconnumber = geticonNumber(futureWeather.data.next_1_hours.summary.symbol_code)
+            additionalWeatherInfo.nearFutureWeather.temperature = temperature
+            additionalWeatherInfo.nearFutureWeather.iconName = iconnumber
+        }
     }
 
     function parseISOString(s) {
