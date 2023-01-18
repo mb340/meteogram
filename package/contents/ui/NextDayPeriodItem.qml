@@ -15,18 +15,23 @@
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
 import QtQuick 2.2
+import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import "../code/icons.js" as IconTools
 import "../code/unit-utils.js" as UnitUtils
 
-Item {
+RowLayout {
     property string temperature
+    property string temperature_min
+    property string temperature_max
     property string iconName
     property bool hidden
     property bool past
     property int partOfDay
     property double pixelFontSize
+
+    property bool hasMinMax: isFinite(temperature_min) && isFinite(temperature_max)
 
     property int iconSetType: (plasmoid && plasmoid.configuration && plasmoid.configuration.iconSetType) ?
                                plasmoid.configuration.iconSetType : 0
@@ -39,33 +44,75 @@ Item {
     }
     
     opacity: past ? 0.5 : 1
-    
+
     Item {
-        id: temperatureTextItem
-        width: parent.width / 2
+        /*spacer*/
+        Layout.fillWidth: true
         height: parent.height
+        visible: hasMinMax
+    }
+
+
+    PlasmaComponents.Label {
+        id: temperatureText
+
+        font.pointSize: -1
+
+        height: parent.height
+        Layout.alignment: Qt.AlignRight
+        Layout.fillWidth: true
+
+        horizontalAlignment: Text.AlignRight
+        verticalAlignment: Text.AlignVCenter
+
+        text: hidden ? '' : UnitUtils.getTemperatureNumberExt(temperature, temperatureType)
+
+        visible: !hasMinMax
+    }
+
+    PlasmaComponents.Label {
+        // id: temperatureText
+
+        font.pointSize: -1
+
+        height: parent.height
+        Layout.alignment: Qt.AlignRight
+        Layout.fillWidth: true
+
+        horizontalAlignment: Text.AlignRight
+        verticalAlignment: Text.AlignVCenter
+
+        text: hidden ? '' : UnitUtils.getTemperatureNumberExt(temperature_max, temperatureType)
+
+        visible: hasMinMax
+    }
+
+    PlasmaComponents.Label {
+        text: "/"
+        visible: !hidden && hasMinMax
+    }
+
+    PlasmaComponents.Label {
+        // id: temperatureText
         
-        PlasmaComponents.Label {
-            id: temperatureText
-            
-            font.pointSize: -1
-            
-            width: parent.width
-            height: parent.height
-            
-            horizontalAlignment: Text.AlignRight
-            verticalAlignment: Text.AlignVCenter
-            
-            text: hidden ? '' : UnitUtils.getTemperatureNumberExt(temperature, temperatureType)
-        }
+        font.pointSize: -1
+
+        height: parent.height
+        Layout.alignment: Qt.AlignRight
+        Layout.fillWidth: true
+
+        horizontalAlignment: Text.AlignRight
+        verticalAlignment: Text.AlignVCenter
+
+        text: hidden ? '' : UnitUtils.getTemperatureNumberExt(temperature_min, temperatureType)
+
+        visible: hasMinMax
     }
     
     Item {
-        width: parent.width / 2
+        width: parent.width / 3
         height: parent.height
-        
-        anchors.right: parent.right
-        
+
         PlasmaComponents.Label {
             id: temperatureIcon
             

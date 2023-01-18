@@ -76,6 +76,8 @@ Item {
             width: parent.width
             height: periodHeight
             temperature: temperature0
+            temperature_min: temperature_min0
+            temperature_max: temperature_max0
             iconName: (iconName0 != undefined) ? iconName0 : ""
             hidden: hidden0
             past: isPast0
@@ -87,6 +89,8 @@ Item {
             width: parent.width
             height: periodHeight
             temperature: temperature1
+            temperature_min: temperature_min1
+            temperature_max: temperature_max1
             iconName: (iconName1 != undefined) ? iconName1 : ""
             hidden: hidden1
             past: isPast1
@@ -98,6 +102,8 @@ Item {
             width: parent.width
             height: periodHeight
             temperature: temperature2
+            temperature_min: temperature_min2
+            temperature_max: temperature_max2
             iconName: (iconName2 != undefined) ? iconName2 : ""
             hidden: hidden2
             past: isPast2
@@ -109,6 +115,8 @@ Item {
             width: parent.width
             height: periodHeight
             temperature: temperature3
+            temperature_min: temperature_min3
+            temperature_max: temperature_max3
             iconName: (iconName3 != undefined) ? iconName3 : ""
             hidden: hidden3
             past: isPast3
