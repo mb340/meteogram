@@ -30,6 +30,8 @@ function populateNextDaysObject(nextDaysObj) {
             hidden = true
         }
         nextDaysObj['temperature' + i] = tempInfo.temperature
+        nextDaysObj['temperature_min' + i] = NaN
+        nextDaysObj['temperature_max' + i] = NaN
         nextDaysObj['iconName' + i] = tempInfo.iconName
         nextDaysObj['hidden' + i] = hidden
         nextDaysObj['isPast' + i] = tempInfo.isPast
