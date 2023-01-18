@@ -126,10 +126,8 @@ Item {
 
     function buildMetogramData(readingsArray) {
         meteogramModel.clear()
-        var readingsLength = (readingsArray.properties.timeseries.length)
         var dateNow = UnitUtils.dateNow(timezoneType)
         var precipitation_unit = readingsArray.properties.meta.units["precipitation_amount"]
-        var counter = 0
         var i = 0
         var timeseries = readingsArray.properties.timeseries
         while (i < timeseries.length - 2 && timeseries[i].data.next_1_hours) {
@@ -150,7 +148,6 @@ Item {
             var prec = obj.data.next_1_hours.details["precipitation_amount"]
             var hm = obj.data.instant.details["relative_humidity"]
             var cld = obj.data.instant.details["cloud_area_fraction"]
-            counter = (prec > 0) ? counter + 1 : 0
             meteogramModel.append({
                 from: dateFrom,
                 to: dateTo,
