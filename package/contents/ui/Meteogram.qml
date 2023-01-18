@@ -614,7 +614,8 @@ Item {
             }
 
             function drawWarmTemp(context, path, color, lineWidth) {
-                var h = temperatureScale.translate(0);
+                var freezing_temp = UnitUtils.convertTemperature(0, temperatureType)
+                var h = temperatureScale.translate(freezing_temp);
                 if (h <= 0.0) {
                     return;
                 }
@@ -631,7 +632,8 @@ Item {
             }
 
             function drawColdTemp(context, path, color, lineWidth) {
-                var y0 = temperatureScale.translate(0);
+                var freezing_temp = UnitUtils.convertTemperature(0, temperatureType)
+                var y0 = temperatureScale.translate(freezing_temp);
                 var h = imageHeight - y0;
                 if (h <= 0.0) {
                     return;
