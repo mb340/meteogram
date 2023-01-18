@@ -1036,6 +1036,13 @@ Item {
                     newCloudElements[(2 * meteogramModel.count) - 1 - i].x = i * sampleWidth
                     newCloudElements[(2 * meteogramModel.count) - 1 - i].y = cloudY0
                 }
+            } else {
+                if (i < newCloudElements.length) {
+                    newCloudElements[i].x = i *sampleWidth
+                    newCloudElements[i].y = NaN
+                    newCloudElements[(2 * meteogramModel.count) - 1 - i].x = i * sampleWidth
+                    newCloudElements[(2 * meteogramModel.count) - 1 - i].y = NaN
+                }
             }
             if (isFinite(humidityY)) {
                 if (!reuse) {
@@ -1045,6 +1052,11 @@ Item {
                 } else {
                     newHumidityElements[i].x = i * sampleWidth
                     newHumidityElements[i].y = humidityY
+                }
+            } else {
+                if (i < newHumidityElements.length) {
+                    newHumidityElements[i].x = i * sampleWidth
+                    newHumidityElements[i].y = NaN
                 }
             }
         }
