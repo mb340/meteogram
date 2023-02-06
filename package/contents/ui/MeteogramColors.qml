@@ -28,6 +28,7 @@ Item {
         Prot,
         Deut,
         Trit,
+        Custom
     }
 
     /*
@@ -115,30 +116,58 @@ Item {
     }
 
     function pressureColor() {
+        if (colorPaletteType == MeteogramColors.PaletteType.Custom) {
+            return !textColorLight ? plasmoid.configuration.pressureColor :
+                                    plasmoid.configuration.pressureColorDark
+        }
         return getPalette().pressureColor
     }
 
     function temperatureWarmColor() {
+        if (colorPaletteType == MeteogramColors.PaletteType.Custom) {
+            return !textColorLight ? plasmoid.configuration.temperatureWarmColor :
+                                    plasmoid.configuration.temperatureWarmColorDark
+        }
         return getPalette().temperatureWarmColor
     }
 
     function temperatureColdColor() {
+        if (colorPaletteType === MeteogramColors.PaletteType.Custom) {
+            return !textColorLight ? plasmoid.configuration.temperatureColdColor :
+                                    plasmoid.configuration.temperatureColdColorDark
+        }
         return getPalette().temperatureColdColor
     }
 
     function rainColor() {
+        if (colorPaletteType === MeteogramColors.PaletteType.Custom) {
+            return !textColorLight ? plasmoid.configuration.rainColor :
+                                    plasmoid.configuration.rainColorDark
+        }
         return getPalette().rainColor
     }
 
     function cloudAreaColor() {
+        if (colorPaletteType === MeteogramColors.PaletteType.Custom) {
+            return !textColorLight ? plasmoid.configuration.cloudAreaColor :
+                                    plasmoid.configuration.cloudAreaColorDark
+        }
         return getPalette().cloudAreaColor
     }
 
     function cloudAreaColor2() {
+        if (colorPaletteType === MeteogramColors.PaletteType.Custom) {
+            return !textColorLight ? plasmoid.configuration.cloudAreaColor2 :
+                                    plasmoid.configuration.cloudAreaColor2Dark
+        }
         return getPalette().cloudAreaColor2
     }
 
     function humidityColor() {
+        if (colorPaletteType === MeteogramColors.PaletteType.Custom) {
+            return !textColorLight ? plasmoid.configuration.humidityColor :
+                                    plasmoid.configuration.humidityColorDark
+        }
         return getPalette().humidityColor
     }
 
@@ -149,6 +178,8 @@ Item {
                 return textColorLight ? protPaletteDark : protPalette
             case MeteogramColors.PaletteType.Trit:     // trit
                 return textColorLight ? tritPaletteDark : tritPalette
+            case MeteogramColors.PaletteType.Custom:
+                return null
             case MeteogramColors.PaletteType.Default:
             default:
                 return textColorLight ? paletteDark : palette

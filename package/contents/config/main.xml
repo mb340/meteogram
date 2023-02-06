@@ -68,6 +68,50 @@
         <entry name="iconSetType" type="Int">
             <default>0</default>
         </entry>
+
+        <entry name="pressureColor" type="String">
+            <default>#FF006800</default>
+        </entry>
+        <entry name="temperatureWarmColor" type="String">
+            <default>#FFEE0000</default>
+        </entry>
+        <entry name="temperatureColdColor" type="String">
+            <default>#FF0071f2</default>
+        </entry>
+        <entry name="rainColor" type="String">
+            <default>#FF0059A6</default>
+        </entry>
+        <entry name="cloudAreaColor" type="String">
+            <default>#50d3d3d3</default>
+        </entry>
+        <entry name="cloudAreaColor2" type="String">
+            <default>#506c6c6c</default>
+        </entry>
+        <entry name="humidityColor" type="String">
+            <default>#FF6105FF</default>
+        </entry>
+
+        <entry name="pressureColorDark" type="String">
+            <default>#FF00AE00</default>
+        </entry>
+        <entry name="temperatureWarmColorDark" type="String">
+            <default>#FFEA0000</default>
+        </entry>
+        <entry name="temperatureColdColorDark" type="String">
+            <default>#FF0071ea</default>
+        </entry>
+        <entry name="rainColorDark" type="String">
+            <default>#FF1B98FF</default>
+        </entry>
+        <entry name="cloudAreaColorDark" type="String">
+            <default>#50b3b3b3</default>
+        </entry>
+        <entry name="cloudAreaColor2Dark" type="String">
+            <default>#506c6c6c</default>
+        </entry>
+        <entry name="humidityColorDark" type="String">
+            <default>#FFAB7BFF</default>
+        </entry>
     </group>
 
     <group name="Units">
