@@ -23,6 +23,13 @@ Item {
     property var palette: defaultPalette
     property var paletteDark: defaultPaletteDark
 
+    enum PaletteType {
+        Default,
+        Prot,
+        Deut,
+        Trit,
+    }
+
     /*
      * 4.5 contrast ratio for temperature colors
      * 7.0 contrast ratio for others
@@ -137,12 +144,12 @@ Item {
 
     function getPalette() {
         switch (colorPaletteType) {
-            case 1:     // prot
-            case 2:     // deut
+            case MeteogramColors.PaletteType.Prot:     // prot
+            case MeteogramColors.PaletteType.Deut:     // deut
                 return textColorLight ? protPaletteDark : protPalette
-            case 3:     // trit
+            case MeteogramColors.PaletteType.Trit:     // trit
                 return textColorLight ? tritPaletteDark : tritPalette
-            case 0:
+            case MeteogramColors.PaletteType.Default:
             default:
                 return textColorLight ? paletteDark : palette
         }
