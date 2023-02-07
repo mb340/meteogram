@@ -133,7 +133,7 @@ Item {
         anchors.rightMargin: labelWidth
         anchors.topMargin: labelHeight  + cloudarea
         border.color:gridColor
-        color: textColorLight ? 'black' : 'white'
+        color: palette.backgroundColor()
     }
     ListView {
         id: horizontalLines1
