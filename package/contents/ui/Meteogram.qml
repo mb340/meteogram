@@ -650,8 +650,29 @@ Item {
                 context.restore()
             }
 
+            function invertColor(color) {
+                const NCHANNELS = 3
+                const STRIDE = 2
+                if (color[0] !== '#' && color.length !== 9 && color.length !== 7) {
+                    return null
+                }
+                var first_ch = color.length === 9 ? 3 : 1
+                var res = color.substr(0, first_ch)
+                for (var i = 0; i < NCHANNELS; i++) {
+                    let si = first_ch + (STRIDE * i)
+                    let ei = si + STRIDE
+                    let hex = color.substring(si, ei)
+                    let inv = 255 - parseInt(hex, 16)
+                    res = res + inv.toString(16).padStart(STRIDE, "0")
+                }
+                return res
+            }
+
             function drawWeatherIcons(context, rectWidth) {
                 context.font =  (fontSize + 1) + 'px "%1"'.arg(weatherIconFont.name)
+
+                var bgColor = palette.backgroundColor()
+                var dropShadowColor = invertColor(bgColor)
 
                 for (var i = 0; i < hourGridModel.count; i++) {
                     var hourModel = hourGridModel.get(i)
@@ -713,7 +734,7 @@ Item {
                             context.save()
                             context.shadowOffsetX = 0;
                             context.shadowOffsetY = 0;
-                            context.shadowColor = !textColorLight ? 'black' : 'white';
+                            context.shadowColor = dropShadowColor;
                             context.shadowBlur = 1.0;
                             context.drawImage(imgPath, x0, y0, dim, dim)
                             context.restore()
