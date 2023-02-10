@@ -120,6 +120,30 @@
         </entry>
     </group>
 
+    <group name="Meteogram">
+        <entry name="renderTemperature" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="renderPressure" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="renderHumidity" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="renderPrecipitation" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="renderCloudCover" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="renderIcons" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="renderAlerts" type="Bool">
+            <default>true</default>
+        </entry>
+    </group>
+
     <group name="Units">
         <entry name="temperatureType" type="Enum">
             <choices>

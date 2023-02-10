@@ -7,8 +7,18 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import "../../code/color.js" as ColorTools
 
 ColumnLayout {
+    id: root
 
     property bool cfg_graphCurvedLine: plasmoid.configuration.graphCurvedLine
+
+    property bool cfg_renderTemperature: plasmoid.configuration.renderTemperature
+    property bool cfg_renderPressure: plasmoid.configuration.renderPressure
+    property bool cfg_renderHumidity: plasmoid.configuration.renderHumidity
+    property bool cfg_renderPrecipitation: plasmoid.configuration.renderPrecipitation
+    property bool cfg_renderCloudCover: plasmoid.configuration.renderCloudCover
+    property bool cfg_renderIcons: plasmoid.configuration.renderIcons
+    property bool cfg_renderAlerts: plasmoid.configuration.renderAlerts
+
     property int cfg_colorPaletteType: plasmoid.configuration.colorPaletteType
 
     property string cfg_backgroundColor: plasmoid.configuration.backgroundColor
@@ -121,6 +131,14 @@ ColumnLayout {
     }
 
     Component.onCompleted: {
+        cfg_renderTemperatureChanged()
+        cfg_renderPressureChanged()
+        cfg_renderHumidityChanged()
+        cfg_renderPrecipitationChanged()
+        cfg_renderCloudCoverChanged()
+        cfg_renderIconsChanged()
+        cfg_renderAlertsChanged()
+
         cfg_colorPaletteTypeChanged()
         lightDarkModeChanged()
         setModel()
@@ -149,6 +167,68 @@ ColumnLayout {
             width: 2
             height: 10
             Layout.columnSpan: 3
+        }
+    }
+
+    Label {
+        text: i18n("Visible Parameters")
+        Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+    }
+
+    GridLayout {
+        Layout.fillWidth: true
+        columns: 2
+
+        property var labels: [
+            i18n("Temperature"),
+            i18n("Pressure"),
+            i18n("Humidity"),
+            i18n("Precipitation"),
+            i18n("Cloud Cover"),
+            i18n("Icons"),
+            i18n("Alerts"),
+        ]
+
+        property var values: [
+            "renderTemperature",
+            "renderPressure",
+            "renderHumidity",
+            "renderPrecipitation",
+            "renderCloudCover",
+            "renderIcons",
+            "renderAlerts"
+        ]
+
+        Repeater {
+            model: parent.labels
+            Item {
+                width: 2
+                height: 2
+                Layout.row: index
+                Layout.column: 0
+
+                Layout.preferredWidth: maxColWidth
+                onWidthChanged: updateMaxColWidth(width)
+            }
+        }
+
+        Repeater {
+            model: parent.values
+
+            delegate: CheckBox {
+                id: renderParameterCheckbox
+                text: parent.labels[index]
+                checked: plasmoid.configuration[modelData]
+                Layout.row: index
+                Layout.column: 1
+
+                Binding {
+                    target: root
+                    property: "cfg_" + modelData
+                    value: renderParameterCheckbox.checked
+                }
+            }
+
         }
     }
 
