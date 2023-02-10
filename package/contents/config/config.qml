@@ -13,6 +13,11 @@ ConfigModel {
          source: 'config/ConfigAppearance.qml'
     }
     ConfigCategory {
+         name: i18n("Meteogram")
+         icon: 'office-chart-line'
+         source: 'config/ConfigMeteogram.qml'
+    }
+    ConfigCategory {
          name: i18n("Units")
          icon: 'plugins'
          source: 'config/ConfigUnits.qml'
