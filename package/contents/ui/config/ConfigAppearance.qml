@@ -1,5 +1,6 @@
 import QtQuick 2.2
 import QtQuick.Controls 2.15
+import QtQuick.Dialogs 1.0
 import QtQuick.Layouts 1.1
 
 Item {
@@ -9,8 +10,6 @@ Item {
     property alias cfg_inTrayActiveTimeoutSec: inTrayActiveTimeoutSec.value
     property string cfg_widgetFontName: plasmoid.configuration.widgetFontName
     property string cfg_widgetFontSize: plasmoid.configuration.widgetFontSize
-    property bool cfg_graphCurvedLine: plasmoid.configuration.graphCurvedLine
-    property int cfg_colorPaletteType: plasmoid.configuration.colorPaletteType
     property int cfg_iconSetType: plasmoid.configuration.iconSetType
 
     onCfg_layoutTypeChanged: {
@@ -25,23 +24,6 @@ Item {
             layoutTypeRadioCompact.checked = true;
             break;
         default:
-        }
-    }
-
-    onCfg_colorPaletteTypeChanged: {
-        switch (cfg_colorPaletteType) {
-            default:
-            case 0:
-                colorPaletteTypeDefault.checked = true
-                break;
-            case 1:
-                colorPaletteTypeProt.checked = true
-                break;
-            case 2:
-                colorPaletteTypeDeut.checked = true
-                break;
-            case 3:
-                colorPaletteTypeTrit.checked = true
         }
     }
 
@@ -83,16 +65,11 @@ Item {
 
     Component.onCompleted: {
         cfg_layoutTypeChanged()
-        cfg_colorPaletteTypeChanged()
         cfg_iconSetTypeChanged()
     }
 
     ButtonGroup {
         id: layoutTypeGroup
-    }
-
-    ButtonGroup {
-        id: colorPaletteTypeGroup
     }
 
     ButtonGroup {
@@ -103,87 +80,6 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         columns: 3
-
-        Item {
-            width: 2
-            height: 10
-            Layout.columnSpan: 3
-        }
-
-        Label {
-            text: i18n("Meteogram")
-            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-            font.bold: true
-            Layout.columnSpan: 3
-        }
-
-        Label {
-            text: i18n("Smooth Graph Line:")
-            Layout.alignment: Qt.AlignVCenter|Qt.AlignRight
-        }
-
-        CheckBox {
-            checked: cfg_graphCurvedLine
-            onCheckedChanged: {
-                cfg_graphCurvedLine = checked
-            }
-        }
-
-        Item {
-            width: 2
-            height: 10
-            Layout.columnSpan: 3
-        }
-
-        Label {
-            text: i18n("Color palette")
-            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-        }
-        RadioButton {
-            id: colorPaletteTypeDefault
-            ButtonGroup.group: colorPaletteTypeGroup
-            text: i18n("Default")
-            onCheckedChanged: if (checked) cfg_colorPaletteType = 0
-        }
-        Item {
-            width: 2
-            height: 2
-            Layout.rowSpan: 1
-        }
-        Item {
-            width: 2
-            height: 2
-            Layout.rowSpan: 2
-        }
-        RadioButton {
-            id: colorPaletteTypeProt
-            ButtonGroup.group: colorPaletteTypeGroup
-            text: i18n("Protanopia")
-            onCheckedChanged: if (checked) cfg_colorPaletteType = 1
-        }
-        Item {
-            width: 2
-            height: 2
-            Layout.rowSpan: 2
-        }
-        RadioButton {
-            id: colorPaletteTypeDeut
-            ButtonGroup.group: colorPaletteTypeGroup
-            text: i18n("Deuteranopia")
-            onCheckedChanged: if (checked) cfg_colorPaletteType = 2
-        }
-        Item {
-            width: 2
-            height: 2
-            Layout.rowSpan: 2
-        }
-        RadioButton {
-            id: colorPaletteTypeTrit
-            ButtonGroup.group: colorPaletteTypeGroup
-            text: i18n("Tritanopia")
-            onCheckedChanged: if (checked) cfg_colorPaletteType = 3
-            Layout.rowSpan: 1
-        }
 
         /* spacer */
         Item {
