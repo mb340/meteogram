@@ -39,6 +39,7 @@ Item {
      */
     Item {
         id: defaultPalette
+        property color backgroundColor: "#FFFFFFFF"
         property color pressureColor: "#FF006800"
         property color temperatureWarmColor: "#FFEE0000"
         property color temperatureColdColor: "#FF0071f2"
@@ -50,6 +51,7 @@ Item {
 
     Item {
         id: defaultPaletteDark
+        property color backgroundColor: "#FF000000"
         property color pressureColor: "#FF00AE00"
         property color temperatureWarmColor: "#FFEA0000"
         property color temperatureColdColor: "#FF0071ea"
@@ -64,6 +66,7 @@ Item {
      */
     Item {
         id: protPalette
+        property color backgroundColor: "#FFFFFFFF"
         property color pressureColor: "#9F0162"
         property color temperatureWarmColor: "#E20134"
         property color temperatureColdColor: "#E20134"
@@ -75,6 +78,7 @@ Item {
 
     Item {
         id: protPaletteDark
+        property color backgroundColor: "#FF000000"
         property color pressureColor: "#00FCCF"
         property color temperatureWarmColor: "#FFC33B"
         property color temperatureColdColor: "#FFC33B"
@@ -89,6 +93,7 @@ Item {
      */
     Item {
         id: tritPalette
+        property color backgroundColor: "#FFFFFFFF"
         property color pressureColor: "#8400CD"
         property color temperatureWarmColor: "#E20134"
         property color temperatureColdColor: "#E20134"
@@ -100,6 +105,7 @@ Item {
 
     Item {
         id: tritPaletteDark
+        property color backgroundColor: "#FF000000"
         property color pressureColor: "#FFB2FD"
         property color temperatureWarmColor: "#FF6E3A"
         property color temperatureColdColor: "#FF6E3A"
@@ -113,6 +119,14 @@ Item {
         print("onColorPaletteTypeChanged")
         main.alreadyLoadedFromCache = false
         main.loadFromCache()
+    }
+
+    function backgroundColor() {
+        if (colorPaletteType == MeteogramColors.PaletteType.Custom) {
+            return !textColorLight ? plasmoid.configuration.backgroundColor :
+                                    plasmoid.configuration.backgroundColorDark
+        }
+        return getPalette().backgroundColor
     }
 
     function pressureColor() {

@@ -69,6 +69,9 @@
             <default>0</default>
         </entry>
 
+        <entry name="backgroundColor" type="String">
+            <default>#FFFFFFFF</default>
+        </entry>
         <entry name="pressureColor" type="String">
             <default>#FF006800</default>
         </entry>
@@ -91,6 +94,9 @@
             <default>#FF6105FF</default>
         </entry>
 
+        <entry name="backgroundColorDark" type="String">
+            <default>#FF000000</default>
+        </entry>
         <entry name="pressureColorDark" type="String">
             <default>#FF00AE00</default>
         </entry>
