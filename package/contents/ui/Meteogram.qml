@@ -801,27 +801,46 @@ Item {
 
                 var rectWidth = xIndexScale.translate(1) - xIndexScale.translate(0)
 
-                context.globalCompositeOperation = "source-over"
-                drawAlerts(context)
-                drawPrecipitationBars(context, rectWidth)
+                if (plasmoid.configuration.renderAlerts) {
+                    context.globalCompositeOperation = "source-over"
+                    drawAlerts(context)
+                }
+
+                if (plasmoid.configuration.renderPrecipitation) {
+                    drawPrecipitationBars(context, rectWidth)
+                }
 
                 // Carve out negative space when weather icons overlap precipitation bars
-                context.globalCompositeOperation = "xor"
-                drawWeatherIcons(context, rectWidth)
+                if (plasmoid.configuration.renderIcons) {
+                    context.globalCompositeOperation = "xor"
+                    drawWeatherIcons(context, rectWidth)
+                }
 
                 context.globalCompositeOperation = "source-over"
-                drawCloudArea(context)
-                drawPath(context, humidityPath, palette.humidityColor(), 1 * units.devicePixelRatio)
-                drawPath(context, pressurePath, palette.pressureColor(), 1 * units.devicePixelRatio)
-                drawWarmTemp(context, temperaturePath, palette.temperatureWarmColor(), 2 * units.devicePixelRatio)
-                drawColdTemp(context, temperaturePath, palette.temperatureColdColor(), 2 * units.devicePixelRatio)
+                if (plasmoid.configuration.renderCloudCover) {
+                    drawCloudArea(context)
+                }
+                if (plasmoid.configuration.renderHumidity) {
+                    drawPath(context, humidityPath, palette.humidityColor(), 1 * units.devicePixelRatio)
+                }
+                if (plasmoid.configuration.renderPressure) {
+                    drawPath(context, pressurePath, palette.pressureColor(), 1 * units.devicePixelRatio)
+                }
+                if (plasmoid.configuration.renderTemperature) {
+                    drawWarmTemp(context, temperaturePath, palette.temperatureWarmColor(), 2 * units.devicePixelRatio)
+                    drawColdTemp(context, temperaturePath, palette.temperatureColdColor(), 2 * units.devicePixelRatio)
+                }
 
-                // Ensure weather icons atop graph lines without drawing over carve out
-                context.globalCompositeOperation = "source-atop"
-                drawWeatherIcons(context, rectWidth)
+                if (plasmoid.configuration.renderIcons) {
+                    // Ensure weather icons atop graph lines without drawing over carve out
+                    context.globalCompositeOperation = "source-atop"
+                    drawWeatherIcons(context, rectWidth)
+                }
 
-                context.globalCompositeOperation = "source-over"
-                drawPrecipitationText(context, rectWidth)
+                if (plasmoid.configuration.renderPrecipitation) {
+                    context.globalCompositeOperation = "source-over"
+                    drawPrecipitationText(context, rectWidth)
+                }
             }
 
             /*
