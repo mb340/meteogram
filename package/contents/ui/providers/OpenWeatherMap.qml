@@ -513,7 +513,7 @@ Item {
                 to: dateTo,
                 temperature: parseInt(obj.temperature),
                 precipitationAvg: prec,
-                precipitationLabel: "",
+                precipitationLabel: "mm",
                 precipitationMax: prec,
                 windDirection: obj.windDirection,
                 windSpeedMps: parseFloat(obj.windSpeedMps),
