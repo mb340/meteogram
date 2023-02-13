@@ -49,23 +49,7 @@ Item {
     property bool textColorLight: ((theme.textColor.r + theme.textColor.g + theme.textColor.b) / 3) > 0.5
     property color gridColor: textColorLight ? Qt.tint(theme.textColor, '#80000000') : Qt.tint(theme.textColor, '#80FFFFFF')
     property color gridColorHighlight: textColorLight ? Qt.tint(theme.textColor, '#50000000') : Qt.tint(theme.textColor, '#50FFFFFF')
-/*    property color pressureColor: textColorLight ? Qt.rgba(0.3, 1, 0.3, 1) : Qt.rgba(0.0, 0.6, 0.0, 1)
-    property color temperatureWarmColor: textColorLight ? Qt.rgba(1, 0.3, 0.3, 1) : Qt.rgba(1, 0.0, 0.0, 1)
-    property color temperatureColdColor: textColorLight ? Qt.rgba(0.2, 0.7, 1, 1) : Qt.rgba(0.1, 0.5, 1, 1)
-    property color rainColor: textColorLight ? Qt.rgba(0.33, 0.66, 1, 1) : Qt.rgba(0, 0.33, 1, 1)
-    property color cloudAreaColor: textColorLight ? Qt.rgba(1.0, 1.0, 1.0, 0.2) : Qt.rgba(0.5, 0.5, 0.5, 0.2)
-    property color cloudAreaColor2: textColorLight ? Qt.rgba(0.5, 0.5, 0.5, 0.2) : Qt.rgba(0.0, 0.0, 0.0, 0.2)
-    property color humidityColor: textColorLight ?  Qt.rgba(0.0/255, 206/255, 209/255, 1.0) : // DarkTurquoise
-                                                    Qt.rgba(0.0/255, 98/255, 134/255, 1.0)   // Cerulean
-*/
 
-/*
-    property int temperatureType: 0
-    property int pressureType: 0
-    property int timezoneType: 0
-    property bool twelveHourClockEnabled: false
-    property int windSpeedType: 0
-*/
     property double sampleWidth: imageWidth / (meteogramModel.count - 1)
 
     property alias temperatureScale: meteogramCanvas.temperatureScale
