@@ -410,7 +410,7 @@ Canvas {
             var hourModel = hourGridModel.get(i)
             var iconName = hourModel.iconName
             var hourFrom = hourModel.dateFrom.getHours()
-            var textVisible = (hourFrom % 2 === 1)
+            var textVisible = (hourFrom % 2 === 1) && iconName != ''
             if (!textVisible) {
                 continue
             }
