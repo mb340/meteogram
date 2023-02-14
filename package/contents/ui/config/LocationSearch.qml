@@ -255,6 +255,7 @@ Dialog {
                 tableView.clearSelection()
                 if (countryList.currentIndex > 0) {
                     Helper.loadCSVDatabase(countryList.textAt(countryList.currentIndex))
+                    tableView.contentY = 0
                 }
             }
         }
@@ -283,6 +284,7 @@ Dialog {
             onTextChanged: {
                 tableView.clearSelection()
                 Helper.updateListView(locationEdit.text)
+                tableView.contentY = 0
             }
         }
     }
