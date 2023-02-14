@@ -186,49 +186,6 @@ Item {
 
     }
 
-    MessageDialog {
-        id: invalidData
-        title: i18n("Error!")
-        text: ""
-        icon: StandardIcon.Critical
-        informativeText: ""
-        visible: false
-    }
-
-    MessageDialog {
-        id: saveSearchedData
-        title: i18n("Confirmation")
-        text: i18n("Do you want to select this place?")
-        icon: StandardIcon.Question
-        standardButtons: StandardButton.Yes | StandardButton.No
-        informativeText: ""
-        visible: false
-        onYes: {
-            let data=filteredCSVData.get(searchWindow.tableView.currentRow)
-            newMetnoCityLatitudeField.text=data["latitude"]
-            newMetnoCityLongitudeField.text=data["longitude"]
-            newMetnoCityAltitudeField.text=data["altitude"]
-            print("saveSearchedData: providerId = " +  addMetnoCityIdDialog.providerId)
-            if (addMetnoCityIdDialog.providerId === 'metno') {
-                newMetnoUrl.text="lat="+data["latitude"]+"&lon="+data["longitude"]+"&altitude="+data["altitude"]
-            }
-            let loc=data["locationName"]+", "+Helper.getshortCode(countryList.textAt(countryList.currentIndex))
-            newMetnoCityAlias.text=loc
-            addMetnoCityIdDialog.timezoneID=data["timezoneId"]
-            for (var i=0; i < timezoneDataModel.count; i++) {
-                if (timezoneDataModel.get(i).id == Number(data["timezoneId"])) {
-                    tzComboBox.currentIndex=i
-                    break
-                }
-            }
-            searchWindow.close()
-            // addMetnoCityIdDialog.open()
-        }
-        onNo: {
-            searchWindow.close()
-        }
-    }
-
     property alias newMetnoCityAlias: addMetnoCityIdDialog.newMetnoCityAlias
     property alias newMetnoCityLatitudeField: addMetnoCityIdDialog.newMetnoCityLatitudeField
     property alias newMetnoCityLongitudeField: addMetnoCityIdDialog.newMetnoCityLongitudeField
@@ -409,6 +366,24 @@ Item {
 
             Button {
                 icon.name: 'list-add'
+                text: 'OWM 2'
+                width: 100
+                onClicked: {
+                    editEntryNumber = -1
+                    newMetnoCityAlias.text = ''
+                    newMetnoCityLatitudeField.text = ''
+                    newMetnoCityLongitudeField.text = ''
+                    newMetnoCityAltitudeField.text = ''
+                    newMetnoUrl.text = ''
+                    newMetnoCityLatitudeField.focus = true
+                    addMetnoCityIdDialog.providerId = 'owm2'
+                    addMetnoCityIdDialog.open()
+                }
+            }
+
+
+            Button {
+                icon.name: 'list-add'
                 text: 'metno'
                 width: 100
                 onClicked: {
@@ -504,6 +479,24 @@ Item {
                             newOwmCityIdField.text = "https://openweathermap.org/city/"+entry.placeIdentifier
                             newOwmCityAlias.text = entry.placeAlias
                             addOwmCityIdDialog.open()
+                        }
+                        if (entry.providerId === "owm2") {
+                            let url=entry.placeIdentifier
+                            newMetnoUrl.text = url
+                            var data = url.match(RegExp("([+-]?[0-9]{1,5}[.]?[0-9]{0,5})","g"))
+                            newMetnoCityLatitudeField.text = Number(data[0]).toLocaleString(Qt.locale(),"f",5)
+                            newMetnoCityLongitudeField.text = Number(data[1]).toLocaleString(Qt.locale(),"f",5)
+                            newMetnoCityAltitudeField.text = (data[2] === undefined) ? 0:data[2]
+                            for (var i = 0; i < timezoneDataModel.count; i++) {
+                                if (timezoneDataModel.get(i).id == Number(entry.timezoneID)) {
+                                    tzComboBox.currentIndex = i
+                                    addMetnoCityIdDialog.timezoneID = entry.timezoneID
+                                    break
+                                }
+                            }
+                            newMetnoCityAlias.text = entry.placeAlias
+                            addMetnoCityIdDialog.providerId = entry.providerId
+                            addMetnoCityIdDialog.open()
                         }
                     }
                 }

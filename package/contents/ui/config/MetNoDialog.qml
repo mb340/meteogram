@@ -101,6 +101,51 @@ Dialog {
         close()
     }
 
+    MessageDialog {
+        id: invalidData
+        title: i18n("Error!")
+        text: ""
+        icon: StandardIcon.Critical
+        informativeText: ""
+        visible: false
+    }
+
+    MessageDialog {
+        id: saveSearchedData
+        title: i18n("Confirmation")
+        text: i18n("Do you want to select this place?")
+        icon: StandardIcon.Question
+        standardButtons: StandardButton.Yes | StandardButton.No
+        informativeText: ""
+        visible: false
+        onYes: {
+            let data=filteredCSVData.get(searchWindow.tableView.currentRow)
+            newMetnoCityLatitudeField.text=data["latitude"]
+            newMetnoCityLongitudeField.text=data["longitude"]
+            newMetnoCityAltitudeField.text=data["altitude"]
+            print("saveSearchedData: providerId = " +  addMetnoCityIdDialog.providerId)
+            if (addMetnoCityIdDialog.providerId === 'metno') {
+                newMetnoUrl.text="lat="+data["latitude"]+"&lon="+data["longitude"]+"&altitude="+data["altitude"]
+            } else if (addMetnoCityIdDialog.providerId === 'owm2') {
+                newMetnoUrl.text="lat="+data["latitude"]+"&lon="+data["longitude"]
+            }
+            let loc=data["locationName"]+", "+Helper.getshortCode(countryList.textAt(countryList.currentIndex))
+            newMetnoCityAlias.text=loc
+            addMetnoCityIdDialog.timezoneID=data["timezoneId"]
+            for (var i=0; i < timezoneDataModel.count; i++) {
+                if (timezoneDataModel.get(i).id == Number(data["timezoneId"])) {
+                    tzComboBox.currentIndex=i
+                    break
+                }
+            }
+            searchWindow.close()
+            // addMetnoCityIdDialog.open()
+        }
+        onNo: {
+            searchWindow.close()
+        }
+    }
+
     GridLayout {
         id: metNoRowLayout
         anchors.fill: parent
