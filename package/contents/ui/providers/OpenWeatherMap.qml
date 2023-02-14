@@ -28,6 +28,8 @@ Item {
     property string urlPrefix: 'http://api.openweathermap.org/data/2.5'
     property string appIdAndModeSuffix: '&units=metric&mode=xml&appid=5819a34c58f8f07bc282820ca08948f1'
 
+    property bool updateSemaphore: false
+
 // DEBUGGING URLs
 //     property string urlPrefix: 'http://localhost/forecast'
 //     property string appIdAndModeSuffix: ''
@@ -191,6 +193,9 @@ Item {
     }
 
     function xmlModelReady() {
+        if (!updateSemaphore) {
+            return
+        }
         if (xmlModelCurrent.status != XmlListModel.Ready) {
             return
         }
@@ -206,6 +211,7 @@ Item {
         updateMeteogramModel()
         updateNextDaysModel()
         updateAdditionalWeatherInfoText()
+        updateSemaphore = false
     }
 
     function createTodayTimeObj() {
@@ -580,6 +586,7 @@ Item {
         if (!cacheContent.longTerm || !cacheContent.hourByHour || !cacheContent.current) {
             return false
         }
+        updateSemaphore = true
         xmlModelCurrent.xml = ''
         xmlModelCurrent.xml = cacheContent.current
         xmlModelLongTerm.xml = ''
