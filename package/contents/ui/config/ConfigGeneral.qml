@@ -111,27 +111,6 @@ Item {
         id: addMetnoCityIdDialog
     }
 
-    Dialog {
-        id: changePlaceAliasDialog
-        title: i18n("Change Displayed As")
-
-        standardButtons: StandardButton.Ok | StandardButton.Cancel
-
-        onAccepted: {
-            placesModel.setProperty(changePlaceAliasDialog.tableIndex, 'placeAlias', newPlaceAliasField.text)
-            placesModelChanged()
-            changePlaceAliasDialog.close()
-        }
-
-        property int tableIndex: 0
-
-        TextField {
-            id: newPlaceAliasField
-            placeholderText: i18n("Enter place alias")
-            width: parent.width
-        }
-    }
-
     property alias countryCodesModel: searchWindow.countryCodesModel
     property alias filteredCSVData: searchWindow.filteredCSVData
     property alias timezoneDataModel: searchWindow.timezoneDataModel
