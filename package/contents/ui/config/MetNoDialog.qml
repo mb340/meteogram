@@ -131,13 +131,7 @@ Dialog {
             }
             let loc=data["locationName"]+", "+Helper.getshortCode(countryList.textAt(countryList.currentIndex))
             newMetnoCityAlias.text=loc
-            addMetnoCityIdDialog.timezoneID=data["timezoneId"]
-            for (var i=0; i < timezoneDataModel.count; i++) {
-                if (timezoneDataModel.get(i).id == Number(data["timezoneId"])) {
-                    tzComboBox.currentIndex=i
-                    break
-                }
-            }
+            setTimezone(data["timezoneId"])
             searchWindow.close()
             // addMetnoCityIdDialog.open()
         }
@@ -277,6 +271,15 @@ Dialog {
             Layout.alignment: Qt.AlignRight
             onClicked: {
                 searchWindow.open()
+            }
+        }
+    }
+    function setTimezone(timezoneID) {
+        for (var i = 0; i < timezoneDataModel.count; i++) {
+            if (timezoneDataModel.get(i).id == Number(timezoneID)) {
+                tzComboBox.currentIndex = i
+                addMetnoCityIdDialog.timezoneID = timezoneID
+                break
             }
         }
     }
