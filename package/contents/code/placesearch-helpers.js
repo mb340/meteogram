@@ -311,14 +311,16 @@ function parseCSVLine(csvLine) {
     }
 
     var items = csvLine.split(/\t/)
+    var timezoneId = parseInt(items[5])
+    var timezone = TZData.TZData.find((el) => { return el.id === timezoneId })
     return ({
                 region: stripquotes((items[0])),
                 locationName: stripquotes(items[1]),
                 latitude: parseFloat(items[2]),
                 longitude: parseFloat(items[3]),
                 altitude: parseInt(items[4]),
-                timezoneId: parseInt(items[5]),
-                timezoneName: TZData.TZData[items[5]].displayName,
+                timezoneId: timezone.id,
+                timezoneName: timezone.displayName,
                 selected: false
             })
 }
