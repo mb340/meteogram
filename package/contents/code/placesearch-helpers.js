@@ -277,9 +277,10 @@ function getDisplayName(shortCode) {
 }
 function updateListView(filter) {
     filteredCSVData.clear()
+    filter = filter.toLowerCase()
     for (var f = 0; f < myCSVData.length; f++) {
         let lc = myCSVData[f].locationName.toLowerCase()
-        if (myCSVData[f].locationName.toLowerCase().indexOf(filter.toLowerCase()) === 0) {
+        if (lc.startsWith(filter)) {
             filteredCSVData.append(myCSVData[f])
         }
     }
