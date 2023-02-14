@@ -50,6 +50,17 @@ Dialog {
         let tmpDB=Helper.getDisplayNames()
         for (var i=0; i < tmpDB.length - 1 ; i++) {
             countryCodesModel.append({ id: tmpDB[i] })
+        }
+    }
+
+    onVisibleChanged: {
+        if (!visible || countryList.currentIndex !== -1) {
+            return
+        }
+        let locale=Qt.locale().name.substr(3,2)
+        let userCountry=Helper.getDisplayName(locale)
+        let tmpDB=Helper.getDisplayNames()
+        for (var i=0; i < tmpDB.length - 1 ; i++) {
             if (tmpDB[i] === userCountry) {
                 countryList.currentIndex = i
             }
