@@ -5,7 +5,7 @@ import QtQuick.Dialogs 1.2
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "../../code/config-utils.js" as ConfigUtils
 import "../../code/placesearch-helpers.js" as Helper
-import "../../code/db/timezoneData.js" as TZData
+
 
 Dialog {
     title: i18n("Location Search")
@@ -14,11 +14,18 @@ Dialog {
     height: 400
     standardButtons: StandardButton.Ok | StandardButton.Cancel
 
-    property alias countryCodesModel: countryCodesModel
     property alias filteredCSVData: filteredCSVData
-    property alias timezoneDataModel: timezoneDataModel
     property alias tableView: tableView
     property alias countryList: countryList
+
+    property var myCSVData: ([])
+
+    ListModel {
+        id: countryCodesModel
+    }
+    ListModel {
+        id: filteredCSVData
+    }
 
     onAccepted: {
         if(tableView.currentRow > -1) {
@@ -267,16 +274,5 @@ Dialog {
                 Helper.updateListView(locationEdit.text)
             }
         }
-    }
-
-    property var myCSVData: ([])
-    ListModel {
-        id: countryCodesModel
-    }
-    ListModel {
-        id: filteredCSVData
-    }
-    ListModel {
-        id: timezoneDataModel
     }
 }

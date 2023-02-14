@@ -5,7 +5,8 @@ import QtQuick.Dialogs 1.2
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "../../code/config-utils.js" as ConfigUtils
 import "../../code/placesearch-helpers.js" as Helper
-import "../../code/db/timezoneData.js" as TZData
+
+
 Item {
 
     property alias cfg_reloadIntervalMin: reloadIntervalMin.value
@@ -29,32 +30,6 @@ Item {
                                    selected: false
                                })
         })
-        let timezoneArray = TZData.TZData.sort(dynamicSort("displayName"))
-        timezoneArray.forEach(function (tz) {
-            timezoneDataModel.append({displayName: tz.displayName.replace(/_/gi, " "), id: tz.id});
-        })
-
-    }
-
-    function dynamicSort(property) {
-        var sortOrder = 1;
-
-        if (property[0] === "-") {
-            sortOrder = -1;
-            property = property.substr(1);
-        }
-
-        return function (a,b) {
-            if (sortOrder == -1){
-                return b[property].localeCompare(a[property]);
-            } else {
-                return a[property].localeCompare(b[property]);
-            }
-        }
-    }
-
-    function isNumeric(n) {
-        return !isNaN(parseFloat(n)) && isFinite(n);
     }
 
     function placesModelChanged() {
@@ -73,26 +48,6 @@ Item {
         print('[weatherWidget] places: ' + cfg_places)
     }
 
-    function updateUrl() {
-        var Url=""
-        if (newMetnoCityLatitudeField.acceptableInput) {
-            Url += "lat=" + (Number.fromLocaleString(newMetnoCityLatitudeField.text))
-        }
-        if (newMetnoCityLongitudeField.acceptableInput) {
-            if (Url.length > 0) {
-                Url += "&"
-            }
-            Url += "lon=" + (Number.fromLocaleString(newMetnoCityLongitudeField.text))
-        }
-        if (newMetnoCityAltitudeField.acceptableInput) {
-            if (Url.length > 0) {
-                Url += "&"
-            }
-            Url += "altitude=" + (Number.fromLocaleString(newMetnoCityAltitudeField.text))
-        }
-        newMetnoUrl.text = Url
-    }
-
     property alias newOwmCityIdField: addOwmCityIdDialog.newOwmCityIdField
     property alias newOwmCityAlias: addOwmCityIdDialog.newOwmCityAlias
 
@@ -105,21 +60,11 @@ Item {
     property alias newMetnoCityLongitudeField: addMetnoCityIdDialog.newMetnoCityLongitudeField
     property alias newMetnoCityAltitudeField: addMetnoCityIdDialog.newMetnoCityAltitudeField
     property alias newMetnoUrl: addMetnoCityIdDialog.newMetnoUrl
-    property alias tzComboBox: addMetnoCityIdDialog.tzComboBox
 
     MetNoDialog {
         id: addMetnoCityIdDialog
     }
 
-    property alias countryCodesModel: searchWindow.countryCodesModel
-    property alias filteredCSVData: searchWindow.filteredCSVData
-    property alias timezoneDataModel: searchWindow.timezoneDataModel
-    property alias tableView: searchWindow.tableView
-    property alias countryList: searchWindow.countryList
-
-    LocationSearch {
-        id: searchWindow
-    }
 
     ColumnLayout{
         id: rhsColumn

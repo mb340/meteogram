@@ -3,9 +3,9 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
 import org.kde.plasma.core 2.0 as PlasmaCore
-import "../../code/config-utils.js" as ConfigUtils
 import "../../code/placesearch-helpers.js" as Helper
 import "../../code/db/timezoneData.js" as TZData
+
 
 Dialog {
     id: addMetnoCityIdDialog
@@ -24,6 +24,17 @@ Dialog {
     property alias newMetnoCityAltitudeField: newMetnoCityAltitudeField
     property alias newMetnoUrl: newMetnoUrl
     property alias tzComboBox: tzComboBox
+
+    ListModel {
+        id: timezoneDataModel
+    }
+
+    Component.onCompleted: {
+        let timezoneArray = TZData.TZData.sort(dynamicSort("displayName"))
+        timezoneArray.forEach(function (tz) {
+            timezoneDataModel.append({displayName: tz.displayName.replace(/_/gi, " "), id: tz.id});
+        })
+    }
 
     onActionChosen: {
 
@@ -138,6 +149,14 @@ Dialog {
         onNo: {
             searchWindow.close()
         }
+    }
+
+    property alias filteredCSVData: searchWindow.filteredCSVData
+    property alias tableView: searchWindow.tableView
+    property alias countryList: searchWindow.countryList
+
+    LocationSearch {
+        id: searchWindow
     }
 
     GridLayout {
@@ -274,6 +293,44 @@ Dialog {
             }
         }
     }
+
+    function updateUrl() {
+        var Url=""
+        if (newMetnoCityLatitudeField.acceptableInput) {
+            Url += "lat=" + (Number.fromLocaleString(newMetnoCityLatitudeField.text))
+        }
+        if (newMetnoCityLongitudeField.acceptableInput) {
+            if (Url.length > 0) {
+                Url += "&"
+            }
+            Url += "lon=" + (Number.fromLocaleString(newMetnoCityLongitudeField.text))
+        }
+        if (newMetnoCityAltitudeField.acceptableInput) {
+            if (Url.length > 0) {
+                Url += "&"
+            }
+            Url += "altitude=" + (Number.fromLocaleString(newMetnoCityAltitudeField.text))
+        }
+        newMetnoUrl.text = Url
+    }
+
+    function dynamicSort(property) {
+        var sortOrder = 1;
+
+        if (property[0] === "-") {
+            sortOrder = -1;
+            property = property.substr(1);
+        }
+
+        return function (a,b) {
+            if (sortOrder == -1){
+                return b[property].localeCompare(a[property]);
+            } else {
+                return a[property].localeCompare(b[property]);
+            }
+        }
+    }
+
     function setTimezone(timezoneID) {
         for (var i = 0; i < timezoneDataModel.count; i++) {
             if (timezoneDataModel.get(i).id == Number(timezoneID)) {
