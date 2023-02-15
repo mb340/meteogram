@@ -7,7 +7,7 @@ import "../../code/config-utils.js" as ConfigUtils
 import "../../code/placesearch-helpers.js" as Helper
 
 
-Item {
+ColumnLayout {
 
     property alias cfg_reloadIntervalMin: reloadIntervalMin.value
     property string cfg_places
@@ -68,8 +68,9 @@ Item {
 
     ColumnLayout{
         id: rhsColumn
-        width: parent.width
-
+        Layout.fillWidth: true
+        Layout.fillHeight: false
+        Layout.minimumHeight: childrenRect.height
 
         Label {
             text: i18n("Plasmoid version:") + ' 2.2.4'
@@ -86,7 +87,7 @@ Item {
             id: horizontalHeader
             syncView: tableView
             Layout.preferredHeight: contentHeight
-            Layout.preferredWidth: parent.width
+            Layout.fillWidth: true
 
             model: [
                 i18n("Source"),
@@ -98,7 +99,7 @@ Item {
         TableView {
             id: tableView
             Layout.minimumHeight: 150
-            Layout.preferredWidth: parent.width
+            Layout.fillWidth: true
             clip: true
 
             property int currentRow: -1
@@ -336,10 +337,16 @@ Item {
         }
     }
 
+    /* spacer */
     Item {
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+    }
+
+    Item {
+        Layout.fillWidth: true
+        Layout.minimumHeight: childrenRect.height
+
         Label {
             id: attribution1
             anchors.bottom: attribution2.top
