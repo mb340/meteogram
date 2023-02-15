@@ -449,6 +449,118 @@ if (BasmiliusWeatherIcon.IconNames === null) {
     });
 }
 
+var BreezeIcons = {
+
+    iconNameByYrNoCode: {
+        '1': ['weather-clear', 'weather-clear-night'],
+        '4': ['weather-clouds', 'weather-clouds-night'],
+        '2': ['weather-few-clouds', 'weather-few-clouds-night'],
+        '15': ['weather-fog', 'weather-fog'],
+        '10': ['weather-showers', 'weather-showers'],
+        '11': ['weather-storm-day', 'weather-storm-night'],
+        '41': ['weather-showers-day', 'weather-showers-night'],
+        '25': ['weather-storm-day', 'weather-storm-night'],
+        '48': ['weather-snow-rain', 'weather-snow-rain'],
+        '32': ['weather-storm', 'weather-storm'],
+        '43': ['weather-snow-rain', 'weather-snow-rain'],
+        '27': ['weather-storm-day', 'weather-storm-night'],
+        '50': ['weather-snow', 'weather-snow'],
+        '34': ['weather-storm', 'weather-storm'],
+        '45': ['weather-snow-scattered-day', 'weather-snow-scattered-night'],
+        '29': ['weather-storm-day', 'weather-storm-night'],
+        '46': ['weather-showers-scattered', 'weather-showers-scattered'],
+        '30': ['weather-storm', 'weather-storm'],
+        '40': ['weather-showers-scattered-day', 'weather-showers-scattered-night'],
+        '24': ['weather-storm-day', 'weather-storm-night'],
+        '47': ['weather-snow-rain', 'weather-snow-rain'],
+        '24': ['weather-storm-day', 'weather-storm-night'],
+        '47': ['weather-snow-rain', 'weather-snow-rain'],
+        '31': ['weather-storm', 'weather-storm'],
+        '42': ['weather-snow-rain', 'weather-snow-rain'],
+        '49': ['weather-snow-scattered', 'weather-snow-scattered'],
+        '33': ['weather-storm', 'weather-storm'],
+        '44': ['weather-snow-scattered-day', 'weather-snow-scattered-night'],
+        '26': ['weather-storm-day', 'weather-storm-night'],
+        '28': ['weather-storm-day', 'weather-storm-night'],
+        '3': ['weather-few-clouds', 'weather-few-clouds-night'],
+        '9': ['weather-showers', 'weather-showers'],
+        '22': ['weather-storm', 'weather-storm'],
+        '5': ['weather-showers-day', 'weather-showers-night'],
+        '6': ['weather-storm-day', 'weather-storm-night'],
+        '12': ['weather-snow-rain', 'weather-snow-rain'],
+        '23': ['weather-storm', 'weather-storm'],
+        '7': ['weather-snow-rain', 'weather-snow-rain'],
+        '20': ['weather-storm-day', 'weather-storm-night'],
+        '13': ['weather-snow', 'weather-snow'],
+        '14': ['weather-storm', 'weather-storm'],
+        '8': ['weather-snow-scattered-day', 'weather-snow-scattered-night'],
+        '21': ['weather-storm-day', 'weather-storm-night']
+    },
+
+    iconNameByOwmCode: {
+        200: ['weather-storm-day', 'weather-storm-night'],
+        201: ['weather-storm-day', 'weather-storm-night'],
+        202: ['weather-storm-day', 'weather-storm-night'],
+        210: ['weather-storm-day', 'weather-storm-night'],
+        211: ['weather-storm-day', 'weather-storm-night'],
+        212: ['weather-storm-day', 'weather-storm-night'],
+        221: ['weather-storm-day', 'weather-storm-night'],
+        230: ['weather-storm-day', 'weather-storm-night'],
+        231: ['weather-storm-day', 'weather-storm-night'],
+        232: ['weather-storm-day', 'weather-storm-night'],
+
+        300: ['weather-showers-scattered-day', 'weather-showers-scattered-night'],
+        301: ['weather-showers-scattered-day', 'weather-showers-scattered-night'],
+        302: ['weather-showers-scattered-day', 'weather-showers-scattered-night'],
+        310: ['weather-showers-scattered-day', 'weather-showers-scattered-night'],
+        311: ['weather-showers-scattered-day', 'weather-showers-scattered-night'],
+        312: ['weather-showers-scattered-day', 'weather-showers-scattered-night'],
+        313: ['weather-showers-scattered-day', 'weather-showers-scattered-night'],
+        314: ['weather-showers-scattered-day', 'weather-showers-scattered-night'],
+        321: ['weather-showers-scattered-day', 'weather-showers-scattered-night'],
+
+        500: ['weather-showers-day', 'weather-showers-night'],
+        501: ['weather-showers-day', 'weather-showers-night'],
+        502: ['weather-showers-day', 'weather-showers-night'],
+        503: ['weather-showers-day', 'weather-showers-night'],
+        504: ['weather-showers-day', 'weather-showers-night'],
+        511: ['weather-showers-day', 'weather-showers-night'],
+        520: ['weather-showers-day', 'weather-showers-night'],
+        521: ['weather-showers-day', 'weather-showers-night'],
+        522: ['weather-showers-day', 'weather-showers-night'],
+        531: ['weather-showers-day', 'weather-showers-night'],
+
+        600: ['weather-snow-scattered-day', 'weather-snow-scattered-night'],
+        601: ['weather-snow-scattered-day', 'weather-snow-scattered-night'],
+        602: ['weather-snow-scattered-day', 'weather-snow-scattered-night'],
+        611: ['weather-snow-scattered-day', 'weather-snow-scattered-night'],
+        612: ['weather-snow-scattered-day', 'weather-snow-scattered-night'],
+        613: ['weather-snow-scattered-day', 'weather-snow-scattered-night'],
+        615: ['weather-snow-scattered-day', 'weather-snow-scattered-night'],
+        616: ['weather-snow-scattered-day', 'weather-snow-scattered-night'],
+        620: ['weather-snow-scattered-day', 'weather-snow-scattered-night'],
+        621: ['weather-snow-scattered-day', 'weather-snow-scattered-night'],
+        622: ['weather-snow-scattered-day', 'weather-snow-scattered-night'],
+
+        701: ['weather-mist', 'weather-mist'],
+        711: ['weather-fog', 'weather-fog'],
+        721: ['weather-fog', 'weather-fog'],
+        731: ['weather-fog', 'weather-fog'],
+        741: ['weather-fog', 'weather-fog'],
+        751: ['weather-fog', 'weather-fog'],
+        761: ['weather-fog', 'weather-fog'],
+        762: ['weather-fog', 'weather-fog'],
+        771: ['weather-fog', 'weather-fog'],
+        781: ['weather-fog', 'weather-fog'],
+
+        800: ['weather-clear', 'weather-clear-night'],
+        801: ['weather-few-clouds', 'weather-few-clouds-night'],
+        802: ['weather-few-clouds', 'weather-few-clouds-night'],
+        803: ['weather-clouds', 'weather-clouds-night'],
+        804: ['weather-clouds', 'weather-clouds-night'],
+    }
+}
+
 function getIconCode(iconName, providerId, partOfDay) {
     var iconCodeParts = null
     if (providerId === 'yrno') {
@@ -633,4 +745,19 @@ function getBasmiliusIconImage(iconName, providerId, partOfDay) {
     }
 
     return "basmilius/weather-icons/" + filename + ".png"
+}
+
+function getBreezeIcon(iconName, providerId, partOfDay) {
+    var iconCodeParts = null
+    if (providerId === 'yrno' || providerId === 'metno') {
+        iconCodeParts = BreezeIcons.iconNameByYrNoCode[iconName]
+    } else if (providerId === 'owm' || providerId === 'owm2') {
+        iconCodeParts = BreezeIcons.iconNameByOwmCode[iconName]
+    }
+
+    if (!iconCodeParts) {
+        return null
+    }
+
+    return iconCodeParts[partOfDay]
 }
