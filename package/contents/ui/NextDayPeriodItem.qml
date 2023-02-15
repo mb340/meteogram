@@ -18,6 +18,8 @@ import QtQuick 2.2
 import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
 import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.core 2.0 as PlasmaCore
+
 import "../code/icons.js" as IconTools
 import "../code/unit-utils.js" as UnitUtils
 
@@ -147,6 +149,12 @@ RowLayout {
             anchors.centerIn: parent
         }
 
+        PlasmaCore.IconItem {
+            visible: iconSetType === 3
+            source: IconTools.getBreezeIcon(iconName, currentProvider.providerId, partOfDay)
+            width: 1.1 * Math.min(parent.width, parent.height)
+            height: 1.1 * Math.min(parent.width, parent.height)
+        }
 
         DropShadow {
             anchors.fill: weatherIcon
