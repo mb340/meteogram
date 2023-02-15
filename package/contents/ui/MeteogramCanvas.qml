@@ -118,6 +118,12 @@ Canvas {
         pathElements: []
     }
 
+    MeteogramIconOverlay {
+        id: iconOverlay
+        anchors.fill: parent
+        clip: true
+    }
+
     Connections {
         target: plasmoid
         function onExpandedChanged() {
@@ -406,6 +412,8 @@ Canvas {
         var bgColor = palette.backgroundColor()
         var dropShadowColor = invertColor(bgColor)
 
+        var iconArr = []
+
         for (var i = 0; i < hourGridModel.count; i++) {
             var hourModel = hourGridModel.get(i)
             var iconName = hourModel.iconName
@@ -450,7 +458,7 @@ Canvas {
             if (iconSetType === 0) {
                 context.fillStyle = theme.textColor
                 context.fillText(str, x0, y0)
-            } else {
+            } else if (iconSetType === 1 || iconSetType === 2) {
                 var imgPath = iconSetType === 1 ? IconTools.getMetNoIconImage(iconName, currentProvider.providerId, timePeriod) :
                                 (iconSetType === 2 ? IconTools.getBasmiliusIconImage(iconName, currentProvider.providerId, timePeriod) :
                                     null)
@@ -462,22 +470,31 @@ Canvas {
                     x0 = x - (dim / 2.0) + (rectWidth)
                     y0 -= dim
 
-                    // Draw drop shadow
-                    context.save()
-                    context.shadowOffsetX = 0;
-                    context.shadowOffsetY = 0;
-                    context.shadowColor = dropShadowColor;
-                    context.shadowBlur = 1.0;
-                    context.drawImage(imgPath, x0, y0, dim, dim)
-                    context.restore()
-
-                    // Draw actual image
-                    context.drawImage(imgPath, x0, y0, dim, dim)
+                    iconArr.push({
+                        iconType: "Image",
+                        iconSource: imgPath,
+                        iconX: x0,
+                        iconY: y0,
+                        iconDim: dim
+                    })
                 }
+            } else if (iconSetType === 3) {
+                var iconName = IconTools.getBreezeIcon(iconName, currentProvider.providerId, timePeriod)
+                let padding = (0.05 * rectWidth)   // padding determined by hand
+                x0 = x + padding
+                y0 -= 1.5 * rectWidth
+
+                iconArr.push({
+                    iconType: "Icon",
+                    iconSource: iconName,
+                    iconX: x0,
+                    iconY: y0,
+                    iconDim: 2 * rectWidth
+                })
             }
-
-
         }
+
+        iconOverlay.weatherIcons = iconArr
     }
 
     function drawCloudArea(context) {
