@@ -39,6 +39,9 @@ Item {
             case 2:
                 iconSetBasmilius.checked = true
                 break;
+            case 3:
+                iconSetBreeze.checked = true
+                break;
         }
     }
 
@@ -132,6 +135,20 @@ Item {
             ButtonGroup.group: iconSetTypeGroup
             text: i18n("Basmilius Meteocons")
             onCheckedChanged: if (checked) cfg_iconSetType = 2
+            Layout.rowSpan: 1
+        }
+
+        /* Icon Set - Breeze */
+        Item {
+            width: 2
+            height: 2
+            Layout.rowSpan: 2
+        }
+        RadioButton {
+            id: iconSetBreeze
+            ButtonGroup.group: iconSetTypeGroup
+            text: i18n("System icon theme")
+            onCheckedChanged: if (checked) cfg_iconSetType = 3
             Layout.rowSpan: 1
         }
 
