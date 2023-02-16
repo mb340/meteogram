@@ -233,7 +233,7 @@ Item {
         height: nextDaysHeight
         clip: true
 
-        model: nextDaysModel
+        model: nextDaysModel.model
         orientation: Qt.Horizontal
         spacing: nextDayItemSpacing
         interactive: false

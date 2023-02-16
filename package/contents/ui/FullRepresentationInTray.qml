@@ -104,7 +104,7 @@ Item {
             width: parent.width
             height: parent.height
 
-            model: nextDaysModel
+            model: nextDaysModel.model
             orientation: Qt.Vertical
             spacing: nextDayItemSpacing
             interactive: false

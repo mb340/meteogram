@@ -469,7 +469,7 @@ Item {
         //
         // set next days model
         //
-        nextDaysModel.clear()
+        nextDaysModel.beginList()
         newObjectArray.forEach(function (objToAdd) {
             if (nextDaysModel.count >= nextDaysFixedCount) {
                 return
@@ -478,11 +478,12 @@ Item {
                 objToAdd.tempInfoArray.unshift(null)
             }
             ModelUtils.populateNextDaysObject(objToAdd)
-            nextDaysModel.append(objToAdd)
+            nextDaysModel.addItem(objToAdd)
         })
         for (var i = 0; i < (nextDaysFixedCount - nextDaysModel.count); i++) {
-            nextDaysModel.append(ModelUtils.createEmptyNextDaysObject())
+            nextDaysModel.addItem(ModelUtils.createEmptyNextDaysObject())
         }
+        nextDaysModel.endList()
 
         dbgprint('result nextDaysModel count: ' + nextDaysModel.count)
     }

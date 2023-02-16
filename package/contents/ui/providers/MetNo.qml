@@ -209,11 +209,12 @@ Item {
                 obj['iconName'+i] = ""
             }
 
-            nextDaysModel.append(obj)
+            nextDaysModel.addItem(obj)
             return true
         }
 
-        nextDaysModel.clear()
+        nextDaysModel.beginList()
+
         var readingsLength = (readingsArray.properties.timeseries.length) - 1
         var dateNow = UnitUtils.dateNow(timezoneType)
         var obj = resetobj()
@@ -342,6 +343,8 @@ Item {
                 continue;
             }
         }
+
+        nextDaysModel.endList()
         main.nextDaysCount = nextDaysModel.count
     }
 
