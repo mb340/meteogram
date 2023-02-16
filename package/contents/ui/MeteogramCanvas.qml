@@ -167,61 +167,6 @@ Canvas {
     property int iconSetType: (plasmoid && plasmoid.configuration && plasmoid.configuration.iconSetType) ?
                                 plasmoid.configuration.iconSetType : 0
 
-    property int nLoadingImages: 0
-    property int nLoadedImages: 0
-
-    function loadBasmiliusIcons(doLoad) {
-        let iconNames = IconTools.BasmiliusWeatherIcon.IconNames
-        let func = doLoad ? loadImage : unloadImage
-        for (const value in iconNames) {
-            func("image://basmilius/weather-icons/" + value + '.png')
-        }
-    }
-
-    function loadYrNoIcons(doLoad) {
-        let func = doLoad ? loadImage : unloadImage
-        for (const iconId in IconTools.MetNo.IconCode) {
-            let stem = iconId.toString().padStart(2, '0')
-            if (IconTools.hasMetNoPartOfDay(iconId)) {
-                func("image://yr-weather-symbols/" + stem + "d" + ".png")
-                func("image://yr-weather-symbols/" + stem + "n" + ".png")
-            } else {
-                func("image://yr-weather-symbols/" + stem + ".png")
-            }
-        }
-    }
-
-    onIconSetTypeChanged: {
-        nLoadedImages = 0
-
-        if (iconSetType === 0) {
-            loadYrNoIcons(false)
-            loadBasmiliusIcons(false)
-        }
-
-        if (iconSetType === 1) {
-            nLoadingImages = IconTools.MetNo.IconCode.length
-            loadYrNoIcons(true)
-            loadBasmiliusIcons(false)
-        }
-
-        if (iconSetType === 2) {
-            nLoadingImages = IconTools.BasmiliusWeatherIcon.IconNames.length
-            loadBasmiliusIcons(true)
-            loadYrNoIcons(false)
-        }
-    }
-
-    onImageLoaded: {
-        nLoadedImages++
-        if (nLoadedImages > 0 && nLoadedImages === nLoadingImages) {
-            nLoadingImages = 0
-            nLoadedImages = 0
-        }
-        root.markDirty(Qt.rect(0, 0, width, height))
-    }
-
-
     function computeFontSize() {
         var rectWidth = xIndexScale.translate(1) - xIndexScale.translate(0)
         var rectHeight = Math.abs(temperatureScale.translate(temperatureYGridStep) -
