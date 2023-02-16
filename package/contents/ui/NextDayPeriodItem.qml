@@ -41,7 +41,6 @@ RowLayout {
     onPixelFontSizeChanged: {
         if (pixelFontSize > 0) {
             temperatureText.font.pixelSize = pixelFontSize
-            temperatureIcon.font.pixelSize = pixelFontSize
         }
     }
     
@@ -112,59 +111,100 @@ RowLayout {
     }
     
     Item {
+        id: iconParent
         width: parent.width / 3
         height: parent.height
 
-        PlasmaComponents.Label {
-            id: temperatureIcon
-            
-            font.pointSize: -1
-            
+        Component {
+            id: weatherIconLabel
+
+            PlasmaComponents.Label {
+                id: temperatureIcon
+
+                font.pointSize: -1
+                font.pixelSize: pixelFontSize > 0 ? pixelFontSize : undefined
+
+                font.family: 'weathericons'
+                text: hidden ? '' : IconTools.getIconCode(iconName, currentProvider.providerId, partOfDay)
+            }
+        }
+
+        Component {
+            id: weatherIconImage
+
+            Item {
+
+                Image {
+                    id: weatherIcon
+
+                    property var imgSrc: (iconSetType === 1 ?
+                                            IconTools.getMetNoIconImage(iconName, currentProvider.providerId, partOfDay) :
+                                            (iconSetType === 2 ?
+                                                IconTools.getBasmiliusIconImage(iconName, currentProvider.providerId, partOfDay) :
+                                                null))
+
+
+                    source: imgSrc ? imgSrc : "images/placeholder.svg"
+                    property double dim: iconSetType === 1 ? (Math.min(iconParent.width, iconParent.height) * 1.00) :
+                                            (iconSetType === 2 ? (Math.min(iconParent.width, iconParent.height) * 1.25) : 1.00)
+
+                    width: dim
+                    height: dim
+                    anchors.centerIn: parent
+                }
+
+                DropShadow {
+                    anchors.fill: weatherIcon
+                    horizontalOffset: 0
+                    verticalOffset: 0
+                    radius: 8.0
+                    samples: 17
+                    color: !textColorLight ? "#80000000" : "#80ffffff"
+                    source: weatherIcon
+                    visible: weatherIcon.visible
+                }
+            }
+        }
+
+        Component {
+            id: weatherIconItem
+
+            Item {
+                width: 1.1 * Math.min(iconParent.width, iconParent.height)
+                height: 1.1 * Math.min(iconParent.width, iconParent.height)
+
+                PlasmaCore.IconItem {
+                    id: weatherIcon
+                    source: IconTools.getBreezeIcon(iconName, currentProvider.providerId, partOfDay)
+                    anchors.fill: parent
+                }
+
+                DropShadow {
+                    anchors.fill: weatherIcon
+                    horizontalOffset: 0
+                    verticalOffset: 0
+                    radius: 8.0
+                    samples: 17
+                    color: !textColorLight ? "#80000000" : "#80ffffff"
+                    source: weatherIcon
+                    visible: weatherIcon.visible
+                }
+            }
+        }
+
+        Loader {
+            asynchronous: true
             anchors.centerIn: parent
-            
-            font.family: 'weathericons'
-            text: hidden ? '' : IconTools.getIconCode(iconName, currentProvider.providerId, partOfDay)
-            visible: iconSetType === 0
-        }
 
-        Image {
-            id: weatherIcon
-            visible: (iconSetType === 1 || iconSetType === 2)
-
-            property var imgSrc: (iconSetType === 1 ?
-                                    IconTools.getMetNoIconImage(iconName, currentProvider.providerId, partOfDay) :
-                                    (iconSetType === 2 ?
-                                        IconTools.getBasmiliusIconImage(iconName, currentProvider.providerId, partOfDay) :
-                                        null))
-
-
-            source: imgSrc ? imgSrc : "images/placeholder.svg"
-            property double dim: iconSetType === 1 ? (Math.min(parent.width, parent.height) * 1.00) :
-                                    (iconSetType === 2 ? (Math.min(parent.width, parent.height) * 1.25) : 1.00)
-
-
-            width: dim
-            height: dim
-
-            anchors.centerIn: parent
-        }
-
-        PlasmaCore.IconItem {
-            visible: iconSetType === 3
-            source: IconTools.getBreezeIcon(iconName, currentProvider.providerId, partOfDay)
-            width: 1.1 * Math.min(parent.width, parent.height)
-            height: 1.1 * Math.min(parent.width, parent.height)
-        }
-
-        DropShadow {
-            anchors.fill: weatherIcon
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: 8.0
-            samples: 17
-            color: "#80000000"
-            source: weatherIcon
-            visible: weatherIcon.visible
+            sourceComponent: {
+                if (iconSetType === 0) {
+                    return weatherIconLabel
+                } else if (iconSetType === 1 || iconSetType === 2) {
+                    return weatherIconImage
+                } else if (iconSetType === 3) {
+                    return weatherIconItem
+                }
+            }
         }
     }
     
