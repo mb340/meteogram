@@ -18,8 +18,24 @@ import QtGraphicalEffects 1.12
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 Item {
+    id: root
 
-    property var weatherIcons: []
+    property int index: 0
+    property alias weatherIcons: weatherIcons
+
+    signal beginList()
+    signal addItem(var data)
+    signal endList()
+
+    ManagedListModel {
+        id: weatherIcons
+    }
+
+    Component.onCompleted: {
+        root.beginList.connect(weatherIcons.beginList)
+        root.addItem.connect(weatherIcons.addItem)
+        root.endList.connect(weatherIcons.endList)
+    }
 
     Component {
         id: imageComponent
@@ -76,20 +92,22 @@ Item {
     }
 
     Repeater {
-        model: weatherIcons
+        model: weatherIcons.model
 
         delegate: Loader {
-            property var iconSource: modelData.iconSource
-            property var iconX: modelData.iconX
-            property var iconY: modelData.iconY
-            property var iconDim: modelData.iconDim
+            property var iconType: model.iconType
+            property var iconSource: model.iconSource
+            property var iconX: model.iconX
+            property var iconY: model.iconY
+            property var iconDim: model.iconDim
 
             asynchronous: true
+            visible: status == Loader.Ready
 
             sourceComponent: {
-                if (modelData.iconType === "Icon") {
+                if (model.iconType === "Icon") {
                     return iconItemComponent
-                } else if (modelData.iconType === "Image") {
+                } else if (model.iconType === "Image") {
                     return imageComponent
                 }
             }

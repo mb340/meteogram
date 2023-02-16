@@ -357,7 +357,7 @@ Canvas {
         var bgColor = palette.backgroundColor()
         var dropShadowColor = invertColor(bgColor)
 
-        var iconArr = []
+        iconOverlay.beginList()
 
         for (var i = 0; i < hourGridModel.count; i++) {
             var hourModel = hourGridModel.get(i)
@@ -415,7 +415,7 @@ Canvas {
                     x0 = x - (dim / 2.0) + (rectWidth)
                     y0 -= dim
 
-                    iconArr.push({
+                    iconOverlay.addItem({
                         iconType: "Image",
                         iconSource: imgPath,
                         iconX: x0,
@@ -429,7 +429,7 @@ Canvas {
                 x0 = x + padding
                 y0 -= 1.5 * rectWidth
 
-                iconArr.push({
+                iconOverlay.addItem({
                     iconType: "Icon",
                     iconSource: iconName,
                     iconX: x0,
@@ -439,7 +439,7 @@ Canvas {
             }
         }
 
-        iconOverlay.weatherIcons = iconArr
+        iconOverlay.endList()
     }
 
     function drawCloudArea(context) {
