@@ -206,40 +206,44 @@ Item {
             return
         }
         dbgprint('all xml models ready')
-        var todayTimeObj = createTodayTimeObj()
-        updateTodayModels(todayTimeObj)
+        createTodayTimeObj()
+        updateTodayModels()
         updateMeteogramModel()
         updateNextDaysModel()
-        updateAdditionalWeatherInfoText()
+        refreshTooltipSubText()
         updateSemaphore = false
     }
 
     function createTodayTimeObj() {
-        var currentTimeObj = xmlModelCurrent.get(0)
-        additionalWeatherInfo.sunRise = parseDate(currentTimeObj.rise)
-        additionalWeatherInfo.sunSet = parseDate(currentTimeObj.set)
+        if (xmlModelCurrent.count > 0) {
+            var currentTimeObj = xmlModelCurrent.get(0)
+            currentWeatherModel.temperature = currentTimeObj.temperature
+            currentWeatherModel.iconName = currentTimeObj.iconName
+            currentWeatherModel.windDirection = currentTimeObj.windDirection
+            currentWeatherModel.windSpeedMps = currentTimeObj.windSpeedMps
+            currentWeatherModel.pressureHpa = currentTimeObj.pressureHpa
+            currentWeatherModel.humidity = currentTimeObj.humidity
+            currentWeatherModel.cloudiness = currentTimeObj.cloudiness
+            currentWeatherModel.valid = true
+        }
+
+        currentWeatherModel.sunRise = parseDate(currentTimeObj.rise)
+        currentWeatherModel.sunSet = parseDate(currentTimeObj.set)
         dbgprint('setting actual weather from current xml model')
-        dbgprint('sunRise: ' + additionalWeatherInfo.sunRise)
-        dbgprint('sunSet:  ' + additionalWeatherInfo.sunSet)
+        dbgprint('sunRise: ' + currentWeatherModel.sunRise)
+        dbgprint('sunSet:  ' + currentWeatherModel.sunSet)
         dbgprint('current: ' + currentTimeObj.temperature)
-        return currentTimeObj
     }
 
-    function updateTodayModels(todayTimeObj) {
+    function updateTodayModels() {
 
         dbgprint('updating today models')
 
         var now = new Date()
         dbgprint('now: ' + now)
         var tooOldCurrentDataLimit = new Date(now.getTime() - (2 * 60 * 60 * 1000))
-        var nearFutureWeather = additionalWeatherInfo.nearFutureWeather
-
-        actualWeatherModel.clear()
-        actualWeatherModel.append(todayTimeObj)
 
         // set current models
-        nearFutureWeather.iconName = null
-        nearFutureWeather.temperature = null
         var foundNow = false
         for (var i = 0; i < xmlModelHourByHour.count; i++) {
             var timeObj = xmlModelHourByHour.get(i)
@@ -250,23 +254,30 @@ Item {
             if (!foundNow && dateFrom <= now && now <= dateTo) {
                 dbgprint('foundNow setting to true')
                 foundNow = true
-                if (actualWeatherModel.count === 0) {
+                if (!currentWeatherModel.valid) {
                     dbgprint('adding to actualWeatherModel - temperature: ' + timeObj.temperature + ', iconName: ' + timeObj.iconName)
-                    actualWeatherModel.append(timeObj)
+                    currentWeatherModel.temperature = timeObj.temperature
+                    currentWeatherModel.iconName = timeObj.iconName
+                    currentWeatherModel.windDirection = timeObj.windDirection
+                    currentWeatherModel.windSpeedMps = timeObj.windSpeedMps
+                    currentWeatherModel.pressureHpa = timeObj.pressureHpa
+                    currentWeatherModel.humidity = timeObj.humidity
+                    currentWeatherModel.cloudiness = timeObj.cloudiness
+                    currentWeatherModel.valid = true
                 }
                 continue
             }
 
             if (foundNow) {
-                nearFutureWeather.iconName = timeObj.iconName
-                nearFutureWeather.temperature = timeObj.temperature
-                dbgprint('setting near future - ' + nearFutureWeather.iconName + ', temp: ' + nearFutureWeather.temperature)
+                currentWeatherModel.nearFuture.iconName = timeObj.iconName
+                currentWeatherModel.nearFuture.temperature = timeObj.temperature
+                dbgprint('setting near future - ' + timeObj.iconName + ', temp: ' + timeObj.temperature)
                 break
             }
         }
 
-        dbgprint('result actualWeatherModel count: ' + actualWeatherModel.count)
-        dbgprint('result nearFutureWeather.iconName: ' + nearFutureWeather.iconName)
+        dbgprint('result currentWeatherModel.valid: ' + currentWeatherModel.valid)
+        dbgprint('result nearFutureWeather.iconName: ' + currentWeatherModel.nearFuture.iconName)
 
     }
 
