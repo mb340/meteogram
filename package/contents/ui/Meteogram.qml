@@ -50,8 +50,6 @@ Item {
     property color gridColor: textColorLight ? Qt.tint(theme.textColor, '#80000000') : Qt.tint(theme.textColor, '#80FFFFFF')
     property color gridColorHighlight: textColorLight ? Qt.tint(theme.textColor, '#50000000') : Qt.tint(theme.textColor, '#50FFFFFF')
 
-    property double sampleWidth: imageWidth / (meteogramModel.count - 1)
-
     property alias temperatureScale: meteogramCanvas.temperatureScale
     property alias temperatureAxisScale: meteogramCanvas.temperatureAxisScale
     property alias pressureScale: meteogramCanvas.pressureScale

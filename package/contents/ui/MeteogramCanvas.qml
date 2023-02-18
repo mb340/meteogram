@@ -570,6 +570,9 @@ Canvas {
         for (var i = 0; i < meteogramModel.count; i++) {
             var dataObj = meteogramModel.get(i)
 
+            var t = dataObj.from
+            var x = timeScale.translate(t)
+
             var temperatureY = temperatureScale.translate(UnitUtils.convertTemperature(dataObj.temperature, temperatureType))
             var pressureY = pressureScale.translate(UnitUtils.convertPressure(dataObj.pressureHpa, pressureType))
             var humidityY = humidityScale.translate(dataObj.humidity)
@@ -581,19 +584,19 @@ Canvas {
 
             if (!reuse) {
                 newPathElements.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
-                                     '{ x: ' + (i * sampleWidth) + '; y: ' + temperatureY + ' }',
+                                     '{ x: ' + x + '; y: ' + temperatureY + ' }',
                                      graphArea, "dynamicTemperature" + i))
             } else {
-                newPathElements[i].x = i * sampleWidth
+                newPathElements[i].x = x
                 newPathElements[i].y = temperatureY
             }
 
             if (!reuse) {
                 newPressureElements.push(Qt.createQmlObject('import QtQuick 2.0; '+ pathType +
-                                         '{ x: ' + (i * sampleWidth) + '; y: ' + pressureY + ' }',
+                                         '{ x: ' + x + '; y: ' + pressureY + ' }',
                                          graphArea, "dynamicPressure" + i))
             } else {
-                newPressureElements[i].x = i * sampleWidth
+                newPressureElements[i].x = x
                 newPressureElements[i].y = pressureY
             }
 
@@ -606,37 +609,37 @@ Canvas {
 
                 if (!reuse) {
                     newCloudElements.push(Qt.createQmlObject('import QtQuick 2.0; ' + 'PathCurve' +
-                                         '{ x: ' + (i * sampleWidth) + '; y: ' + cloudY1 + ' }',
+                                         '{ x: ' + x + '; y: ' + cloudY1 + ' }',
                                          graphArea, "dynamicCloudArea" + i))
                     newCloudElements2.push(Qt.createQmlObject('import QtQuick 2.0; ' + 'PathLine' +
-                                         '{ x: ' + (i * sampleWidth) + '; y: ' + cloudY0 + ' }',
+                                         '{ x: ' + x + '; y: ' + cloudY0 + ' }',
                                          graphArea, "dynamicCloudArea" + (meteogramModel.count + i)))
                 } else {
-                    newCloudElements[i].x = i * sampleWidth
+                    newCloudElements[i].x = x
                     newCloudElements[i].y = cloudY1
-                    newCloudElements[(2 * meteogramModel.count) - 1 - i].x = i * sampleWidth
+                    newCloudElements[(2 * meteogramModel.count) - 1 - i].x = x
                     newCloudElements[(2 * meteogramModel.count) - 1 - i].y = cloudY0
                 }
             } else {
                 if (i < newCloudElements.length) {
-                    newCloudElements[i].x = i *sampleWidth
+                    newCloudElements[i].x = NaN
                     newCloudElements[i].y = NaN
-                    newCloudElements[(2 * meteogramModel.count) - 1 - i].x = i * sampleWidth
+                    newCloudElements[(2 * meteogramModel.count) - 1 - i].x = NaN
                     newCloudElements[(2 * meteogramModel.count) - 1 - i].y = NaN
                 }
             }
             if (isFinite(humidityY)) {
                 if (!reuse) {
                     newHumidityElements.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
-                                             '{ x: ' + (i * sampleWidth) + '; y: ' + humidityY + ' }',
+                                             '{ x: ' + x + '; y: ' + humidityY + ' }',
                                              graphArea, "dynamicHumidity" + i))
                 } else {
-                    newHumidityElements[i].x = i * sampleWidth
+                    newHumidityElements[i].x = x
                     newHumidityElements[i].y = humidityY
                 }
             } else {
                 if (i < newHumidityElements.length) {
-                    newHumidityElements[i].x = i * sampleWidth
+                    newHumidityElements[i].x = NaN
                     newHumidityElements[i].y = NaN
                 }
             }
