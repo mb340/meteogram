@@ -71,10 +71,6 @@ Item {
         id: palette
     }
 
-
-    ListModel {
-        id: horizontalGridModel
-    }
     ListModel {
         id: hourGridModel
     }
@@ -105,7 +101,7 @@ Item {
     }
     ListView {
         id: horizontalLines1
-        model: horizontalGridModel
+        model: temperatureYGridCount
         anchors.left: graphArea.left
         anchors.top: graphArea.top
 //         anchors.bottom: graphArea.bottom + labelHeight
@@ -118,7 +114,7 @@ Item {
         delegate: Item {
             height: horizontalLines1.itemHeight
             width: graphArea.width
-            visible: num % temperatureYGridStep === 0
+            visible: index % temperatureYGridStep === 0
 
             Rectangle {
                 id: gridLine
@@ -127,7 +123,7 @@ Item {
                 color: gridColor
             }
             PlasmaComponents.Label {
-                text: UnitUtils.formatTemperatureStr(temperatureAxisScale.invert(num), temperatureType)
+                text: UnitUtils.formatTemperatureStr(temperatureAxisScale.invert(index), temperatureType)
                 height: labelHeight
                 width: labelWidth
                 horizontalAlignment: Text.AlignRight
@@ -139,7 +135,7 @@ Item {
                 font.pointSize: -1
             }
             PlasmaComponents.Label {
-                text: UnitUtils.formatPressureStr(pressureAxisScale.invert(num), pressureDecimals)
+                text: UnitUtils.formatPressureStr(pressureAxisScale.invert(index), pressureDecimals)
                 height: labelHeight
                 width: labelWidth
                 anchors.top: gridLine.top

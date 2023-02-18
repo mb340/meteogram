@@ -728,13 +728,6 @@ Canvas {
         temperatureAxisScale.setRange(temperatureYGridCount, 0)
 
         xIndexScale.setDomain(0, hourGridModel.count - 1)
-
-        horizontalGridModel.clear()
-        for (var i = 0; i <= temperatureYGridCount; i++) {
-            horizontalGridModel.append({
-                num: i
-            })
-        }
     }
 
     function logn(x, base) {
