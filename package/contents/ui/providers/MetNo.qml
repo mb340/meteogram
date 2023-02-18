@@ -125,7 +125,7 @@ Item {
     }
 
     function buildMetogramData(readingsArray) {
-        meteogramModel.clear()
+        meteogramModel.beginList()
         var dateNow = UnitUtils.dateNow(timezoneType)
         var precipitation_unit = readingsArray.properties.meta.units["precipitation_amount"]
         var i = 0
@@ -148,7 +148,7 @@ Item {
             var prec = obj.data.next_1_hours.details["precipitation_amount"]
             var hm = obj.data.instant.details["relative_humidity"]
             var cld = obj.data.instant.details["cloud_area_fraction"]
-            meteogramModel.append({
+            meteogramModel.addItem({
                 from: dateFrom,
                 to: dateTo,
                 temperature: airtmp,
@@ -164,6 +164,7 @@ Item {
             })
             i++
         }
+        meteogramModel.endList()
     }
 
     function formatTime(ISOdate) {
