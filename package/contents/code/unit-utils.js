@@ -236,26 +236,8 @@ function convertDate(date, timezoneType, timezoneId) {
 }
 
 function hasSunriseSunsetData() {
-    if (!main.additionalWeatherInfo) {
-        return false
-    }
-    if (main.additionalWeatherInfo.sunRise === undefined ||
-        main.additionalWeatherInfo.sunSet === undefined)
-    {
-        return false
-    }
-    if (typeof(main.additionalWeatherInfo.sunRise) === "number" &&
-        isNaN(main.additionalWeatherInfo.sunRise))
-    {
-        return false
-    }
-    if (typeof(main.additionalWeatherInfo.sunSet) === "number" &&
-        isNaN(main.additionalWeatherInfo.sunSet))
-    {
-        return false
-    }
-    return true
-
+    return Number(main.currentWeatherModel.sunRise) !== 0 &&
+            Number(main.currentWeatherModel.sunSet) !== 0
 }
 
 function isSunRisen(t) {
@@ -264,8 +246,8 @@ function isSunRisen(t) {
         return 6 <= hourFrom && hourFrom <= 18
     }
 
-    var sunRise = main.additionalWeatherInfo.sunRise
-    var sunSet = main.additionalWeatherInfo.sunSet
+    var sunRise = main.currentWeatherModel.sunRise
+    var sunSet = main.currentWeatherModel.sunSet
 
     var res = undefined
     // print('isSunRisen: sunRise = ' + sunRise)

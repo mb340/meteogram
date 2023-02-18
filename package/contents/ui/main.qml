@@ -49,7 +49,8 @@ Item {
 
     property string datetimeFormat: 'yyyy-MM-dd\'T\'hh:mm:ss'
     property var xmlLocale: Qt.locale('en_GB')
-    property var additionalWeatherInfo: {}
+
+    property alias currentWeatherModel: currentWeatherModel
 
     property string overviewImageSource
     property string creditLink
@@ -126,6 +127,10 @@ Item {
 
     ListModel {
         id: actualWeatherModel
+    }
+
+    CurrentWeatherModel {
+        id: currentWeatherModel
     }
 
     ManagedListModel {
@@ -221,17 +226,6 @@ Item {
         plasmoidCacheId = inTray ? plasmoid.parent.id : plasmoid.id
         dbgprint('inTray=' + inTray + ', plasmoidCacheId=' + plasmoidCacheId)
 
-        additionalWeatherInfo = {
-            sunRise: new Date('2000-01-01T00:00:00'),
-            sunSet: new Date('2000-01-01T00:00:00'),
-            sunRiseTime: '0:00',
-            sunSetTime: '0:00',
-            nearFutureWeather: {
-                iconName: null,
-                temperature: null
-            }
-        }
-
         // systray settings
         if (inTray) {
             Plasmoid.compactRepresentation = crInTray
@@ -278,7 +272,8 @@ Item {
      }
 
     function setNextPlace(initial,direction) {
-        actualWeatherModel.clear()
+        currentWeatherModel.clear()
+
         if (direction === undefined) {
           direction = "+"
         }
@@ -428,7 +423,7 @@ Item {
         }
 
         updateLastReloadedText()
-        updateAdditionalWeatherInfoText()
+        refreshTooltipSubText()
         reloadMeteogram()
         alreadyLoadedFromCache = true
         return true
@@ -458,49 +453,41 @@ Item {
         plasmoid.status = getPlasmoidStatus(lastReloadedMs, inTrayActiveTimeoutSec)
     }
 
-    function updateAdditionalWeatherInfoText() {
-        if (additionalWeatherInfo === undefined || additionalWeatherInfo.sunRise === undefined ||
-            additionalWeatherInfo.sunSet === undefined)
-        {
-            additionalWeatherInfo.sunRiseTime = '0:00'
-            additionalWeatherInfo.sunSetTime = '0:00'
-            refreshTooltipSubText()
-            return
-        }
-        var sunRise = additionalWeatherInfo.sunRise
-        var sunSet = additionalWeatherInfo.sunSet
-        if (UnitUtils.hasSunriseSunsetData()) {
-            additionalWeatherInfo.sunRiseTime = Qt.formatTime(sunRise, Qt.locale().timeFormat(Locale.ShortFormat))
-            additionalWeatherInfo.sunSetTime = Qt.formatTime(sunSet, Qt.locale().timeFormat(Locale.ShortFormat))
-        }
-        refreshTooltipSubText()
-    }
-
     function refreshTooltipSubText() {
         dbgprint('refreshing sub text')
-        if (additionalWeatherInfo === undefined || additionalWeatherInfo.nearFutureWeather.iconName === null || actualWeatherModel.count === 0) {
+        if (!currentWeatherModel.valid) {
             dbgprint('model not yet ready')
            return
         }
-        var nearFutureWeather = additionalWeatherInfo.nearFutureWeather
+        var nearFutureWeather = currentWeatherModel.nearFuture
         var futureWeatherIcon = IconTools.getIconCode(nearFutureWeather.iconName, currentProvider.providerId, getPartOfDayIndex())
-        var wind1=Math.round(actualWeatherModel.get(0).windDirection)
+        var wind1=Math.round(currentWeatherModel.windDirection)
         var windDirectionIcon = IconTools.getWindDirectionIconCode(wind1)
+
+        var sunRiseTime = ""
+        var sunSetTime = ""
+        if (UnitUtils.hasSunriseSunsetData()) {
+            let sunRise = currentWeatherModel.sunRise
+            let sunSet = currentWeatherModel.sunSet
+            sunRiseTime = Qt.formatTime(sunRise, Qt.locale().timeFormat(Locale.ShortFormat))
+            sunSetTime = Qt.formatTime(sunSet, Qt.locale().timeFormat(Locale.ShortFormat))
+        }
+
         var subText = ''
-        subText += '<br /><font size="4" style="font-family: weathericons;">' + windDirectionIcon + '</font><font size="4"> ' + wind1 + '\u00B0 &nbsp; @ ' + UnitUtils.getWindSpeedText(actualWeatherModel.get(0).windSpeedMps, windSpeedType) + '</font>'
-        subText += '<br /><font size="4">' + UnitUtils.getPressureText(actualWeatherModel.get(0).pressureHpa, pressureType) + '</font>'
+        subText += '<br /><font size="4" style="font-family: weathericons;">' + windDirectionIcon + '</font><font size="4"> ' + wind1 + '\u00B0 &nbsp; @ ' + UnitUtils.getWindSpeedText(currentWeatherModel.windSpeedMps, windSpeedType) + '</font>'
+        subText += '<br /><font size="4">' + UnitUtils.getPressureText(currentWeatherModel.pressureHpa, pressureType) + '</font>'
         subText += '<br /><table>'
-        if ((actualWeatherModel.get(0).humidity !== undefined) && (actualWeatherModel.get(0).cloudiness !== undefined)) {
+        if ((currentWeatherModel.humidity !== undefined) && (currentWeatherModel.cloudiness !== undefined)) {
             subText += '<tr>'
-            subText += '<td><font size="4"><font style="font-family: weathericons">\uf07a</font>&nbsp;' + actualWeatherModel.get(0).humidity + '%</font></td>'
-            subText += '<td><font size="4"><font style="font-family: weathericons">\uf013</font>&nbsp;' + actualWeatherModel.get(0).cloudiness + '%</font></td>'
+            subText += '<td><font size="4"><font style="font-family: weathericons">\uf07a</font>&nbsp;' + currentWeatherModel.humidity + '%</font></td>'
+            subText += '<td><font size="4"><font style="font-family: weathericons">\uf013</font>&nbsp;' + currentWeatherModel.cloudiness + '%</font></td>'
             subText += '</tr>'
             subText += '<tr><td>&nbsp;</td><td></td></tr>'
         }
         if (UnitUtils.hasSunriseSunsetData()) {
             subText += '<tr>'
-            subText += '<td><font size="4"><font style="font-family: weathericons">\uf051</font>&nbsp;' + additionalWeatherInfo.sunRiseTime + ' '+timezoneShortName + '&nbsp;&nbsp;&nbsp;</font></td>'
-            subText += '<td><font size="4"><font style="font-family: weathericons">\uf052</font>&nbsp;' + additionalWeatherInfo.sunSetTime + ' '+timezoneShortName + '</font></td>'
+            subText += '<td><font size="4"><font style="font-family: weathericons">\uf051</font>&nbsp;' + sunRiseTime + ' '+timezoneShortName + '&nbsp;&nbsp;&nbsp;</font></td>'
+            subText += '<td><font size="4"><font style="font-family: weathericons">\uf052</font>&nbsp;' + sunSetTime + ' '+timezoneShortName + '</font></td>'
             subText += '</tr>'
         }
         subText += '</table>'
@@ -515,8 +502,11 @@ Item {
     }
 
     function getPartOfDayIndex() {
+        if (!UnitUtils.hasSunriseSunsetData()) {
+            return 0
+        }
         var now = new Date()
-        return additionalWeatherInfo.sunRise < now && now < additionalWeatherInfo.sunSet ? 0 : 1
+        return currentWeatherModel.sunRise < now && now < currentWeatherModel.sunSet ? 0 : 1
     }
 
     function abortTooLongConnection(forceAbort) {
