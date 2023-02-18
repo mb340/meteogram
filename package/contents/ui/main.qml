@@ -132,7 +132,7 @@ Item {
         id: nextDaysModel
     }
 
-    ListModel {
+    ManagedListModel {
         id: meteogramModel
     }
 
@@ -279,7 +279,6 @@ Item {
 
     function setNextPlace(initial,direction) {
         actualWeatherModel.clear()
-        meteogramModel.clear()
         if (direction === undefined) {
           direction = "+"
         }
