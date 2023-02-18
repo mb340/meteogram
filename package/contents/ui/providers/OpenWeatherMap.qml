@@ -490,7 +490,7 @@ Item {
 
     function updateMeteogramModel() {
 
-        meteogramModel.clear()
+        meteogramModel.beginList()
 
         var firstFromMs = null
         var limitMsDifference = 1000 * 60 * 60 * 54 // 2.25 days
@@ -515,7 +515,7 @@ Item {
             if (typeof(prec) === "string"  && prec === "") {
               prec = 0
             }
-            meteogramModel.append({
+            meteogramModel.addItem({
                 from: dateFrom,
                 to: dateTo,
                 temperature: parseInt(obj.temperature),
@@ -540,6 +540,7 @@ Item {
             }
         }
 
+        meteogramModel.endList()
         dbgprint('meteogramModel.count = ' + meteogramModel.count)
 
         main.meteogramModelChanged = !main.meteogramModelChanged
