@@ -78,8 +78,16 @@ Item {
             Layout.alignment: Qt.AlignHCenter
         }
 
-        ListModel {
+        ManagedListModel {
             id: model
+
+            defaultModel: ListModel {
+                ListElement {
+                    nameStr: ""
+                    valueStr: ""
+                    valueColor: ""
+                }
+            }
         }
 
         ListView {
@@ -89,7 +97,7 @@ Item {
 
             implicitHeight: contentItem.childrenRect.height
 
-            model: model
+            model: model.model
 
             interactive: false
 
@@ -177,7 +185,7 @@ Item {
             return
         }
 
-        model.clear()
+        model.beginList()
 
         var dateFrom = hourModel.dateFrom
         var hourFrom = dateFrom.getHours()
@@ -192,13 +200,14 @@ Item {
             var timePeriod = UnitUtils.isSunRisen(hourModel.dateFrom) ? 0 : 1
             var iconNameStr = IconTools.getIconDescription(hourModel.iconName,
                                                     currentProvider.providerId, timePeriod)
-            model.append({
+            model.addItem({
                 nameStr: i18n("Conditions:"),
                 valueStr: iconNameStr,
+                valueColor: ""
             })
         }
 
-        model.append({
+        model.addItem({
             nameStr: i18n("Temperature:"),
             valueStr: hourModel.temperature.toFixed(2) +
                         UnitUtils.getTemperatureEnding(temperatureType),
@@ -208,31 +217,33 @@ Item {
 
 
         var pressureStr = UnitUtils.convertPressure(hourModel.pressureHpa, pressureType).toFixed(2)
-        model.append({
+        model.addItem({
             nameStr: i18n("Pressure:"),
             valueStr: pressureStr + " " + UnitUtils.getPressureEnding(pressureType),
             valueColor: palette.pressureColor().toString()
         })
 
         var windStr = UnitUtils.getWindSpeedText(hourModel.windSpeedMps, windSpeedType)
-        model.append({
+        model.addItem({
             nameStr: i18n("Wind speed:"),
-            valueStr: windStr
+            valueStr: windStr,
+            valueColor: ""
         })
 
         var cloudAreaStr = ""
         if (isFinite(hourModel.cloudArea)) {
             cloudAreaStr = hourModel.cloudArea + " %"
-            model.append({
+            model.addItem({
                 nameStr: i18n("Cloud area:"),
                 valueStr: cloudAreaStr,
+                valueColor: ""
             })
         }
 
         var humidityStr = ""
         if (isFinite(hourModel.humidity)) {
             humidityStr = hourModel.humidity + " %"
-            model.append({
+            model.addItem({
                 nameStr: i18n("Relative humidity:"),
                 valueStr: humidityStr,
                 valueColor: palette.humidityColor().toString()
@@ -244,12 +255,14 @@ Item {
             precipitationStr = UnitUtils.precipitationFormat(hourModel.precipitationAvg,
                                                              hourModel.precipitationLabel) +
                                " " + hourModel.precipitationLabel
-            model.append({
+            model.addItem({
                 nameStr: i18n("Precipitation:"),
                 valueStr: precipitationStr,
                 valueColor: palette.rainColor().toString()
             })
         }
+
+        model.endList()
     }
 
 
