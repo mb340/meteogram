@@ -50,9 +50,7 @@ RowLayout {
         /*spacer*/
         Layout.fillWidth: true
         height: parent.height
-        visible: hasMinMax
     }
-
 
     PlasmaComponents.Label {
         id: temperatureText
@@ -66,50 +64,12 @@ RowLayout {
         horizontalAlignment: Text.AlignRight
         verticalAlignment: Text.AlignVCenter
 
-        text: hidden ? '' : UnitUtils.getTemperatureNumberExt(temperature, temperatureType)
-
-        visible: !hasMinMax
+        text: hidden ? '' :
+              (!hasMinMax ? UnitUtils.getTemperatureNumberExt(temperature, temperatureType) :
+                            UnitUtils.getTemperatureNumberExt(temperature_max, temperatureType) + " / " +
+                            UnitUtils.getTemperatureNumberExt(temperature_min, temperatureType))
     }
 
-    PlasmaComponents.Label {
-        // id: temperatureText
-
-        font.pointSize: -1
-
-        height: parent.height
-        Layout.alignment: Qt.AlignRight
-        Layout.fillWidth: true
-
-        horizontalAlignment: Text.AlignRight
-        verticalAlignment: Text.AlignVCenter
-
-        text: hidden ? '' : UnitUtils.getTemperatureNumberExt(temperature_max, temperatureType)
-
-        visible: hasMinMax
-    }
-
-    PlasmaComponents.Label {
-        text: "/"
-        visible: !hidden && hasMinMax
-    }
-
-    PlasmaComponents.Label {
-        // id: temperatureText
-        
-        font.pointSize: -1
-
-        height: parent.height
-        Layout.alignment: Qt.AlignRight
-        Layout.fillWidth: true
-
-        horizontalAlignment: Text.AlignRight
-        verticalAlignment: Text.AlignVCenter
-
-        text: hidden ? '' : UnitUtils.getTemperatureNumberExt(temperature_min, temperatureType)
-
-        visible: hasMinMax
-    }
-    
     Item {
         id: iconParent
         width: parent.width / 3
