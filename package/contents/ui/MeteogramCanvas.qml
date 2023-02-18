@@ -37,6 +37,8 @@ Canvas {
     property bool graphCurvedLine: plasmoid.configuration.graphCurvedLine
     property bool hasGraphCurvedLineChanged: false
 
+    property int nHours: 0
+
     property alias temperatureScale: temperatureScale
     property alias temperatureAxisScale: temperatureAxisScale
     property alias pressureScale: pressureScale
@@ -920,6 +922,11 @@ Canvas {
 
             i++
         }
+
+        hourGridModel.endList()
+
+        var dt = dateFrom.getTime() - startTime.getTime()
+        root.nHours = Math.floor(dt / oneHourMs) + 1
         for (i = Math.max(0, hourGridModel.count - 5); i < hourGridModel.count; i++) {
             hourGridModel.setProperty(i, 'canShowDay', false)
         }
@@ -935,8 +942,7 @@ Canvas {
             }
         }
 
-        hourGridModel.endList()
-        xIndexScale.setDomain(0, hourGridModel.count - 1)
+        xIndexScale.setDomain(0, nHours - 1)
         timeScale.setDomain(startTime.getTime(), dateFrom.getTime())
     }
 

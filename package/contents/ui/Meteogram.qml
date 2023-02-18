@@ -60,6 +60,8 @@ Item {
     property alias xIndexScale: meteogramCanvas.xIndexScale
     property alias timeScale: meteogramCanvas.timeScale
 
+    property alias nHours: meteogramCanvas.nHours
+
     Component.onCompleted: {
         UnitUtils.precipitationMinVisible = precipitationMinVisible
         meteogramCanvas.fullRedraw()
@@ -174,7 +176,7 @@ Item {
     ListView {
         id: hourGrid
         model: hourGridModel.model
-        property double hourItemWidth: hourGridModel.count < 2 ? 0 : imageWidth / (hourGridModel.count - 1)
+        property double hourItemWidth: nHours < 2 ? 0 : imageWidth / (nHours - 1)
         anchors.fill: graphArea
         interactive: false
         orientation: ListView.Horizontal
@@ -187,7 +189,7 @@ Item {
             property string hourFromEnding: twelveHourClockEnabled ? UnitUtils.getAmOrPm(hourFrom) : '00'
             property bool dayBegins: hourFrom === 0
             property bool hourVisible: hourFrom % 2 === 0
-            property bool textVisible: hourVisible && index < hourGridModel.count-1
+            property bool textVisible: hourVisible && index < nHours - 1
 
             Rectangle {
                 id: verticalLine
@@ -261,7 +263,7 @@ Item {
                     width: 16
                     height: 16
                     fillMode: Image.PreserveAspectFit
-                    visible: (index % 2 == 1) && (index < hourGridModel.count-1)
+                    visible: (index % 2 == 1) && (index < nHours - 1)
                     anchors.leftMargin: -8
                     anchors.left: parent.left
                     //                    visible: ((windDirection > 0) || (windSpeedMps > 0)) && (! textVisible) && (index > 0) && (index < hourGridModel.count-1)
@@ -362,7 +364,7 @@ Item {
 
             function update(mouse) {
                 var idx = Math.round(xIndexScale.invert(mouse.x) - 0.5)
-                if (idx < 0 || idx >= hourGridModel.count) {
+                if (idx < 0 || idx >= nHours) {
                     return
                 }
 
