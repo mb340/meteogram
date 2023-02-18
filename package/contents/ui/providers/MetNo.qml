@@ -78,8 +78,8 @@ Item {
         }
 
         if (sunRise && sunSet) {
-            additionalWeatherInfo.sunRise = UnitUtils.convertDate(sunRise, timezoneType)
-            additionalWeatherInfo.sunSet = UnitUtils.convertDate(sunSet, timezoneType)
+            currentWeatherModel.sunRise = UnitUtils.convertDate(sunRise, timezoneType)
+            currentWeatherModel.sunSet = UnitUtils.convertDate(sunSet, timezoneType)
         }
 
         return true
@@ -91,7 +91,7 @@ Item {
             print("error: weather data doesn't contain current hour data")
             return
         }
-        actualWeatherModel.clear()
+
         var currentWeather = weatherData.properties.timeseries[currentIndex]
         var iconnumber = geticonNumber(currentWeather.data.next_1_hours.summary.symbol_code)
         var temperature = currentWeather.data.instant.details["air_temperature"]
@@ -100,22 +100,22 @@ Item {
         var ap = currentWeather.data.instant.details["air_pressure_at_sea_level"]
         var hm = currentWeather.data.instant.details["relative_humidity"]
         var cld = currentWeather.data.instant.details["cloud_area_fraction"]
-        actualWeatherModel.append({
-            "temperature": temperature,
-            "iconName": iconnumber,
-            "windDirection": wd,
-            "windSpeedMps": ws,
-            "pressureHpa": ap,
-            "humidity": hm,
-            "cloudiness": cld
-        })
+
+        currentWeatherModel.temperature = temperature
+        currentWeatherModel.iconName = iconnumber
+        currentWeatherModel.windDirection = wd
+        currentWeatherModel.windSpeedMps = ws
+        currentWeatherModel.pressureHpa = ap
+        currentWeatherModel.humidity = hm
+        currentWeatherModel.cloudiness = cld
+        currentWeatherModel.valid = true
 
         if (currentIndex + 1 < weatherData.properties.timeseries.length) {
             let futureWeather = weatherData.properties.timeseries[currentIndex + 1]
             temperature = futureWeather.data.instant.details["air_temperature"]
             iconnumber = geticonNumber(futureWeather.data.next_1_hours.summary.symbol_code)
-            additionalWeatherInfo.nearFutureWeather.temperature = temperature
-            additionalWeatherInfo.nearFutureWeather.iconName = iconnumber
+            currentWeatherModel.nearFuture.temperature = temperature
+            currentWeatherModel.nearFuture.iconName = iconnumber
         }
     }
 
