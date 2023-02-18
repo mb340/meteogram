@@ -878,9 +878,7 @@ Canvas {
             var obj = meteogramModel.get(i)
             dateFrom = obj.from
             var dateTo = obj.to
-            dateFrom.setMinutes(0)
-            dateFrom.setSeconds(0)
-            dateFrom.setMilliseconds(0)
+            dateFrom.setMinutes(0, 0, 0)
             var differenceHours = Math.floor((dateTo.getTime() - dateFrom.getTime()) / oneHourMs)
             dbgprint(dateFrom + "\t" + dateTo + "\t" + differenceHours)
             var differenceHoursMid = Math.ceil(differenceHours / 2) - 1
