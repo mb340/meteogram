@@ -20,7 +20,10 @@ Item {
     property int index: 0
 
     property alias count: root.index
-    property alias model: listModel
+    property alias model: root._model
+
+    property var defaultModel: null
+    property var _model: defaultModel ? defaultModel : listModel
 
     ListModel {
         id: listModel
@@ -31,26 +34,26 @@ Item {
     }
 
     function addItem(data) {
-        if (index >= listModel.count) {
-            listModel.append(data)
+        if (index >= _model.count) {
+            _model.append(data)
         } else {
-            listModel.set(index, data)
+            _model.set(index, data)
         }
         index++
     }
 
     function endList() {
-        let count = listModel.count - index
+        let count = _model.count - index
         if (count > 0) {
-            listModel.remove(index, count)
+            _model.remove(index, count)
         }
     }
 
     function get(index) {
-        return listModel.get(index)
+        return _model.get(index)
     }
 
     function setProperty(index, property, value) {
-        return listModel.setProperty(index, property, value)
+        return _model.setProperty(index, property, value)
     }
 }
