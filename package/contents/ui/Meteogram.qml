@@ -176,7 +176,7 @@ Item {
     ListView {
         id: hourGrid
         model: hourGridModel.model
-        property double hourItemWidth: hourGridModel.count === 0 ? 0 : imageWidth / (hourGridModel.count - 1)
+        property double hourItemWidth: hourGridModel.count < 2 ? 0 : imageWidth / (hourGridModel.count - 1)
         anchors.fill: graphArea
         interactive: false
         orientation: ListView.Horizontal
