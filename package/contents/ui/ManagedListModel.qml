@@ -45,4 +45,12 @@ Item {
             listModel.remove(index, count)
         }
     }
+
+    function get(index) {
+        return listModel.get(index)
+    }
+
+    function setProperty(index, property, value) {
+        return listModel.setProperty(index, property, value)
+    }
 }
