@@ -71,7 +71,7 @@ Item {
         id: palette
     }
 
-    ListModel {
+    ManagedListModel {
         id: hourGridModel
     }
 
@@ -175,7 +175,7 @@ Item {
     }
     ListView {
         id: hourGrid
-        model: hourGridModel
+        model: hourGridModel.model
         property double hourItemWidth: hourGridModel.count === 0 ? 0 : imageWidth / (hourGridModel.count - 1)
         anchors.fill: graphArea
         interactive: false

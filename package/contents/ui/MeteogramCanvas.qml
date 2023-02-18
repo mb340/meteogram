@@ -865,7 +865,7 @@ Canvas {
         var counter = 0
         var i = 0
         const oneHourMs = 3600000
-        hourGridModel.clear()
+        hourGridModel.beginList()
 
         var dateFrom = undefined
         var startTime = undefined
@@ -894,7 +894,7 @@ Canvas {
                 counter = (prec >= precipitationMinVisible) ? counter + 1 : 0
                 var preparedDate = new Date(dateFrom.getTime() + (j * oneHourMs))
 
-                hourGridModel.append({
+                hourGridModel.addItem({
                                       dateFrom: preparedDate,
                                       iconName: j === differenceHoursMid ? icon : '',
                                       temperature: airtmp,
@@ -933,6 +933,7 @@ Canvas {
             }
         }
 
+        hourGridModel.endList()
         timeScale.setDomain(startTime.getTime(), dateFrom.getTime())
     }
 
