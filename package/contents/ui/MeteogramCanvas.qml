@@ -177,13 +177,14 @@ Canvas {
 
     function drawPrecipitationBars(context, rectWidth) {
         precLabelPositions = ({})
-        for (var i = 0; i < hourGridModel.count; i++) {
-            var hourModel = hourGridModel.get(i)
-            if (hourModel.precipitationAvg <= 0) {
+        for (var i = 0; i < meteogramModel.count; i++) {
+            var item = meteogramModel.get(i)
+            if (item.precipitationAvg <= 0) {
                 continue
             }
-            var x = xIndexScale.translate(i) + (0.5 * units.devicePixelRatio)
-            var prec = Math.min(precipitationMaxGraphY, hourModel.precipitationAvg)
+
+            var x = timeScale.translate(item.from) + (0.5 * units.devicePixelRatio)
+            var prec = Math.min(precipitationMaxGraphY, item.precipitationAvg)
             var y = precipitationScale.translate(prec)
             context.fillStyle = palette.rainColor()
             var h = (precipitationScale.range[0]) - y
@@ -215,9 +216,9 @@ Canvas {
         var prevShowPrecUnit = false
         var prevPrecStr = undefined
 
-        for (var i = 0; i < hourGridModel.count; i++) {
-            var hourModel = hourGridModel.get(i)
-            var prec = hourModel.precipitationAvg
+        for (var i = 0; i < meteogramModel.count; i++) {
+            var item = meteogramModel.get(i)
+            var prec = item.precipitationAvg
             var showPrecExcess = prec > precipitationMaxGraphY
             var showPrec = prec > 0
 
@@ -230,9 +231,9 @@ Canvas {
                 continue
             }
 
-            var x = xIndexScale.translate(i)
+            var x = timeScale.translate(item.from)
             var y = precipitationScale.translate(Math.min(precipitationMaxGraphY, prec))
-            var precStr = UnitUtils.precipitationFormat(prec, hourModel.precipitationLabel)
+            var precStr = UnitUtils.precipitationFormat(prec, item.precipitationLabel)
             const textPad = 2
             var y0 = y - textPad
 
@@ -257,7 +258,7 @@ Canvas {
 
             if (showPrecUnit) {
                 var precUnitStr = UnitUtils.localisePrecipitationUnit(
-                                    hourModel.precipitationLabel)
+                                    item.precipitationLabel)
                 var metrics = context.measureText(precUnitStr)
                 var x0 = x - (metrics.width / 2) + (rectWidth / 2)
 
@@ -359,19 +360,21 @@ Canvas {
 
         iconOverlay.beginList()
 
-        for (var i = 0; i < hourGridModel.count; i++) {
-            var hourModel = hourGridModel.get(i)
-            var iconName = hourModel.iconName
-            var hourFrom = hourModel.dateFrom.getHours()
+        for (var i = 0; i < meteogramModel.count; i++) {
+            var item = meteogramModel.get(i)
+            var iconName = item.iconName
+            var hourFrom = item.from.getHours()
             var textVisible = (hourFrom % 2 === 1) && iconName != ''
             if (!textVisible) {
                 continue
             }
 
-            var x = xIndexScale.translate(i - 1)
+            var t = item.from
+            t.setHours(hourFrom - 1, 0, 0, 0)
+            var x = timeScale.translate(t)
             var y = temperatureScale.translate(UnitUtils.convertTemperature(
-                                                hourModel.temperature, temperatureType))
-            var timePeriod = UnitUtils.isSunRisen(hourModel.dateFrom) ? 0 : 1
+                                               item.temperature, temperatureType))
+            var timePeriod = UnitUtils.isSunRisen(item.from) ? 0 : 1
             var str = IconTools.getIconCode(iconName, currentProvider.providerId, timePeriod)
 
             var metrics = context.measureText(str)
@@ -726,8 +729,6 @@ Canvas {
         temperatureScale.setDomain(minValue, maxValue)
         temperatureAxisScale.setDomain(minValue, maxValue)
         temperatureAxisScale.setRange(temperatureYGridCount, 0)
-
-        xIndexScale.setDomain(0, hourGridModel.count - 1)
     }
 
     function logn(x, base) {
@@ -934,6 +935,7 @@ Canvas {
         }
 
         hourGridModel.endList()
+        xIndexScale.setDomain(0, hourGridModel.count - 1)
         timeScale.setDomain(startTime.getTime(), dateFrom.getTime())
     }
 
