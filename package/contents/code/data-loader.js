@@ -127,3 +127,22 @@ function IsJsonString(str) {
     }
     return true
 }
+
+function getReloadedTimeText(time) {
+    var mins = time / 60000
+    if (mins <= 180) {
+        return Math.round(mins) + 'm'
+    }
+
+    var hours = mins / 60
+    if (hours <= 48) {
+        return Math.round(hours) + 'h'
+    }
+
+    var days = hours / 24
+    if (days <= 14) {
+        return Math.round(days) + 'd'
+    }
+
+    return 'long'
+}
