@@ -553,11 +553,6 @@ Item {
                 continue
             }
 
-            if (dateFrom <= now && now <= dateTo) {
-                dbgprint('foundNow')
-                dateFrom = now
-            }
-
             var prec = obj.precipitationAvg
             if (typeof(prec) === "string"  && prec === "") {
               prec = 0
