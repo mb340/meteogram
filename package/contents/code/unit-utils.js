@@ -241,6 +241,14 @@ function convertDate(date, timezoneType, timezoneId = undefined, offset = undefi
     return date
 }
 
+/*
+ * Round date to the previous half hour
+ */
+function floorDate(date) {
+    let ts = date.getTime()
+    return new Date(ts - (ts % (60 * 60 * 1000)))
+}
+
 function hasSunriseSunsetData() {
     return Number(main.currentWeatherModel.sunRise) !== 0 &&
             Number(main.currentWeatherModel.sunSet) !== 0
