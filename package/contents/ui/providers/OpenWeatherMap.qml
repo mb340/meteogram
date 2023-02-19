@@ -30,6 +30,8 @@ Item {
 
     property bool updateSemaphore: false
 
+    property int tzOffset: 0
+
 // DEBUGGING URLs
 //     property string urlPrefix: 'http://localhost/forecast'
 //     property string appIdAndModeSuffix: ''
@@ -181,7 +183,8 @@ Item {
     property var xmlModelHourByHourStatus: xmlModelHourByHour.status
 
     function parseDate(dateString) {
-        return new Date(dateString + '.000Z')
+        let d = new Date(dateString + '.000Z')
+        return UnitUtils.convertDate(d, timezoneType, undefined, tzOffset)
     }
 
     onXmlModelCurrentStatusChanged: {
@@ -232,6 +235,13 @@ Item {
             return
         }
         dbgprint('all xml models ready')
+        if (xmlModelLocation.count > 0) {
+            let item = xmlModelLocation.get(0)
+            tzOffset = item.timezone
+        } else {
+            tzOffset = 0
+            print("warning: OpenWeatherMap timezone offset data not available")
+        }
         createTodayTimeObj()
         updateTodayModels()
         updateMeteogramModel()
