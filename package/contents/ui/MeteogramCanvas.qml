@@ -510,7 +510,7 @@ Canvas {
         }
 
         // Carve out negative space when weather icons overlap precipitation bars
-        if (plasmoid.configuration.renderIcons) {
+        if (plasmoid.configuration.renderIcons && iconSetType === 0) {
             context.globalCompositeOperation = "xor"
             drawWeatherIcons(context, rectWidth)
         }
