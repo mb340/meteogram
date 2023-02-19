@@ -35,6 +35,21 @@ Item {
 //     property string appIdAndModeSuffix: ''
 
     XmlListModel {
+        id: xmlModelLocation
+        query: '/weatherdata/location'
+
+        XmlRole {
+            name: 'name'
+            query: 'name/string()'
+        }
+
+        XmlRole {
+            name: 'timezone'
+            query: 'timezone/number()'
+        }
+    }
+
+    XmlListModel {
         id: xmlModelLongTerm
         query: '/weatherdata/forecast/time'
 
@@ -160,6 +175,7 @@ Item {
         }
     }
 
+    property var xmlModelLocationStatus: xmlModelLocation.status
     property var xmlModelLongTermStatus: xmlModelLongTerm.status
     property var xmlModelCurrentStatus: xmlModelCurrent.status
     property var xmlModelHourByHourStatus: xmlModelHourByHour.status
@@ -192,8 +208,18 @@ Item {
         xmlModelReady()
     }
 
+    onXmlModelLocationStatusChanged: {
+        if (xmlModelLocation.status != XmlListModel.Ready) {
+            return
+        }
+        xmlModelReady()
+    }
+
     function xmlModelReady() {
         if (!updateSemaphore) {
+            return
+        }
+        if (xmlModelLocation.status != XmlListModel.Ready) {
             return
         }
         if (xmlModelCurrent.status != XmlListModel.Ready) {
@@ -601,6 +627,8 @@ Item {
             return false
         }
         updateSemaphore = true
+        xmlModelLocation.xml = ''
+        xmlModelLocation.xml = cacheContent.longTerm
         xmlModelCurrent.xml = ''
         xmlModelCurrent.xml = cacheContent.current
         xmlModelLongTerm.xml = ''
