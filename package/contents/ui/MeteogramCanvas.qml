@@ -867,72 +867,16 @@ Canvas {
             return
         }
 
-        var precipitation_unit = meteogramModel.get(0).precipitationLabel
-        var counter = 0
-        var i = 0
-        const oneHourMs = 3600000
-        hourGridModel.beginList()
+        const ONE_HOUR_MS = 60 * 60 * 1000
 
-        var dateFrom = undefined
-        var startTime = undefined
+        var startTime = meteogramModel.get(0).from
+        var endTime = meteogramModel.get(meteogramModel.count - 1).from
 
-        while (i < meteogramModel.count) {
-            var obj = meteogramModel.get(i)
-            dateFrom = obj.from
-            var dateTo = obj.to
-            dateFrom.setMinutes(0, 0, 0)
-            var differenceHours = Math.floor((dateTo.getTime() - dateFrom.getTime()) / oneHourMs)
-            dbgprint(dateFrom + "\t" + dateTo + "\t" + differenceHours)
-            var differenceHoursMid = Math.ceil(differenceHours / 2) - 1
-            var wd = obj.windDirection
-            var ws = obj.windSpeedMps
-            var ap = obj.pressureHpa
-            var airtmp = parseFloat(obj.temperature)
-            var icon = obj.iconName
-            var prec = parseFloat(obj.precipitationAvg) / differenceHours
-            var preclabel = obj.precipitationLabel
-            var hm = obj.humidity
-            var cld = obj.cloudArea
+        var dt = endTime.getTime() - startTime.getTime()
+        root.nHours = Math.floor(dt / ONE_HOUR_MS) + 1
 
-            for (var j = 0; j < differenceHours; j++) {
-                counter = (prec >= precipitationMinVisible) ? counter + 1 : 0
-                var preparedDate = new Date(dateFrom.getTime() + (j * oneHourMs))
-
-                hourGridModel.addItem({
-                                      dateFrom: preparedDate,
-                                      iconName: j === differenceHoursMid ? icon : '',
-                                      temperature: airtmp,
-                                      precipitationAvg: prec,
-                                      precipitationLabel: preclabel,
-                                      precipitationUnitVisible: counter === 1,
-                                      precipitationMax: prec,
-                                      canShowDay: true,
-                                      windDirection: parseFloat(wd),
-                                      windSpeedMps: parseFloat(ws),
-                                      pressureHpa: parseFloat(ap),
-                                      humidity: hm,
-                                      cloudArea: cld,
-                                      differenceHours: differenceHours
-                                  })
-            }
-
-            if (i === 0) {
-                startTime = dateFrom
-            }
-
-            i++
-        }
-
-        hourGridModel.endList()
-
-        var dt = dateFrom.getTime() - startTime.getTime()
-        root.nHours = Math.floor(dt / oneHourMs) + 1
-        for (i = Math.max(0, hourGridModel.count - 5); i < hourGridModel.count; i++) {
-            hourGridModel.setProperty(i, 'canShowDay', false)
-        }
-
-        if (hourGridModel.count > 0) {
-            var model = hourGridModel.get(0)
+        if (meteogramModel.count > 0) {
+            var model = meteogramModel.get(0)
             if (model.precipitationLabel === i18n("%")) {
                 precipitationScale.setDomain(0, 8.0)
                 precipitationMaxGraphY = 100
@@ -943,7 +887,7 @@ Canvas {
         }
 
         xIndexScale.setDomain(0, meteogramModel.count - 1)
-        timeScale.setDomain(startTime.getTime(), dateFrom.getTime())
+        timeScale.setDomain(startTime.getTime(), endTime.getTime())
         windSpeedArea.setModel(meteogramModel.count)
         hourGrid.setModel(startTime, meteogramModel.count)
     }

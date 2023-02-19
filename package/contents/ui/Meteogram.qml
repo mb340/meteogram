@@ -71,10 +71,6 @@ Item {
         id: palette
     }
 
-    ManagedListModel {
-        id: hourGridModel
-    }
-
     TextMetrics {
         id: textMetrics
         font.family: theme.defaultFont.family
