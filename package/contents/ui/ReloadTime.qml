@@ -19,6 +19,8 @@ Item {
     property var expiresMsMap: {}
     property var loadingError: ({})
 
+    property string nextReloadText: ''
+
     Timer {
         id: reloadTimer
         interval: 60*1000
@@ -138,4 +140,9 @@ Item {
         plasmoid.configuration.expiresMsJson = JSON.stringify(expiresMsMap)
     }
 
+    function updateNextReloadText(cacheKey) {
+        var nextReloadTime = getNextReloadTime(cacheKey)
+        var t = nextReloadTime - Date.now()
+        nextReloadText = i18n('Next update is in %1', DataLoader.getReloadedTimeText(t))
+    }
 }

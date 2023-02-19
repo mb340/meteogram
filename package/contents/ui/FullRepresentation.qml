@@ -335,11 +335,14 @@ Item {
         }
 
         onEntered: {
-            lastReloadedTextComponent.visible = false
-            reloadTextComponent.visible = true
+            reloadTime.updateNextReloadText(cacheKey)
+            lastReloadedTextComponent.text = reloadTime.nextReloadText
+            lastReloadedTextComponent.visible = true
+            reloadTextComponent.visible = false
         }
 
         onExited: {
+            lastReloadedTextComponent.text = lastReloadedText
             lastReloadedTextComponent.visible = true
             reloadTextComponent.visible = false
             pressAndHoldTimer.stop()
@@ -352,10 +355,14 @@ Item {
         onPressed: {
             pressCountdownTimer.reloadTimerStartTs = Date.now() + (pressAndHoldTimer.interval)
             pressAndHoldTimer.restart()
+            lastReloadedTextComponent.visible = false
+            reloadTextComponent.visible = true
         }
 
         onReleased: {
             pressAndHoldTimer.stop()
+            lastReloadedTextComponent.visible = true
+            reloadTextComponent.visible = false
         }
 
         Timer {
