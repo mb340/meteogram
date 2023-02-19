@@ -534,6 +534,9 @@ Canvas {
             // Ensure weather icons atop graph lines without drawing over carve out
             context.globalCompositeOperation = "source-atop"
             drawWeatherIcons(context, rectWidth)
+        } else {
+            iconOverlay.beginList()
+            iconOverlay.endList()
         }
 
         if (plasmoid.configuration.renderPrecipitation) {
