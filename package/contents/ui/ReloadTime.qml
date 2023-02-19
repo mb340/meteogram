@@ -115,7 +115,10 @@ Item {
 
         var lastReload = getLastReloadedMs(key)
         lastReload = lastReload !== undefined ? lastReload : now
-        var nextReload = Number(lastReload + reloadIntervalMs)
+        var t1 = Number(lastReload + reloadIntervalMs)
+
+        var t2 = expiresMsMap[key] ? expiresMsMap[key] : 0
+        var nextReload = Math.max(t1, t2)
 
         dbgprint("getNextReloadTime: nextReload = " + (new Date(nextReload)).toString())
         return nextReload
