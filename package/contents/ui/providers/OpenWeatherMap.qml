@@ -540,7 +540,7 @@ Item {
         meteogramModel.beginList()
 
         var firstFromMs = null
-        var limitMsDifference = 1000 * 60 * 60 * 54 // 2.25 days
+        var limitMsDifference = 1000 * 60 * 60 * 60 // 2.50 days
         var now = new Date()
 
         for (var i = 0; i < xmlModelHourByHour.count; i++) {
