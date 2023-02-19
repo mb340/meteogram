@@ -16,6 +16,7 @@ Item {
 
     property var abortTimers: ({})
     property var lastReloadedMsMap: ({})
+    property var expiresMsMap: {}
     property var loadingError: ({})
 
     Timer {
@@ -47,6 +48,12 @@ Item {
         }
         lastReloadedMsMap = lastReloadedMsMap || {}
         print("init: lastReloadedMsMap = " + JSON.stringify(lastReloadedMsMap))
+
+        var expiresMsJson = plasmoid.configuration.expiresMsJson
+        if (expiresMsJson) {
+            expiresMsMap = JSON.parse(expiresMsJson)
+        }
+        expiresMsMap = expiresMsMap || {}
     }
 
     function start(interval) {
@@ -122,4 +129,10 @@ Item {
         dbgprint("isReadyToReload: " + res)
         return res
     }
+
+    function setExpireTime(time, cacheKey) {
+        expiresMsMap[cacheKey] = time
+        plasmoid.configuration.expiresMsJson = JSON.stringify(expiresMsMap)
+    }
+
 }

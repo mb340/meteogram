@@ -336,8 +336,15 @@ Item {
         providerCache.printKeys()
 
         saveCache()
-
         reloadTime.setLastReloadedMs(cacheKey)
+
+        if (loadingXhrs.length > 0) {
+            var xhr = loadingXhrs[0]
+            var expires = xhr.getResponseHeader("expires");
+            if (expires) {
+                reloadTime.setExpireTime(Date.parse(expires), cacheKey)
+            }
+        }
 
         clearLoadingXhrs()
 
