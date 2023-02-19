@@ -36,6 +36,9 @@
         <entry name="lastReloadedMsJson" type="String">
             <default></default>
         </entry>
+        <entry name="expiresMsJson" type="String">
+            <default></default>
+        </entry>
     </group>
 
     <group name="Appearance">
