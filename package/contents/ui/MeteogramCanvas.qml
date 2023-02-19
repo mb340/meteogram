@@ -170,7 +170,7 @@ Canvas {
                                 plasmoid.configuration.iconSetType : 0
 
     function computeFontSize() {
-        var rectWidth = xIndexScale.translate(1) - xIndexScale.translate(0)
+        var rectWidth = width / root.nHours
         var rectHeight = Math.abs(temperatureScale.translate(temperatureYGridStep) -
                                   temperatureScale.translate(0))
         var dim = Math.min(rectWidth, rectHeight / 2)
@@ -498,7 +498,7 @@ Canvas {
 
         context.globalCompositeOperation = "source-over"
 
-        var rectWidth = xIndexScale.translate(1) - xIndexScale.translate(0)
+        var rectWidth = width / root.nHours
 
         if (plasmoid.configuration.renderAlerts) {
             context.globalCompositeOperation = "source-over"
