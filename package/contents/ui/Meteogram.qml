@@ -433,7 +433,7 @@ Item {
                     meteogramInfo.anchorsMargins = 1.5 * rectWidth
 
                     meteogramInfo.idx = idx
-                    meteogramInfo.hourModel = hourGridModel.get(idx)
+                    meteogramInfo.hourModel = meteogramModel.get(idx)
                 }
             }
         }

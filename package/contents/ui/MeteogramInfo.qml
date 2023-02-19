@@ -187,7 +187,7 @@ Item {
 
         model.beginList()
 
-        var dateFrom = hourModel.dateFrom
+        var dateFrom = hourModel.from
         var hourFrom = dateFrom.getHours()
         var dateStr = dateFrom.toLocaleDateString(Qt.locale(), 'ddd d MMM') +
                             " " + i18n("at") + " " +
@@ -197,7 +197,7 @@ Item {
 
         var iconNameStr = ""
         if (hourModel.iconName) {
-            var timePeriod = UnitUtils.isSunRisen(hourModel.dateFrom) ? 0 : 1
+            var timePeriod = UnitUtils.isSunRisen(dateFrom) ? 0 : 1
             var iconNameStr = IconTools.getIconDescription(hourModel.iconName,
                                                     currentProvider.providerId, timePeriod)
             model.addItem({
