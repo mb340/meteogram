@@ -150,7 +150,6 @@ Item {
             var cld = obj.data.instant.details["cloud_area_fraction"]
             meteogramModel.addItem({
                 from: dateFrom,
-                to: dateTo,
                 temperature: airtmp,
                 precipitationAvg: prec,
                 precipitationMax: prec,
