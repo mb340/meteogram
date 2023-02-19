@@ -559,7 +559,6 @@ Item {
             }
             meteogramModel.addItem({
                 from: dateFrom,
-                to: dateTo,
                 temperature: parseInt(obj.temperature),
                 precipitationAvg: prec,
                 precipitationLabel: "mm",
