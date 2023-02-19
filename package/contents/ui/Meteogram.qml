@@ -375,13 +375,13 @@ Item {
                     return
                 }
 
-                var rectWidth = xIndexScale.translate(1) - xIndexScale.translate(0)
                 context.fillStyle = Qt.rgba(theme.highlightColor.r,
                                             theme.highlightColor.g,
                                             theme.highlightColor.b,
                                             0.25)
-                var x0 = xIndexScale.translate(meteogramInfo.idx)
-                context.fillRect(x0, 0, rectWidth, height);
+
+                var [x0, x1] = meteogramCanvas.getItemIntervalX(meteogramInfo.idx)
+                context.fillRect(x0, 0, x1 - x0, height);
             }
         }
 
@@ -416,12 +416,11 @@ Item {
 
             function update(mouse) {
                 var idx = Math.round(xIndexScale.invert(mouse.x) - 0.5)
-                if (idx < 0 || idx >= nHours) {
+                if (idx < 0 || idx >= meteogramModel.count) {
                     return
                 }
 
-                var x0 = xIndexScale.translate(meteogramInfo.idx)
-                var x1 = xIndexScale.translate(meteogramInfo.idx + 1)
+                var [x0, x1] = meteogramCanvas.getItemIntervalX(idx)
                 var rectWidth = x1 - x0
 
                 meteogramInfo.x = mouse.x
