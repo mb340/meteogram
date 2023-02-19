@@ -945,6 +945,7 @@ Canvas {
         xIndexScale.setDomain(0, nHours - 1)
         timeScale.setDomain(startTime.getTime(), dateFrom.getTime())
         windSpeedArea.setModel(meteogramModel.count)
+        hourGrid.setModel(startTime, meteogramModel.count)
     }
 
     function fullRedraw() {

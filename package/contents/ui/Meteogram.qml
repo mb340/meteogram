@@ -175,16 +175,26 @@ Item {
     }
     ListView {
         id: hourGrid
-        model: hourGridModel.model
+        model: root.nHours
         property double hourItemWidth: nHours < 2 ? 0 : imageWidth / (nHours - 1)
         anchors.fill: graphArea
         interactive: false
         orientation: ListView.Horizontal
+
+        property var startTime: new Date(0)
+
+        function setModel(startTime) {
+            hourGrid.startTime = startTime
+        }
+
         delegate: Item {
             height: labelHeight
             width: hourGrid.hourItemWidth
 
-            property int hourFrom: dateFrom.getHours()
+            property int onHourMs: 3600000
+            property var date: new Date(Number(hourGrid.startTime) + (index * onHourMs))
+
+            property int hourFrom: date.getHours()
             property string hourFromStr: UnitUtils.getHourText(hourFrom, twelveHourClockEnabled)
             property string hourFromEnding: twelveHourClockEnabled ? UnitUtils.getAmOrPm(hourFrom) : '00'
             property bool dayBegins: hourFrom === 0
@@ -228,7 +238,7 @@ Item {
             }
             PlasmaComponents.Label {
                 id: dayTest
-                text: Qt.locale().dayName(dateFrom.getDay(), Locale.LongFormat)
+                text: Qt.locale().dayName(date.getDay(), Locale.LongFormat)
                 height: labelHeight
                 anchors.top: parent.top
                 anchors.topMargin: -labelHeight
@@ -236,7 +246,10 @@ Item {
                 anchors.leftMargin: parent.width / 2
                 font.pixelSize: 11 * units.devicePixelRatio
                 font.pointSize: -1
-                visible: dayBegins && canShowDay
+                visible: dayBegins && date.getHours() === 0
+            }
+        }
+    }
 
     Item {
         id: windSpeedArea
