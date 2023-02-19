@@ -273,6 +273,7 @@ Item {
 
     function setNextPlace(initial,direction) {
         currentWeatherModel.clear()
+        meteogramModel.hourInterval = 1
 
         if (direction === undefined) {
           direction = "+"
