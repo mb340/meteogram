@@ -207,6 +207,9 @@ function isDST(DSTPeriods, timezoneType) {
     return(isDSTflag)
 }
 
+/*
+ * Convert from system time to UTC or location-local time.
+ */
 function convertDate(date, timezoneType, timezoneId = undefined, offset = undefined) {
     if (typeof(date) === "string") {
         date = new Date(Date.parse(date))
