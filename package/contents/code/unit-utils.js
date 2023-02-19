@@ -207,7 +207,7 @@ function isDST(DSTPeriods, timezoneType) {
     return(isDSTflag)
 }
 
-function convertDate(date, timezoneType, timezoneId) {
+function convertDate(date, timezoneType, timezoneId = undefined, offset = undefined) {
     if (typeof(date) === "string") {
         date = new Date(Date.parse(date))
     } else if (typeof(date) === "number") {
@@ -227,10 +227,13 @@ function convertDate(date, timezoneType, timezoneId) {
         return convertDateToUTC(date)
     } else if (timezoneType === TimezoneType.LOCATION_LOCAL_TIME) {
         var utcDate = convertDateToUTC(date)
-        var tz = TZ.TZData[timezoneId]
-        var offset = isDST(tz.DSTData, timezoneType, timezoneId) ? tz.DSTOffset : tz.Offset
-        offset = parseInt(offset) * 1000
-        return new Date(utcDate.getTime() + offset)
+        var _offset = offset
+        if (_offset == undefined) {
+            var tz = TZ.TZData[timezoneId]
+            _offset = isDST(tz.DSTData, timezoneType, timezoneId) ? tz.DSTOffset : tz.Offset
+        }
+        _offset = parseInt(_offset) * 1000
+        return new Date(utcDate.getTime() + _offset)
     }
     return date
 }
