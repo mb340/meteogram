@@ -889,6 +889,7 @@ Canvas {
         xIndexScale.setDomain(0, meteogramModel.count - 1)
         timeScale.setDomain(startTime.getTime(), endTime.getTime())
         windSpeedArea.setModel(meteogramModel.count)
+        horizontalLines1.setModel(temperatureYGridCount)
         hourGrid.setModel(startTime)
     }
 

@@ -97,7 +97,7 @@ Item {
     }
     ListView {
         id: horizontalLines1
-        model: temperatureYGridCount
+        model: horizontalLinesModel.model
         anchors.left: graphArea.left
         anchors.top: graphArea.top
 //         anchors.bottom: graphArea.bottom + labelHeight
@@ -106,6 +106,19 @@ Item {
         interactive: false
 
         property double itemHeight: graphArea.height / (temperatureYGridCount)
+
+
+        ManagedListModel {
+            id: horizontalLinesModel
+        }
+
+        function setModel(count) {
+            horizontalLinesModel.beginList()
+            for (var i = 0; i < count; i++) {
+                horizontalLinesModel.addItem({ index: i })
+            }
+            horizontalLinesModel.endList()
+        }
 
         delegate: Item {
             height: horizontalLines1.itemHeight
