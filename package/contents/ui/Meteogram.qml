@@ -171,7 +171,7 @@ Item {
     }
     ListView {
         id: hourGrid
-        model: root.nHours
+        model: hourGridModel.model
         property double hourItemWidth: nHours < 2 ? 0 : imageWidth / (nHours - 1)
         anchors.fill: graphArea
         interactive: false
@@ -179,23 +179,33 @@ Item {
 
         property var startTime: new Date(0)
 
+        ManagedListModel {
+            id: hourGridModel
+        }
+
         function setModel(startTime) {
             hourGrid.startTime = startTime
+
+            hourGridModel.beginList()
+            for (var i = 0; i < root.nHours; i++) {
+                hourGridModel.addItem({ index: i })
+            }
+            hourGridModel.endList()
         }
 
         delegate: Item {
             height: labelHeight
             width: hourGrid.hourItemWidth
 
-            property int onHourMs: 3600000
-            property var date: new Date(Number(hourGrid.startTime) + (index * onHourMs))
+            property int onHourMs: 60 * 60 * 1000
+            property var date: new Date(Number(hourGrid.startTime) + (model.index * onHourMs))
 
             property int hourFrom: date.getHours()
             property string hourFromStr: UnitUtils.getHourText(hourFrom, twelveHourClockEnabled)
             property string hourFromEnding: twelveHourClockEnabled ? UnitUtils.getAmOrPm(hourFrom) : '00'
             property bool dayBegins: hourFrom === 0
             property bool hourVisible: hourFrom % 2 === 0
-            property bool textVisible: hourVisible && index < nHours - 1
+            property bool textVisible: hourVisible && model.index < root.nHours - 1
 
             Rectangle {
                 id: verticalLine
