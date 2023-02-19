@@ -893,8 +893,8 @@ Canvas {
     }
 
     function fullRedraw() {
-        buildMetogramData()
         processMeteogramData()
+        buildMetogramData()
         buildCurves()
         initialized = true
         requestPaint()
