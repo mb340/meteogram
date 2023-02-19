@@ -265,7 +265,16 @@ Item {
                 anchors.leftMargin: parent.width / 2
                 font.pixelSize: 11 * units.devicePixelRatio
                 font.pointSize: -1
-                visible: dayBegins && date.getHours() === 0
+                visible: date.getHours() === 0 && (itemEndX < hourGrid.width)
+
+                property double itemEndX: dayTest.parent.x + dayTest.x + dayLabelMetrics.width
+            }
+
+            TextMetrics {
+                id: dayLabelMetrics
+                font.family: dayTest.font.family
+                font.pixelSize: dayTest.font.pixelSize
+                text: dayTest.text
             }
         }
     }
