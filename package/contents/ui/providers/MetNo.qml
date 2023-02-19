@@ -127,16 +127,14 @@ Item {
     function buildMetogramData(readingsArray) {
         meteogramModel.beginList()
         var dateNow = UnitUtils.dateNow(timezoneType)
+        var intervalStart = UnitUtils.floorDate(dateNow)
         var precipitation_unit = readingsArray.properties.meta.units["precipitation_amount"]
         var i = 0
         var timeseries = readingsArray.properties.timeseries
-        while (i < timeseries.length - 2 && timeseries[i].data.next_1_hours) {
+        while (i < timeseries.length && timeseries[i].data.next_1_hours) {
             var obj = timeseries[i]
             var dateFrom = UnitUtils.convertDate(obj.time, timezoneType)
-            var nextObj = timeseries[i + 1]
-            var dateTo = UnitUtils.convertDate(nextObj.time, timezoneType)
-            if (dateTo < dateNow) {
-                dateFrom = dateTo
+            if (dateFrom < intervalStart) {
                 i++
                 continue
             }
