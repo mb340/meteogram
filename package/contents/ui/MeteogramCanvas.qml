@@ -366,7 +366,7 @@ Canvas {
             var item = meteogramModel.get(i)
             var iconName = item.iconName
             var hourFrom = item.from.getHours()
-            var textVisible = (hourFrom % 2 === 1) && iconName != ''
+            var textVisible = meteogramModel.hourInterval > 1 || ((hourFrom % 2 === 1) && iconName != '')
             if (!textVisible) {
                 continue
             }

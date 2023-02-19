@@ -335,7 +335,10 @@ Item {
 
                 function condition(index) {
                     var model = meteogramModel.get(index)
-                    if ((index % 2) == 1) {
+                    if (!model || !model.windSpeedMps) {
+                        return false
+                    }
+                    if (meteogramModel.hourInterval === 1 && (index % 2) == 1) {
                         return false
                     }
                     return isFinite(model.windSpeedMps)
