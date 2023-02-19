@@ -33,7 +33,7 @@ Item {
     property int labelHeight: textMetrics.height
 
     property int cloudarea: 0
-    property int windarea: 28
+    property int windarea: 28 * units.devicePixelRatio
 
     readonly property int minTemperatureYGridCount: 20
 
@@ -226,61 +226,6 @@ Item {
                 font.pointSize: -1
                 visible: textVisible
             }
-            function windFrom(rotation) {
-                rotation = (Math.round( rotation / 22.5 ) * 22.5)
-                rotation = (rotation >= 180) ? rotation - 180 : rotation + 180
-                return rotation
-            }
-            function windStrength(windspeed,themecolor) {
-                var img = "images/"
-                img += (themecolor) ? "light" : "dark"
-                img += Math.min(5,Math.trunc(windspeed / 5) + 1)
-                return img
-            }
-            Item {
-                id: windspeedAnchor
-                width: parent.width
-                height: 32
-                anchors.top: hourText.bottom
-                anchors.left: hourText.left
-
-                ToolTip{
-                    id: windspeedhover
-                    text: (index % 2 == 1) ? UnitUtils.getWindSpeedText(windSpeedMps, windSpeedType) : ""
-                    padding: 4
-                    x: windspeedAnchor.width + 6
-                    y: (windspeedAnchor.height / 2)
-                    opacity: 1
-                    visible: false
-                }
-
-                Image {
-                    id: wind
-                    source: windStrength(windSpeedMps,textColorLight)
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    rotation: windFrom(windDirection)
-                    anchors.top: windspeedAnchor.top
-                    width: 16
-                    height: 16
-                    fillMode: Image.PreserveAspectFit
-                    visible: (index % 2 == 1) && (index < nHours - 1)
-                    anchors.leftMargin: -8
-                    anchors.left: parent.left
-                    //                    visible: ((windDirection > 0) || (windSpeedMps > 0)) && (! textVisible) && (index > 0) && (index < hourGridModel.count-1)
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-
-                    onEntered: {
-                        windspeedhover.visible = (windspeedhover.text.length > 0)
-                    }
-
-                    onExited: {
-                        windspeedhover.visible = false
-                    }
-                }
-            }
             PlasmaComponents.Label {
                 id: dayTest
                 text: Qt.locale().dayName(dateFrom.getDay(), Locale.LongFormat)
@@ -292,6 +237,100 @@ Item {
                 font.pixelSize: 11 * units.devicePixelRatio
                 font.pointSize: -1
                 visible: dayBegins && canShowDay
+
+    Item {
+        id: windSpeedArea
+        width: imageWidth
+        height: windarea
+        anchors.top: hourGrid.bottom
+        anchors.left: hourGrid.left
+        anchors.topMargin: labelHeight
+
+        property int count: 0
+
+        function setModel(count) {
+            windSpeedArea.count = count
+        }
+
+        Repeater {
+            id: windSpeedRepeater
+            model: windSpeedArea.count
+
+            property var rectWidth: 2 * (meteogramCanvas.width / nHours)
+
+            Component {
+                id: windIconDelegate
+
+                Item {
+                    id: windspeedAnchor
+                    width: windSpeedRepeater.rectWidth
+                    height: labelHeight
+                    x: timeScale.translate(from) - (windSpeedRepeater.rectWidth / 2)
+                    y: 0
+
+                    Image {
+                        id: wind
+                        source: !isNaN(windSpeedMps) ? windStrength(windSpeedMps, textColorLight) : ""
+                        rotation: windFrom(windDirection)
+                        fillMode: Image.PreserveAspectFit
+
+                        width: Math.min(16 * units.devicePixelRatio, windSpeedRepeater.rectWidth)
+                        height: width
+                        anchors.centerIn: parent
+                    }
+
+                    ToolTip{
+                        id: windspeedhover
+                        text: UnitUtils.getWindSpeedText(windSpeedMps, windSpeedType)
+                        padding: 4
+                        x: windspeedAnchor.width + 6
+                        y: (windspeedAnchor.height / 2)
+                        opacity: 1
+                        visible: false
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+
+                        onEntered: {
+                            windspeedhover.visible = (windspeedhover.text.length > 0)
+                        }
+
+                        onExited: {
+                            windspeedhover.visible = false
+                        }
+                    }
+
+                    function windFrom(rotation) {
+                        rotation = (Math.round( rotation / 22.5 ) * 22.5)
+                        rotation = (rotation >= 180) ? rotation - 180 : rotation + 180
+                        return rotation
+                    }
+                    function windStrength(windspeed,themecolor) {
+                        var img = "images/"
+                        img += (themecolor) ? "light" : "dark"
+                        img += Math.min(5,Math.trunc(windspeed / 5) + 1)
+                        return img
+                    }
+                }
+            }
+
+            delegate: Loader {
+                sourceComponent: condition(index) ? windIconDelegate : null
+
+                property var item: meteogramModel.get(index)
+                property var windSpeedMps: item ? parseFloat(item.windSpeedMps) : NaN
+                property var windDirection: item ? parseFloat(item.windDirection) : NaN
+                property var from: item ? item.from : new Date(0)
+
+                function condition(index) {
+                    var model = meteogramModel.get(index)
+                    if ((index % 2) == 1) {
+                        return false
+                    }
+                    return isFinite(model.windSpeedMps)
+                }
             }
         }
     }
