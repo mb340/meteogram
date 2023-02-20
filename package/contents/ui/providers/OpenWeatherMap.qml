@@ -158,8 +158,9 @@ Item {
             query: 'pressure/@value/number()'
         }
         XmlRole {
-            name: 'precipitationAvg'
-            query: 'precipitation/@value/number()'
+            name: 'precipitation'
+            query: 'precipitation/@probability/number()'
+        }
         }
     }
 
@@ -401,16 +402,12 @@ Item {
                 continue
             }
 
-            var prec = obj.precipitationAvg
-            if (typeof(prec) === "string"  && prec === "") {
-              prec = 0
-            }
             meteogramModel.addItem({
                 from: dateFrom,
                 temperature: parseInt(obj.temperature),
-                precipitationAvg: prec,
-                precipitationLabel: "mm",
-                precipitationMax: prec,
+                precipitationAvg: parseFloat(obj.precipitation),
+                precipitationMax: parseFloat(obj.precipitation),
+                precipitationLabel: "%",
                 windDirection: obj.windDirection,
                 windSpeedMps: parseFloat(obj.windSpeedMps),
                 pressureHpa: parseFloat(obj.pressureHpa),
