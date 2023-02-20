@@ -351,6 +351,35 @@ Item {
 
     function updateNextDaysModel() {
 
+        dailyWeatherModels.beginList()
+
+        for (var i = 0; i < xmlModelLongTerm.count; i++) {
+            let item = xmlModelLongTerm.get(i)
+            let dailyModel = dailyWeatherModels.createItem()
+
+            let dateFrom = Date.fromLocaleString(xmlLocale, item.date, 'yyyy-MM-dd')
+            dailyModel.date = dateFrom
+
+            let night = dailyModel.models[0]
+            let morn = dailyModel.models[1]
+            let day = dailyModel.models[2]
+            let eve = dailyModel.models[3]
+
+            night.temperature = item.temperatureNight
+            morn.temperature = item.temperatureMorning
+            day.temperature = item.temperatureDay
+            eve.temperature = item.temperatureEvening
+
+            night.iconName = item.iconName
+            morn.iconName = item.iconName
+            day.iconName = item.iconName
+            eve.iconName = item.iconName
+
+            dailyWeatherModels.addItem(dailyModel)
+        }
+
+        dailyWeatherModels.endList()
+        main.nextDaysCount = dailyWeatherModels.count
     }
 
     function updateMeteogramModel() {
