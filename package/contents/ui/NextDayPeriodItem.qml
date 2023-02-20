@@ -24,9 +24,9 @@ import "../code/icons.js" as IconTools
 import "../code/unit-utils.js" as UnitUtils
 
 RowLayout {
-    property string temperature
-    property string temperature_min
-    property string temperature_max
+    property double temperature
+    property double temperature_min: NaN
+    property double temperature_max: NaN
     property string iconName
     property bool hidden
     property bool past

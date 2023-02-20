@@ -133,8 +133,8 @@ Item {
         id: currentWeatherModel
     }
 
-    ManagedListModel {
-        id: nextDaysModel
+    DailyWeatherModel {
+        id: dailyWeatherModels
     }
 
     ManagedListModel {

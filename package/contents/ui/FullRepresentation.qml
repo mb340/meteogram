@@ -233,7 +233,7 @@ Item {
         height: nextDaysHeight
         clip: true
 
-        model: nextDaysModel.model
+        model: dailyWeatherModels.model
         orientation: Qt.Horizontal
         spacing: nextDayItemSpacing
         interactive: false
