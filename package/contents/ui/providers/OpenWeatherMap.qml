@@ -161,6 +161,13 @@ Item {
             name: 'precipitation'
             query: 'precipitation/@probability/number()'
         }
+        XmlRole {
+            name: 'humidity'
+            query: 'humidity/@value/number()'
+        }
+        XmlRole {
+            name: 'clouds'
+            query: 'clouds/@all/number()'
         }
     }
 
@@ -412,8 +419,8 @@ Item {
                 windSpeedMps: parseFloat(obj.windSpeedMps),
                 pressureHpa: parseFloat(obj.pressureHpa),
                 iconName: obj.iconName,
-                humidity: NaN,
-                cloudArea: NaN
+                humidity: parseFloat(obj.humidity),
+                cloudArea: parseFloat(obj.clouds)
             })
 
             if (firstFromMs === null) {
