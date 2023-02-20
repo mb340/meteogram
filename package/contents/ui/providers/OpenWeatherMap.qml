@@ -541,7 +541,8 @@ Item {
 
         var firstFromMs = null
         var limitMsDifference = 1000 * 60 * 60 * 60 // 2.50 days
-        var now = new Date()
+        var dateNow = UnitUtils.convertDate(new Date(), timezoneType, undefined, tzOffset)
+        var intervalStart = UnitUtils.floorDate(dateNow)
 
         for (var i = 0; i < xmlModelHourByHour.count; i++) {
             var obj = xmlModelHourByHour.get(i)
@@ -549,7 +550,7 @@ Item {
             var dateTo = parseDate(obj.to)
 //             dbgprint('meteo fill: i=' + i + ', from=' + obj.from + ', to=' + obj.to)
 //             dbgprint('parsed: from=' + dateFrom + ', to=' + dateTo)
-            if (now > dateTo) {
+            if (intervalStart > dateTo) {
                 continue
             }
 
