@@ -177,7 +177,120 @@ Item {
     }
 
     function updateNextDaysModel(readingsArray) {
+        var readingsLength = (readingsArray.properties.timeseries.length) - 1
 
+        var prevHour = -1;
+        var nearestHour = [NaN, NaN, NaN, NaN]
+
+        function checkIsNearestHour(obj_num, target_hour, hour) {
+            if (isNaN(nearestHour[obj_num])) {
+                nearestHour[obj_num] = hour
+                return true
+            }
+
+            if (Math.abs(target_hour - hour) < Math.abs(nearestHour[obj_num] - hour)) {
+                nearestHour[obj_num] = hour
+                return true
+            }
+            return false
+        }
+
+        dailyWeatherModels.beginList()
+        let dailyModel = dailyWeatherModels.createItem()
+
+        let dailyPeriodIdx = -1
+        let prevPeriodIdx = -1
+        let temperatureMin = NaN
+        let temperatureMax = NaN
+        let temperatureCount = 0
+
+        for (var i = 0; i < readingsLength; i++) {
+            var reading = readingsArray.properties.timeseries[i]
+            var details = reading.data.instant.details
+            var date = UnitUtils.convertDate(new Date(Date.parse(reading.time)), timezoneType)
+
+            // Hour convention [1 - 24]
+            var hour = date.getHours() + 1
+
+            // Check for new day
+            if (prevHour > hour) {
+                dailyWeatherModels.addItem(dailyModel)
+                if (dailyWeatherModels.count >= 8) {
+                    break;
+                }
+
+                dailyModel = dailyWeatherModels.createItem()
+                nearestHour = [NaN, NaN, NaN, NaN]
+            }
+            prevHour = hour
+
+            // Match exact hour.
+            // Take the next closest if exact match isn't available.
+            let isNearestHour = false
+            if  (hour <= 6) {
+                dailyPeriodIdx = 0
+                isNearestHour = checkIsNearestHour(dailyPeriodIdx, 3, hour)
+            } else if (hour <= 12) {
+                dailyPeriodIdx = 1
+                isNearestHour = checkIsNearestHour(dailyPeriodIdx, 9, hour)
+            } else if (hour <= 18) {
+                dailyPeriodIdx = 2
+                isNearestHour = checkIsNearestHour(dailyPeriodIdx, 15, hour)
+            } else if (hour <= 24) {
+                dailyPeriodIdx = 3
+                isNearestHour = checkIsNearestHour(dailyPeriodIdx, 21, hour)
+            }
+
+            if (dailyPeriodIdx != prevPeriodIdx) {
+                temperatureMin = NaN
+                temperatureMax = NaN
+                temperatureCount = 0
+            }
+            prevPeriodIdx = dailyPeriodIdx
+
+            //
+            // Populate daily data model
+            //
+            let iconNumber = ""
+            let precipitation = NaN
+            if (reading.data.next_6_hours) {
+                let summary = reading.data.next_6_hours.summary
+                let details = reading.data.next_6_hours.details
+                iconNumber = geticonNumber(summary.symbol_code)
+                precipitation = parseFloat(details.precipitation_amount)
+            } else if (reading.data.next_1_hours) {
+                let summary = reading.data.next_1_hours.summary
+                let details = reading.data.next_1_hours.details
+                iconNumber = geticonNumber(summary.symbol_code)
+                precipitation = parseFloat(details.precipitation_amount)
+            }
+
+            let temperature = details["air_temperature"]
+            temperatureMin = Math.min(isFinite(temperatureMin) ? temperatureMin : temperature, temperature)
+            temperatureMax = Math.max(isFinite(temperatureMax) ? temperatureMax : temperature, temperature)
+            temperatureCount++
+
+            let item = dailyModel.models[dailyPeriodIdx]
+            if (isNearestHour) {
+                dailyModel.date = date
+                item.temperature = temperature
+                item.iconName = iconNumber
+                item.pressure = parseFloat(details["air_pressure_at_sea_level"])
+                item.cloudiness = parseFloat(details["cloud_area_fraction"])
+                item.humidity = parseFloat(details["relative_humidity"])
+                item.windDirection = parseFloat(details["wind_from_direction"])
+                item.windSpeed = parseFloat(details["wind_speed"])
+                item.precipitation = precipitation
+            }
+
+            if (temperatureCount > 1) {
+                item.temperatureLow = temperatureMin
+                item.temperatureHigh = temperatureMax
+            }
+        }
+
+        dailyWeatherModels.endList()
+        main.nextDaysCount = dailyWeatherModels.count
     }
 
     function calculateOffset(seconds) {
