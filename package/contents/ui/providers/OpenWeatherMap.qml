@@ -76,6 +76,22 @@ Item {
             query: 'temperature/@night/number()'
         }
         XmlRole {
+            name: 'feelsLikeDay'
+            query: 'feels_like/@day/number()'
+        }
+        XmlRole {
+            name: 'feelsLikeEvening'
+            query: 'feels_like/@eve/number()'
+        }
+        XmlRole {
+            name: 'feelsLikeNight'
+            query: 'feels_like/@night/number()'
+        }
+        XmlRole {
+            name: 'feelsLikeMorn'
+            query: 'feels_like/@morn/number()'
+        }
+        XmlRole {
             name: 'iconName'
             query: 'symbol/@number/string()'
         }
@@ -88,8 +104,24 @@ Item {
             query: 'windSpeed/@mps/number()'
         }
         XmlRole {
+            name: 'windGust'
+            query: 'windGust/@gust/number()'
+        }
+        XmlRole {
             name: 'pressureHpa'
             query: 'pressure/@value/number()'
+        }
+        XmlRole {
+            name: 'humidity'
+            query: 'humidity/@value/number()'
+        }
+        XmlRole {
+            name: 'clouds'
+            query: 'clouds/@all/number()'
+        }
+        XmlRole {
+            name: 'precipitation'
+            query: 'precipitation/@probability/number()'
         }
     }
 
