@@ -540,7 +540,7 @@ Item {
         meteogramModel.beginList()
 
         var firstFromMs = null
-        var limitMsDifference = 1000 * 60 * 60 * 60 // 2.50 days
+        var limitMsDifference = 1000 * 60 * 60 * 63 // 2.50 days
         var dateNow = UnitUtils.convertDate(new Date(), timezoneType, undefined, tzOffset)
         var intervalStart = UnitUtils.floorDate(dateNow)
 
