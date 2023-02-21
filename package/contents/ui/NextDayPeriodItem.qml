@@ -24,6 +24,8 @@ import "../code/icons.js" as IconTools
 import "../code/unit-utils.js" as UnitUtils
 
 RowLayout {
+    id: root
+
     property double temperature
     property double temperature_min: NaN
     property double temperature_max: NaN
@@ -75,97 +77,26 @@ RowLayout {
         width: parent.width / 3
         height: parent.height
 
-        Component {
-            id: weatherIconLabel
-
-            PlasmaComponents.Label {
-                id: temperatureIcon
-
-                font.pointSize: -1
-                font.pixelSize: pixelFontSize > 0 ? pixelFontSize : undefined
-
-                font.family: 'weathericons'
-                text: hidden ? '' : IconTools.getIconCode(iconName, currentProvider.providerId, partOfDay)
-            }
-        }
-
-        Component {
-            id: weatherIconImage
-
-            Item {
-
-                Image {
-                    id: weatherIcon
-
-                    property var imgSrc: (iconSetType === 1 ?
-                                            IconTools.getMetNoIconImage(iconName, currentProvider.providerId, partOfDay) :
-                                            (iconSetType === 2 ?
-                                                IconTools.getBasmiliusIconImage(iconName, currentProvider.providerId, partOfDay) :
-                                                null))
-
-
-                    source: imgSrc ? imgSrc : "images/placeholder.svg"
-                    property double dim: iconSetType === 1 ? (Math.min(iconParent.width, iconParent.height) * 1.00) :
-                                            (iconSetType === 2 ? (Math.min(iconParent.width, iconParent.height) * 1.25) : 1.00)
-
-                    width: dim
-                    height: dim
-                    anchors.centerIn: parent
-                }
-
-                DropShadow {
-                    anchors.fill: weatherIcon
-                    horizontalOffset: 0
-                    verticalOffset: 0
-                    radius: 8.0
-                    samples: 17
-                    color: !textColorLight ? "#80000000" : "#80ffffff"
-                    source: weatherIcon
-                    visible: weatherIcon.visible
-                }
-            }
-        }
-
-        Component {
-            id: weatherIconItem
-
-            Item {
-                width: 1.1 * Math.min(iconParent.width, iconParent.height)
-                height: 1.1 * Math.min(iconParent.width, iconParent.height)
-
-                PlasmaCore.IconItem {
-                    id: weatherIcon
-                    source: IconTools.getBreezeIcon(iconName, currentProvider.providerId, partOfDay)
-                    anchors.fill: parent
-                }
-
-                DropShadow {
-                    anchors.fill: weatherIcon
-                    horizontalOffset: 0
-                    verticalOffset: 0
-                    radius: 8.0
-                    samples: 17
-                    color: !textColorLight ? "#80000000" : "#80ffffff"
-                    source: weatherIcon
-                    visible: weatherIcon.visible
-                }
-            }
-        }
-
-        Loader {
-            asynchronous: true
+        WeatherIcon {
             anchors.centerIn: parent
 
-            sourceComponent: {
-                if (iconSetType === 0) {
-                    return weatherIconLabel
-                } else if (iconSetType === 1 || iconSetType === 2) {
-                    return weatherIconImage
+            iconSetType: root.iconSetType
+            iconName: root.iconName
+            partOfDay: root.partOfDay
+            iconDim: getDim()
+
+            centerInParent: true
+
+            function getDim() {
+                if (iconSetType === 1) {
+                    return Math.min(iconParent.width, iconParent.height) * 1.00
+                } else if (iconSetType === 2) {
+                    return Math.min(iconParent.width, iconParent.height) * 1.25
                 } else if (iconSetType === 3) {
-                    return weatherIconItem
+                    return 1.1 * Math.min(iconParent.width, iconParent.height)
                 }
+                return iconParent.width
             }
         }
     }
-    
 }
