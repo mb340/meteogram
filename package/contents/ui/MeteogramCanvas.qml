@@ -409,37 +409,32 @@ Canvas {
                 context.fillStyle = theme.textColor
                 context.fillText(str, x0, y0)
             } else if (iconSetType === 1 || iconSetType === 2) {
-                var imgPath = iconSetType === 1 ? IconTools.getMetNoIconImage(iconName, currentProvider.providerId, timePeriod) :
-                                (iconSetType === 2 ? IconTools.getBasmiliusIconImage(iconName, currentProvider.providerId, timePeriod) :
-                                    null)
+                let dim = (iconSetType === 1) ? (1.75 * rectWidth) :
+                            ((iconSetType === 2) ? (2.5 * rectWidth) : 1.0)
 
-                if (imgPath != null) {
-                    let dim = (iconSetType === 1) ? (1.75 * rectWidth) :
-                                ((iconSetType === 2) ? (2.5 * rectWidth) : 1.0)
+                x0 = x - (dim / 2.0) + (rectWidth)
+                y0 -= dim
 
-                    x0 = x - (dim / 2.0) + (rectWidth)
-                    y0 -= dim
-
-                    iconOverlay.addItem({
-                        iconType: "Image",
-                        iconSource: imgPath,
-                        iconX: x0,
-                        iconY: y0,
-                        iconDim: dim
-                    })
-                }
+                iconOverlay.addItem({
+                    iconSetType: iconSetType,
+                    iconName: iconName,
+                    iconX: x0,
+                    iconY: y0,
+                    iconDim: dim,
+                    partOfDay: timePeriod
+                })
             } else if (iconSetType === 3) {
-                var iconName = IconTools.getBreezeIcon(iconName, currentProvider.providerId, timePeriod)
                 let padding = (0.05 * rectWidth)   // padding determined by hand
                 x0 = x + padding
                 y0 -= 1.5 * rectWidth
 
                 iconOverlay.addItem({
-                    iconType: "Icon",
-                    iconSource: iconName,
+                    iconSetType: iconSetType,
+                    iconName: iconName,
                     iconX: x0,
                     iconY: y0,
-                    iconDim: 2 * rectWidth
+                    iconDim: 2 * rectWidth,
+                    partOfDay: timePeriod
                 })
             }
         }
