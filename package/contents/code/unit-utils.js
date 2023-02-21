@@ -298,7 +298,7 @@ function precipitationFormat(precFloat, precipitationLabel) {
         var result = Math.round(precFloat * 10) / 10
         return result.toFixed(1)
     }
-    return ''
+    return '0'
 }
 
 function localisePrecipitationUnit(unitText) {
