@@ -363,6 +363,7 @@ Item {
 
     function updateNextDaysModel() {
 
+        dailyWeatherModels.precipitationUnit = "mm"
         dailyWeatherModels.beginList()
 
         for (var i = 0; i < xmlModelLongTerm.count; i++) {
@@ -416,9 +417,9 @@ Item {
             meteogramModel.addItem({
                 from: dateFrom,
                 temperature: parseInt(obj.temperature),
-                precipitationAvg: parseFloat(obj.precipitation),
-                precipitationMax: parseFloat(obj.precipitation),
-                precipitationLabel: "%",
+                precipitationAvg: parseFloat(obj.precipitationValue),
+                precipitationMax: parseFloat(obj.precipitationValue),
+                precipitationLabel: "mm",
                 windDirection: obj.windDirection,
                 windSpeedMps: parseFloat(obj.windSpeedMps),
                 pressureHpa: parseFloat(obj.pressureHpa),
@@ -439,6 +440,7 @@ Item {
 
         meteogramModel.endList()
         meteogramModel.hourInterval = 3
+        meteogramModel.precipitationUnit = "mm"
         dbgprint('meteogramModel.count = ' + meteogramModel.count)
 
         main.meteogramModelChanged = !main.meteogramModelChanged
