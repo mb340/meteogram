@@ -291,7 +291,7 @@ function isSunRisen(t) {
  * PRECIPITATION
  */
 function precipitationFormat(precFloat, precipitationLabel) {
-    if (precipitationLabel === i18n('%')) {
+    if (precipitationLabel === '%') {
         return (precFloat * 100).toFixed(0)
     }
     if (precFloat >= precipitationMinVisible) {
