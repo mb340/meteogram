@@ -57,6 +57,33 @@ ManagedListModel {
         return {
             foobar: "foobar",
             date: NaN,
+
+            iconNam: "",
+
+            temperatureMin: NaN,
+            temperatureMax: NaN,
+
+            temperatureNight: NaN,
+            temperatureMorn: NaN,
+            temperatureDay: NaN,
+            temperatureEve: NaN,
+
+            feelsLikeNight: NaN,
+            feelsLikeMorn: NaN,
+            feelsLikeDay: NaN,
+            feelsLikeEve: NaN,
+
+            windDirection: NaN,
+            windSpeed: NaN,
+            windGust: NaN,
+
+            precipitationProb: NaN,
+            precipitationAmount: NaN,
+
+            pressure: NaN,
+            humidity: NaN,
+            clouds: NaN,
+
             sunrise: NaN,
             sunset: NaN,
             moonrise: NaN,
