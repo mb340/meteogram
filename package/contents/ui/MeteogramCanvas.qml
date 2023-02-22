@@ -188,9 +188,19 @@ Canvas {
             var x = timeScale.translate(item.from) + (0.5 * units.devicePixelRatio)
             var prec = Math.min(precipitationMaxGraphY, item.precipitationAvg)
             var y = precipitationScale.translate(prec)
+
+            let barWidth = rectWidth
+            if (i < meteogramModel.count - 1) {
+                var nexItem = meteogramModel.get(i + 1)
+                var x1 = timeScale.translate(nexItem.from) + (0.5 * units.devicePixelRatio)
+                barWidth = x1 - x
+            } else {
+                barWidth = width - x
+            }
+
             context.fillStyle = palette.rainColor()
             var h = (precipitationScale.range[0]) - y
-            var w = rectWidth - (0.5 * units.devicePixelRatio)
+            var w = barWidth - (0.5 * units.devicePixelRatio)
             context.fillRect(x, y, w, h)
 
             var fontSize = Math.round(rectWidth / 2) + 1
