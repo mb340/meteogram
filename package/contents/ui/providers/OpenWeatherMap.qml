@@ -158,8 +158,12 @@ Item {
             query: 'pressure/@value/number()'
         }
         XmlRole {
-            name: 'precipitation'
+            name: 'precipitationProb'
             query: 'precipitation/@probability/number()'
+        }
+        XmlRole {
+            name: 'precipitationValue'
+            query: 'precipitation/@value/number()'
         }
         XmlRole {
             name: 'humidity'
