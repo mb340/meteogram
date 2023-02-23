@@ -314,6 +314,21 @@ function localisePrecipitationUnit(unitText) {
     }
 }
 
+function convertValue(value, varName) {
+    let temperatureType = main.temperatureType
+    let pressureType = main.pressureType
+    let windSpeedType = main.windSpeedType
+
+    if (varName === "temperature") {
+        return convertTemperature(value, temperatureType)
+    } else if (varName === "windSpeed" || varName === "windGust") {
+        return getWindSpeedNumber(value, windSpeedType)
+    } else if (varName === "pressure") {
+        return convertPressure(value, pressureType)
+    }
+    return value
+}
+
 function formatValue(value, varName, args = { partOfDay: 0}) {
     if (value === null || value === NaN) {
         return "-"
