@@ -24,7 +24,6 @@ ManagedListModel {
             temperature: NaN,
             precipitationProb: NaN,
             precipitationAmount: NaN,
-            precipitationLabel: "",
             windDirection: NaN,
             windSpeed: NaN,
             pressure: NaN,
