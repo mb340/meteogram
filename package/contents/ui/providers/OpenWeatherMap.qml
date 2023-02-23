@@ -379,7 +379,6 @@ Item {
 
     function updateNextDaysModel() {
 
-        dailyWeatherModels.precipitationUnit = "mm"
         dailyWeatherModels.beginList()
 
         for (var i = 0; i < xmlModelLongTerm.count; i++) {
@@ -480,7 +479,6 @@ Item {
 
         meteogramModel.endList()
         meteogramModel.hourInterval = 3
-        meteogramModel.precipitationUnit = "mm"
         dbgprint('meteogramModel.count = ' + meteogramModel.count)
 
         main.meteogramModelChanged = !main.meteogramModelChanged
