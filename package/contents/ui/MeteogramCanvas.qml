@@ -269,8 +269,7 @@ Canvas {
             prevPrecStr = precStr
 
             if (showPrecUnit) {
-                var precUnitStr = UnitUtils.localisePrecipitationUnit(
-                                    item.precipitationLabel)
+                var precUnitStr = UnitUtils.localisePrecipitationUnit("mm")
                 var metrics = context.measureText(precUnitStr)
                 var x0 = x - (metrics.width / 2) + (rectWidth / 2)
 
@@ -887,16 +886,8 @@ Canvas {
         var dt = endTime.getTime() - startTime.getTime()
         root.nHours = Math.floor(dt / ONE_HOUR_MS) + 1
 
-        if (meteogramModel.count > 0) {
-            var model = meteogramModel.get(0)
-            if (model.precipitationLabel === "%") {
-                precipitationScale.setDomain(0, 8.0)
-                precipitationMaxGraphY = 100
-            } else if (model.precipitationLabel === "mm") {
-                precipitationScale.setDomain(0, 50)
-                precipitationMaxGraphY = 15
-            }
-        }
+        precipitationScale.setDomain(0, 50)
+        precipitationMaxGraphY = 15
 
         xIndexScale.setDomain(0, meteogramModel.count - 1)
         timeScale.setDomain(startTime.getTime(), endTime.getTime())
