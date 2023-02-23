@@ -151,7 +151,6 @@ Item {
             item.from = dateFrom
             item.temperature = airtmp
             item.precipitationAmount = prec
-            item.precipitationLabel = precipitation_unit
             item.windDirection = parseFloat(wd)
             item.windSpeed = parseFloat(ws)
             item.pressure = parseFloat(ap)
