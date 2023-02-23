@@ -137,7 +137,7 @@ Item {
         id: dailyWeatherModels
     }
 
-    ManagedListModel {
+    MeteogramModel {
         id: meteogramModel
     }
 
