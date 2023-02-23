@@ -52,8 +52,8 @@ Item {
 
     property alias temperatureScale: meteogramCanvas.temperatureScale
     property alias temperatureAxisScale: meteogramCanvas.temperatureAxisScale
-    property alias pressureScale: meteogramCanvas.pressureScale
-    property alias pressureAxisScale: meteogramCanvas.pressureAxisScale
+    property alias rightAxisScale: meteogramCanvas.rightAxisScale
+    property alias rightGridScale: meteogramCanvas.rightGridScale
     property alias precipitationScale: meteogramCanvas.precipitationScale
     property alias cloudAreaScale: meteogramCanvas.cloudAreaScale
     property alias humidityScale: meteogramCanvas.humidityScale
@@ -144,7 +144,7 @@ Item {
                 font.pointSize: -1
             }
             PlasmaComponents.Label {
-                text: UnitUtils.formatPressureStr(pressureAxisScale.invert(index), pressureDecimals)
+                text: UnitUtils.formatPressureStr(rightGridScale.invert(index), pressureDecimals)
                 height: labelHeight
                 width: labelWidth
                 anchors.top: gridLine.top

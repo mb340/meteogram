@@ -39,10 +39,12 @@ Canvas {
 
     property int nHours: 0
 
+    property var y2VarName: "pressure"
+
     property alias temperatureScale: temperatureScale
     property alias temperatureAxisScale: temperatureAxisScale
-    property alias pressureScale: pressureScale
-    property alias pressureAxisScale: pressureAxisScale
+    property alias rightAxisScale: rightAxisScale
+    property alias rightGridScale: rightGridScale
     property alias precipitationScale: precipitationScale
     property alias cloudAreaScale: cloudAreaScale
     property alias humidityScale: humidityScale
@@ -60,12 +62,12 @@ Canvas {
     }
 
     LinearScale {
-        id: pressureScale
+        id: rightAxisScale
         range: [height, 0]
     }
 
     LinearScale {
-        id: pressureAxisScale
+        id: rightGridScale
         range: [1, 0]
     }
 
@@ -98,7 +100,7 @@ Canvas {
     }
 
     Path {
-        id: pressurePath
+        id: y2Path
         startX: 0
         pathElements: []
     }
@@ -527,7 +529,7 @@ Canvas {
             drawPath(context, humidityPath, palette.humidityColor(), 1 * units.devicePixelRatio)
         }
         if (plasmoid.configuration.renderPressure) {
-            drawPath(context, pressurePath, palette.pressureColor(), 1 * units.devicePixelRatio)
+            drawPath(context, y2Path, palette.pressureColor(), 1 * units.devicePixelRatio)
         }
         if (plasmoid.configuration.renderTemperature) {
             drawWarmTemp(context, temperaturePath, palette.temperatureWarmColor(), 2 * units.devicePixelRatio)
@@ -551,7 +553,7 @@ Canvas {
 
     function buildCurves() {
         var newPathElements = temperaturePath.pathElements
-        var newPressureElements = pressurePath.pathElements
+        var newY2Elements = y2Path.pathElements
         var newCloudElements = cloudAreaPath.pathElements
         var newCloudElements2 = []
         var newHumidityElements = humidityPath.pathElements
@@ -570,7 +572,7 @@ Canvas {
 
         if (!reuse) {
             newPathElements = []
-            newPressureElements = []
+            newY2Elements = []
             newCloudElements = []
             newCloudElements2 = []
             newHumidityElements = []
@@ -582,12 +584,14 @@ Canvas {
             var t = dataObj.from
             var x = timeScale.translate(t)
 
+            let y2Value = dataObj[y2VarName]
+
             var temperatureY = temperatureScale.translate(UnitUtils.convertTemperature(dataObj.temperature, temperatureType))
-            var pressureY = pressureScale.translate(UnitUtils.convertPressure(dataObj.pressure, pressureType))
+            var y2 = rightAxisScale.translate(UnitUtils.convertValue(y2Value, y2VarName))
             var humidityY = humidityScale.translate(dataObj.humidity)
             if (i === 0) {
                 temperaturePath.startY = temperatureY
-                pressurePath.startY = pressureY
+                y2Path.startY = y2
                 humidityPath.startY = isFinite(humidityY) ? humidityY : 0
             }
 
@@ -601,12 +605,12 @@ Canvas {
             }
 
             if (!reuse) {
-                newPressureElements.push(Qt.createQmlObject('import QtQuick 2.0; '+ pathType +
-                                         '{ x: ' + x + '; y: ' + pressureY + ' }',
-                                         graphArea, "dynamicPressure" + i))
+                newY2Elements.push(Qt.createQmlObject('import QtQuick 2.0; '+ pathType +
+                                         '{ x: ' + x + '; y: ' + y2 + ' }',
+                                         graphArea, "dynamicY2" + i))
             } else {
-                newPressureElements[i].x = x
-                newPressureElements[i].y = pressureY
+                newY2Elements[i].x = x
+                newY2Elements[i].y = y2
             }
 
             if (isFinite(dataObj.cloudArea)) {
@@ -659,8 +663,8 @@ Canvas {
             if (i < newPathElements.length) {
                 newPathElements[i].x = NaN
                 newPathElements[i].y = NaN
-                newPressureElements[i].x = NaN
-                newPressureElements[i].y = NaN
+                newY2Elements[i].x = NaN
+                newY2Elements[i].y = NaN
                 newHumidityElements[i].x = NaN
                 newHumidityElements[i].y = NaN
             }
@@ -672,7 +676,7 @@ Canvas {
 
         if (!reuse) {
             temperaturePath.pathElements = newPathElements
-            pressurePath.pathElements = newPressureElements
+            y2Path.pathElements = newY2Elements
             cloudAreaPath.pathElements = newCloudElements.concat(newCloudElements2.reverse())
             humidityPath.pathElements = newHumidityElements
         }
@@ -687,15 +691,15 @@ Canvas {
 
         var minValue = +Infinity
         var maxValue = -Infinity
-        var minPressure = +Infinity
-        var maxPressure = -Infinity
+        var minY2 = +Infinity
+        var maxY2 = -Infinity
 
         for (var i = 0; i < meteogramModel.count; i++) {
             var obj = meteogramModel.get(i)
             minValue = Math.min(minValue,  obj.temperature)
             maxValue = Math.max(maxValue, obj.temperature)
-            minPressure = Math.min(minPressure,  obj.pressure)
-            maxPressure = Math.max(maxPressure, obj.pressure)
+            minY2 = Math.min(minY2,  obj[y2VarName])
+            maxY2 = Math.max(maxY2, obj[y2VarName])
         }
 
         minValue = UnitUtils.convertTemperature(minValue, temperatureType)
@@ -706,13 +710,15 @@ Canvas {
         temperatureAxisScale.setDomain(minT, maxT)
         temperatureAxisScale.setRange(temperatureYGridCount, 0)
 
-        minPressure = UnitUtils.convertPressure(minPressure, pressureType)
-        maxPressure = UnitUtils.convertPressure(maxPressure, pressureType)
-        let [minP, maxP, pressureDecimals] = processPressureData(minPressure, maxPressure)
 
-        pressureScale.setDomain(minP, maxP)
-        pressureAxisScale.setDomain(minP, maxP)
-        pressureAxisScale.setRange(temperatureYGridCount, 0)
+        minY2 = UnitUtils.convertValue(minY2, y2VarName)
+        maxY2 = UnitUtils.convertValue(maxY2, y2VarName)
+        let [minP, maxP, decimalPlaces] = computeRightAxisRange(minY2, maxY2)
+        pressureDecimals = decimalPlaces
+
+        rightAxisScale.setDomain(minP, maxP)
+        rightGridScale.setDomain(minP, maxP)
+        rightGridScale.setRange(temperatureYGridCount, 0)
     }
 
     /*
@@ -766,15 +772,15 @@ Canvas {
     }
 
     /*
-     * Compute y-axis scale for pressure graph.
-     * Pressure graph shares y-axis grid lines with temperature graph. This imposes a constraint of
-     * which pressure axis steps are bound to temperature axis steps.
+     * Compute y-axis scale.
+     * Right axis shares y-axis grid lines with temperature graph. This imposes a constraint of
+     * which right axis steps are bound to temperature axis steps.
      */
-    function processPressureData(minPressure, maxPressure) {
-        var dP = maxPressure - minPressure
+    function computeRightAxisRange(minValue, maxValue) {
+        var dP = maxValue - minValue
         var [decimalPlace, mult] = getMagnitude(dP)
         // print(" ")
-        // print("maxPressure = " + maxPressure + ", minPressure = " + minPressure)
+        // print("maxValue = " + maxValue + ", minValue = " + minValue)
         // print("dP = " + dP)
         // print("decimalPlace = " + decimalPlace + ", mult = " + mult)
 
@@ -802,8 +808,8 @@ Canvas {
         var stepSize = 1 / mult
         var count = Math.ceil(dP / stepSize)
         var nSteps = Math.ceil(count / temperatureYGridCount) * temperatureYGridCount
-        var pressureRange = stepSize * nSteps
-        // print("pressureRange = " + pressureRange)
+        var valueRange = stepSize * nSteps
+        // print("valueRange = " + valueRange)
         // print("temperatureYGridCount = " + temperatureYGridCount)
 
         while (true) {
@@ -813,34 +819,34 @@ Canvas {
             var pr = s * ns
 
             // print("stepSize = " + stepSize + ", nSteps = " + nSteps +
-            //       ", pressureRange = " + pressureRange + ", dP = " + dP)
+            //       ", valueRange = " + valueRange + ", dP = " + dP)
             if (c <= 0 || ns <= 0) {
                 print("c = " + c + ", ns = " + ns)
                 break
             }
-            if (nSteps <= temperatureYGridCount && pressureRange >= dP) {
+            if (nSteps <= temperatureYGridCount && valueRange >= dP) {
                 break
             }
             stepSize = s
             count = c
             nSteps = ns
-            pressureRange = pr
+            valueRange = pr
         }
 
         // Pressure scale domain
-        var mid = minPressure + ((maxPressure - minPressure) / 2.0)
+        var mid = minValue + ((maxValue - minValue) / 2.0)
         mid = Math.round(mid * mult) / mult
-        minPressure = mid - (pressureRange / 2.0)
-        maxPressure = mid + (pressureRange / 2.0)
+        minValue = mid - (valueRange / 2.0)
+        maxValue = mid + (valueRange / 2.0)
         if (mult != 1) {
-            minPressure = Math.ceil(minPressure * mult) / mult
-            maxPressure = Math.floor(maxPressure * mult) / mult
+            minValue = Math.ceil(minValue * mult) / mult
+            maxValue = Math.floor(maxValue * mult) / mult
         }
 
-        // print("mid = " + mid + ", maxPressure = " + maxPressure + ", minPressure = " + minPressure)
+        // print("mid = " + mid + ", maxValue = " + maxValue + ", minValue = " + minValue)
 
         /*
-         * Round min/max pressure at one higher order of magnitude
+         * Round min/max values at one higher order of magnitude
          */
         var decimalPlace_ = Math.floor(Math.log10(stepSize))
         var mult = decimalPlace_ + 1
@@ -851,25 +857,25 @@ Canvas {
             mult = mult < 1 ? Math.pow(10, mult) : mult
         }
 
-        var ceilMaxP = Math.ceil(maxPressure / mult) * mult
-        var floorMaxP = Math.floor(maxPressure / mult) * mult
+        var ceilMaxP = Math.ceil(maxValue / mult) * mult
+        var floorMaxP = Math.floor(maxValue / mult) * mult
         // print("ceilMaxP = " + ceilMaxP)
         // print("floorMaxP = " + floorMaxP)
-        if (maxPressure - floorMaxP <= ceilMaxP - maxPressure) {
-            var dp = maxPressure - floorMaxP
-            maxPressure = maxPressure - dp
-            minPressure = minPressure - dp
+        if (maxValue - floorMaxP <= ceilMaxP - maxValue) {
+            var dp = maxValue - floorMaxP
+            maxValue = maxValue - dp
+            minValue = minValue - dp
         } else {
-            var dp = ceilMaxP - maxPressure
-            maxPressure = maxPressure + dp
-            minPressure = minPressure + dp
+            var dp = ceilMaxP - maxValue
+            maxValue = maxValue + dp
+            minValue = minValue + dp
         }
         // print("mult = " + mult)
-        // print("maxPressure = " + maxPressure + ", minPressure = " + minPressure)
+        // print("maxValue = " + maxValue + ", minValue = " + minValue)
 
-        pressureDecimals = -1 * Math.min(0, decimalPlace)
+        let decimalPlaces = -1 * Math.min(0, decimalPlace)
 
-        return [minPressure, maxPressure, pressureDecimals]
+        return [minValue, maxValue, decimalPlaces]
     }
 
 
