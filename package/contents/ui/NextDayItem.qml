@@ -99,4 +99,22 @@ Item {
         }
     }
 
+    MouseArea {
+        anchors.fill: parent
+
+        hoverEnabled: true
+
+        onEntered: {
+            if (currentProvider.providerId === "metno") {
+                metnoDailyWeatherInfo.model = dailyWeatherModels.get(index)
+            } else if (currentProvider.providerId === "owm") {
+                owmDailyWeatherInfo.model = dailyWeatherModels.get(index)
+            }
+        }
+
+        onExited: {
+            metnoDailyWeatherInfo.model = null
+            owmDailyWeatherInfo.model = null
+        }
+    }
 }
