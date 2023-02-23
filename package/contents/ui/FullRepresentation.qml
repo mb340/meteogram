@@ -182,6 +182,23 @@ Item {
         visible: model != null
      }
 
+     OwmDailyWeatherInfo {
+        id: owmDailyWeatherInfo
+
+        anchors.top: parent.top
+        anchors.topMargin: headingHeight
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: nextDaysView.top
+        anchors.bottomMargin: 14 /* wind area */
+
+        anchors.leftMargin: units.largeSpacing
+        anchors.rightMargin: units.largeSpacing
+
+        model: null
+        visible: model != null
+     }
+
     Rectangle {
         anchors.top: weatherAlertsView.top
         anchors.left: weatherAlertsView.left
