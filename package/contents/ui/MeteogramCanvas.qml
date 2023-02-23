@@ -245,7 +245,7 @@ Canvas {
 
             var x = timeScale.translate(item.from)
             var y = precipitationScale.translate(Math.min(precipitationMaxGraphY, prec))
-            var precStr = UnitUtils.precipitationFormat(prec, item.precipitationLabel)
+            var precStr = UnitUtils.precipitationFormat(prec)
             const textPad = 2
             var y0 = y - textPad
 

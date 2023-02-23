@@ -290,15 +290,21 @@ function isSunRisen(t) {
 /*
  * PRECIPITATION
  */
-function precipitationFormat(precFloat, precipitationLabel) {
-    if (precipitationLabel === '%') {
-        return (precFloat * 100).toFixed(0)
+function precipitationFormat(precFloat) {
+    // Format precipitation amount
+    if (main.precipitationType === 0) {
+        if (precFloat >= precipitationMinVisible) {
+            var result = Math.round(precFloat * 10) / 10
+            return result.toFixed(1)
+        }
+        return "0.0 "
     }
-    if (precFloat >= precipitationMinVisible) {
-        var result = Math.round(precFloat * 10) / 10
-        return result.toFixed(1)
-    }
-    return '0'
+    return String(precFloat)
+}
+
+function precipitationProbFormat(prob) {
+    // Format probability of precipitation
+    return (prob * 100).toFixed(0)
 }
 
 function localisePrecipitationUnit(unitText) {
@@ -342,11 +348,11 @@ function formatValue(value, varName, args = { partOfDay: 0}) {
     if (varName === "temperature") {
         return getTemperatureNumberExt(value, temperatureType)
     } else if (varName === "precipitationProb") {
-        let precipStr = precipitationFormat(value, "%")
+        let precipStr = precipitationProbFormat(value)
         let precipSuffix = i18n("%")
         return precipStr + " " + precipSuffix
     } else if (varName === "precipitationAmount") {
-        let precipStr = precipitationFormat(value, "mm")
+        let precipStr = precipitationFormat(value)
         let precipSuffix = i18n("mm")
         return precipStr + " " + precipSuffix
     } else if (varName === "windSpeed" || varName === "windGust") {

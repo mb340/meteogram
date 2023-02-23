@@ -252,8 +252,7 @@ Item {
 
         var precipitationStr = ""
         if (hourModel.precipitationAvg >= precipitationMinVisible) {
-            precipitationStr = UnitUtils.precipitationFormat(hourModel.precipitationAvg,
-                                                             hourModel.precipitationLabel) +
+            precipitationStr = UnitUtils.precipitationFormat(hourModel.precipitationAvg) +
                                " " + hourModel.precipitationLabel
             model.addItem({
                 nameStr: i18n("Precipitation:"),
