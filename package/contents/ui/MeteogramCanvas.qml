@@ -889,7 +889,7 @@ Canvas {
                 precipitationScale.setDomain(0, 8.0)
                 precipitationMaxGraphY = 100
             } else if (model.precipitationLabel === "mm") {
-                precipitationScale.setDomain(0, 25)
+                precipitationScale.setDomain(0, 50)
                 precipitationMaxGraphY = 15
             }
         }
