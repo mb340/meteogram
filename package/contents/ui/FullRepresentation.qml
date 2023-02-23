@@ -164,6 +164,22 @@ Item {
         anchors.bottom: nextDaysView.top
         anchors.bottomMargin: 14 /* wind area */
         visible: !isShowAlert
+
+     MetNoDailyWeatherInfo {
+        id: metnoDailyWeatherInfo
+
+        anchors.top: parent.top
+        anchors.topMargin: headingHeight
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: nextDaysView.top
+        anchors.bottomMargin: 14 /* wind area */
+
+        anchors.leftMargin: units.largeSpacing
+        anchors.rightMargin: units.largeSpacing
+
+        model: null
+        visible: model != null
      }
 
     Rectangle {
