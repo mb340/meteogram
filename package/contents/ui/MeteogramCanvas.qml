@@ -584,7 +584,7 @@ Canvas {
             var x = timeScale.translate(t)
 
             var temperatureY = temperatureScale.translate(UnitUtils.convertTemperature(dataObj.temperature, temperatureType))
-            var pressureY = pressureScale.translate(UnitUtils.convertPressure(dataObj.pressureHpa, pressureType))
+            var pressureY = pressureScale.translate(UnitUtils.convertPressure(dataObj.pressure, pressureType))
             var humidityY = humidityScale.translate(dataObj.humidity)
             if (i === 0) {
                 temperaturePath.startY = temperatureY
@@ -695,8 +695,8 @@ Canvas {
             var obj = meteogramModel.get(i)
             minValue = Math.min(minValue,  obj.temperature)
             maxValue = Math.max(maxValue, obj.temperature)
-            minPressure = Math.min(minPressure,  obj.pressureHpa)
-            maxPressure = Math.max(maxPressure, obj.pressureHpa)
+            minPressure = Math.min(minPressure,  obj.pressure)
+            maxPressure = Math.max(maxPressure, obj.pressure)
         }
 
         minValue = UnitUtils.convertTemperature(minValue, temperatureType)

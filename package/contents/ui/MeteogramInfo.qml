@@ -216,14 +216,14 @@ Item {
         })
 
 
-        var pressureStr = UnitUtils.convertPressure(hourModel.pressureHpa, pressureType).toFixed(2)
+        var pressureStr = UnitUtils.convertPressure(hourModel.pressure, pressureType).toFixed(2)
         model.addItem({
             nameStr: i18n("Pressure:"),
             valueStr: pressureStr + " " + UnitUtils.getPressureEnding(pressureType),
             valueColor: palette.pressureColor().toString()
         })
 
-        var windStr = UnitUtils.getWindSpeedText(hourModel.windSpeedMps, windSpeedType)
+        var windStr = UnitUtils.getWindSpeedText(hourModel.windSpeed, windSpeedType)
         model.addItem({
             nameStr: i18n("Wind speed:"),
             valueStr: windStr,
