@@ -146,19 +146,19 @@ Item {
             var prec = obj.data.next_1_hours.details["precipitation_amount"]
             var hm = obj.data.instant.details["relative_humidity"]
             var cld = obj.data.instant.details["cloud_area_fraction"]
-            meteogramModel.addItem({
-                from: dateFrom,
-                temperature: airtmp,
-                precipitationAvg: prec,
-                precipitationMax: prec,
-                precipitationLabel: precipitation_unit,
-                windDirection: parseFloat(wd),
-                windSpeedMps: parseFloat(ws),
-                pressureHpa: parseFloat(ap),
-                iconName: geticonNumber(icon),
-                humidity: parseFloat(hm),
-                cloudArea: parseFloat(cld)
-            })
+
+            var item = meteogramModel.createItem()
+            item.from = dateFrom
+            item.temperature = airtmp
+            item.precipitationAmount = prec
+            item.precipitationLabel = precipitation_unit
+            item.windDirection = parseFloat(wd)
+            item.windSpeed = parseFloat(ws)
+            item.pressure = parseFloat(ap)
+            item.iconName = geticonNumber(icon)
+            item.humidity = parseFloat(hm)
+            item.cloudArea = parseFloat(cld)
+            meteogramModel.addItem(item)
             i++
         }
         meteogramModel.endList()
