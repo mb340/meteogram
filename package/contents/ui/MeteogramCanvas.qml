@@ -701,11 +701,19 @@ Canvas {
 
         minValue = UnitUtils.convertTemperature(minValue, temperatureType)
         maxValue = UnitUtils.convertTemperature(maxValue, temperatureType)
-        processTemperatureData(minValue, maxValue)
+        let [minT, maxT] = processTemperatureData(minValue, maxValue)
+
+        temperatureScale.setDomain(minT, maxT)
+        temperatureAxisScale.setDomain(minT, maxT)
+        temperatureAxisScale.setRange(temperatureYGridCount, 0)
 
         minPressure = UnitUtils.convertPressure(minPressure, pressureType)
         maxPressure = UnitUtils.convertPressure(maxPressure, pressureType)
-        processPressureData(minPressure, maxPressure)
+        let [minP, maxP, pressureDecimals] = processPressureData(minPressure, maxPressure)
+
+        pressureScale.setDomain(minP, maxP)
+        pressureAxisScale.setDomain(minP, maxP)
+        pressureAxisScale.setRange(temperatureYGridCount, 0)
     }
 
     /*
@@ -739,9 +747,7 @@ Canvas {
         temperatureYGridStep = Math.max(1, Math.round(temperatureYGridCount / 10))
         // print("temperatureYGridStep = " + temperatureYGridStep)
 
-        temperatureScale.setDomain(minValue, maxValue)
-        temperatureAxisScale.setDomain(minValue, maxValue)
-        temperatureAxisScale.setRange(temperatureYGridCount, 0)
+        return [minValue, maxValue]
     }
 
     function logn(x, base) {
@@ -862,11 +868,9 @@ Canvas {
         // print("mult = " + mult)
         // print("maxPressure = " + maxPressure + ", minPressure = " + minPressure)
 
-        pressureScale.setDomain(minPressure, maxPressure)
-        pressureAxisScale.setDomain(minPressure, maxPressure)
-        pressureAxisScale.setRange(temperatureYGridCount, 0)
-
         pressureDecimals = -1 * Math.min(0, decimalPlace)
+
+        return [minPressure, maxPressure, pressureDecimals]
     }
 
 
