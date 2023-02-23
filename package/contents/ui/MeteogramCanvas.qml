@@ -181,12 +181,12 @@ Canvas {
         precLabelPositions = ({})
         for (var i = 0; i < meteogramModel.count; i++) {
             var item = meteogramModel.get(i)
-            if (item.precipitationAvg <= 0) {
+            if (item.precipitationAmount <= 0) {
                 continue
             }
 
             var x = timeScale.translate(item.from) + (0.5 * units.devicePixelRatio)
-            var prec = Math.min(precipitationMaxGraphY, item.precipitationAvg)
+            var prec = Math.min(precipitationMaxGraphY, item.precipitationAmount)
             var y = precipitationScale.translate(prec)
 
             let barWidth = rectWidth
@@ -230,7 +230,7 @@ Canvas {
 
         for (var i = 0; i < meteogramModel.count; i++) {
             var item = meteogramModel.get(i)
-            var prec = item.precipitationAvg
+            var prec = item.precipitationAmount
             var showPrecExcess = prec > precipitationMaxGraphY
             var showPrec = prec > 0
 
