@@ -163,7 +163,8 @@ Item {
         anchors.right: parent.right
         anchors.bottom: nextDaysView.top
         anchors.bottomMargin: 14 /* wind area */
-        visible: !isShowAlert
+        visible: !isShowAlert && !metnoDailyWeatherInfo.visible && !owmDailyWeatherInfo.visible
+     }
 
      MetNoDailyWeatherInfo {
         id: metnoDailyWeatherInfo
