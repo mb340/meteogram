@@ -888,7 +888,7 @@ Canvas {
             if (model.precipitationLabel === "%") {
                 precipitationScale.setDomain(0, 8.0)
                 precipitationMaxGraphY = 100
-            } else {
+            } else if (model.precipitationLabel === "mm") {
                 precipitationScale.setDomain(0, 25)
                 precipitationMaxGraphY = 15
             }
