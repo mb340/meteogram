@@ -711,11 +711,35 @@ Canvas {
         temperatureAxisScale.setRange(temperatureYGridCount, 0)
 
 
+        function getValueRange(varName) {
+            if (varName === "windSpeed") {
+                return [0, Infinity]
+            }
+            return [-Infinity, Infinity]
+        }
         minY2 = UnitUtils.convertValue(minY2, y2VarName)
         maxY2 = UnitUtils.convertValue(maxY2, y2VarName)
-        let [minP, maxP, decimalPlaces] = computeRightAxisRange(minY2, maxY2)
-        pressureDecimals = decimalPlaces
 
+        let [minP, maxP, decimalPlaces] = computeRightAxisRange(minY2, maxY2, false, false)
+        let [fixedMinY2, fixedMaxY2] = getValueRange(y2VarName)
+        if (isFinite(fixedMinY2) || isFinite(fixedMaxY2)) {
+            let fixedMin = false
+            if (minP < fixedMinY2) {
+                fixedMin = true
+                minY2 = fixedMinY2
+            }
+            let fixedMax = false
+            if (maxP > fixedMaxY2) {
+                fixedMax = true
+                maxY2 = fixedMaxY2
+            }
+            if (fixedMin === true || fixedMax === true) {
+                [minP, maxP, decimalPlaces] = computeRightAxisRange(minY2, maxY2,
+                                                                    fixedMin, fixedMax)
+            }
+        }
+
+        pressureDecimals = decimalPlaces
         rightAxisScale.setDomain(minP, maxP)
         rightGridScale.setDomain(minP, maxP)
         rightGridScale.setRange(temperatureYGridCount, 0)
@@ -776,13 +800,17 @@ Canvas {
      * Right axis shares y-axis grid lines with temperature graph. This imposes a constraint of
      * which right axis steps are bound to temperature axis steps.
      */
-    function computeRightAxisRange(minValue, maxValue) {
+    function computeRightAxisRange(minValue, maxValue, fixedMin, fixedMax) {
         var dP = maxValue - minValue
         var [decimalPlace, mult] = getMagnitude(dP)
         // print(" ")
         // print("maxValue = " + maxValue + ", minValue = " + minValue)
         // print("dP = " + dP)
         // print("decimalPlace = " + decimalPlace + ", mult = " + mult)
+
+        if (fixedMin === true && fixedMax === true) {
+            return [minValue, maxValue, decimalPlace]
+        }
 
         var stepSize = 1 / mult
         if ((dP / stepSize) < 2) {
@@ -803,7 +831,7 @@ Canvas {
              dP += (2 * (mult / 100) / temperatureYGridCount)
         }
         dP = Math.ceil(dP * mult * 10) / (mult * 10)
-        // print("minP = " + minP + ", dP = " + dP)
+        // print("minGridRange = " + minGridRange + ", dP = " + dP)
 
         var stepSize = 1 / mult
         var count = Math.ceil(dP / stepSize)
@@ -836,11 +864,11 @@ Canvas {
         // Pressure scale domain
         var mid = minValue + ((maxValue - minValue) / 2.0)
         mid = Math.round(mid * mult) / mult
-        minValue = mid - (valueRange / 2.0)
-        maxValue = mid + (valueRange / 2.0)
+        minValue = fixedMin ? minValue : (mid - (valueRange / 2.0))
+        maxValue = fixedMax ? maxValue : (mid + (valueRange / 2.0))
         if (mult != 1) {
-            minValue = Math.ceil(minValue * mult) / mult
-            maxValue = Math.floor(maxValue * mult) / mult
+            minValue = fixedMin ? minValue : (Math.ceil(minValue * mult) / mult)
+            maxValue = fixedMax ? maxValue : (Math.floor(maxValue * mult) / mult)
         }
 
         // print("mid = " + mid + ", maxValue = " + maxValue + ", minValue = " + minValue)
@@ -863,12 +891,12 @@ Canvas {
         // print("floorMaxP = " + floorMaxP)
         if (maxValue - floorMaxP <= ceilMaxP - maxValue) {
             var dp = maxValue - floorMaxP
-            maxValue = maxValue - dp
-            minValue = minValue - dp
+            maxValue = fixedMax ? maxValue : (maxValue - dp)
+            minValue = fixedMin ? minValue : (minValue - dp)
         } else {
             var dp = ceilMaxP - maxValue
-            maxValue = maxValue + dp
-            minValue = minValue + dp
+            maxValue = fixedMax ? maxValue : (maxValue + dp)
+            minValue = fixedMin ? minValue : (minValue + dp)
         }
         // print("mult = " + mult)
         // print("maxValue = " + maxValue + ", minValue = " + minValue)
