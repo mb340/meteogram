@@ -885,7 +885,7 @@ Canvas {
 
         if (meteogramModel.count > 0) {
             var model = meteogramModel.get(0)
-            if (model.precipitationLabel === i18n("%")) {
+            if (model.precipitationLabel === "%") {
                 precipitationScale.setDomain(0, 8.0)
                 precipitationMaxGraphY = 100
             } else {
