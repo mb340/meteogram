@@ -313,3 +313,42 @@ function localisePrecipitationUnit(unitText) {
         return unitText
     }
 }
+
+function formatValue(value, varName, args = { partOfDay: 0}) {
+    if (value === null || value === NaN) {
+        return "-"
+    }
+
+    let partOfDay = args.partOfDay
+    let temperatureType = main.temperatureType
+    let pressureType = main.pressureType
+    let windSpeedType = main.windSpeedType
+
+    if (varName === "temperature") {
+        return getTemperatureNumberExt(value, temperatureType)
+    } else if (varName === "precipitationProb") {
+        let precipStr = precipitationFormat(value, "%")
+        let precipSuffix = i18n("%")
+        return precipStr + " " + precipSuffix
+    } else if (varName === "precipitationAmount") {
+        let precipStr = precipitationFormat(value, "mm")
+        let precipSuffix = i18n("mm")
+        return precipStr + " " + precipSuffix
+    } else if (varName === "windSpeed" || varName === "windGust") {
+        return getWindSpeedText(value, windSpeedType)
+    } else if (varName === "windDirection") {
+        return String(value) + '°'
+    } else if (varName === "pressure") {
+        var pressureStr = convertPressure(value, pressureType)
+        var pressureSuffix = getPressureEnding(pressureType)
+        if (!pressureStr) {
+            return ""
+        }
+        return pressureStr.toFixed(2) + " " + pressureSuffix
+    } else if (varName === "humidity") {
+        return value + " %"
+    } else if (varName === "clouds") {
+        return value + " %"
+    }
+    return value
+}
