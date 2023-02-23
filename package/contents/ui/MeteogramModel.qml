@@ -17,7 +17,6 @@ import QtQuick 2.0
 ManagedListModel {
 
     property double hourInterval: 1.0
-    property string precipitationUnit: ""
 
     function createItem() {
         return {
