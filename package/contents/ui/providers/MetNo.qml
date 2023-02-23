@@ -227,9 +227,11 @@ Item {
             // Match exact hour.
             // Take the next closest if exact match isn't available.
             let isNearestHour = false
+            let partOfDay = 0
             if  (hour <= 6) {
                 dailyPeriodIdx = 0
                 isNearestHour = checkIsNearestHour(dailyPeriodIdx, 3, hour)
+                partOfDay = 1
             } else if (hour <= 12) {
                 dailyPeriodIdx = 1
                 isNearestHour = checkIsNearestHour(dailyPeriodIdx, 9, hour)
@@ -239,6 +241,7 @@ Item {
             } else if (hour <= 24) {
                 dailyPeriodIdx = 3
                 isNearestHour = checkIsNearestHour(dailyPeriodIdx, 21, hour)
+                partOfDay = 1
             }
 
             if (dailyPeriodIdx != prevPeriodIdx) {
@@ -273,6 +276,7 @@ Item {
             let item = dailyModel.models[dailyPeriodIdx]
             if (isNearestHour) {
                 dailyModel.date = date
+                item.partOfDay = partOfDay
                 item.temperature = temperature
                 item.iconName = iconNumber
                 item.pressure = parseFloat(details["air_pressure_at_sea_level"])
