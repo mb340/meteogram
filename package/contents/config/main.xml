@@ -179,6 +179,12 @@
             </choices>
             <default>0</default>
         </entry>
+        <entry name="precipitationType" type="Enum">
+            <choices>
+                <choice name="mm"/>
+            </choices>
+            <default>0</default>
+        </entry>
     </group>
 
 </kcfg>
