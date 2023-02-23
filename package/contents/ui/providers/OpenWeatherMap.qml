@@ -454,19 +454,19 @@ Item {
                 continue
             }
 
-            meteogramModel.addItem({
-                from: dateFrom,
-                temperature: parseInt(obj.temperature),
-                precipitationAvg: parseFloat(obj.precipitationValue),
-                precipitationMax: parseFloat(obj.precipitationValue),
-                precipitationLabel: "mm",
-                windDirection: obj.windDirection,
-                windSpeedMps: parseFloat(obj.windSpeedMps),
-                pressureHpa: parseFloat(obj.pressureHpa),
-                iconName: obj.iconName,
-                humidity: parseFloat(obj.humidity),
-                cloudArea: parseFloat(obj.clouds)
-            })
+            var item = meteogramModel.createItem()
+            item.from = dateFrom
+            item.temperature = parseFloat(obj.temperature)
+            item.precipitationAmount = parseFloat(obj.precipitationValue)
+            item.precipitationProb = parseFloat(obj.precipitationProb)
+            item.precipitationLabel = "mm"
+            item.windDirection = parseFloat(obj.windDirection)
+            item.windSpeed = parseFloat(obj.windSpeedMps)
+            item.pressure = parseFloat(obj.pressureHpa)
+            item.iconName = obj.iconName
+            item.humidity = parseFloat(obj.humidity)
+            item.cloudArea = parseFloat(obj.clouds)
+            meteogramModel.addItem(item)
 
             if (firstFromMs === null) {
                 firstFromMs = dateFrom.getTime()
