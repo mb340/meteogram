@@ -280,7 +280,7 @@ Item {
                 item.humidity = parseFloat(details["relative_humidity"])
                 item.windDirection = parseFloat(details["wind_from_direction"])
                 item.windSpeed = parseFloat(details["wind_speed"])
-                item.precipitation = precipitation
+                item.precipitationAmount = precipitation
             }
 
             if (temperatureCount > 1) {
