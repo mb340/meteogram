@@ -60,6 +60,14 @@ Item {
             query: '@day/string()'
         }
         XmlRole {
+            name: 'temperatureMin'
+            query: 'temperature/@min/number()'
+        }
+        XmlRole {
+            name: 'temperatureMax'
+            query: 'temperature/@max/number()'
+        }
+        XmlRole {
             name: 'temperatureMorning'
             query: 'temperature/@morn/number()'
         }
@@ -120,8 +128,16 @@ Item {
             query: 'clouds/@all/number()'
         }
         XmlRole {
-            name: 'precipitation'
+            name: 'precipitationProb'
             query: 'precipitation/@probability/number()'
+        }
+        XmlRole {
+            name: 'precipitationValue'
+            query: 'precipitation/@value/number()'
+        }
+        XmlRole {
+            name: 'precipitationType'
+            query: 'precipitation/@type/string()'
         }
     }
 
@@ -372,6 +388,30 @@ Item {
 
             let dateFrom = Date.fromLocaleString(xmlLocale, item.date, 'yyyy-MM-dd')
             dailyModel.date = dateFrom
+            dailyModel.iconName = item.iconName
+            dailyModel.temperatureMin = item.temperatureMin
+            dailyModel.temperatureMax = item.temperatureMax
+
+            dailyModel.temperatureNight = item.temperatureNight
+            dailyModel.temperatureMorn = item.temperatureMorning
+            dailyModel.temperatureDay = item.temperatureDay
+            dailyModel.temperatureEve = item.temperatureEvening
+
+            dailyModel.feelsLikeNight = item.feelsLikeNight
+            dailyModel.feelsLikeMorn = item.feelsLikeMorn
+            dailyModel.feelsLikeDay = item.feelsLikeDay
+            dailyModel.feelsLikeEve = item.feelsLikeEvening
+
+            dailyModel.precipitationProb = item.precipitationProb
+            dailyModel.precipitationAmount = parseFloat(item.precipitationValue)
+
+            dailyModel.humidity = item.humidity
+            dailyModel.pressure = item.pressureHpa
+            dailyModel.clouds = item.clouds
+
+            dailyModel.windDirection = item.windDirection
+            dailyModel.windSpeed = item.windSpeedMps
+            dailyModel.windGust = item.windGust
 
             let night = dailyModel.models[0]
             let morn = dailyModel.models[1]
