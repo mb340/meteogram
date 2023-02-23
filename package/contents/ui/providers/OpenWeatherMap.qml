@@ -458,7 +458,6 @@ Item {
             item.temperature = parseFloat(obj.temperature)
             item.precipitationAmount = parseFloat(obj.precipitationValue)
             item.precipitationProb = parseFloat(obj.precipitationProb)
-            item.precipitationLabel = "mm"
             item.windDirection = parseFloat(obj.windDirection)
             item.windSpeed = parseFloat(obj.windSpeedMps)
             item.pressure = parseFloat(obj.pressureHpa)
