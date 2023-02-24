@@ -26,10 +26,12 @@ ManagedListModel {
             precipitationAmount: NaN,
             windDirection: NaN,
             windSpeed: NaN,
+            windGust: NaN,
             pressure: NaN,
             iconName: "",
             humidity: NaN,
-            cloudArea: NaN
+            cloudArea: NaN,
+            uvi: NaN
         }
     }
 }
