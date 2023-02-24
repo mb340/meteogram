@@ -7,6 +7,8 @@ var main = null
 function getValueRange(varName) {
     if (varName === "windSpeed" || varName === "windGust") {
         return [0, Infinity]
+    } else if (varName === "cloudArea") {
+        return [0, 100]
     }
     return [-Infinity, Infinity]
 }
