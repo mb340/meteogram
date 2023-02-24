@@ -48,6 +48,10 @@ function roundBase(val, base) {
  */
 function computeRightAxisRange(minValue, maxValue, minGridRange, fixedMin, fixedMax, gridCount) {
 
+    if (!isFinite(minValue) || !isFinite(maxValue)) {
+        return [minValue, maxValue, 0]
+    }
+
     var dP = maxValue - minValue
     var [decimalPlace, mult] = getMagnitude(dP)
     // print(" ")
