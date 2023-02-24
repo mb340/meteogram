@@ -23,35 +23,41 @@ function toKelvin(celsia) {
     return celsia + 273.15
 }
 
+function kelvinToCelsia(kelvin) {
+    return kelvin - 273.15
+}
+
 function convertTemperature(celsia, temperatureType) {
+    if (temperatureType === undefined) {
+        temperatureType = main.temperatureType
+    }
     if (temperatureType === TemperatureType.FAHRENHEIT) {
         return toFahrenheit(celsia)
     } else if (temperatureType === TemperatureType.KELVIN) {
         return toKelvin(celsia)
     }
-    return celsia
+    return Math.round(celsia)
 }
 
 function formatTemperatureStr(temperature, temperatureType) {
     return temperature.toFixed(0)
 }
 
-function getTemperatureNumberExt(temperatureStr, temperatureType) {
-    return getTemperatureNumber(temperatureStr, temperatureType) + (temperatureType === TemperatureType.CELSIUS || temperatureType === TemperatureType.FAHRENHEIT ? '°' : '')
-}
-
-function getTemperatureNumber(temperatureStr, temperatureType) {
-    var fl = parseFloat(temperatureStr)
-    if (temperatureType === TemperatureType.FAHRENHEIT) {
-        fl = toFahrenheit(fl)
-    } else if (temperatureType === TemperatureType.KELVIN) {
-        fl = toKelvin(fl)
+function formatTemperatureUnit(temperatureType) {
+    if (temperatureType === undefined) {
+        temperatureType = main.temperatureType
     }
-    return Math.round(fl)
+    if (temperatureType === TemperatureType.CELSIUS ||
+        temperatureType === TemperatureType.FAHRENHEIT)
+    {
+        return '°'
+    }
+    return ""
 }
 
-function kelvinToCelsia(kelvin) {
-    return kelvin - 273.15
+function getTemperatureNumberExt(temperatureStr, temperatureType) {
+    return convertTemperature(temperatureStr, temperatureType) +
+            formatTemperatureUnit(temperatureType)
 }
 
 function getTemperatureEnding(temperatureType) {
@@ -103,6 +109,9 @@ function getPressureText(hpa, pressureType) {
 }
 
 function getPressureEnding(pressureType) {
+    if (pressureType === undefined) {
+        pressureType = main.pressureType
+    }
     if (pressureType === PressureType.INHG) {
         return i18n("inHg")
     }
@@ -135,6 +144,9 @@ function getWindSpeedText(mps, windSpeedType) {
 }
 
 function getWindSpeedEnding(windSpeedType) {
+    if (windSpeedType === undefined) {
+        windSpeedType = main.windSpeedType
+    }
     if (windSpeedType === WindSpeedType.MPH) {
         return i18n("mph")
     } else if (windSpeedType === WindSpeedType.KMH) {
@@ -333,6 +345,27 @@ function convertValue(value, varName) {
         return convertPressure(value, pressureType)
     }
     return value
+}
+
+function formatUnits(varName) {
+    if (varName === "temperature") {
+        return formatTemperatureUnit(main.temperatureType)
+    } else if (varName === "precipitationProb") {
+        return i18n("%")
+    } else if (varName === "precipitationAmount") {
+        return i18n("mm")
+    } else if (varName === "windSpeed" || varName === "windGust") {
+        return getWindSpeedEnding()
+    } else if (varName === "windDirection") {
+        return '°'
+    } else if (varName === "pressure") {
+        return getPressureEnding()
+    } else if (varName === "humidity") {
+        return i18n("%")
+    } else if (varName === "cloudArea") {
+        return i18n("%")
+    }
+    return ""
 }
 
 function formatValue(value, varName, args = { partOfDay: 0}) {
