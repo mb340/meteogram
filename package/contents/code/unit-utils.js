@@ -345,6 +345,8 @@ function convertValue(value, varName) {
         return getWindSpeedNumber(value, windSpeedType)
     } else if (varName === "pressure") {
         return convertPressure(value, pressureType)
+    } else if (varName === "humidity") {
+        return value * 100
     }
     return value
 }
