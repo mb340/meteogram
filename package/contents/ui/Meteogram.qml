@@ -159,10 +159,10 @@ Item {
         }
     }
     PlasmaComponents.Label {
-        text: UnitUtils.getPressureEnding(pressureType)
+        text: UnitUtils.formatUnits(y2VarName)
         height: labelHeight
         width: labelWidth
-        horizontalAlignment: (UnitUtils.getPressureEnding(pressureType).length > 4) ? Text.AlignRight : Text.AlignLeft
+        horizontalAlignment: (text.length > 4) ? Text.AlignRight : Text.AlignLeft
         anchors.right: (graphArea.right)
         anchors.rightMargin: -labelWidth
         font.pixelSize: 11 * units.devicePixelRatio
