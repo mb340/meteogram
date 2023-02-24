@@ -170,6 +170,10 @@ Item {
             query: 'windSpeed/@mps/number()'
         }
         XmlRole {
+            name: 'windGust'
+            query: 'windGust/@gust/number()'
+        }
+        XmlRole {
             name: 'pressureHpa'
             query: 'pressure/@value/number()'
         }
@@ -460,6 +464,7 @@ Item {
             item.precipitationProb = parseFloat(obj.precipitationProb)
             item.windDirection = parseFloat(obj.windDirection)
             item.windSpeed = parseFloat(obj.windSpeedMps)
+            item.windGust = parseFloat(obj.windGust)
             item.pressure = parseFloat(obj.pressureHpa)
             item.iconName = obj.iconName
             item.humidity = parseFloat(obj.humidity)
