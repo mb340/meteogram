@@ -374,12 +374,8 @@ function formatUnits(varName) {
     return ""
 }
 
-function formatValue(value, varName, args = { partOfDay: 0}) {
-    if (value === null || value === NaN) {
-        return "-"
-    }
-
-    let partOfDay = args.partOfDay
+function formatValue(value, varName, partOfDay) {
+    partOfDay = (partOfDay !== undefined) ? partOfDay : 0
     let temperatureType = main.temperatureType
     let pressureType = main.pressureType
     let windSpeedType = main.windSpeedType
