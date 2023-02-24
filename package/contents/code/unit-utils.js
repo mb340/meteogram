@@ -347,6 +347,8 @@ function convertValue(value, varName) {
         return convertPressure(value, pressureType)
     } else if (varName === "humidity") {
         return value * 100
+    } else if (varName === "cloudArea") {
+        return value * 100
     }
     return value
 }
