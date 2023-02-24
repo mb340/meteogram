@@ -337,7 +337,7 @@ function convertValue(value, varName) {
     let pressureType = main.pressureType
     let windSpeedType = main.windSpeedType
 
-    if (varName === "temperature") {
+    if (varName === "temperature" || varName === "feelsLike") {
         return convertTemperature(value, temperatureType)
     } else if (varName === "precipitationProb") {
         return value * 100
@@ -354,7 +354,7 @@ function convertValue(value, varName) {
 }
 
 function formatUnits(varName) {
-    if (varName === "temperature") {
+    if (varName === "temperature" || varName === "feelsLike") {
         return formatTemperatureUnit(main.temperatureType)
     } else if (varName === "precipitationProb") {
         return i18n("%")
@@ -384,7 +384,7 @@ function formatValue(value, varName, args = { partOfDay: 0}) {
     let pressureType = main.pressureType
     let windSpeedType = main.windSpeedType
 
-    if (varName === "temperature") {
+    if (varName === "temperature" || varName === "feelsLike") {
         return getTemperatureNumberExt(value, temperatureType)
     } else if (varName === "precipitationProb") {
         let precipStr = precipitationProbFormat(value)
