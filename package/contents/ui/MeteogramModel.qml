@@ -15,6 +15,7 @@
 import QtQuick 2.0
 
 ManagedListModel {
+    id: root
 
     property double hourInterval: 1.0
 
@@ -33,5 +34,12 @@ ManagedListModel {
             cloudArea: NaN,
             uvi: NaN
         }
+    }
+
+    function hasVariable(varName) {
+        if (root.count <= 0) {
+            return false
+        }
+        return isFinite(root.get(0)[varName])
     }
 }
