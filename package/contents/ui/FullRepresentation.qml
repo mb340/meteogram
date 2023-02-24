@@ -91,6 +91,19 @@ Item {
         }
     }
 
+    /* select right axis weather variable */
+    RowLayout {
+        anchors.top: parent.top
+        anchors.right: parent.right
+
+        ChartSelectorButtons {
+            meteogram: fullRepresentation.meteogram
+            meteogramModel: main.meteogramModel
+
+            Layout.alignment: Qt.AlignCenter
+        }
+    }
+
     /* next location buttons */
     RowLayout {
         visible: !onlyOnePlace

@@ -53,6 +53,7 @@ Item {
     property var xmlLocale: Qt.locale('en_GB')
 
     property alias currentWeatherModel: currentWeatherModel
+    property alias meteogramModel: meteogramModel
 
     property string overviewImageSource
     property string creditLink
