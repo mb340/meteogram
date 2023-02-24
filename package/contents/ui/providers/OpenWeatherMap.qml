@@ -158,6 +158,10 @@ Item {
             query: 'temperature/@value/number()'
         }
         XmlRole {
+            name: 'feelsLike'
+            query: 'feels_like/@value/number()'
+        }
+        XmlRole {
             name: 'iconName'
             query: 'symbol/@number/string()'
         }
@@ -460,6 +464,7 @@ Item {
             var item = meteogramModel.createItem()
             item.from = dateFrom
             item.temperature = parseFloat(obj.temperature)
+            item.feelsLike = parseFloat(obj.feelsLike)
             item.precipitationAmount = parseFloat(obj.precipitationValue)
             item.precipitationProb = parseFloat(obj.precipitationProb)
             item.windDirection = parseFloat(obj.windDirection)
