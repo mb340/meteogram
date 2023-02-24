@@ -11,6 +11,8 @@ function getValueRange(varName) {
         return [0, 100]
     } else if (varName === "precipitationProb") {
         return [0, 100]
+    } else if (varName === "uvi") {
+        return [0, Infinity]
     }
     return [-Infinity, Infinity]
 }
