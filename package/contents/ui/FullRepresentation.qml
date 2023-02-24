@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
 import QtQuick 2.2
+import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.1
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.components 2.0 as PlasmaComponents
@@ -90,6 +91,43 @@ Item {
         }
     }
 
+    /* next location buttons */
+    RowLayout {
+        visible: !onlyOnePlace
+
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        RowLayout {
+            Layout.alignment: Qt.AlignCenter
+
+            Component {
+                id: buttonComponent
+
+                Label {
+                    text: modelData.label
+                    MouseArea {
+                        cursorShape: Qt.PointingHandCursor
+                        hoverEnabled: true
+                        anchors.fill: parent
+                        onClicked: main.setNextPlace(false, modelData.direction)
+                        onEntered: parent.color = theme.highlightColor
+                        onExited: parent.color = theme.textColor
+                    }
+                }
+            }
+
+            Repeater {
+                model: [
+                    { label: "     \u25C4", direction: "-" },
+                    { label: "\u25BA     ", direction: "+" }
+                ]
+
+                delegate: buttonComponent
+            }
+        }
+    }
 
     Meteogram {
         id: meteogram2
