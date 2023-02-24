@@ -162,6 +162,8 @@ Item {
                 font.pixelSize: 11 * units.devicePixelRatio
                 font.pointSize: -1
                 color: palette.pressureColor()
+
+                visible: y2AxisVisble
             }
         }
     }
@@ -177,6 +179,7 @@ Item {
         color: palette.pressureColor()
         anchors.bottom: graphArea.top
         anchors.bottomMargin: 6
+        visible: y2AxisVisble
     }
     PlasmaComponents.Label {
         text: UnitUtils.getTemperatureEnding(temperatureType)
