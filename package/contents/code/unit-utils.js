@@ -339,6 +339,8 @@ function convertValue(value, varName) {
 
     if (varName === "temperature") {
         return convertTemperature(value, temperatureType)
+    } else if (varName === "precipitationProb") {
+        return value * 100
     } else if (varName === "windSpeed" || varName === "windGust") {
         return getWindSpeedNumber(value, windSpeedType)
     } else if (varName === "pressure") {
