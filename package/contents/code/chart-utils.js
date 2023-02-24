@@ -5,7 +5,7 @@ var main = null
 
 
 function getValueRange(varName) {
-    if (varName === "windSpeed") {
+    if (varName === "windSpeed" || varName === "windGust") {
         return [0, Infinity]
     }
     return [-Infinity, Infinity]
