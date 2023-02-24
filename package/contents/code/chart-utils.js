@@ -9,6 +9,8 @@ function getValueRange(varName) {
         return [0, Infinity]
     } else if (varName === "cloudArea") {
         return [0, 100]
+    } else if (varName === "precipitationProb") {
+        return [0, 100]
     }
     return [-Infinity, Infinity]
 }
