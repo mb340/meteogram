@@ -15,6 +15,7 @@
 import QtQuick 2.0
 import "../code/unit-utils.js" as UnitUtils
 import "../code/icons.js" as IconTools
+import "../code/chart-utils.js" as ChartUtils
 
 
 Canvas {
@@ -704,34 +705,16 @@ Canvas {
         temperatureAxisScale.setDomain(minT, maxT)
         temperatureAxisScale.setRange(temperatureYGridCount, 0)
 
-
-        function getValueRange(varName) {
-            if (varName === "windSpeed") {
-                return [0, Infinity]
-            }
-            return [-Infinity, Infinity]
-        }
-
-        function getMinGridRange(varName) {
-            if (varName === "pressure") {
-                const minPressureYGridCount = {
-                    0: 30,
-                    1: 0.5,
-                    2: 10,
-                }
-                return minPressureYGridCount[main.pressureType]
-            }
-            return 1.0
-        }
-
         minY2 = UnitUtils.convertValue(minY2, y2VarName)
         maxY2 = UnitUtils.convertValue(maxY2, y2VarName)
 
-        var minGridRange = getMinGridRange(y2VarName)
-        let [minP, maxP, decimalPlaces] = computeRightAxisRange(minY2, maxY2, minGridRange,
-                                                                false, false)
+        var minGridRange = ChartUtils.getMinGridRange(y2VarName)
+        let [minP, maxP, decimalPlaces] = ChartUtils.computeRightAxisRange(minY2, maxY2,
+                                                                           minGridRange,
+                                                                           false, false,
+                                                                           temperatureYGridCount)
 
-        let [fixedMinY2, fixedMaxY2] = getValueRange(y2VarName)
+        let [fixedMinY2, fixedMaxY2] = ChartUtils.getValueRange(y2VarName)
         if (isFinite(fixedMinY2) || isFinite(fixedMaxY2)) {
             let fixedMin = false
             if (minP < fixedMinY2) {
@@ -744,8 +727,9 @@ Canvas {
                 maxY2 = fixedMaxY2
             }
             if (fixedMin === true || fixedMax === true) {
-                [minP, maxP, decimalPlaces] = computeRightAxisRange(minY2, maxY2, minGridRange,
-                                                                    fixedMin, fixedMax)
+                [minP, maxP, decimalPlaces] =
+                    ChartUtils.computeRightAxisRange(minY2, maxY2, minGridRange, fixedMin, fixedMax,
+                                                     temperatureYGridCount)
             }
         }
 
@@ -788,134 +772,6 @@ Canvas {
 
         return [minValue, maxValue]
     }
-
-    function logn(x, base) {
-        return Math.log(x) / Math.log(base)
-    }
-
-    function getMagnitude(val) {
-        var decimalPlace = Math.floor(logn(val, 100))
-        decimalPlace = (Math.abs(decimalPlace) === Infinity) ? 0 : decimalPlace
-        var mult = Math.pow(100, -decimalPlace)
-        decimalPlace *= 2
-        return [decimalPlace, mult]
-    }
-
-    function roundBase(val, base) {
-        return base * Math.round(val / base)
-    }
-
-    /*
-     * Compute y-axis scale.
-     * Right axis shares y-axis grid lines with temperature graph. This imposes a constraint of
-     * which right axis steps are bound to temperature axis steps.
-     */
-    function computeRightAxisRange(minValue, maxValue, minGridRange, fixedMin, fixedMax) {
-
-        var dP = maxValue - minValue
-        var [decimalPlace, mult] = getMagnitude(dP)
-        // print(" ")
-        // print("maxValue = " + maxValue + ", minValue = " + minValue)
-        // print("dP = " + dP)
-        // print("decimalPlace = " + decimalPlace + ", mult = " + mult)
-
-        if (fixedMin === true && fixedMax === true) {
-            return [minValue, maxValue, decimalPlace]
-        }
-
-        var stepSize = 1 / mult
-        if ((dP / stepSize) < 2) {
-            // Ensure at least 2 steps
-            mult *= 100
-            decimalPlace -= 2
-            // print("decimalPlace = " + decimalPlace + ", mult = " + mult)
-        }
-
-        decimalPlace = Math.max(-2, decimalPlace)
-        decimalPlace = Math.min(4, decimalPlace)
-
-        dP = Math.max(minGridRange, dP)
-        if (decimalPlace >= 0) {
-             dP += (2 * (mult * 100) / temperatureYGridCount)
-        } else {
-             dP += (2 * (mult / 100) / temperatureYGridCount)
-        }
-        dP = Math.ceil(dP * mult * 10) / (mult * 10)
-        // print("minGridRange = " + minGridRange + ", dP = " + dP)
-
-        var stepSize = 1 / mult
-        var count = Math.ceil(dP / stepSize)
-        var nSteps = Math.ceil(count / temperatureYGridCount) * temperatureYGridCount
-        var valueRange = stepSize * nSteps
-        // print("valueRange = " + valueRange)
-        // print("temperatureYGridCount = " + temperatureYGridCount)
-
-        while (true) {
-            var s = stepSize * 2
-            var c = Math.floor(dP / s)
-            var ns = Math.ceil(c / temperatureYGridCount) * temperatureYGridCount
-            var pr = s * ns
-
-            // print("stepSize = " + stepSize + ", nSteps = " + nSteps +
-            //       ", valueRange = " + valueRange + ", dP = " + dP)
-            if (c <= 0 || ns <= 0) {
-                print("c = " + c + ", ns = " + ns)
-                break
-            }
-            if (nSteps <= temperatureYGridCount && valueRange >= dP) {
-                break
-            }
-            stepSize = s
-            count = c
-            nSteps = ns
-            valueRange = pr
-        }
-
-        // Pressure scale domain
-        var mid = minValue + ((maxValue - minValue) / 2.0)
-        mid = Math.round(mid * mult) / mult
-        minValue = fixedMin ? minValue : (mid - (valueRange / 2.0))
-        maxValue = fixedMax ? maxValue : (mid + (valueRange / 2.0))
-        if (mult != 1) {
-            minValue = fixedMin ? minValue : (Math.ceil(minValue * mult) / mult)
-            maxValue = fixedMax ? maxValue : (Math.floor(maxValue * mult) / mult)
-        }
-
-        // print("mid = " + mid + ", maxValue = " + maxValue + ", minValue = " + minValue)
-
-        /*
-         * Round min/max values at one higher order of magnitude
-         */
-        var decimalPlace_ = Math.floor(Math.log10(stepSize))
-        var mult = decimalPlace_ + 1
-        if (decimalPlace_ >= 0) {
-            mult = Math.pow(10, mult)
-        } else {
-            // Whole numbers are the upper bound for rounding when the step size is less than zero.
-            mult = mult < 1 ? Math.pow(10, mult) : mult
-        }
-
-        var ceilMaxP = Math.ceil(maxValue / mult) * mult
-        var floorMaxP = Math.floor(maxValue / mult) * mult
-        // print("ceilMaxP = " + ceilMaxP)
-        // print("floorMaxP = " + floorMaxP)
-        if (maxValue - floorMaxP <= ceilMaxP - maxValue) {
-            var dp = maxValue - floorMaxP
-            maxValue = fixedMax ? maxValue : (maxValue - dp)
-            minValue = fixedMin ? minValue : (minValue - dp)
-        } else {
-            var dp = ceilMaxP - maxValue
-            maxValue = fixedMax ? maxValue : (maxValue + dp)
-            minValue = fixedMin ? minValue : (minValue + dp)
-        }
-        // print("mult = " + mult)
-        // print("maxValue = " + maxValue + ", minValue = " + minValue)
-
-        let decimalPlaces = -1 * Math.min(0, decimalPlace)
-
-        return [minValue, maxValue, decimalPlaces]
-    }
-
 
     function buildMetogramData() {
         if (meteogramModel.count <= 0) {

@@ -23,6 +23,7 @@ import "../code/data-loader.js" as DataLoader
 import "../code/config-utils.js" as ConfigUtils
 import "../code/icons.js" as IconTools
 import "../code/unit-utils.js" as UnitUtils
+import "../code/chart-utils.js" as ChartUtils
 import "providers"
 
 Item {
@@ -194,6 +195,10 @@ Item {
         if (!IconTools.initialized) {
             IconTools.i18n = i18n
             IconTools.initialized = true
+        }
+        if (!ChartUtils.initialized) {
+            ChartUtils.initialized = true
+            ChartUtils.main = main
         }
     }
 
