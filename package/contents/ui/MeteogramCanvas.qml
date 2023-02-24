@@ -28,12 +28,6 @@ Canvas {
     property double fontSize: 14 * units.devicePixelRatio
     property var precLabelPositions: ({})
 
-    property var minPressureYGridCount: ({
-        0: 30,
-        1: 0.5,
-        2: 10,
-    })
-
     property bool graphCurvedLine: plasmoid.configuration.graphCurvedLine
     property bool hasGraphCurvedLineChanged: false
 
@@ -717,10 +711,26 @@ Canvas {
             }
             return [-Infinity, Infinity]
         }
+
+        function getMinGridRange(varName) {
+            if (varName === "pressure") {
+                const minPressureYGridCount = {
+                    0: 30,
+                    1: 0.5,
+                    2: 10,
+                }
+                return minPressureYGridCount[main.pressureType]
+            }
+            return 1.0
+        }
+
         minY2 = UnitUtils.convertValue(minY2, y2VarName)
         maxY2 = UnitUtils.convertValue(maxY2, y2VarName)
 
-        let [minP, maxP, decimalPlaces] = computeRightAxisRange(minY2, maxY2, false, false)
+        var minGridRange = getMinGridRange(y2VarName)
+        let [minP, maxP, decimalPlaces] = computeRightAxisRange(minY2, maxY2, minGridRange,
+                                                                false, false)
+
         let [fixedMinY2, fixedMaxY2] = getValueRange(y2VarName)
         if (isFinite(fixedMinY2) || isFinite(fixedMaxY2)) {
             let fixedMin = false
@@ -734,7 +744,7 @@ Canvas {
                 maxY2 = fixedMaxY2
             }
             if (fixedMin === true || fixedMax === true) {
-                [minP, maxP, decimalPlaces] = computeRightAxisRange(minY2, maxY2,
+                [minP, maxP, decimalPlaces] = computeRightAxisRange(minY2, maxY2, minGridRange,
                                                                     fixedMin, fixedMax)
             }
         }
@@ -800,7 +810,8 @@ Canvas {
      * Right axis shares y-axis grid lines with temperature graph. This imposes a constraint of
      * which right axis steps are bound to temperature axis steps.
      */
-    function computeRightAxisRange(minValue, maxValue, fixedMin, fixedMax) {
+    function computeRightAxisRange(minValue, maxValue, minGridRange, fixedMin, fixedMax) {
+
         var dP = maxValue - minValue
         var [decimalPlace, mult] = getMagnitude(dP)
         // print(" ")
@@ -823,8 +834,7 @@ Canvas {
         decimalPlace = Math.max(-2, decimalPlace)
         decimalPlace = Math.min(4, decimalPlace)
 
-        var minP = minPressureYGridCount[pressureType]
-        dP = Math.max(minP, dP)
+        dP = Math.max(minGridRange, dP)
         if (decimalPlace >= 0) {
              dP += (2 * (mult * 100) / temperatureYGridCount)
         } else {
