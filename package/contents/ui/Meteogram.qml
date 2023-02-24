@@ -317,7 +317,7 @@ Item {
 
                     Image {
                         id: wind
-                        source: !isNaN(windSpeedMps) ? windStrength(windSpeedMps, textColorLight) : ""
+                        source: !isNaN(windSpeed) ? windStrength(windSpeed, textColorLight) : ""
                         rotation: windFrom(windDirection)
                         fillMode: Image.PreserveAspectFit
 
@@ -328,7 +328,7 @@ Item {
 
                     ToolTip{
                         id: windspeedhover
-                        text: UnitUtils.getWindSpeedText(windSpeedMps, windSpeedType)
+                        text: UnitUtils.getWindSpeedText(windSpeed, windSpeedType)
                         padding: 4
                         x: windspeedAnchor.width + 6
                         y: (windspeedAnchor.height / 2)
@@ -367,19 +367,19 @@ Item {
                 sourceComponent: condition(index) ? windIconDelegate : null
 
                 property var item: meteogramModel.get(index)
-                property var windSpeedMps: item ? parseFloat(item.windSpeedMps) : NaN
+                property var windSpeed: item ? parseFloat(item.windSpeed) : NaN
                 property var windDirection: item ? parseFloat(item.windDirection) : NaN
                 property var from: item ? item.from : new Date(0)
 
                 function condition(index) {
                     var model = meteogramModel.get(index)
-                    if (!model || !model.windSpeedMps) {
+                    if (!model || !model.windSpeed) {
                         return false
                     }
                     if (meteogramModel.hourInterval === 1 && (index % 2) == 1) {
                         return false
                     }
-                    return isFinite(model.windSpeedMps)
+                    return isFinite(model.windSpeed)
                 }
             }
         }
