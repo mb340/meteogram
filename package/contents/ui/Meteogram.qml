@@ -50,6 +50,9 @@ Item {
     property color gridColor: textColorLight ? Qt.tint(theme.textColor, '#80000000') : Qt.tint(theme.textColor, '#80FFFFFF')
     property color gridColorHighlight: textColorLight ? Qt.tint(theme.textColor, '#50000000') : Qt.tint(theme.textColor, '#50FFFFFF')
 
+    property var y2VarName: "pressure"
+    property bool y2AxisVisble: meteogramModel.hasVariable(y2VarName)
+
     property alias temperatureScale: meteogramCanvas.temperatureScale
     property alias temperatureAxisScale: meteogramCanvas.temperatureAxisScale
     property alias rightAxisScale: meteogramCanvas.rightAxisScale
@@ -65,6 +68,10 @@ Item {
     Component.onCompleted: {
         UnitUtils.precipitationMinVisible = precipitationMinVisible
         meteogramCanvas.fullRedraw()
+    }
+
+    onY2VarNameChanged: {
+        fullRedraw()
     }
 
     MeteogramColors {

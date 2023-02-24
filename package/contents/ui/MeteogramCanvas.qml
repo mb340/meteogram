@@ -34,8 +34,6 @@ Canvas {
 
     property int nHours: 0
 
-    property var y2VarName: "pressure"
-
     property alias temperatureScale: temperatureScale
     property alias temperatureAxisScale: temperatureAxisScale
     property alias rightAxisScale: rightAxisScale
