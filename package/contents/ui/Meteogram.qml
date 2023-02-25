@@ -297,21 +297,13 @@ Item {
         anchors.left: hourGrid.left
         anchors.topMargin: labelHeight
 
-        ManagedListModel {
-            id: windSpeedModel
-        }
-
         function setModel(count) {
-            windSpeedModel.beginList()
-            for (var i = 0; i < count; i++) {
-                windSpeedModel.addItem({ index: i })
-            }
-            windSpeedModel.endList()
+            windSpeedRepeater.model = count
         }
 
         Repeater {
             id: windSpeedRepeater
-            model: windSpeedModel.model
+            model: 0
 
             property var rectWidth: 2 * (meteogramCanvas.width / nHours)
 
