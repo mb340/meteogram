@@ -382,6 +382,15 @@ function getPrecipitationUnit(precipitationType) {
     }
 }
 
+function getSmallestPrecipitationType(precipitationType) {
+    if (precipitationType === PrecipitationType.CM) {
+        return PrecipitationType.MM
+    } else if (precipitationType === PrecipitationType.INCH) {
+        return PrecipitationType.MIL
+    }
+    return precipitationType
+}
+
 function convertPop(percentage) {
     return percentage * 100.0
 }
