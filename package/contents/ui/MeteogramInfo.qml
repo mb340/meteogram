@@ -214,6 +214,24 @@ Item {
                                                      palette.temperatureColdColor()).toString()
         })
 
+        if (isFinite(hourModel.feelsLike)) {
+            model.addItem({
+                nameStr: i18n("Feels like:"),
+                valueStr: UnitUtils.getTemperatureText(hourModel.feelsLike, temperatureType, 2),
+                valueColor: (hourModel.feelsLike >= 0 ? palette.temperatureWarmColor() :
+                                                         palette.temperatureColdColor()).toString()
+            })
+        }
+
+        if (isFinite(hourModel.dewPoint)) {
+            model.addItem({
+                nameStr: i18n("Dew point:"),
+                valueStr: UnitUtils.getTemperatureText(hourModel.dewPoint, temperatureType, 2),
+                valueColor: (hourModel.dewPoint >= 0 ? palette.temperatureWarmColor() :
+                                                         palette.temperatureColdColor()).toString()
+            })
+        }
+
         model.addItem({
             nameStr: i18n("Pressure:"),
             valueStr: UnitUtils.getPressureText(hourModel.pressure, pressureType),
@@ -226,6 +244,15 @@ Item {
             valueStr: windStr,
             valueColor: ""
         })
+
+        if (isFinite(hourModel.windGust)) {
+            var gustStr = UnitUtils.getWindSpeedText(hourModel.windGust, windSpeedType)
+            model.addItem({
+                nameStr: i18n("Wind gust:"),
+                valueStr: gustStr,
+                valueColor: ""
+            })
+        }
 
         var cloudAreaStr = ""
         if (isFinite(hourModel.cloudArea)) {
@@ -248,13 +275,29 @@ Item {
         }
 
         var precipitationStr = ""
-        if (isFinite(hourModel.precipitationAmount)) {
+        if (isFinite(hourModel.precipitationAmount) && hourModel.precipitationAmount > 0) {
             precipitationStr = UnitUtils.getPrecipitationText(hourModel.precipitationAmount,
                                                               precipitationType)
             model.addItem({
                 nameStr: i18n("Precipitation:"),
                 valueStr: precipitationStr,
                 valueColor: palette.rainColor().toString()
+            })
+        }
+
+        if (isFinite(hourModel.precipitationProb) && hourModel.precipitationProb > 0) {
+            model.addItem({
+                nameStr: i18n("PoP:"),
+                valueStr: UnitUtils.getPopText(hourModel.precipitationProb),
+                valueColor: palette.rainColor().toString()
+            })
+        }
+
+       if (isFinite(hourModel.uvi) && hourModel.uvi > 0) {
+            model.addItem({
+                nameStr: i18n("UV Index:"),
+                valueStr: hourModel.uvi.toFixed(2),
+                valueColor: ""
             })
         }
 
