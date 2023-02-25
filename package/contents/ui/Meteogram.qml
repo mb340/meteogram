@@ -378,7 +378,7 @@ Item {
                     if (!model || !model.windSpeed) {
                         return false
                     }
-                    if (meteogramModel.hourInterval === 1 && (index % 2) == 1) {
+                    if (meteogramModel.hourInterval === 1 && (model.from.getHours()) % 2 === 0) {
                         return false
                     }
                     return isFinite(model.windSpeed)
