@@ -49,6 +49,11 @@ Item {
         }
     }
 
+    function clear() {
+        index = 0
+        return _model.clear()
+    }
+
     function get(index) {
         return _model.get(index)
     }
