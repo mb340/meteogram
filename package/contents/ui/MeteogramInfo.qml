@@ -262,6 +262,7 @@ Item {
     }
 
 
+    Component.onCompleted: updateState()
     onIsAnchorTopChanged: updateState()
     onIsAnchorLeftChanged: updateState()
 
