@@ -24,6 +24,7 @@ ManagedListModel {
             from: null,
             temperature: NaN,
             feelsLike: NaN,
+            dewPoint: NaN,
             precipitationProb: NaN,
             precipitationAmount: NaN,
             windDirection: NaN,
