@@ -74,10 +74,6 @@ Item {
         fullRedraw()
     }
 
-    MeteogramColors {
-        id: palette
-    }
-
     TextMetrics {
         id: textMetrics
         font.family: theme.defaultFont.family
@@ -400,10 +396,6 @@ Item {
             anchors.fill: parent
         }
 
-        MeteogramInfo {
-            id: meteogramInfo
-        }
-
         Canvas {
             id: meteogramInfoCanvas
             anchors.fill: parent
@@ -464,11 +456,12 @@ Item {
                 var [x0, x1] = meteogramCanvas.getItemIntervalX(idx)
                 var rectWidth = x1 - x0
 
-                meteogramInfo.x = mouse.x
-                meteogramInfo.y = mouse.y
+                var globalCoord = mapToItem(main, 0, 0)
+                meteogramInfo.x = globalCoord.x + mouse.x
+                meteogramInfo.y = globalCoord.y + mouse.y
 
-                meteogramInfo.isAnchorLeft = mouse.x < (imageWidth - meteogramInfo.boxWidth - rectWidth)
-                meteogramInfo.isAnchorTop = mouse.y > (imageHeight - meteogramInfo.boxHeight - rectWidth)
+                meteogramInfo.isAnchorLeft = mouse.x < (imageWidth - meteogramInfo.boxWidth - (1.5 * rectWidth))
+                meteogramInfo.isAnchorTop = mouse.y < (globalCoord.y + meteogramInfo.boxHeight + (1.5 * rectWidth))
 
                 if (meteogramInfo.idx !== idx) {
                     meteogramInfo.anchorsMargins = 1.5 * rectWidth

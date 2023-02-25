@@ -142,6 +142,10 @@ Item {
         }
     }
 
+    MeteogramColors {
+        id: palette
+    }
+
     Meteogram {
         id: meteogram2
         anchors.top: parent.top
@@ -152,6 +156,11 @@ Item {
         anchors.bottomMargin: 14 /* wind area */
         visible: !isShowAlert && !metnoDailyWeatherInfo.visible && !owmDailyWeatherInfo.visible
      }
+
+    MeteogramInfo {
+        id: meteogramInfo
+        z: 1
+    }
 
      MetNoDailyWeatherInfo {
         id: metnoDailyWeatherInfo
