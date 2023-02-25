@@ -41,7 +41,7 @@ Item {
     property int temperatureYGridCount: minTemperatureYGridCount   // Number of vertical grid Temperature elements
 
     // Decimal places for pressure y-axis labels
-    property int pressureDecimals: 0
+    property int rightAxisDecimals: 0
 
     readonly property double precipitationMinVisible: 0.05
     property double precipitationMaxGraphY: 10
@@ -151,7 +151,7 @@ Item {
                 font.pointSize: -1
             }
             PlasmaComponents.Label {
-                text: UnitUtils.formatPressureStr(rightGridScale.invert(index), pressureDecimals)
+                text: rightGridScale.invert(index).toFixed(rightAxisDecimals)
                 height: labelHeight
                 width: labelWidth
                 anchors.top: gridLine.top

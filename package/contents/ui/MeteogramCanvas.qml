@@ -731,7 +731,7 @@ Canvas {
             }
         }
 
-        pressureDecimals = decimalPlaces
+        rightAxisDecimals = decimalPlaces
         rightAxisScale.setDomain(minP, maxP)
         rightGridScale.setDomain(minP, maxP)
         rightGridScale.setRange(temperatureYGridCount, 0)
