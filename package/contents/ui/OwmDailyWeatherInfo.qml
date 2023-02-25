@@ -57,9 +57,9 @@ ColumnLayout {
             Layout.fillHeight: true
 
             WeatherIcon {
-                width: parent.height
-                height: parent.height
-                iconDim: parent.height
+                iconDim: units.iconSizes.large
+                width: iconDim
+                height: iconDim
 
                 anchors.centerIn: parent
 
