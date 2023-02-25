@@ -376,7 +376,7 @@ Canvas {
             }
 
             var t = item.from
-            t.setHours(hourFrom - 1, 0, 0, 0)
+            t.setMinutes(0, 0, 0)
             var x = timeScale.translate(t)
             var y = temperatureScale.translate(UnitUtils.convertTemperature(
                                                item.temperature, temperatureType))
@@ -385,7 +385,7 @@ Canvas {
 
             var metrics = context.measureText(str)
             var textWidth = metrics.width
-            var x0 = x - (textWidth / 2.0) + (rectWidth)
+            var x0 = x
             var y0 = y - rectWidth
 
             // Avoid overlapping precipitation labels.
@@ -410,14 +410,15 @@ Canvas {
             y0 = Math.min(newY0, newY1)
 
             if (iconSetType === 0) {
+                x0 = x - (textWidth / 2.0)
                 context.fillStyle = theme.textColor
                 context.fillText(str, x0, y0)
             } else if (iconSetType === 1 || iconSetType === 2) {
                 let dim = (iconSetType === 1) ? (1.75 * rectWidth) :
                             ((iconSetType === 2) ? (2.5 * rectWidth) : 1.0)
 
-                x0 = x - (dim / 2.0) + (rectWidth)
-                y0 -= dim
+                x0 = x - (dim / 2.0)
+                y0 -= 1.5 * rectWidth
 
                 iconOverlay.addItem({
                     iconSetType: iconSetType,
@@ -428,8 +429,7 @@ Canvas {
                     partOfDay: timePeriod
                 })
             } else if (iconSetType === 3) {
-                let padding = (0.05 * rectWidth)   // padding determined by hand
-                x0 = x + padding
+                x0 = x - rectWidth
                 y0 -= 1.5 * rectWidth
 
                 iconOverlay.addItem({
