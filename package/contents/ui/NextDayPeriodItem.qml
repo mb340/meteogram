@@ -83,20 +83,9 @@ RowLayout {
             iconSetType: root.iconSetType
             iconName: root.iconName
             partOfDay: root.partOfDay
-            iconDim: getDim()
+            iconDim: Math.min(iconParent.width, iconParent.height)
 
             centerInParent: true
-
-            function getDim() {
-                if (iconSetType === 1) {
-                    return Math.min(iconParent.width, iconParent.height) * 1.00
-                } else if (iconSetType === 2) {
-                    return Math.min(iconParent.width, iconParent.height) * 1.25
-                } else if (iconSetType === 3) {
-                    return 1.1 * Math.min(iconParent.width, iconParent.height)
-                }
-                return iconParent.width
-            }
         }
     }
 }

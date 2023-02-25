@@ -21,18 +21,31 @@ Item {
 
     property bool centerInParent: false
 
+    // Component.onCompleted: {
+    //     print("WeatherIcon " + iconSetType + ", " + iconName + ", " + iconX + ", " + iconY + ", " + iconDim)
+    // }
+
     Component {
         id: iconLabelComponent
 
-        PlasmaComponents.Label {
+        Item {
             x: iconX
             y: iconY
+            width: isFinite(iconDim) ? adjustDim(iconDim)  : parent.width
+            height: width
 
-            font.pointSize: -1
-            font.pixelSize: pixelFontSize > 0 ? pixelFontSize : undefined
+            PlasmaComponents.Label {
+                text: IconTools.getIconCode(iconName, currentProvider.providerId, partOfDay)
 
-            font.family: 'weathericons'
-            text: hidden ? '' : IconTools.getIconCode(iconName, currentProvider.providerId, partOfDay)
+                // Re-usable components need a custom icon to avoid the same
+                // font size for ever instance of the component.
+                font: Qt.font({
+                        pixelSize: Math.max(1, parent.width),
+                        family: 'weathericons',
+                })
+
+                anchors.centerIn: parent
+            }
         }
     }
 
@@ -41,7 +54,7 @@ Item {
         Item {
             x: iconX
             y: iconY
-            width: isFinite(iconDim) ? iconDim : parent.width
+            width: isFinite(iconDim) ? adjustDim(iconDim)  : parent.width
             height: width
 
             property var imgSrc: (iconSetType === 1 ?
@@ -76,7 +89,7 @@ Item {
             x: iconX
             y: iconY
 
-            width: isFinite(iconDim) ? iconDim : parent.width
+            width: isFinite(iconDim) ? adjustDim(iconDim) : parent.width
             height: width
 
             PlasmaCore.IconItem {
@@ -103,6 +116,8 @@ Item {
 
         anchors.centerIn: centerInParent ? parent : null
 
+        // anchors.fill: parent
+
         sourceComponent: {
             if (iconSetType === 0) {
                 return iconLabelComponent
@@ -115,5 +130,22 @@ Item {
             }
             return null
         }
+    }
+
+    // Empirically determined size adjustements
+    function adjustDim(dim) {
+        if (iconSetType === 0) {
+            return dim * 0.75
+        }
+        if (iconSetType === 1) {
+            return dim * (1.75 / 2.0)
+        }
+        if (iconSetType === 2) {
+            return dim * (2.5 / 2.0)
+        }
+        if (iconSetType === 3) {
+            return 1.00 * dim
+        }
+        return dim
     }
 }
