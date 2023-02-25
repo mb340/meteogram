@@ -141,8 +141,8 @@ Item {
                 name: "anchorTopLeft"
                 AnchorChanges {
                     target: hoverItem
-                    anchors.top: undefined
-                    anchors.bottom: hoverPoint.bottom
+                    anchors.top: hoverPoint.top
+                    anchors.bottom: undefined
                     anchors.left: hoverPoint.left
                     anchors.right: undefined
                 }
@@ -151,8 +151,8 @@ Item {
                 name: "anchorBottomLeft"
                 AnchorChanges {
                     target: hoverItem
-                    anchors.top: hoverPoint.top
-                    anchors.bottom: undefined
+                    anchors.top: undefined
+                    anchors.bottom: hoverPoint.bottom
                     anchors.left: hoverPoint.left
                     anchors.right: undefined
                 }
@@ -161,8 +161,8 @@ Item {
                 name: "anchorTopRight"
                 AnchorChanges {
                     target: hoverItem
-                    anchors.top: undefined
-                    anchors.bottom: hoverPoint.bottom
+                    anchors.top: hoverPoint.top
+                    anchors.bottom: undefined
                     anchors.left: undefined
                     anchors.right: hoverPoint.right
                 }
@@ -171,8 +171,8 @@ Item {
                 name: "anchorBottomRight"
                 AnchorChanges {
                     target: hoverItem
-                    anchors.top: hoverPoint.top
-                    anchors.bottom: undefined
+                    anchors.top: undefined
+                    anchors.bottom: hoverPoint.bottom
                     anchors.left: undefined
                     anchors.right: hoverPoint.right
                 }
