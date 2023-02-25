@@ -42,6 +42,13 @@ ManagedListModel {
         if (root.count <= 0) {
             return false
         }
-        return isFinite(root.get(0)[varName])
+        for (var i = 0; i < root.count; i++) {
+            let val = root.get(i)[varName]
+            // if (typeof(val) === 'number' && (-Infinity < val && val < +Infinity)) {
+            if (isFinite(val)) {
+                return true
+            }
+        }
+        return false
     }
 }
