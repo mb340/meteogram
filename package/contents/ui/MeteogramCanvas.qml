@@ -223,6 +223,8 @@ Canvas {
         var prevShowPrecUnit = false
         var prevPrecStr = undefined
 
+        let pType = UnitUtils.getSmallestPrecipitationType(precipitationType)
+
         for (var i = 0; i < meteogramModel.count; i++) {
             var item = meteogramModel.get(i)
             var prec = item.precipitationAmount
@@ -240,7 +242,7 @@ Canvas {
 
             var x = timeScale.translate(item.from)
             var y = precipitationScale.translate(Math.min(precipitationMaxGraphY, prec))
-            var precStr = UnitUtils.formatPrecipitationStr(prec, precipitationType)
+            var precStr = UnitUtils.formatPrecipitationStr(prec, pType)
             const textPad = 2
             var y0 = y - textPad
 
@@ -264,7 +266,7 @@ Canvas {
             prevPrecStr = precStr
 
             if (showPrecUnit) {
-                var precUnitStr = UnitUtils.getPrecipitationUnit(precipitationType)
+                var precUnitStr = UnitUtils.getPrecipitationUnit(pType)
                 var metrics = context.measureText(precUnitStr)
                 var x0 = x - (metrics.width / 2) + (rectWidth / 2)
 
