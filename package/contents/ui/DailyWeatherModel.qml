@@ -30,8 +30,7 @@ ManagedListModel {
             feelsLike: NaN,
 
             // Millimeters
-            // Probability: [0 - 100]%
-            precipitation: NaN,
+            precipitationAmount: NaN,
 
             // Degrees
             windDirection: NaN,
