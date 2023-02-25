@@ -232,11 +232,12 @@ Item {
                 anchors.right: parent.right
 
                 WeatherIcon {
-                    width: parent.height
-                    height: parent.height
-                    iconDim: parent.height
+                    iconDim: units.iconSizes.large
+                    width: iconDim
+                    height: iconDim
 
                     anchors.centerIn: parent
+                    centerInParent: true
 
                     partOfDay: dayParts ? dayParts[dayPart]["partOfDay"] : 0
                     iconSetType: (plasmoid && plasmoid.configuration && plasmoid.configuration.iconSetType) ?
