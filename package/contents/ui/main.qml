@@ -510,7 +510,7 @@ Item {
         subText += '<br /><br />'
         subText += '<font size="3">' + i18n("near future") + '</font>'
         subText += '<b>'
-        subText += '<font size="6">&nbsp;&nbsp;&nbsp;' + UnitUtils.getTemperatureNumberExt(nearFutureWeather.temperature)
+        subText += '<font size="6">&nbsp;&nbsp;&nbsp;' + UnitUtils.getTemperatureText(nearFutureWeather.temperature, temperatureType, 2)
         subText += '&nbsp;&nbsp;&nbsp;<font style="font-family: weathericons">' + futureWeatherIcon + '</font></font>'
         subText += '</b>'
         tooltipSubText = subText

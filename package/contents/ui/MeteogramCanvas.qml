@@ -240,7 +240,7 @@ Canvas {
 
             var x = timeScale.translate(item.from)
             var y = precipitationScale.translate(Math.min(precipitationMaxGraphY, prec))
-            var precStr = UnitUtils.precipitationFormat(prec)
+            var precStr = UnitUtils.formatPrecipitationStr(prec, precipitationType)
             const textPad = 2
             var y0 = y - textPad
 
@@ -264,7 +264,7 @@ Canvas {
             prevPrecStr = precStr
 
             if (showPrecUnit) {
-                var precUnitStr = UnitUtils.localisePrecipitationUnit("mm")
+                var precUnitStr = UnitUtils.getPrecipitationUnit(precipitationType)
                 var metrics = context.measureText(precUnitStr)
                 var x0 = x - (metrics.width / 2) + (rectWidth / 2)
 

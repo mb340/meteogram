@@ -67,9 +67,9 @@ RowLayout {
         verticalAlignment: Text.AlignVCenter
 
         text: hidden ? '' :
-              (!hasMinMax ? UnitUtils.getTemperatureNumberExt(temperature, temperatureType) :
-                            UnitUtils.getTemperatureNumberExt(temperature_max, temperatureType) + " / " +
-                            UnitUtils.getTemperatureNumberExt(temperature_min, temperatureType))
+              (!hasMinMax ? UnitUtils.getTemperatureText(temperature, temperatureType, 0) :
+                            UnitUtils.getTemperatureText(temperature_max, temperatureType, 0) + " / " +
+                            UnitUtils.getTemperatureText(temperature_min, temperatureType, 0))
     }
 
     Item {

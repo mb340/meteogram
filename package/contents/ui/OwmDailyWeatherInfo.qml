@@ -182,7 +182,10 @@ ColumnLayout {
                 Layout.preferredWidth: width
 
                 Label {
-                    text: !root.model ? "" : UnitUtils.getTemperatureNumberExt(root.model[modelData.varName], temperatureType)
+                    text: !root.model ? "" :
+                            UnitUtils.getTemperatureText(
+                                root.model[modelData.varName],
+                                temperatureType, 2)
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
             }

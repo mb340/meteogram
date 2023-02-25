@@ -209,17 +209,14 @@ Item {
 
         model.addItem({
             nameStr: i18n("Temperature:"),
-            valueStr: hourModel.temperature.toFixed(2) +
-                        UnitUtils.getTemperatureEnding(temperatureType),
+            valueStr: UnitUtils.getTemperatureText(hourModel.temperature, temperatureType, 2),
             valueColor: (hourModel.temperature >= 0 ? palette.temperatureWarmColor() :
                                                      palette.temperatureColdColor()).toString()
         })
 
-
-        var pressureStr = UnitUtils.convertPressure(hourModel.pressure, pressureType).toFixed(2)
         model.addItem({
             nameStr: i18n("Pressure:"),
-            valueStr: pressureStr + " " + UnitUtils.getPressureEnding(pressureType),
+            valueStr: UnitUtils.getPressureText(hourModel.pressure, pressureType),
             valueColor: palette.pressureColor().toString()
         })
 
@@ -252,8 +249,8 @@ Item {
 
         var precipitationStr = ""
         if (isFinite(hourModel.precipitationAmount)) {
-            precipitationStr = UnitUtils.precipitationFormat(hourModel.precipitationAmount) +
-                               " " + "mm"
+            precipitationStr = UnitUtils.getPrecipitationText(hourModel.precipitationAmount,
+                                                              precipitationType)
             model.addItem({
                 nameStr: i18n("Precipitation:"),
                 valueStr: precipitationStr,

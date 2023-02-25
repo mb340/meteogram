@@ -36,14 +36,17 @@ function convertTemperature(celsia, temperatureType) {
     } else if (temperatureType === TemperatureType.KELVIN) {
         return toKelvin(celsia)
     }
-    return Math.round(celsia)
+    return celsia
 }
 
-function formatTemperatureStr(temperature, temperatureType) {
-    return temperature.toFixed(0)
+function formatTemperatureStr(temperature, temperatureType, digits = undefined) {
+    if (digits === undefined) {
+        digits = 2
+    }
+    return convertTemperature(temperature, temperatureType).toFixed(digits)
 }
 
-function formatTemperatureUnit(temperatureType) {
+function getTemperatureUnit(temperatureType) {
     if (temperatureType === undefined) {
         temperatureType = main.temperatureType
     }
@@ -55,9 +58,9 @@ function formatTemperatureUnit(temperatureType) {
     return ""
 }
 
-function getTemperatureNumberExt(temperatureStr, temperatureType) {
-    return convertTemperature(temperatureStr, temperatureType) +
-            formatTemperatureUnit(temperatureType)
+function getTemperatureText(temperatureStr, temperatureType, digits = undefined) {
+    return formatTemperatureStr(temperatureStr, temperatureType, digits) +
+            getTemperatureUnit(temperatureType)
 }
 
 function getTemperatureEnding(temperatureType) {
@@ -74,7 +77,7 @@ function getTemperatureEnding(temperatureType) {
 /*
  * PRESSURE
  */
-var PressureType = {
+const PressureType = {
     HPA: 0,
     INHG: 1,
     MMHG: 2
@@ -82,33 +85,34 @@ var PressureType = {
 
 function convertPressure(hpa, pressureType) {
     if (pressureType === PressureType.INHG) {
-        return hpa * 0.0295299830714
+        return Math.round(hpa * 0.0295299830714 * 10) / 10
     }
     if (pressureType === PressureType.MMHG) {
-        return hpa * 0.750061683
+        return Math.round(hpa * 0.750061683 * 10) / 10
     }
     return hpa
 }
 
-function formatPressureStr(val, pressureDecimals) {
-    return val.toFixed(pressureDecimals)
-}
-
-function getPressureNumber(hpa, pressureType) {
-    if (pressureType === PressureType.INHG) {
-        return Math.round(hpa * 0.0295299830714 * 10) / 10
+function formatPressureStr(val, pressureType, digits = undefined) {
+    if (pressureType === undefined) {
+        pressureType = main.pressureType
     }
-    if (pressureType === PressureType.MMHG) {
-        return Math.round(hpa * 0.750061683)
+    if (digits === undefined) {
+        digits = 1
     }
-    return Math.round(hpa)
+    return convertPressure(val, pressureType).toFixed(digits)
+}
+function getPressureText(hpa, pressureType, digits = undefined) {
+    var pressureStr = ""
+    if (typeof(hpa) === 'number') {
+        pressureStr = formatPressureStr(hpa, pressureType, digits)
+    } else {
+        pressureStr = String(hpa)
+    }
+    return pressureStr + ' ' + getPressureUnit(pressureType)
 }
 
-function getPressureText(hpa, pressureType) {
-    return getPressureNumber(hpa, pressureType) + ' ' + getPressureEnding(pressureType)
-}
-
-function getPressureEnding(pressureType) {
+function getPressureUnit(pressureType) {
     if (pressureType === undefined) {
         pressureType = main.pressureType
     }
@@ -130,20 +134,27 @@ var WindSpeedType = {
     KMH: 2
 }
 
-function getWindSpeedNumber(mps, windSpeedType) {
+function convertWindspeed(mps, windSpeedType) {
     if (windSpeedType === WindSpeedType.MPH) {
-        return Math.round(mps * 2.2369362920544 * 10) / 10
+        return mps * 2.2369362920544
     } else if (windSpeedType === WindSpeedType.KMH) {
-        return Math.round(mps * 3.6 * 10) / 10
+        return mps * 3.6
     }
     return mps
 }
 
-function getWindSpeedText(mps, windSpeedType) {
-    return getWindSpeedNumber(mps, windSpeedType) + ' ' + getWindSpeedEnding(windSpeedType)
+function formatWindSpeedStr(mps, windSpeedType, digits = undefined) {
+    if (digits === undefined) {
+        digits = 1
+    }
+    return convertWindspeed(mps, windSpeedType).toFixed(digits)
 }
 
-function getWindSpeedEnding(windSpeedType) {
+function getWindSpeedText(mps, windSpeedType, digits = undefined) {
+    return formatWindSpeedStr(mps, windSpeedType, digits) + ' ' + getWindSpeedUnit(windSpeedType)
+}
+
+function getWindSpeedUnit(windSpeedType) {
     if (windSpeedType === undefined) {
         windSpeedType = main.windSpeedType
     }
@@ -153,6 +164,21 @@ function getWindSpeedEnding(windSpeedType) {
         return i18n("km/h")
     }
     return i18n("m/s")
+}
+
+function formatWindDirectionStr(degrees, digits = undefined) {
+    if (digits === undefined) {
+        digits = 0
+    }
+    return degrees.toFixed(digits)
+}
+
+function getWindDirectionUnit() {
+    return i18n('°')
+}
+
+function getWindDirectionText(degrees, digits = undefined) {
+    return formatWindDirectionStr(degrees, digits) + getWindDirectionUnit()
 }
 
 function getHourText(hourNumber, twelveHourClockEnabled) {
@@ -302,34 +328,66 @@ function isSunRisen(t) {
 /*
  * PRECIPITATION
  */
-function precipitationFormat(precFloat) {
-    // Format precipitation amount
-    if (main.precipitationType === 0) {
-        if (precFloat >= precipitationMinVisible) {
-            var result = Math.round(precFloat * 10) / 10
-            return result.toFixed(1)
-        }
-        return "0.0 "
+function convertPrecipitation(precFloat, precipitationType) {
+    return precFloat
+}
+
+function formatPrecipitationStr(precFloat, precipitationType, digits = undefined) {
+    if (digits === undefined) {
+        digits = 1
     }
-    return String(precFloat)
+    return convertPrecipitation(precFloat, precipitationType).toFixed(digits)
 }
 
-function precipitationProbFormat(prob) {
-    // Format probability of precipitation
-    return (prob * 100).toFixed(0)
+function getPrecipitationText(prec, precipitationType, digits = undefined) {
+    return formatPrecipitationStr(prec, precipitationType, digits) + " " +
+            getPrecipitationUnit(precipitationType)
 }
 
-function localisePrecipitationUnit(unitText) {
-    switch (unitText) {
-    case "mm":
-        return i18n("mm")
-    case "cm":
-        return i18n("cm")
-    case "in":
-        return i18n("in")
+function getPrecipitationUnit(precipitationType) {
+    switch (precipitationType) {
     default:
-        return unitText
+    case 0:
+        return i18n("mm")
+    case 1:
+        return i18n("cm")
+    case 2:
+        return i18n("in")
     }
+}
+
+function convertPop(percentage) {
+    return percentage * 100.0
+}
+
+function formatPopStr(percentage, digits = undefined) {
+    if (digits === undefined) {
+        digits = 0
+    }
+    return convertPop(percentage).toFixed(digits)
+}
+
+function getPopText(percentage) {
+    return formatPopStr(percentage) + getPercentageUnit()
+}
+
+function convertPercentage(percentage) {
+    return percentage * 1.0
+}
+
+function formatPercentageStr(percentage, digits = undefined) {
+    if (digits === undefined) {
+        digits = 0
+    }
+    return convertPercentage(percentage).toFixed(digits)
+}
+
+function getPercentageText(percentage, digits = undefined) {
+    return formatPercentageStr(percentage, digits) + getPercentageUnit()
+}
+
+function getPercentageUnit() {
+    return i18n("%")
 }
 
 function convertValue(value, varName) {
@@ -340,71 +398,63 @@ function convertValue(value, varName) {
     if (varName === "temperature" || varName === "feelsLike") {
         return convertTemperature(value, temperatureType)
     } else if (varName === "precipitationProb") {
-        return value * 100
+        return convertPop(value)
     } else if (varName === "windSpeed" || varName === "windGust") {
-        return getWindSpeedNumber(value, windSpeedType)
+        return convertWindspeed(value, windSpeedType)
     } else if (varName === "pressure") {
         return convertPressure(value, pressureType)
     } else if (varName === "humidity") {
-        return value * 100
+        return convertPercentage(value)
     } else if (varName === "cloudArea") {
-        return value * 100
+        return convertPercentage(value)
     }
     return value
 }
 
 function formatUnits(varName) {
     if (varName === "temperature" || varName === "feelsLike") {
-        return formatTemperatureUnit(main.temperatureType)
+        return getTemperatureUnit(main.temperatureType)
     } else if (varName === "precipitationProb") {
-        return i18n("%")
+        return getPercentageUnit()
     } else if (varName === "precipitationAmount") {
-        return i18n("mm")
+        return getPrecipitationUnit("mm")
     } else if (varName === "windSpeed" || varName === "windGust") {
-        return getWindSpeedEnding()
+        return getWindSpeedUnit()
     } else if (varName === "windDirection") {
-        return '°'
+        return getWindDirectionUnit()
     } else if (varName === "pressure") {
-        return getPressureEnding()
+        return getPressureUnit()
     } else if (varName === "humidity") {
-        return i18n("%")
+        return getPercentageUnit()
     } else if (varName === "cloudArea") {
-        return i18n("%")
+        return getPercentageUnit()
     }
     return ""
 }
 
-function formatValue(value, varName, partOfDay) {
+function formatValue(value, varName, partOfDay, digits = undefined) {
     partOfDay = (partOfDay !== undefined) ? partOfDay : 0
     let temperatureType = main.temperatureType
     let pressureType = main.pressureType
     let windSpeedType = main.windSpeedType
+    let precipitationType = main.precipitationType
 
     if (varName === "temperature" || varName === "feelsLike") {
-        return getTemperatureNumberExt(value, temperatureType)
+        return getTemperatureText(value, temperatureType, digits)
     } else if (varName === "precipitationProb") {
-        let precipStr = precipitationProbFormat(value)
-        let precipSuffix = i18n("%")
-        return precipStr + " " + precipSuffix
+        return getPopText(value, digits)
     } else if (varName === "precipitationAmount") {
-        let precipStr = precipitationFormat(value)
-        let precipSuffix = i18n("mm")
-        return precipStr + " " + precipSuffix
+        return getPrecipitationText(value, precipitationType, digits)
     } else if (varName === "windSpeed" || varName === "windGust") {
-        return getWindSpeedText(value, windSpeedType)
+        return getWindSpeedText(value, windSpeedType, digits)
     } else if (varName === "windDirection") {
-        return String(value) + '°'
+        return getWindDirectionText(value, digits)
     } else if (varName === "pressure") {
-        var pressureStr = convertPressure(value, pressureType)
-        var pressureSuffix = getPressureEnding(pressureType)
-        if (!pressureStr) {
-            return ""
-        }
-        return pressureStr.toFixed(2) + " " + pressureSuffix
+        return getPressureText(value, pressureType, digits)
     } else if (varName === "humidity") {
-        return value + " %"
+        return getPercentageText(value, digits)
     } else if (varName === "clouds") {
-        return value + " %"
+        return getPercentageText(value, digits)
     }
     return value
 }

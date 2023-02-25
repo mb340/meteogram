@@ -87,7 +87,7 @@ Item {
     property double fontPixelSize: boxHeight * (layoutType === 2 ? 0.7 : 0.7)
 
     property string iconNameStr:    currentWeatherModel.valid ? IconTools.getIconCode(currentWeatherModel.iconName, currentProvider.providerId, getPartOfDayIndex()) : '\uf07b'
-    property string temperatureStr: currentWeatherModel.valid ? UnitUtils.getTemperatureNumberExt(currentWeatherModel.temperature, temperatureType) : '--'
+    property string temperatureStr: currentWeatherModel.valid ? UnitUtils.getTemperatureText(currentWeatherModel.temperature, temperatureType, 0) : '--'
     Item {
         id: innerWindow
         anchors.fill: parent

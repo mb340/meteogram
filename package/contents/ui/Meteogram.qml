@@ -139,7 +139,7 @@ Item {
                 color: gridColor
             }
             PlasmaComponents.Label {
-                text: UnitUtils.formatTemperatureStr(temperatureAxisScale.invert(index), temperatureType)
+                text: UnitUtils.formatTemperatureStr(temperatureAxisScale.invert(index), temperatureType, 0)
                 height: labelHeight
                 width: labelWidth
                 horizontalAlignment: Text.AlignRight
