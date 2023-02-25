@@ -28,7 +28,7 @@ Item {
     property color lineColor: theme.textColor
 
     property var model: null
-    property var dayParts: null
+    property var dayParts: model ? model.models : null
 
     property var dayPartHeaders: [
         i18n("Night"),
@@ -62,19 +62,6 @@ Item {
         i18n("Cloud Cover"),
         // i18n("UV Index"),
     ]
-
-    onModelChanged: {
-        if (!model) {
-            return
-        }
-        // dayParts = model.models
-
-        // print("onModelChanged")
-        // print(JSON.stringify(model))
-        var m = JSON.parse(JSON.stringify(model))
-        dayParts = m['models']
-        // print(dayParts.length)
-    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -151,10 +138,7 @@ Item {
                     property string varName: dayPartVars[index]
                     property int rowIndex: index
 
-                    visible: dayParts && (dayParts[0][varName] ||
-                                          dayParts[1][varName] ||
-                                          dayParts[2][varName] ||
-                                          dayParts[3][varName])
+                    visible: meteogramModel.hasVariable(varName)
 
                     anchors.left: parent.left
                     anchors.right: parent.right
@@ -179,6 +163,7 @@ Item {
 
                             property int dayPart: modelData
                             property string varName: tableRow.varName
+                            property var model: dayParts ? dayParts.get(dayPart) : null
 
                             width: parent.width / nColumns
                             height: childrenRect.height
@@ -207,15 +192,15 @@ Item {
                 height: childrenRect.height
                 Label {
 
-                    property var value: dayParts ? dayParts[dayPart][varName] : NaN
-                    property int partOfDay: dayParts ? dayParts[dayPart]["partOfDay"] : 0
-                    property var iconDesc: IconTools.getIconDescription(value,
-                                            currentProvider.providerId, partOfDay)
-                    property var valueStr: typeof(value) === 'number' ?
-                                            UnitUtils.formatValue(value, varName, dayPart) : null
+                    property var value: (model && model[varName] != undefined) ? model[varName] : null
+                    property int partOfDay: model ? model["partOfDay"] : 0
+                    property var iconDesc: (value && varName !== "iconName") ? null :
+                                                IconTools.getIconDescription(value,
+                                                    currentProvider.providerId, partOfDay)
+                    property string valueStr: isNaN(value) || value === null ? "-" :
+                                                UnitUtils.formatValue(value, varName, dayPart)
 
-                    text: varName === "iconName" ? (iconDesc ? iconDesc : "-") :
-                                                   (valueStr ? valueStr : "-")
+                    text: varName === "iconName" ? (iconDesc ? iconDesc : "-") : valueStr
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     // visible: dayParts && dayParts[dayPart]["temperature"]
                 }
@@ -239,10 +224,10 @@ Item {
                     anchors.centerIn: parent
                     centerInParent: true
 
-                    partOfDay: dayParts ? dayParts[dayPart]["partOfDay"] : 0
+                    partOfDay: model ? model["partOfDay"] : 0
                     iconSetType: (plasmoid && plasmoid.configuration && plasmoid.configuration.iconSetType) ?
                                    plasmoid.configuration.iconSetType : 0
-                    iconName: dayParts ? dayParts[dayPart][varName] : null
+                    iconName: model ? model[varName] : null
                 }
             }
         }
