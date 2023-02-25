@@ -410,7 +410,9 @@ Item {
             dailyModel.feelsLikeEve = item.feelsLikeEvening
 
             dailyModel.precipitationProb = item.precipitationProb
-            dailyModel.precipitationAmount = parseFloat(item.precipitationValue)
+
+            let prec = parseFloat(item.precipitationValue)
+            dailyModel.precipitationAmount = !isNaN(prec) ? prec : 0
 
             dailyModel.humidity = item.humidity
             dailyModel.pressure = item.pressureHpa
@@ -461,11 +463,13 @@ Item {
                 continue
             }
 
+            let prec = parseFloat(obj.precipitationValue)
+
             var item = meteogramModel.createItem()
             item.from = dateFrom
             item.temperature = parseFloat(obj.temperature)
             item.feelsLike = parseFloat(obj.feelsLike)
-            item.precipitationAmount = parseFloat(obj.precipitationValue)
+            item.precipitationAmount = !isNaN(prec) ? prec : 0
             item.precipitationProb = parseFloat(obj.precipitationProb)
             item.windDirection = parseFloat(obj.windDirection)
             item.windSpeed = parseFloat(obj.windSpeedMps)
