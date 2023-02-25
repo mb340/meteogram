@@ -328,15 +328,39 @@ function isSunRisen(t) {
 /*
  * PRECIPITATION
  */
+const PrecipitationType = {
+    MM: 0,
+    CM: 1,
+    INCH: 2,
+    MIL: 3
+}
+
 function convertPrecipitation(precFloat, precipitationType) {
+    if (precipitationType === PrecipitationType.CM) {
+        return precFloat / 10.0
+    } else if (precipitationType === PrecipitationType.INCH) {
+        return Math.round(precFloat * 100) / (100 * 25.4)
+    } else if (precipitationType === PrecipitationType.MIL) {
+        return Math.round(precFloat * 39.3701 * 10) / 10
+    }
     return precFloat
 }
 
 function formatPrecipitationStr(precFloat, precipitationType, digits = undefined) {
+    let val = convertPrecipitation(precFloat, precipitationType)
     if (digits === undefined) {
         digits = 1
+        if (precipitationType === PrecipitationType.MIL) {
+            if (val >= 1.0) {
+                digits = 0
+            }
+        } else if (precipitationType === PrecipitationType.CM) {
+            digits = 2
+        } else if (precipitationType === PrecipitationType.INCH) {
+            digits = 3
+        }
     }
-    return convertPrecipitation(precFloat, precipitationType).toFixed(digits)
+    return val.toFixed(digits)
 }
 
 function getPrecipitationText(prec, precipitationType, digits = undefined) {
@@ -353,6 +377,8 @@ function getPrecipitationUnit(precipitationType) {
         return i18n("cm")
     case 2:
         return i18n("in")
+    case 3:
+        return i18n("mil")
     }
 }
 
