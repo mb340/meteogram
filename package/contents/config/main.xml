@@ -182,6 +182,9 @@
         <entry name="precipitationType" type="Enum">
             <choices>
                 <choice name="mm"/>
+                <choice name="cm"/>
+                <choice name="inch"/>
+                <choice name="mil"/>
             </choices>
             <default>0</default>
         </entry>

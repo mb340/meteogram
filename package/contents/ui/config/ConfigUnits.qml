@@ -8,6 +8,7 @@ Item {
     property int cfg_pressureType
     property int cfg_windSpeedType
     property int cfg_timezoneType
+    property int cfg_precipitationType
 
     onCfg_temperatureTypeChanged: {
         switch (cfg_temperatureType) {
@@ -69,11 +70,30 @@ Item {
         }
     }
 
+    onCfg_precipitationTypeChanged: {
+        switch (cfg_precipitationType) {
+        default:
+        case 0:
+            precipitationTypeMM.checked = true;
+            break;
+        case 1:
+            precipitationTypeCM.checked = true;
+            break;
+        case 2:
+            precipitationTypeInch.checked = true;
+            break;
+        case 3:
+            precipitationTypeMil.checked = true;
+            break;
+        }
+    }
+
     Component.onCompleted: {
         cfg_temperatureTypeChanged()
         cfg_pressureTypeChanged()
         cfg_windSpeedTypeChanged()
         cfg_timezoneTypeChanged()
+        cfg_precipitationTypeChanged()
     }
 
     ButtonGroup {
@@ -90,6 +110,10 @@ Item {
 
     ButtonGroup {
         id: timezoneTypeGroup
+    }
+
+    ButtonGroup {
+        id: precipitationTypeGroup
     }
 
     GridLayout {
@@ -233,6 +257,56 @@ Item {
             ButtonGroup.group: timezoneTypeGroup
             text: i18n("Location local-time")
             onCheckedChanged: if (checked) cfg_timezoneType = 2
+        }
+
+        Item {
+            width: 2
+            height: 10
+            Layout.columnSpan: 2
+        }
+
+        Label {
+            text: i18n("Precipitation:")
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+        }
+        RadioButton {
+            id: precipitationTypeMM
+            ButtonGroup.group: precipitationTypeGroup
+            text: i18n("Millimeter")
+            onCheckedChanged: if (checked) cfg_precipitationType = 0
+        }
+        Item {
+            width: 2
+            height: 2
+            Layout.rowSpan: 1
+        }
+        RadioButton {
+            id: precipitationTypeCM
+            ButtonGroup.group: precipitationTypeGroup
+            text: i18n("Centimeter")
+            onCheckedChanged: if (checked) cfg_precipitationType = 1
+        }
+        Item {
+            width: 2
+            height: 2
+            Layout.rowSpan: 1
+        }
+        RadioButton {
+            id: precipitationTypeInch
+            ButtonGroup.group: precipitationTypeGroup
+            text: i18n("Inch")
+            onCheckedChanged: if (checked) cfg_precipitationType = 2
+        }
+        Item {
+            width: 2
+            height: 2
+            Layout.rowSpan: 1
+        }
+        RadioButton {
+            id: precipitationTypeMil
+            ButtonGroup.group: precipitationTypeGroup
+            text: i18n("Mil") + " (" + i18n("Thousandth of an inch") + ")"
+            onCheckedChanged: if (checked) cfg_precipitationType = 3
         }
     }
 
