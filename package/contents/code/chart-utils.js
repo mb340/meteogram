@@ -145,14 +145,18 @@ function computeRightAxisRange(minValue, maxValue, minGridRange, fixedMin, fixed
     var floorMaxP = Math.floor(maxValue / mult) * mult
     // print("ceilMaxP = " + ceilMaxP)
     // print("floorMaxP = " + floorMaxP)
-    if (maxValue - floorMaxP <= ceilMaxP - maxValue) {
+    if (fixedMin) {
+        maxValue = minValue + (nSteps * stepSize)
+    } else if (fixedMax) {
+        minValue = maxValue - (nSteps * stepSize)
+    } else if (maxValue - floorMaxP <= ceilMaxP - maxValue) {
         var dp = maxValue - floorMaxP
-        maxValue = fixedMax ? maxValue : (maxValue - dp)
-        minValue = fixedMin ? minValue : (minValue - dp)
+        maxValue = maxValue - dp
+        minValue = minValue - dp
     } else {
         var dp = ceilMaxP - maxValue
-        maxValue = fixedMax ? maxValue : (maxValue + dp)
-        minValue = fixedMin ? minValue : (minValue + dp)
+        maxValue = maxValue + dp
+        minValue = minValue + dp
     }
     // print("mult = " + mult)
     // print("maxValue = " + maxValue + ", minValue = " + minValue)
