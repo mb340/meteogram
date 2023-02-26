@@ -29,18 +29,13 @@ function getMinGridRange(varName) {
     return 0.0
 }
 
-function logn(x, base) {
-    return Math.log(x) / Math.log(base)
-}
 
 function getMagnitude(val) {
-    var decimalPlace = Math.floor(logn(val, 100))
+    var decimalPlace = Math.floor(Math.log10(val))
     decimalPlace = (Math.abs(decimalPlace) === Infinity) ? 0 : decimalPlace
-    var mult = Math.pow(100, -decimalPlace)
-    decimalPlace *= 2
+    var mult = Math.pow(10, -decimalPlace)
     return [decimalPlace, mult]
 }
-
 
 /* Round a value in base number system */
 function roundBase(val, base) {
@@ -56,117 +51,143 @@ function floorBase(val, base) {
 }
 
 /*
- * Compute y-axis scale.
- * Right axis shares y-axis grid lines with temperature graph. This imposes a constraint of
- * which right axis steps are bound to temperature axis steps.
+ * Compute y-axis scale. Right axis shares y-axis grid lines with temperature graph.
+ * This imposes a constraint of right axis steps being bound to temperature axis steps.
  */
-function computeRightAxisRange(minValue, maxValue, minGridRange, fixedMin, fixedMax, gridCount) {
+function computeRightAxisRange(minValue, maxValue, minGridRange, fixedMin, fixedMax, gridCount)
+{
 
     if (!isFinite(minValue) || !isFinite(maxValue)) {
-        return [minValue, maxValue, 0]
+        return [minValue, maxValue]
     }
 
-    var dP = maxValue - minValue
-    var [decimalPlace, mult] = getMagnitude(dP)
+    let _minValue = minValue
+    let _maxValue = maxValue
+    let dP = maxValue - minValue
+    let [decimalPlace, mult] = getMagnitude(dP)
     // print(" ")
+    // print("fixedMin, fixedMax " + fixedMin + ", " + fixedMax)
     // print("maxValue = " + maxValue + ", minValue = " + minValue)
     // print("dP = " + dP)
     // print("decimalPlace = " + decimalPlace + ", mult = " + mult)
 
-    if (fixedMin === true && fixedMax === true) {
-        return [minValue, maxValue, decimalPlace]
-    }
-
-    var stepSize = 1 / mult
-    if ((dP / stepSize) < 2) {
-        // Ensure at least 2 steps
-        mult *= 100
-        decimalPlace -= 2
-        // print("decimalPlace = " + decimalPlace + ", mult = " + mult)
-    }
-
-    decimalPlace = Math.max(-2, decimalPlace)
-    decimalPlace = Math.min(4, decimalPlace)
+    dP = ceilBase(dP * mult, 0.5) / mult
+    // print("rounded dP = " + dP)
 
     dP = Math.max(minGridRange, dP)
-    // print("minGridRange = " + minGridRange + ", dP = " + dP)
+    // print("dP = " + dP)
 
-    var stepSize = 1 / mult
-    var count = Math.ceil(dP / stepSize)
-    var nSteps = Math.ceil(count / gridCount) * gridCount
-    var valueRange = stepSize * nSteps
+    if (fixedMin === true && fixedMax === true) {
+        return [minValue, maxValue]
+    }
+
+    let stepSize
+    if (decimalPlace > 0) {
+        stepSize = 10 * mult
+    } else {
+        stepSize = 1 / (10 * mult)
+    }
+
+    let count = Math.ceil(dP / stepSize)
+    let nSteps = Math.ceil(count / gridCount) * gridCount
+    let valueRange = stepSize * nSteps
+
+    // print("mult = " + mult)
+    // print("stepSize = " + stepSize)
     // print("valueRange = " + valueRange)
     // print("gridCount = " + gridCount)
 
-    while (true) {
-        var s = stepSize * 2
-        var c = Math.floor(dP / s)
-        var ns = Math.ceil(c / gridCount) * gridCount
-        var pr = s * ns
+    if (fixedMin) {
+        maxValue = minValue + (nSteps * stepSize)
+        return [minValue, maxValue]
+    }
 
-        // print("stepSize = " + stepSize + ", nSteps = " + nSteps +
-        //       ", valueRange = " + valueRange + ", dP = " + dP)
+    if (fixedMax) {
+        minValue = maxValue - (nSteps * stepSize)
+        return [minValue, maxValue]
+    }
+
+
+    let iter = 0
+    let baseStepSize = stepSize
+    let s = stepSize
+    // print("baseStepSize = " + baseStepSize)
+
+    var [_, roundMult] = getMagnitude(stepSize)
+    // print("decimalPlace_ = " + decimalPlace_)
+    // print("roundMult = " + roundMult)
+
+    // Find an appropriate step size by 0.5 and 1.0 increments per order of magnitude.
+    while (true) {
+        let c = Math.floor(dP / s)
+        let ns = Math.ceil(c / gridCount) * gridCount
+        let pr = s * ns
+
+        // print("stepSize = " + s + ", nSteps = " + ns + ", valueRange = " + pr)
         if (c <= 0 || ns <= 0) {
             print("c = " + c + ", ns = " + ns)
             break
         }
-        if (nSteps <= gridCount && valueRange >= dP) {
+        if (nSteps >= gridCount && pr <= 2.0 * dP) {
             break
         }
+
         stepSize = s
+
         count = c
         nSteps = ns
         valueRange = pr
+
+        if (iter >= 1) {
+            baseStepSize  /= 10
+            s = baseStepSize
+            iter = 0
+        } else {
+            s = s / 2
+            iter++
+        }
+
     }
 
-    // Pressure scale domain
-    var mid = minValue + ((maxValue - minValue) / 2.0)
-    mid = Math.round(mid * mult) / mult
-    minValue = fixedMin ? minValue : (mid - (valueRange / 2.0))
-    maxValue = fixedMax ? maxValue : (mid + (valueRange / 2.0))
-    if (mult != 1) {
-        minValue = fixedMin ? minValue : (Math.ceil(minValue * mult) / mult)
-        maxValue = fixedMax ? maxValue : (Math.floor(maxValue * mult) / mult)
-    }
+    // print('done')
+    // print("stepSize = " + stepSize + ", nSteps = " + nSteps +
+    //       ", valueRange = " + valueRange)
 
+    let mid = minValue + ((maxValue - minValue) / 2.0)
+    minValue = mid - (valueRange / 2.0)
+    maxValue = mid + (valueRange / 2.0)
     // print("mid = " + mid + ", maxValue = " + maxValue + ", minValue = " + minValue)
 
-    /*
-     * Round min/max values at one higher order of magnitude
-     */
-    var decimalPlace_ = Math.floor(Math.log10(stepSize))
-    var mult = decimalPlace_ + 1
-    if (decimalPlace_ >= 0) {
-        mult = Math.pow(10, mult)
-    } else {
-        // Whole numbers are the upper bound for rounding when the step size is less than zero.
-        mult = mult < 1 ? Math.pow(10, mult) : mult
+    // Find the highest order of magnitude that fits the data
+    let m = roundMult
+    while (true) {
+        let base = m >= 1 ? 5 : 0.5
+        let maxV = floorBase(maxValue * m, base) / m
+        let minV = maxV - (nSteps * stepSize)
+
+        if (_minValue < minV || _maxValue > maxV) {
+            maxV = ceilBase(maxValue * m, base) / m
+            minV = maxV - (nSteps * stepSize)
+        }
+
+        // print("m minV maxV " + m + ", " + minV + ", " + maxV)
+
+        if (_minValue < minV || _maxValue > maxV) {
+            break
+        }
+
+        minValue = minV
+        maxValue = maxV
+        m = m / 10
+        if (m < mult) {
+            break
+        }
     }
 
-    // print("ceilMaxP = " + ceilMaxP)
-    // print("floorMaxP = " + floorMaxP)
-    var ceilMaxP = ceilBase(maxValue / mult, 0.5) * mult
-    var floorMaxP = floorBase(maxValue / mult, 0.5) * mult
-    if (fixedMin) {
-        maxValue = minValue + (nSteps * stepSize)
-    } else if (fixedMax) {
-        minValue = maxValue - (nSteps * stepSize)
-    } else if (maxValue - floorMaxP <= ceilMaxP - maxValue) {
-        var dp = maxValue - floorMaxP
-        maxValue = maxValue - dp
-        minValue = minValue - dp
-    } else {
-        var dp = ceilMaxP - maxValue
-        maxValue = maxValue + dp
-        minValue = minValue + dp
-    }
-    // print("mult = " + mult)
     // print("maxValue = " + maxValue + ", minValue = " + minValue)
-
-    let decimalPlaces = -1 * Math.min(0, decimalPlace)
-
-    return [minValue, maxValue, decimalPlaces]
+    return [minValue, maxValue]
 }
+
 function countDecimalPlaces(value) {
     if (isNaN(value)) {
         return 0

@@ -683,7 +683,7 @@ Canvas {
 
         minValue = UnitUtils.convertTemperature(minValue, temperatureType)
         maxValue = UnitUtils.convertTemperature(maxValue, temperatureType)
-        let [minT, maxT] = processTemperatureData(minValue, maxValue)
+        let [minT, maxT] = computeTemperatureAxisRange(minValue, maxValue)
 
         temperatureScale.setDomain(minT, maxT)
         temperatureAxisScale.setDomain(minT, maxT)
@@ -693,30 +693,37 @@ Canvas {
         maxY2 = UnitUtils.convertValue(maxY2, y2VarName)
 
         var minGridRange = ChartUtils.getMinGridRange(y2VarName)
-        let [minP, maxP, decimalPlaces] = ChartUtils.computeRightAxisRange(minY2, maxY2,
-                                                                           minGridRange,
-                                                                           false, false,
-                                                                           temperatureYGridCount)
-
+        // var [minP, maxP, decimalPlaces] = ChartUtils.computeRightAxisRange(minY2, maxY2,
+        //                                                                    minGridRange,
+        //                                                                    false, false,
+        //                                                                    temperatureYGridCount)
         let [fixedMinY2, fixedMaxY2] = ChartUtils.getValueRange(y2VarName)
-        if (isFinite(fixedMinY2) || isFinite(fixedMaxY2)) {
-            let fixedMin = false
-            if (minP < fixedMinY2) {
-                fixedMin = true
-                minY2 = fixedMinY2
-            }
-            let fixedMax = false
-            if (maxP > fixedMaxY2) {
-                fixedMax = true
-                maxY2 = fixedMaxY2
-            }
-            if (fixedMin === true || fixedMax === true) {
-                [minP, maxP, decimalPlaces] =
-                    ChartUtils.computeRightAxisRange(minY2, maxY2, minGridRange, fixedMin, fixedMax,
-                                                     temperatureYGridCount)
-            }
+        let fixedMin = isFinite(fixedMinY2)
+        let fixedMax = isFinite(fixedMaxY2)
+        if (fixedMin) {
+            minY2 = fixedMinY2
+        }
+        if (fixedMax) {
+            maxY2 = fixedMaxY2
         }
 
+        var [minP, maxP] = ChartUtils.computeRightAxisRange(minY2, maxY2,
+                                                            minGridRange,
+                                                            fixedMin, fixedMax,
+                                                            temperatureYGridCount)
+
+        while (isFinite(minP) && isFinite(maxP) && !fixedMin && !fixedMax) {
+            const minSpace = 0.80
+            if (((maxY2 - minY2) / (maxP - minP)) < minSpace) {
+                break
+            }
+            let stepSize = (maxP - minP) / temperatureYGridCount
+            let pad = 1 * stepSize
+            var [minP, maxP] = ChartUtils.computeRightAxisRange(minP - pad, maxP + pad,
+                                                                minGridRange,
+                                                                fixedMin, fixedMax,
+                                                                temperatureYGridCount)
+        }
 
         let stepSize = (maxP - minP) / temperatureYGridCount
         let gridStepSize = temperatureYGridStep * stepSize
