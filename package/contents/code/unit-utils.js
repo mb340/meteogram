@@ -85,7 +85,7 @@ const PressureType = {
 
 function convertPressure(hpa, pressureType) {
     if (pressureType === PressureType.INHG) {
-        return Math.round(hpa * 0.0295299830714 * 10) / 10
+        return Math.round(hpa * 0.0295299830714 * 100) / 100
     }
     if (pressureType === PressureType.MMHG) {
         return Math.round(hpa * 0.750061683 * 10) / 10
@@ -98,7 +98,11 @@ function formatPressureStr(val, pressureType, digits = undefined) {
         pressureType = main.pressureType
     }
     if (digits === undefined) {
-        digits = 1
+        if (pressureType === PressureType.INHG) {
+            digits = 2
+        } else {
+            digits = 1
+        }
     }
     return convertPressure(val, pressureType).toFixed(digits)
 }
