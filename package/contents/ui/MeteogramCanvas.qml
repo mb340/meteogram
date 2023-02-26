@@ -235,14 +235,13 @@ Canvas {
         context.save()
         var counter = 0
 
-        context.font = ((fontSize / 2) + 1) + 'px "' + theme.defaultFont.family + '"'
+        context.font = (fontSize * 0.75) + 'px "' + theme.defaultFont.family + '"'
+        let lineHeight = context.measureText('M').width;
 
-        var prevIdx = -1
-        var prevY = NaN
-        var prevShowPrecUnit = false
         var prevPrecStr = undefined
 
         let pType = UnitUtils.getSmallestPrecipitationType(precipitationType)
+
 
         for (var i = 0; i < meteogramModel.count; i++) {
             var item = meteogramModel.get(i)
@@ -254,7 +253,6 @@ Canvas {
             counter = showPrec ? counter + 1 : 0
             var showPrecUnit = counter === 1
 
-
             if (!showPrec) {
                 continue
             }
@@ -265,19 +263,6 @@ Canvas {
             const textPad = 2
             var y0 = y - textPad
 
-            // Stagger vertically when two labels are consecutively in the same y position
-            const marginPx = 0
-            if (i - prevIdx === 1 && (prevY-marginPx <= y0 && y0 <= prevY+marginPx)) {
-                y0 = y0 - (fontSize / 2)
-            }
-            prevIdx = i
-            prevY = y0
-
-            // if (prevShowPrecUnit) {
-            //     y0 -= fontSize / 2
-            // }
-            prevShowPrecUnit = showPrecUnit
-
             if (precStr === prevPrecStr && counter > 1) {
                 prevPrecStr = precStr
                 continue
@@ -285,23 +270,8 @@ Canvas {
             prevPrecStr = precStr
 
             if (showPrecUnit) {
-                var precUnitStr = UnitUtils.getPrecipitationUnit(pType)
-                var metrics = context.measureText(precUnitStr)
-                var x0 = x - (metrics.width / 2) + (rectWidth / 2)
-
-                drawShadowText(context, precUnitStr, x0, y0)
-                context.fillStyle = theme.textColor
-                context.fillText(precUnitStr, x0, y0)
-
-                y0 -= fontSize/2
+                precStr = precStr + " " + UnitUtils.getPrecipitationUnit(pType)
             }
-
-            var metrics = context.measureText(precStr)
-            var x0 = x - (metrics.width / 2) + (rectWidth / 2)
-            drawShadowText(context, precStr, x0, y0)
-            context.fillStyle = theme.textColor
-            context.fillText(precStr, x0, y0)
-            y0 -= fontSize/2
 
             // Show arrow to indicate truncation at max value
             if (showPrecExcess) {
@@ -311,7 +281,19 @@ Canvas {
                 drawShadowText(context, precExcessStr, x0, y0)
                 context.fillStyle = theme.textColor
                 context.fillText(precExcessStr, x0, y0)
+                y0 -= lineHeight
             }
+
+            var xOffs = 0
+            var yOffs = (lineHeight / 2) + (rectWidth / 2)
+
+            context.save()
+            context.translate(x, y0)
+            context.rotate((-90 * Math.PI) / 180);
+            drawShadowText(context, precStr, xOffs, yOffs)
+            context.fillStyle = theme.textColor
+            context.fillText(precStr, xOffs, yOffs)
+            context.restore()
         }
         context.restore()
     }
