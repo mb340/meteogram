@@ -33,6 +33,7 @@ Canvas {
     property bool hasGraphCurvedLineChanged: false
 
     property int nHours: 0
+    property double rectWidth: width / nHours
 
     property alias temperatureScale: temperatureScale
     property alias temperatureAxisScale: temperatureAxisScale
@@ -128,6 +129,10 @@ Canvas {
         }
     }
 
+    onRectWidthChanged: {
+        computeFontSize()
+    }
+
     onGraphCurvedLineChanged: {
         hasGraphCurvedLineChanged = true
         fullRedraw()
@@ -165,11 +170,25 @@ Canvas {
                                 plasmoid.configuration.iconSetType : 0
 
     function computeFontSize() {
-        var rectWidth = width / root.nHours
-        var rectHeight = Math.abs(temperatureScale.translate(temperatureYGridStep) -
-                                  temperatureScale.translate(0))
-        var dim = Math.min(rectWidth, rectHeight / 2)
-        fontSize = Math.round(dim) * units.devicePixelRatio
+        if (!available) {
+            return
+        }
+
+        let ctx = context ? context : getContext("2d")
+        if (!ctx) {
+            return
+        }
+
+        let size = 1
+        while (true) {
+            ctx.font = 'bold ' + size + 'px "' + theme.defaultFont.family + '"'
+            let lineHeight = context.measureText('M').width;
+            if (lineHeight >= rectWidth) {
+                break
+            }
+            size += 0.5
+        }
+        fontSize = size
     }
 
     function drawPrecipitationBars(context, rectWidth) {
@@ -480,11 +499,9 @@ Canvas {
             return
         }
 
-        computeFontSize()
 
         context.globalCompositeOperation = "source-over"
 
-        var rectWidth = width / root.nHours
 
         if (plasmoid.configuration.renderAlerts) {
             context.globalCompositeOperation = "source-over"
