@@ -47,6 +47,14 @@ function roundBase(val, base) {
     return base * Math.round(val / base)
 }
 
+function ceilBase(val, base) {
+    return base * Math.ceil(val / base)
+}
+
+function floorBase(val, base) {
+    return base * Math.floor(val / base)
+}
+
 /*
  * Compute y-axis scale.
  * Right axis shares y-axis grid lines with temperature graph. This imposes a constraint of
@@ -81,12 +89,6 @@ function computeRightAxisRange(minValue, maxValue, minGridRange, fixedMin, fixed
     decimalPlace = Math.min(4, decimalPlace)
 
     dP = Math.max(minGridRange, dP)
-    if (decimalPlace >= 0) {
-         dP += (2 * (mult * 100) / gridCount)
-    } else {
-         dP += (2 * (mult / 100) / gridCount)
-    }
-    dP = Math.ceil(dP * mult * 10) / (mult * 10)
     // print("minGridRange = " + minGridRange + ", dP = " + dP)
 
     var stepSize = 1 / mult
@@ -141,10 +143,10 @@ function computeRightAxisRange(minValue, maxValue, minGridRange, fixedMin, fixed
         mult = mult < 1 ? Math.pow(10, mult) : mult
     }
 
-    var ceilMaxP = Math.ceil(maxValue / mult) * mult
-    var floorMaxP = Math.floor(maxValue / mult) * mult
     // print("ceilMaxP = " + ceilMaxP)
     // print("floorMaxP = " + floorMaxP)
+    var ceilMaxP = ceilBase(maxValue / mult, 0.5) * mult
+    var floorMaxP = floorBase(maxValue / mult, 0.5) * mult
     if (fixedMin) {
         maxValue = minValue + (nSteps * stepSize)
     } else if (fixedMax) {
