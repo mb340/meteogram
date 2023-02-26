@@ -136,11 +136,11 @@ var WindSpeedType = {
 
 function convertWindspeed(mps, windSpeedType) {
     if (windSpeedType === WindSpeedType.MPH) {
-        return mps * 2.2369362920544
+        return Math.round(mps * 2.2369362920544 * 10) / 10
     } else if (windSpeedType === WindSpeedType.KMH) {
-        return mps * 3.6
+        return Math.round(mps * 3.6 * 10) / 10
     }
-    return mps
+    return parseFloat(mps)
 }
 
 function formatWindSpeedStr(mps, windSpeedType, digits = undefined) {
