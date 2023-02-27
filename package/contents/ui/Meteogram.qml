@@ -300,7 +300,21 @@ Item {
         function setModel(count) {
             windSpeedModel.beginList()
             for (var i = 0; i < count; i++) {
-                windSpeedModel.addItem({ index: i })
+                let item = meteogramModel.get(i)
+                if (!item || !isFinite(item.windSpeed)) {
+                    continue
+                }
+
+                let t = item.from
+                if (meteogramModel.hourInterval === 1 && (t.getHours()) % 2 === 0) {
+                    continue
+                }
+
+                windSpeedModel.addItem({
+                    xPos: timeScale.translate(t.getTime()) - (windSpeedRepeater.rectWidth / 2),
+                    windSpeed: parseFloat(item.windSpeed),
+                    windDirection: parseFloat(item.windDirection),
+                })
             }
             windSpeedModel.endList()
         }
@@ -308,8 +322,9 @@ Item {
         Repeater {
             id: windSpeedRepeater
             model: windSpeedModel.model
+            delegate: windIconDelegate
 
-            property var rectWidth: 2 * (meteogramCanvas.width / nHours)
+            property double rectWidth: 2 * (meteogramCanvas.rectWidth)
 
             Component {
                 id: windIconDelegate
@@ -318,7 +333,7 @@ Item {
                     id: windspeedAnchor
                     width: windSpeedRepeater.rectWidth
                     height: labelHeight
-                    x: timeScale.translate(from) - (windSpeedRepeater.rectWidth / 2)
+                    x: xPos
                     y: 0
 
                     Image {
@@ -366,26 +381,6 @@ Item {
                         img += Math.min(5,Math.trunc(windspeed / 5) + 1)
                         return img
                     }
-                }
-            }
-
-            delegate: Loader {
-                sourceComponent: condition(index) ? windIconDelegate : null
-
-                property var item: meteogramModel.get(index)
-                property var windSpeed: item ? parseFloat(item.windSpeed) : NaN
-                property var windDirection: item ? parseFloat(item.windDirection) : NaN
-                property var from: item ? item.from : new Date(0)
-
-                function condition(index) {
-                    var model = meteogramModel.get(index)
-                    if (!model || !model.windSpeed) {
-                        return false
-                    }
-                    if (meteogramModel.hourInterval === 1 && (model.from.getHours()) % 2 === 0) {
-                        return false
-                    }
-                    return isFinite(model.windSpeed)
                 }
             }
         }
