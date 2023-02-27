@@ -318,8 +318,7 @@ Item {
                     id: windspeedAnchor
                     width: windSpeedRepeater.rectWidth
                     height: labelHeight
-                    // x: timeScale.translate(from) - (windSpeedRepeater.rectWidth / 2)
-                    x: xIndexScale.translate(i) - (windSpeedRepeater.rectWidth / 2)
+                    x: timeScale.translate(from) - (windSpeedRepeater.rectWidth / 2)
                     y: 0
 
                     Image {
@@ -373,11 +372,10 @@ Item {
             delegate: Loader {
                 sourceComponent: condition(index) ? windIconDelegate : null
 
-                property int i: index
                 property var item: meteogramModel.get(index)
                 property var windSpeed: item ? parseFloat(item.windSpeed) : NaN
                 property var windDirection: item ? parseFloat(item.windDirection) : NaN
-                property double from: item ? item.from.getTime() : NaN
+                property var from: item ? item.from : new Date(0)
 
                 function condition(index) {
                     var model = meteogramModel.get(index)
