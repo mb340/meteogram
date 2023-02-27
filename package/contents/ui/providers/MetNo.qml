@@ -208,8 +208,8 @@ Item {
             var details = reading.data.instant.details
             var date = UnitUtils.convertDate(new Date(Date.parse(reading.time)), timezoneType)
 
-            // Hour convention [1 - 24]
-            var hour = date.getHours() + 1
+            // Hour convention [0 - 23]
+            var hour = date.getHours()
 
             // Check for new day
             if (prevHour > hour) {
@@ -227,17 +227,17 @@ Item {
             // Take the next closest if exact match isn't available.
             let isNearestHour = false
             let partOfDay = 0
-            if  (hour <= 6) {
+            if  (hour < 6) {
                 dailyPeriodIdx = 0
                 isNearestHour = checkIsNearestHour(dailyPeriodIdx, 3, hour)
                 partOfDay = 1
-            } else if (hour <= 12) {
+            } else if (hour < 12) {
                 dailyPeriodIdx = 1
                 isNearestHour = checkIsNearestHour(dailyPeriodIdx, 9, hour)
-            } else if (hour <= 18) {
+            } else if (hour < 18) {
                 dailyPeriodIdx = 2
                 isNearestHour = checkIsNearestHour(dailyPeriodIdx, 15, hour)
-            } else if (hour <= 24) {
+            } else if (hour < 24) {
                 dailyPeriodIdx = 3
                 isNearestHour = checkIsNearestHour(dailyPeriodIdx, 21, hour)
                 partOfDay = 1
