@@ -22,11 +22,11 @@ function getMinGridRange(varName) {
         const minPressureYGridCount = {
             0: 30,
             1: 0.5,
-            2: 10,
+            2: 20,
         }
         return minPressureYGridCount[main.pressureType]
     }
-    return 1.0
+    return 0.0
 }
 
 function logn(x, base) {
