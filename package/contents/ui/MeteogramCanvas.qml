@@ -701,6 +701,8 @@ Canvas {
 
         var minValue = +Infinity
         var maxValue = -Infinity
+        var minY1 = +Infinity
+        var maxY1 = -Infinity
         var minY2 = +Infinity
         var maxY2 = -Infinity
 
@@ -721,7 +723,18 @@ Canvas {
 
         minValue = UnitUtils.convertTemperature(minValue, temperatureType)
         maxValue = UnitUtils.convertTemperature(maxValue, temperatureType)
-        let [minT, maxT] = computeTemperatureAxisRange(minValue, maxValue)
+        var [minT, maxT] = computeTemperatureAxisRange(minValue, maxValue)
+
+        if (isFinite(minY1) && isFinite(maxY1)) {
+            minY1 = UnitUtils.convertValue(minY1, y1VarName)
+            maxY1 = UnitUtils.convertValue(maxY1, y1VarName)
+
+            if (minY1 < minT || maxY1 > maxT) {
+                minValue = Math.min(minValue, minY1)
+                maxValue = Math.max(maxValue, maxY1)
+                var [minT, maxT] = computeTemperatureAxisRange(minValue, maxValue)
+            }
+        }
 
         temperatureScale.setDomain(minT, maxT)
         temperatureAxisScale.setDomain(minT, maxT)
