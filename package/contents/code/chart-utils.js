@@ -167,3 +167,13 @@ function computeRightAxisRange(minValue, maxValue, minGridRange, fixedMin, fixed
 
     return [minValue, maxValue, decimalPlaces]
 }
+function countDecimalPlaces(value) {
+    if (isNaN(value)) {
+        return 0
+    }
+    let strNum = value.toString()
+    if (strNum.includes('.')) {
+        return strNum.split('.')[1].length
+    }
+    return 0
+}

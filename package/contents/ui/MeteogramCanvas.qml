@@ -717,6 +717,17 @@ Canvas {
             }
         }
 
+
+        let stepSize = (maxP - minP) / temperatureYGridCount
+        let gridStepSize = temperatureYGridStep * stepSize
+
+        // Limit to 2 decimal places
+        gridStepSize = Math.round(gridStepSize * 100) / 100
+
+        var decimalPlaces = Math.max(ChartUtils.countDecimalPlaces(maxP),
+                                     ChartUtils.countDecimalPlaces(minP))
+        decimalPlaces = Math.max(ChartUtils.countDecimalPlaces(gridStepSize), decimalPlaces)
+
         rightAxisDecimals = decimalPlaces
         rightAxisScale.setDomain(minP, maxP)
         rightGridScale.setDomain(minP, maxP)
