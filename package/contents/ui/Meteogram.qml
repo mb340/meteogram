@@ -17,6 +17,7 @@
 import QtQuick 2.5
 import QtQuick.Window 2.5
 import QtQml.Models 2.5
+import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import QtQuick.Controls 2.5
@@ -50,10 +51,10 @@ Item {
     property color gridColor: textColorLight ? Qt.tint(theme.textColor, '#80000000') : Qt.tint(theme.textColor, '#80FFFFFF')
     property color gridColorHighlight: textColorLight ? Qt.tint(theme.textColor, '#50000000') : Qt.tint(theme.textColor, '#50FFFFFF')
 
-    property var y2VarName: "pressure"
+    property string y2VarName: plasmoid.configuration.y2VarName
     property bool y2AxisVisble: meteogramModel.hasVariable(y2VarName)
 
-    property var y1VarName: "dewPoint"
+    property string y1VarName: plasmoid.configuration.y1VarName
 
     property alias temperatureScale: meteogramCanvas.temperatureScale
     property alias temperatureAxisScale: meteogramCanvas.temperatureAxisScale
@@ -73,10 +74,12 @@ Item {
     }
 
     onY2VarNameChanged: {
+        plasmoid.configuration.y2VarName = y2VarName
         fullRedraw()
     }
 
     onY1VarNameChanged: {
+        plasmoid.configuration.y1VarName = y1VarName
         fullRedraw()
     }
 

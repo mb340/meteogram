@@ -148,6 +148,13 @@
         <entry name="renderAlerts" type="Bool">
             <default>true</default>
         </entry>
+
+        <entry name="y1VarName" type="String">
+            <default></default>
+        </entry>
+        <entry name="y2VarName" type="String">
+            <default>pressure</default>
+        </entry>
     </group>
 
     <group name="Units">
