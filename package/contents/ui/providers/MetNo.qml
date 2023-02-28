@@ -264,6 +264,8 @@ Item {
                 let details = reading.data.next_6_hours.details
                 iconNumber = geticonNumber(summary.symbol_code)
                 precipitation = parseFloat(details.precipitation_amount)
+                temperatureMax = parseFloat(details.air_temperature_max)
+                temperatureMin = parseFloat(details.air_temperature_min)
             } else if (reading.data.next_1_hours) {
                 let summary = reading.data.next_1_hours.summary
                 let details = reading.data.next_1_hours.details
@@ -272,8 +274,8 @@ Item {
             }
 
             let temperature = details["air_temperature"]
-            temperatureMin = Math.min(isFinite(temperatureMin) ? temperatureMin : temperature, temperature)
-            temperatureMax = Math.max(isFinite(temperatureMax) ? temperatureMax : temperature, temperature)
+            // temperatureMin = Math.min(isFinite(temperatureMin) ? temperatureMin : temperature, temperature)
+            // temperatureMax = Math.max(isFinite(temperatureMax) ? temperatureMax : temperature, temperature)
             temperatureCount++
 
             let item = dailyModel.models[dailyPeriodIdx]
@@ -288,12 +290,10 @@ Item {
                 item.windDirection = parseFloat(details["wind_from_direction"])
                 item.windSpeed = parseFloat(details["wind_speed"])
                 item.precipitationAmount = precipitation
-            }
-
-            if (temperatureCount > 1) {
                 item.temperatureLow = temperatureMin
                 item.temperatureHigh = temperatureMax
             }
+
         }
 
         dailyWeatherModels.endList()
