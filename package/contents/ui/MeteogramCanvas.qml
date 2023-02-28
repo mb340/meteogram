@@ -744,31 +744,32 @@ Canvas {
     /*
      * Compute y-axis scale for temperature graph
      */
-    function processTemperatureData(minValue, maxValue) {
-        // print("orig: maxValue = " + maxValue + ", minValue = " + minValue)
+    function computeTemperatureAxisRange(minValue, maxValue) {
 
         // Convert window size from Celsius
         var minGridCount = minTemperatureYGridCount
-        var dF = UnitUtils.convertTemperature(minTemperatureYGridCount, temperatureType) -
-                    UnitUtils.convertTemperature(0, temperatureType)
-        minGridCount = minGridCount * (minTemperatureYGridCount / dF)
         // print('minGridCount = ' + minGridCount)
 
-        // Pad the window size so the min/max value isn't on the edge of the graph area
-        const gridCountMargin = 1.250
         var dV = maxValue - minValue
-        var temperatureRange = Math.max(minGridCount, Math.ceil(dV * gridCountMargin))
-        var pad = temperatureRange - dV
-        minValue = Math.floor(minValue - (pad / 2.0))
-        maxValue = Math.ceil(maxValue + (pad / 2.0))
-        // print("padd: maxValue = " + maxValue + ", minValue = " + minValue)
+        var mid = minValue + (dV / 2)
 
-        temperatureYGridCount = maxValue - minValue
+        // Pad the window size so the min/max value isn't on the edge of the graph area
+        const coverageRatio = 0.80
+        var roundedDv = ChartUtils.ceilBase(dV, 10)
+        while (dV / roundedDv > coverageRatio) {
+            roundedDv = ChartUtils.ceilBase(roundedDv + 10, 10)
+        }
+
+        roundedDv = Math.max(minGridCount, roundedDv)
+        roundedDv = ChartUtils.ceilBase(roundedDv, 10)
+
+        minValue = mid - (roundedDv / 2)
+        maxValue = mid + (roundedDv / 2)
+
+        temperatureYGridCount = roundedDv
         // print("temperatureYGridCount = " + temperatureYGridCount)
 
         // y-axis ticks
-        // var step = (temperatureYGridCount + (minGridCount / 2)) / minGridCount
-        // temperatureYGridStep = Math.ceil(step)
         temperatureYGridStep = Math.max(1, Math.round(temperatureYGridCount / 10))
         // print("temperatureYGridStep = " + temperatureYGridStep)
 
