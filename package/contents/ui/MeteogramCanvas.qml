@@ -105,6 +105,12 @@ Canvas {
     }
 
     Path {
+        id: feelsLikePath
+        startX: 0
+        pathElements: []
+    }
+
+    Path {
         id: cloudAreaPath
         startX: 0
         pathElements: []
@@ -513,6 +519,8 @@ Canvas {
         if (plasmoid.configuration.renderTemperature) {
             drawWarmTemp(context, temperaturePath, palette.temperatureWarmColor(), 2 * units.devicePixelRatio)
             drawColdTemp(context, temperaturePath, palette.temperatureColdColor(), 2 * units.devicePixelRatio)
+
+            drawPath(context, feelsLikePath, 'black', 1 * units.devicePixelRatio)
         }
 
         if (plasmoid.configuration.renderIcons) {
@@ -532,6 +540,7 @@ Canvas {
 
     function buildCurves() {
         var newPathElements = temperaturePath.pathElements
+        var newFeelsElements = feelsLikePath.pathElements
         var newY2Elements = y2Path.pathElements
         var newCloudElements = cloudAreaPath.pathElements
         var newCloudElements2 = []
@@ -551,6 +560,7 @@ Canvas {
 
         if (!reuse) {
             newPathElements = []
+            newFeelsElements = []
             newY2Elements = []
             newCloudElements = []
             newCloudElements2 = []
@@ -568,10 +578,12 @@ Canvas {
             var temperatureY = temperatureScale.translate(UnitUtils.convertTemperature(dataObj.temperature, temperatureType))
             var y2 = rightAxisScale.translate(UnitUtils.convertValue(y2Value, y2VarName))
             var humidityY = humidityScale.translate(dataObj.humidity)
+            var feelsLikeY = temperatureScale.translate(UnitUtils.convertTemperature(dataObj.feelsLike, temperatureType))
             if (i === 0) {
                 temperaturePath.startY = temperatureY
                 y2Path.startY = y2
                 humidityPath.startY = isFinite(humidityY) ? humidityY : 0
+                feelsLikePath.startY = feelsLikeY
             }
 
             if (!reuse) {
@@ -581,6 +593,15 @@ Canvas {
             } else {
                 newPathElements[i].x = x
                 newPathElements[i].y = temperatureY
+            }
+
+            if (!reuse) {
+                newFeelsElements.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
+                                     '{ x: ' + x + '; y: ' + feelsLikeY + ' }',
+                                     graphArea, "dynamicFeelsLike" + i))
+            } else {
+                newFeelsElements[i].x = x
+                newFeelsElements[i].y = feelsLikeY
             }
 
             if (!reuse) {
@@ -642,6 +663,8 @@ Canvas {
             if (i < newPathElements.length) {
                 newPathElements[i].x = NaN
                 newPathElements[i].y = NaN
+                newFeelsElements[i].x = NaN
+                newFeelsElements[i].y = NaN
                 newY2Elements[i].x = NaN
                 newY2Elements[i].y = NaN
                 newHumidityElements[i].x = NaN
@@ -658,6 +681,7 @@ Canvas {
             y2Path.pathElements = newY2Elements
             cloudAreaPath.pathElements = newCloudElements.concat(newCloudElements2.reverse())
             humidityPath.pathElements = newHumidityElements
+            feelsLikePath.pathElements = newFeelsElements
         }
     }
 
