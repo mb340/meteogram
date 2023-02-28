@@ -12,7 +12,7 @@ Item {
 
     property var locale: Qt.locale()
     property string providerId: 'metno'
-    property string urlPrefix: 'https://api.met.no/weatherapi/locationforecast/2.0/compact?'
+    property string urlPrefix: 'https://api.met.no/weatherapi/locationforecast/2.0/complete?'
     property string forecastPrefix: 'https://www.yr.no/en/forecast/daily-table/'
 
     property bool weatherDataFlag: false
@@ -142,14 +142,17 @@ Item {
             var ws = obj.data.instant.details["wind_speed"]
             var ap = obj.data.instant.details["air_pressure_at_sea_level"]
             var airtmp = parseFloat(obj.data.instant.details["air_temperature"])
+            var dewPoint = parseFloat(obj.data.instant.details["dew_point_temperature"])
             var icon = obj.data.next_1_hours.summary["symbol_code"]
             var prec = obj.data.next_1_hours.details["precipitation_amount"]
             var hm = obj.data.instant.details["relative_humidity"]
             var cld = obj.data.instant.details["cloud_area_fraction"]
+            var uvi = obj.data.instant.details["ultraviolet_index_clear_sky"]
 
             var item = meteogramModel.createItem()
             item.from = dateFrom
             item.temperature = airtmp
+            item.dewPoint = dewPoint
             item.precipitationAmount = prec
             item.windDirection = parseFloat(wd)
             item.windSpeed = parseFloat(ws)
@@ -157,6 +160,7 @@ Item {
             item.iconName = geticonNumber(icon)
             item.humidity = parseFloat(hm)
             item.cloudArea = parseFloat(cld)
+            item.uvi = parseFloat(uvi)
             meteogramModel.addItem(item)
             i++
         }
