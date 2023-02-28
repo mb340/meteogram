@@ -138,7 +138,7 @@ Item {
                     property string varName: dayPartVars[index]
                     property int rowIndex: index
 
-                    visible: meteogramModel.hasVariable(varName)
+                    visible: dailyWeatherModels.hasVariable(varName)
 
                     anchors.left: parent.left
                     anchors.right: parent.right
