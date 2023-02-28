@@ -53,6 +53,8 @@ Item {
     property var y2VarName: "pressure"
     property bool y2AxisVisble: meteogramModel.hasVariable(y2VarName)
 
+    property var y1VarName: "dewPoint"
+
     property alias temperatureScale: meteogramCanvas.temperatureScale
     property alias temperatureAxisScale: meteogramCanvas.temperatureAxisScale
     property alias rightAxisScale: meteogramCanvas.rightAxisScale
@@ -71,6 +73,10 @@ Item {
     }
 
     onY2VarNameChanged: {
+        fullRedraw()
+    }
+
+    onY1VarNameChanged: {
         fullRedraw()
     }
 

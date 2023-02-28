@@ -105,7 +105,7 @@ Canvas {
     }
 
     Path {
-        id: feelsLikePath
+        id: y1Path
         startX: 0
         pathElements: []
     }
@@ -520,7 +520,8 @@ Canvas {
             drawWarmTemp(context, temperaturePath, palette.temperatureWarmColor(), 2 * units.devicePixelRatio)
             drawColdTemp(context, temperaturePath, palette.temperatureColdColor(), 2 * units.devicePixelRatio)
 
-            drawPath(context, feelsLikePath, 'black', 1 * units.devicePixelRatio)
+            let color = !textColorLight ? 'black' : 'white'
+            drawPath(context, y1Path, color, 1 * units.devicePixelRatio)
         }
 
         if (plasmoid.configuration.renderIcons) {
@@ -540,7 +541,7 @@ Canvas {
 
     function buildCurves() {
         var newPathElements = temperaturePath.pathElements
-        var newFeelsElements = feelsLikePath.pathElements
+        var newY1Elements = y1Path.pathElements
         var newY2Elements = y2Path.pathElements
         var newCloudElements = cloudAreaPath.pathElements
         var newCloudElements2 = []
@@ -560,7 +561,7 @@ Canvas {
 
         if (!reuse) {
             newPathElements = []
-            newFeelsElements = []
+            newY1Elements = []
             newY2Elements = []
             newCloudElements = []
             newCloudElements2 = []
@@ -578,12 +579,16 @@ Canvas {
             var temperatureY = temperatureScale.translate(UnitUtils.convertTemperature(dataObj.temperature, temperatureType))
             var y2 = rightAxisScale.translate(UnitUtils.convertValue(y2Value, y2VarName))
             var humidityY = humidityScale.translate(dataObj.humidity)
-            var feelsLikeY = temperatureScale.translate(UnitUtils.convertTemperature(dataObj.feelsLike, temperatureType))
+
+            var y1 = y1VarName === "" ? NaN :
+                        temperatureScale.translate(
+                            UnitUtils.convertValue(dataObj[y1VarName], y1VarName))
+
             if (i === 0) {
                 temperaturePath.startY = temperatureY
                 y2Path.startY = y2
                 humidityPath.startY = isFinite(humidityY) ? humidityY : 0
-                feelsLikePath.startY = feelsLikeY
+                y1Path.startY = y1
             }
 
             if (!reuse) {
@@ -596,12 +601,12 @@ Canvas {
             }
 
             if (!reuse) {
-                newFeelsElements.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
-                                     '{ x: ' + x + '; y: ' + feelsLikeY + ' }',
+                newY1Elements.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
+                                     '{ x: ' + x + '; y: ' + y1 + ' }',
                                      graphArea, "dynamicFeelsLike" + i))
             } else {
-                newFeelsElements[i].x = x
-                newFeelsElements[i].y = feelsLikeY
+                newY1Elements[i].x = x
+                newY1Elements[i].y = y1
             }
 
             if (!reuse) {
@@ -663,8 +668,8 @@ Canvas {
             if (i < newPathElements.length) {
                 newPathElements[i].x = NaN
                 newPathElements[i].y = NaN
-                newFeelsElements[i].x = NaN
-                newFeelsElements[i].y = NaN
+                newY1Elements[i].x = NaN
+                newY1Elements[i].y = NaN
                 newY2Elements[i].x = NaN
                 newY2Elements[i].y = NaN
                 newHumidityElements[i].x = NaN
@@ -681,7 +686,7 @@ Canvas {
             y2Path.pathElements = newY2Elements
             cloudAreaPath.pathElements = newCloudElements.concat(newCloudElements2.reverse())
             humidityPath.pathElements = newHumidityElements
-            feelsLikePath.pathElements = newFeelsElements
+            y1Path.pathElements = newY1Elements
         }
     }
 
@@ -701,6 +706,13 @@ Canvas {
             var obj = meteogramModel.get(i)
             minValue = Math.min(minValue,  obj.temperature)
             maxValue = Math.max(maxValue, obj.temperature)
+
+            let val = obj[y1VarName]
+            if (y1VarName !== "" && isFinite(val)) {
+                minY1 = Math.min(minY1,  val)
+                maxY1 = Math.max(maxY1, val)
+            }
+
             minY2 = Math.min(minY2,  obj[y2VarName])
             maxY2 = Math.max(maxY2, obj[y2VarName])
         }
