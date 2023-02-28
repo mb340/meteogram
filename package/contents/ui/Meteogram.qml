@@ -117,16 +117,22 @@ Item {
 
         function setModel(count) {
             horizontalLinesModel.beginList()
-            for (var i = 0; i < count; i++) {
-                horizontalLinesModel.addItem({ index: i })
+            for (var i = 0; i <= count; i++) {
+                if (i % temperatureYGridStep !== 0) {
+                    continue
+                }
+                horizontalLinesModel.addItem({
+                    temperatureLabel: temperatureAxisScale.invert(i).toFixed(0),
+                    rightAxisLabel: rightGridScale.invert(i).toFixed(rightAxisDecimals)
+
+                })
             }
             horizontalLinesModel.endList()
         }
 
         delegate: Item {
-            height: horizontalLines1.itemHeight
+            height: horizontalLines1.itemHeight * temperatureYGridStep
             width: graphArea.width
-            visible: index % temperatureYGridStep === 0
 
             Rectangle {
                 id: gridLine
@@ -135,7 +141,7 @@ Item {
                 color: gridColor
             }
             PlasmaComponents.Label {
-                text: temperatureAxisScale.invert(index).toFixed(0)
+                text: temperatureLabel
                 height: labelHeight
                 width: labelWidth
                 horizontalAlignment: Text.AlignRight
@@ -147,7 +153,7 @@ Item {
                 font.pointSize: -1
             }
             PlasmaComponents.Label {
-                text: rightGridScale.invert(index).toFixed(rightAxisDecimals)
+                text: rightAxisLabel
                 height: labelHeight
                 width: labelWidth
                 anchors.top: gridLine.top
