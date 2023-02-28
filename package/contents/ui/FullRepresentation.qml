@@ -129,6 +129,33 @@ Item {
         }
 
         ChartSelectorButtons {
+            selectedVarName: "precipitationAmount"
+            meteogram: fullRepresentation.meteogram
+            meteogramModel: main.meteogramModel
+            model: [
+                { label: String.fromCodePoint(0x1F3F7), varName: "precipitationAmount",
+                    tooltip: i18n("Precipitation Labels")
+                },
+            ]
+            callback: function callback(varName) {
+                if (varName === "precipitationAmount") {
+                    let val = plasmoid.configuration.renderPrecipitationLabels
+                    plasmoid.configuration.renderPrecipitationLabels = !val
+                    main.reloadMeteogram()
+                }
+            }
+
+            Layout.alignment: Qt.AlignCenter
+        }
+
+        Label {
+            text: "\uFF5C"
+            color: PlasmaCore.Theme.disabledTextColor
+            Layout.leftMargin: 0
+            Layout.rightMargin: 0
+        }
+
+        ChartSelectorButtons {
             selectedVarName: meteogram.y2VarName
             meteogram: fullRepresentation.meteogram
             meteogramModel: main.meteogramModel
