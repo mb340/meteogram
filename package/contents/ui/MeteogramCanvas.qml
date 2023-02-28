@@ -533,7 +533,9 @@ Canvas {
             iconOverlay.endList()
         }
 
-        if (plasmoid.configuration.renderPrecipitation) {
+        if (plasmoid.configuration.renderPrecipitation &&
+            plasmoid.configuration.renderPrecipitationLabels)
+        {
             context.globalCompositeOperation = "source-over"
             drawPrecipitationText(context, rectWidth)
         }

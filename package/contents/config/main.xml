@@ -136,6 +136,9 @@
         <entry name="renderPrecipitation" type="Bool">
             <default>true</default>
         </entry>
+        <entry name="renderPrecipitationLabels" type="Bool">
+            <default>true</default>
+        </entry>
         <entry name="renderCloudCover" type="Bool">
             <default>true</default>
         </entry>
