@@ -434,7 +434,7 @@ function convertValue(value, varName) {
     let pressureType = main.pressureType
     let windSpeedType = main.windSpeedType
 
-    if (varName === "temperature" || varName === "feelsLike") {
+    if (varName === "temperature" || varName === "feelsLike" || varName === "dewPoint") {
         return convertTemperature(value, temperatureType)
     } else if (varName === "precipitationProb") {
         return convertPop(value)
