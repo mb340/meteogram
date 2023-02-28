@@ -15,6 +15,28 @@
 import QtQuick 2.0
 
 ManagedListModel {
+    id: root
+
+    function hasVariable(varName) {
+        if (root.count <= 0) {
+            return false
+        }
+        for (var i = 0; i < root.count; i++) {
+            let item = root.get(i)
+            let models = item.models
+            if (models === undefined) {
+                continue
+            }
+            for (var j = 0; j < models.count; j++) {
+                let val = models.get(j)[varName]
+                // if (typeof(val) === 'number' && (-Infinity < val && val < +Infinity)) {
+                if (isFinite(val)) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
 
     function createInstantItem() {
         return {
