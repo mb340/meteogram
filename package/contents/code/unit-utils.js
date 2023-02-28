@@ -451,7 +451,9 @@ function convertValue(value, varName) {
 }
 
 function formatUnits(varName) {
-    if (varName === "temperature" || varName === "feelsLike") {
+    if (varName === "temperature" || varName === "feelsLike"  || varName === "dewPoint" ||
+        varName === "temperatureHigh" || varName === "temperatureLow")
+    {
         return getTemperatureUnit(main.temperatureType)
     } else if (varName === "precipitationProb") {
         return getPercentageUnit()
@@ -478,7 +480,9 @@ function formatValue(value, varName, partOfDay, digits = undefined) {
     let windSpeedType = main.windSpeedType
     let precipitationType = main.precipitationType
 
-    if (varName === "temperature" || varName === "feelsLike") {
+    if (varName === "temperature" || varName === "feelsLike"  || varName === "dewPoint" ||
+        varName === "temperatureHigh" || varName === "temperatureLow")
+    {
         return getTemperatureText(value, temperatureType, digits)
     } else if (varName === "precipitationProb") {
         return getPopText(value, digits)
