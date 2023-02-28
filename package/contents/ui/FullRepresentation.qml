@@ -97,8 +97,23 @@ Item {
         anchors.right: parent.right
 
         ChartSelectorButtons {
+            selectedVarName: meteogram.y2VarName
             meteogram: fullRepresentation.meteogram
             meteogramModel: main.meteogramModel
+            model: [
+                { label: "\uf079", varName: "pressure", tooltip: i18n("Pressure") },
+                { label: "\uf050", varName: "windSpeed", tooltip: i18n("Wind Speed") },
+                { label: "\uf0cc", varName: "windGust", tooltip: i18n("Wind Gust") },
+                { label: "\uf084", varName: "precipitationProb", tooltip: i18n("POP") },
+                { label: "\uf00d", varName: "uvi", tooltip: i18n("UV Index") },
+            ]
+            callback: function callback(varName) {
+                if (meteogram.y2VarName === varName) {
+                    meteogram.y2VarName = ""
+                } else {
+                    meteogram.y2VarName = varName
+                }
+            }
 
             Layout.alignment: Qt.AlignCenter
         }
