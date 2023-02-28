@@ -19,6 +19,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.1
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.core 2.0 as PlasmaCore
 
 Item {
     id: fullRepresentation
@@ -93,8 +94,39 @@ Item {
 
     /* select right axis weather variable */
     RowLayout {
+        spacing: 0
         anchors.top: parent.top
         anchors.right: parent.right
+
+        ChartSelectorButtons {
+            selectedVarName: meteogram.y1VarName
+            meteogram: fullRepresentation.meteogram
+            meteogramModel: main.meteogramModel
+            model: [
+                { label: String.fromCodePoint(0x2614), varName: "dewPoint",
+                    tooltip: i18n("Dew Point")
+                },
+                { label: String.fromCodePoint(0x2615), varName: "feelsLike",
+                    tooltip: i18n("Feels Like")
+                },
+            ]
+            callback: function callback(varName) {
+                if (meteogram.y1VarName === varName) {
+                    meteogram.y1VarName = ""
+                } else {
+                    meteogram.y1VarName = varName
+                }
+            }
+
+            Layout.alignment: Qt.AlignCenter
+        }
+
+        Label {
+            text: "\uFF5C"
+            color: PlasmaCore.Theme.disabledTextColor
+            Layout.leftMargin: 0
+            Layout.rightMargin: 0
+        }
 
         ChartSelectorButtons {
             selectedVarName: meteogram.y2VarName
