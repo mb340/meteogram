@@ -9,7 +9,7 @@ QtObject {
     property string windSpeedMps: ""
     property string pressureHpa: ""
     property string humidity: ""
-    property string cloudiness: ""
+    property string cloudArea: ""
 
     property date sunRise: new Date(0)
     property date sunSet: new Date(0)
@@ -28,7 +28,7 @@ QtObject {
         windSpeedMps = ""
         pressureHpa = ""
         humidity = ""
-        cloudiness = ""
+        cloudArea = ""
 
         sunRise = new Date(0)
         sunSet = new Date(0)

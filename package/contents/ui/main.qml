@@ -492,10 +492,10 @@ Item {
         subText += '<br /><font size="4" style="font-family: weathericons;">' + windDirectionIcon + '</font><font size="4"> ' + wind1 + '\u00B0 &nbsp; @ ' + UnitUtils.getWindSpeedText(currentWeatherModel.windSpeedMps, windSpeedType) + '</font>'
         subText += '<br /><font size="4">' + UnitUtils.getPressureText(currentWeatherModel.pressureHpa, pressureType) + '</font>'
         subText += '<br /><table>'
-        if ((currentWeatherModel.humidity !== undefined) && (currentWeatherModel.cloudiness !== undefined)) {
+        if ((currentWeatherModel.humidity !== undefined) && (currentWeatherModel.cloudArea !== undefined)) {
             subText += '<tr>'
             subText += '<td><font size="4"><font style="font-family: weathericons">\uf07a</font>&nbsp;' + currentWeatherModel.humidity + '%</font></td>'
-            subText += '<td><font size="4"><font style="font-family: weathericons">\uf013</font>&nbsp;' + currentWeatherModel.cloudiness + '%</font></td>'
+            subText += '<td><font size="4"><font style="font-family: weathericons">\uf013</font>&nbsp;' + currentWeatherModel.cloudArea + '%</font></td>'
             subText += '</tr>'
             subText += '<tr><td>&nbsp;</td><td></td></tr>'
         }

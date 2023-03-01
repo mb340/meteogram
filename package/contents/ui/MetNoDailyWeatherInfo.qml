@@ -48,7 +48,7 @@ Item {
         "windSpeed",
         "pressure",
         "humidity",
-        "cloudiness",
+        "cloudArea",
         // "uvi"
     ]
 

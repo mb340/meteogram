@@ -208,7 +208,7 @@ ColumnLayout {
                 },
                 { tileSymbol: "\uf07a", tileTitle: i18n("Humidity"), varName: "humidity" },
                 { tileSymbol: "\uf079", tileTitle: i18n("Pressure"), varName: "pressure" },
-                { tileSymbol: "\uf041", tileTitle: i18n("Cloud Cover"), varName: "clouds" },
+                { tileSymbol: "\uf041", tileTitle: i18n("Cloud Cover"), varName: "cloudArea" },
                 { tileSymbol: "\uf0b1", tileTitle: i18n("Wind"), varName: "windDirection",
                     varNames: ["windDirection", "windSpeed", "windGust"],
                     varTitles: { windGust: i18n("Gust") }

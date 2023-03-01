@@ -496,7 +496,7 @@ function formatValue(value, varName, partOfDay, digits = undefined) {
         return getPressureText(value, pressureType, digits)
     } else if (varName === "humidity") {
         return getPercentageText(value, digits)
-    } else if (varName === "clouds") {
+    } else if (varName === "cloudArea") {
         return getPercentageText(value, digits)
     }
     return value

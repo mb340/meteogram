@@ -67,7 +67,7 @@ ManagedListModel {
             humidity: NaN,
 
             // [0 - 100]%
-            cloudiness: NaN,
+            cloudArea: NaN,
 
             // [0 - 11+]
             uvi: NaN
@@ -103,7 +103,7 @@ ManagedListModel {
 
             pressure: NaN,
             humidity: NaN,
-            clouds: NaN,
+            cloudArea: NaN,
 
             sunrise: NaN,
             sunset: NaN,

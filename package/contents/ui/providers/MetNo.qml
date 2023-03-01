@@ -107,7 +107,7 @@ Item {
         currentWeatherModel.windSpeedMps = ws
         currentWeatherModel.pressureHpa = ap
         currentWeatherModel.humidity = hm
-        currentWeatherModel.cloudiness = cld
+        currentWeatherModel.cloudArea = cld
         currentWeatherModel.valid = true
 
         if (currentIndex + 1 < weatherData.properties.timeseries.length) {
@@ -285,7 +285,7 @@ Item {
                 item.temperature = temperature
                 item.iconName = iconNumber
                 item.pressure = parseFloat(details["air_pressure_at_sea_level"])
-                item.cloudiness = parseFloat(details["cloud_area_fraction"])
+                item.cloudArea = parseFloat(details["cloud_area_fraction"])
                 item.humidity = parseFloat(details["relative_humidity"])
                 item.windDirection = parseFloat(details["wind_from_direction"])
                 item.windSpeed = parseFloat(details["wind_speed"])
