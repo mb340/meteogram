@@ -53,8 +53,8 @@ function fetchXmlFromInternet(getUrl, successCallback, failureCallback) {
         }
 
         if (xhr.status !== 200) {
-            dbgprint('ERROR - status: ' + xhr.status)
-            dbgprint('ERROR - responseText: ' + xhr.responseText)
+            print('ERROR - status: ' + xhr.status)
+            print('ERROR - responseText: ' + xhr.responseText)
             failureCallback()
             return
         }
@@ -66,7 +66,7 @@ function fetchXmlFromInternet(getUrl, successCallback, failureCallback) {
 
         var xmlString = xhr.responseText
         if (!isXmlStringValid(xmlString)) {
-            dbgprint('incoming xmlString is not valid: ' + xmlString)
+            print('incoming xmlString is not valid: ' + xmlString)
             return
         }
         dbgprint('incoming text seems to be valid')
