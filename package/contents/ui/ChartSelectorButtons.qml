@@ -1,5 +1,6 @@
 import QtQuick 2.2
 import QtQuick.Controls 2.5
+import QtGraphicalEffects 1.12
 import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 
@@ -21,6 +22,9 @@ RowLayout {
             width: childrenRect.width
             height: childrenRect.height
 
+            Layout.leftMargin: 1
+            Layout.rightMargin: 1
+
             ToolTip.text: modelData.tooltip
             ToolTip.visible: mouseArea.containsMouse
 
@@ -35,16 +39,33 @@ RowLayout {
 
                 property bool hasVariable: meteogramModel.hasVariable(modelData.varName)
                 property var textColor: isHighlighted ? theme.highlightColor :
-                                        (isVarSelected ? theme.textColor :
+                                        ((isVarSelected && hasVariable) ? theme.textColor :
                                                          PlasmaCore.Theme.disabledTextColor)
+
+                Image {
+                    id: notAvailable
+                    source: "images/not-allowed.svg"
+                    smooth: true
+                    visible: false
+
+                    width: parent.height
+                    height: width
+                    sourceSize.width: width
+                    sourceSize.height: width
+
+                    anchors.centerIn: varNameLabel
+                }
+
+                ColorOverlay{
+                    anchors.fill: notAvailable
+                    source: notAvailable
+                    color: (visible && varNameLabel.isVarSelected) ?
+                                theme.textColor : PlasmaCore.Theme.disabledTextColor
+                    antialiasing: true
+                    visible: !varNameLabel.hasVariable
+                }
             }
 
-            Label {
-                text: "\u2715"
-                color: varNameLabel.textColor
-                visible: varNameLabel.hasVariable
-                anchors.fill: parent
-            }
 
             MouseArea {
                 id: mouseArea
