@@ -33,7 +33,7 @@ RowLayout {
                 property bool isHighlighted: false
                 property bool isVarSelected: (selectedVarName === modelData.varName)
 
-                property bool hasVariable: !meteogramModel.hasVariable(modelData.varName)
+                property bool hasVariable: meteogramModel.hasVariable(modelData.varName)
                 property var textColor: isHighlighted ? theme.highlightColor :
                                         (isVarSelected ? theme.textColor :
                                                          PlasmaCore.Theme.disabledTextColor)
