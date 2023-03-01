@@ -10,6 +10,6 @@
 	 fill="none"
 	 color="#000000"
  >
-	<circle cx="12" cy="12" r="10"/>
+	<circle cx="11.25" cy="12" r="10"/>
 	<path stroke-linecap="square" d="M6,6 L18,18"/>
 </svg>
