@@ -201,76 +201,12 @@ const Ir = {
     }
 }
 
-var OwmToIr = {
-    200:"lightrainandthunder",
-    201:"rainandthunder",
-    202:"heavyrainandthunder",
-    210:"lightrainandthunder",
-    211:"rainandthunder",
-    212:"heavyrainandthunder",
-    221:"heavyrainandthunder",
-    230:"lightrainandthunder",
-    231:"rainandthunder",
-    232:"heavyrainandthunder",
-    300:"lightrain",
-    301:"lightrainshowers",
-    302:"heavyrain",
-    310:"rain",
-    311:"rain",
-    312:"heavyrain",
-    313:"rain",
-    314:"heavyrain",
-    321:"rain",
-    500:"lightrain",
-    501:"lightrainshowers",
-    502:"heavyrain",
-    503:"heavyrain",
-    504:"heavyrain",
-    511:"sleet",
-    520:"lightsleet",
-    521:"rain",
-    522:"heavyrain",
-    531:"heavyrain",
-    600:"lightsnow",
-    601:"snow",
-    602:"heavysnow",
-    611:"sleet",
-    612:"lightsleet",
-    613:"lightsleetshowers",
-    615:"lightsleet",
-    616:"sleet",
-    620:"lightsleet",
-    621:"heavysleet",
-    622:"heavysleetshowers",
-    701:"fog",
-    711:"fog",
-    721:"fog",
-    731:"fog",
-    741:"fog",
-    751:"fog",
-    761:"fog",
-    762:"",
-    771:"snow",
-    781:"",
-    800:"clearsky",
-    801:"fair",
-    802:"fair",
-    803:"cloudy",
-    804:"cloudy",
-}
-
-function getIconResource(iconVal, providerId, iconSetType, partOfDay) {
+function getIconResource(iconVal, currentProvider, iconSetType, partOfDay) {
     if (partOfDay === undefined) {
         partOfDay = 0
     }
 
-    let irName = null
-    if (providerId === "metno") {
-        irName = iconVal
-    } else if (providerId === "owm" || providerId === "owm2") {
-        irName = OwmToIr[iconVal]
-    }
-
+    let irName = currentProvider.getIconIr(iconVal)
     if (irName === null || irName === "") {
         return null
     }

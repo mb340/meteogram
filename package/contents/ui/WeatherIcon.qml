@@ -35,7 +35,7 @@ Item {
             height: width
 
             PlasmaComponents.Label {
-                text: IconTools.getIconResource(iconName, currentProvider.providerId,
+                text: IconTools.getIconResource(iconName, currentProvider,
                                                 iconSetType, partOfDay)
 
                 // Re-usable components need a custom icon to avoid the same
@@ -59,7 +59,7 @@ Item {
             height: width
 
             property var imgSrc: IconTools.getIconResource(iconName,
-                                                           currentProvider.providerId,
+                                                           currentProvider,
                                                            iconSetType,
                                                            partOfDay)
 
@@ -95,7 +95,7 @@ Item {
             PlasmaCore.IconItem {
                 id: image
                 source: IconTools.getIconResource(iconName,
-                                                  currentProvider.providerId,
+                                                  currentProvider,
                                                   iconSetType,
                                                   partOfDay)
 
