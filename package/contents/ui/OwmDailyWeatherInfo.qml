@@ -70,7 +70,7 @@ ColumnLayout {
         }
 
         Label {
-            text: model ? IconTools.getIconDescription(model.iconName, currentProvider.providerId, 0) : ""
+            text: model ? currentProvider.getIconDescription(model.iconName) : ""
             font.pixelSize: units.iconSizes.small
             Layout.leftMargin: units.smallSpacing
         }

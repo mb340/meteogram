@@ -198,8 +198,7 @@ Item {
         var iconNameStr = ""
         if (hourModel.iconName) {
             var timePeriod = UnitUtils.isSunRisen(dateFrom) ? 0 : 1
-            var iconNameStr = IconTools.getIconDescription(hourModel.iconName,
-                                                    currentProvider.providerId, timePeriod)
+            var iconNameStr = currentProvider.getIconDescription(hourModel.iconName)
             model.addItem({
                 nameStr: i18n("Conditions:"),
                 valueStr: iconNameStr,

@@ -199,8 +199,7 @@ Item {
                     property var value: (model && model[varName] != undefined) ? model[varName] : null
                     property int partOfDay: model ? model["partOfDay"] : 0
                     property var iconDesc: (value && varName !== "iconName") ? null :
-                                                IconTools.getIconDescription(value,
-                                                    currentProvider.providerId, partOfDay)
+                                                currentProvider.getIconDescription(value)
                     property string valueStr: isNaN(value) || value === null ? "-" :
                                                 UnitUtils.formatValue(value, varName, dayPart)
 
