@@ -57,15 +57,20 @@ ColumnLayout {
             Layout.fillHeight: true
 
             WeatherIcon {
-                iconDim: units.iconSizes.large
-                width: iconDim
-                height: iconDim
+                width: iconModel.iconDim
+                height: iconModel.iconDim
 
                 anchors.centerIn: parent
 
                 iconSetType: (plasmoid && plasmoid.configuration && plasmoid.configuration.iconSetType) ?
                                plasmoid.configuration.iconSetType : 0
-                iconName: model ? model.iconName : null
+                iconModel: ({
+                    partOfDay: 0,
+                    iconX: 0,
+                    iconY: 0,
+                    iconDim: units.iconSizes.large,
+                    iconName: model ? model.iconName : null,
+                })
             }
         }
 

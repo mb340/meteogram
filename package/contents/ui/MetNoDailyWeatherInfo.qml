@@ -220,17 +220,22 @@ Item {
                 anchors.right: parent.right
 
                 WeatherIcon {
-                    iconDim: units.iconSizes.large
-                    width: iconDim
-                    height: iconDim
+                    iconSetType: (plasmoid && plasmoid.configuration && plasmoid.configuration.iconSetType) ?
+                                   plasmoid.configuration.iconSetType : 0
+                    iconModel: ({
+                        iconName: model ? model[varName] : null,
+                        iconX: 0,
+                        iconY: 0,
+                        iconDim: units.iconSizes.large,
+                        partOfDay: model ? model["partOfDay"] : 0,
+                    })
+
+                    width: iconModel.iconDim
+                    height: iconModel.iconDim
 
                     anchors.centerIn: parent
                     centerInParent: true
 
-                    partOfDay: model ? model["partOfDay"] : 0
-                    iconSetType: (plasmoid && plasmoid.configuration && plasmoid.configuration.iconSetType) ?
-                                   plasmoid.configuration.iconSetType : 0
-                    iconName: model ? model[varName] : null
                 }
             }
         }

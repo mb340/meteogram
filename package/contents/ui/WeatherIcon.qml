@@ -12,12 +12,14 @@ Item {
 
     property int iconSetType
 
-    property var iconName
-    property int partOfDay
 
-    property double iconX: 0
-    property double iconY: 0
-    property double iconDim: NaN
+    property var iconModel: ({
+        iconName: "",
+        partOfDay: 0,
+        iconX: 0,
+        iconY: 0,
+        iconDim: 0,
+    })
 
     property bool centerInParent: false
 
@@ -29,14 +31,15 @@ Item {
         id: iconLabelComponent
 
         Item {
-            x: iconX
-            y: iconY
-            width: isFinite(iconDim) ? adjustDim(iconDim)  : parent.width
+            x: iconModel.iconX
+            y: iconModel.iconY
+            width: isFinite(iconModel.iconDim) ? adjustDim(iconModel.iconDim)  : parent.width
             height: width
 
             PlasmaComponents.Label {
-                text: IconTools.getIconResource(iconName, currentProvider,
-                                                iconSetType, partOfDay)
+                id: textItem
+                text: IconTools.getIconResource(iconModel.iconName, currentProvider,
+                                                iconSetType, iconModel.partOfDay)
 
                 // Re-usable components need a custom icon to avoid the same
                 // font size for ever instance of the component.
@@ -53,15 +56,15 @@ Item {
     Component {
         id: iconImageComponent
         Item {
-            x: iconX
-            y: iconY
-            width: isFinite(iconDim) ? adjustDim(iconDim)  : parent.width
+            x: iconModel.iconX ? iconModel.iconX : 0
+            y: iconModel.iconY ? iconModel.iconY : 0
+            width: isFinite(iconModel.iconDim) ? adjustDim(iconModel.iconDim)  : parent.width
             height: width
 
-            property var imgSrc: IconTools.getIconResource(iconName,
+            property var imgSrc: IconTools.getIconResource(iconModel.iconName,
                                                            currentProvider,
                                                            iconSetType,
-                                                           partOfDay)
+                                                           iconModel.partOfDay)
 
             Image {
                 id: image
@@ -86,18 +89,18 @@ Item {
         id: iconItemComponent
 
         Item {
-            x: iconX
-            y: iconY
+            x: iconModel.iconX
+            y: iconModel.iconY
 
-            width: isFinite(iconDim) ? adjustDim(iconDim) : parent.width
+            width: isFinite(iconModel.iconDim) ? adjustDim(iconModel.iconDim) : parent.width
             height: width
 
             PlasmaCore.IconItem {
                 id: image
-                source: IconTools.getIconResource(iconName,
+                source: IconTools.getIconResource(iconModel.iconName,
                                                   currentProvider,
                                                   iconSetType,
-                                                  partOfDay)
+                                                  iconModel.partOfDay)
 
                 anchors.fill: parent
             }

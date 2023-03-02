@@ -81,9 +81,14 @@ RowLayout {
             anchors.centerIn: parent
 
             iconSetType: root.iconSetType
-            iconName: root.iconName
-            partOfDay: root.partOfDay
-            iconDim: Math.min(iconParent.width, iconParent.height)
+
+            iconModel: ({
+                iconX: 0,
+                iconY: 0,
+                iconName: root.iconName,
+                partOfDay: root.partOfDay,
+                iconDim: Math.min(iconParent.width, iconParent.height),
+            })
 
             centerInParent: true
         }
