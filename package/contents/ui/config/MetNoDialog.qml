@@ -91,6 +91,10 @@ Dialog {
         if (resultString.length === 0) {
             if (addMetnoCityIdDialog.providerId === 'meto') {
                 resultString="lat="+newMetnoCityLatitudeField.text+"&lon="+newMetnoCityLongitudeField.text+"&altitude="+newMetnoCityAltitudeField.text
+            } else if (addMetnoCityIdDialog.providerId === 'owm2') {
+                resultString="lat="+newMetnoCityLatitudeField.text+"&lon="+newMetnoCityLongitudeField.text
+            } else if (addMetnoCityIdDialog.providerId === 'openMeteo') {
+                resultString =  "latitude=" + newMetnoCityLatitudeField.text + "&longitude=" + newMetnoCityLongitudeField.text
             }
         }
         if (editEntryNumber === -1) {
@@ -139,6 +143,8 @@ Dialog {
                 newMetnoUrl.text="lat="+data["latitude"]+"&lon="+data["longitude"]+"&altitude="+data["altitude"]
             } else if (addMetnoCityIdDialog.providerId === 'owm2') {
                 newMetnoUrl.text="lat="+data["latitude"]+"&lon="+data["longitude"]
+            } else if (addMetnoCityIdDialog.providerId === 'openMeteo') {
+                newMetnoUrl.text = "latitude=" + data["latitude"] + "&longitude=" + data["longitude"]
             }
             let loc=data["locationName"]+", "+Helper.getshortCode(countryList.textAt(countryList.currentIndex))
             newMetnoCityAlias.text=loc

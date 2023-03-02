@@ -128,6 +128,10 @@ Item {
         id: owmProvider
     }
 
+    OpenMeteo {
+        id: openMeteo
+    }
+
     ListModel {
         id: actualWeatherModel
     }
@@ -275,6 +279,9 @@ Item {
         if (providerId === "metno") {
             dbgprint('setting provider metno')
             currentProvider = metnoProvider
+        }
+        if (providerId === 'openMeteo') {
+            currentProvider = openMeteo
         }
      }
 
