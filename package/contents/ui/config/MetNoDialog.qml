@@ -87,16 +87,8 @@ Dialog {
 
     onAccepted: {
         print("newMetnoUrl.text = " + newMetnoUrl.text)
-        var resultString = newMetnoUrl.text
-        if (resultString.length === 0) {
-            if (addMetnoCityIdDialog.providerId === 'metno') {
-                resultString="lat="+newMetnoCityLatitudeField.text+"&lon="+newMetnoCityLongitudeField.text+"&altitude="+newMetnoCityAltitudeField.text
-            } else if (addMetnoCityIdDialog.providerId === 'owm2') {
-                resultString="lat="+newMetnoCityLatitudeField.text+"&lon="+newMetnoCityLongitudeField.text
-            } else if (addMetnoCityIdDialog.providerId === 'openMeteo') {
-                resultString =  "latitude=" + newMetnoCityLatitudeField.text + "&longitude=" + newMetnoCityLongitudeField.text
-            }
-        }
+        var resultString = formatUrlString(providerId, newMetnoCityLatitudeField.text,
+                                newMetnoCityLongitudeField.text, newMetnoCityAltitudeField.text)
         if (editEntryNumber === -1) {
             placesModel.append({
                                    providerId: addMetnoCityIdDialog.providerId,
@@ -139,13 +131,8 @@ Dialog {
             newMetnoCityLongitudeField.text=data["longitude"]
             newMetnoCityAltitudeField.text=data["altitude"]
             print("saveSearchedData: providerId = " +  addMetnoCityIdDialog.providerId)
-            if (addMetnoCityIdDialog.providerId === 'metno') {
-                newMetnoUrl.text="lat="+data["latitude"]+"&lon="+data["longitude"]+"&altitude="+data["altitude"]
-            } else if (addMetnoCityIdDialog.providerId === 'owm2') {
-                newMetnoUrl.text="lat="+data["latitude"]+"&lon="+data["longitude"]
-            } else if (addMetnoCityIdDialog.providerId === 'openMeteo') {
-                newMetnoUrl.text = "latitude=" + data["latitude"] + "&longitude=" + data["longitude"]
-            }
+            newMetnoUrl.text =  formatUrlString(providerId, data["latitude"], data["longitude"],
+                                                data["altitude"])
             let loc=data["locationName"]+", "+Helper.getshortCode(countryList.textAt(countryList.currentIndex))
             newMetnoCityAlias.text=loc
             setTimezone(data["timezoneId"])
@@ -300,24 +287,42 @@ Dialog {
         }
     }
 
+    function formatUrlString(providerId, lat, lon, alt) {
+        let url = null
+
+        if (typeof(lat) === 'string') {
+            lat = Number.fromLocaleString(lat)
+        }
+
+        if (typeof(lon) === 'string') {
+            lon = Number.fromLocaleString(lon)
+        }
+
+        if (typeof(alt) === 'string') {
+            alt = Number.fromLocaleString(alt)
+        }
+
+        lat = parseFloat(lat).toFixed(4)
+        lon = parseFloat(lon).toFixed(4)
+
+        if (providerId === "metno") {
+            url = "lat=" + lat + "&lon=" + lon + "&altitude=" + alt
+        }
+        return url
+    }
+
     function updateUrl() {
-        var Url=""
-        if (newMetnoCityLatitudeField.acceptableInput) {
-            Url += "lat=" + (Number.fromLocaleString(newMetnoCityLatitudeField.text))
+        if (!newMetnoCityLatitudeField.acceptableInput ||
+            !newMetnoCityLongitudeField.acceptableInput ||
+            !newMetnoCityAltitudeField.acceptableInput)
+        {
+            return
         }
-        if (newMetnoCityLongitudeField.acceptableInput) {
-            if (Url.length > 0) {
-                Url += "&"
-            }
-            Url += "lon=" + (Number.fromLocaleString(newMetnoCityLongitudeField.text))
-        }
-        if (newMetnoCityAltitudeField.acceptableInput) {
-            if (Url.length > 0) {
-                Url += "&"
-            }
-            Url += "altitude=" + (Number.fromLocaleString(newMetnoCityAltitudeField.text))
-        }
-        newMetnoUrl.text = Url
+
+        var url = formatUrlString(providerId, newMetnoCityLatitudeField.text,
+                                    newMetnoCityLongitudeField.text, newMetnoCityAltitudeField.text)
+
+        newMetnoUrl.text = url
     }
 
     function dynamicSort(property) {
