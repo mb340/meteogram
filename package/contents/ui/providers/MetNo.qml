@@ -401,8 +401,7 @@ Item {
         if (underscore > -1) {
             text = text.substr(0,underscore)
         }
-        var num = IconTools.MetNo.NameToCode[text]
-        return num
+        return text
     }
 
     function windDirection(bearing) {

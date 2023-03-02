@@ -390,7 +390,8 @@ Canvas {
             var y = temperatureScale.translate(UnitUtils.convertTemperature(
                                                item.temperature, temperatureType))
             var timePeriod = UnitUtils.isSunRisen(item.from) ? 0 : 1
-            var str = IconTools.getIconCode(iconName, currentProvider.providerId, timePeriod)
+            var str = IconTools.getIconResource(iconName, currentProvider.providerId, iconSetType,
+                                                timePeriod)
 
             var metrics = context.measureText(str)
             var textWidth = metrics.width

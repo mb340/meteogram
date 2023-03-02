@@ -35,7 +35,8 @@ Item {
             height: width
 
             PlasmaComponents.Label {
-                text: IconTools.getIconCode(iconName, currentProvider.providerId, partOfDay)
+                text: IconTools.getIconResource(iconName, currentProvider.providerId,
+                                                iconSetType, partOfDay)
 
                 // Re-usable components need a custom icon to avoid the same
                 // font size for ever instance of the component.
@@ -57,11 +58,10 @@ Item {
             width: isFinite(iconDim) ? adjustDim(iconDim)  : parent.width
             height: width
 
-            property var imgSrc: (iconSetType === 1 ?
-                                    IconTools.getMetNoIconImage(iconName, currentProvider.providerId, partOfDay) :
-                                    (iconSetType === 2 ?
-                                        IconTools.getBasmiliusIconImage(iconName, currentProvider.providerId, partOfDay) :
-                                        null))
+            property var imgSrc: IconTools.getIconResource(iconName,
+                                                           currentProvider.providerId,
+                                                           iconSetType,
+                                                           partOfDay)
 
             Image {
                 id: image
@@ -94,7 +94,11 @@ Item {
 
             PlasmaCore.IconItem {
                 id: image
-                source: IconTools.getBreezeIcon(iconName, currentProvider.providerId, partOfDay)
+                source: IconTools.getIconResource(iconName,
+                                                  currentProvider.providerId,
+                                                  iconSetType,
+                                                  partOfDay)
+
                 anchors.fill: parent
             }
 
