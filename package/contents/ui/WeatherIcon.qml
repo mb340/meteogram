@@ -12,14 +12,12 @@ Item {
 
     property int iconSetType
 
+    property var iconName
+    property int partOfDay
 
-    property var iconModel: ({
-        iconName: "",
-        partOfDay: 0,
-        iconX: 0,
-        iconY: 0,
-        iconDim: 0,
-    })
+    property double iconX: 0
+    property double iconY: 0
+    property double iconDim: NaN
 
     property bool centerInParent: false
 
@@ -31,15 +29,14 @@ Item {
         id: iconLabelComponent
 
         Item {
-            x: iconModel.iconX
-            y: iconModel.iconY
-            width: iconModel.iconDim
+            x: iconX
+            y: iconY
+            width: iconDim
             height: width
 
             Label {
                 id: textItem
-                text: IconTools.getIconResource(iconModel.iconName, currentProvider,
-                                                iconSetType, iconModel.partOfDay)
+                text: IconTools.getIconResource(iconName, currentProvider, iconSetType, partOfDay)
                 font.family: 'weathericons'
 
                 width: parent.width
@@ -58,15 +55,16 @@ Item {
     Component {
         id: iconImageComponent
         Item {
-            x: iconModel.iconX ? iconModel.iconX : 0
-            y: iconModel.iconY ? iconModel.iconY : 0
-            width: isFinite(iconModel.iconDim) ? iconModel.iconDim  : parent.width
+            x: iconX ? iconX : 0
+            y: iconY ? iconY : 0
+            width: isFinite(iconDim) ? iconDim  : parent.width
+
             height: width
 
-            property var imgSrc: IconTools.getIconResource(iconModel.iconName,
+            property var imgSrc: IconTools.getIconResource(iconName,
                                                            currentProvider,
                                                            iconSetType,
-                                                           iconModel.partOfDay)
+                                                           partOfDay)
 
             Image {
                 id: image
@@ -92,18 +90,18 @@ Item {
         id: iconItemComponent
 
         Item {
-            x: iconModel.iconX
-            y: iconModel.iconY
+            x: iconX
+            y: iconY
 
-            width: isFinite(iconModel.iconDim) ? iconModel.iconDim : parent.width
+            width: isFinite(iconDim) ? iconDim : parent.width
             height: width
 
             PlasmaCore.IconItem {
                 id: image
-                source: IconTools.getIconResource(iconModel.iconName,
+                source: IconTools.getIconResource(iconName,
                                                   currentProvider,
                                                   iconSetType,
-                                                  iconModel.partOfDay)
+                                                  partOfDay)
 
                 anchors.fill: parent
             }

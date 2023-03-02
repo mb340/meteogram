@@ -40,13 +40,11 @@ Item {
 
         delegate: WeatherIcon {
             iconSetType: (1 <= model.iconSetType && model.iconSetType <= 3) ? model.iconSetType : -1
-            iconModel: ({
-                iconName: model.iconName,
-                partOfDay: model.partOfDay,
-                iconX: model.iconX,
-                iconY: model.iconY,
-                iconDim: model.iconDim,
-            })
+            iconName: model.iconName
+            partOfDay: model.partOfDay
+            iconX: model.iconX
+            iconY: model.iconY
+            iconDim: model.iconDim
         }
     }
 }

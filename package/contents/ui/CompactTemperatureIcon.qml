@@ -64,17 +64,14 @@ Item {
 
     WeatherIcon {
         iconSetType: compactItem.iconSetType
-        iconModel: ({
-            iconName: currentWeatherModel.valid ? currentWeatherModel.iconName : "",
-            iconX: 0,
-            iconY: 0,
-            iconDim: Math.min(temperatureIcon.width,
-                              temperatureIcon.height +
-                                (isVerticalState ? temperatureIconMetrics.descent : 0)),
-            partOfDay: timeUtils.isSunRisen(currentWeatherModel.date, currentWeatherModel.sunRise,
-                                            currentWeatherModel.sunSet) ? 0 : 1
-
-        })
+        iconName: currentWeatherModel.valid ? currentWeatherModel.iconName : ""
+        iconX: 0
+        iconY: 0
+        iconDim: Math.min(temperatureIcon.width,
+                          temperatureIcon.height +
+                            (isVerticalState ? temperatureIconMetrics.descent : 0))
+        partOfDay: timeUtils.isSunRisen(currentWeatherModel.date, currentWeatherModel.sunRise,
+                                        currentWeatherModel.sunSet) ? 0 : 1
 
         width: temperatureIcon.width
         height: temperatureIcon.height
