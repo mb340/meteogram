@@ -409,4 +409,56 @@ Item {
         var brg = Math.round((bearing + 11.25) / 22.5)
         return(Directions[brg])
     }
+
+    function getIconDescription(iconCode) {
+        if (!iconCode) {
+            return ""
+        }
+
+        iconCode = geticonNumber(iconCode)
+        const descriptionByCode = {
+            "clearsky":                    i18n("Clear sky"),
+            "cloudy":                      i18n("Cloudy"),
+            "fair":                        i18n("Fair"),
+            "fog":                         i18n("Fog"),
+            "heavyrain":                   i18n("Heavy rain"),
+            "heavyrainandthunder":         i18n("Heavy rain and thunder"),
+            "heavyrainshowers":            i18n("Heavy rain showers"),
+            "heavyrainshowersandthunder":  i18n("Heavy rain showers and thunder"),
+            "heavysleet":                  i18n("Heavy sleet"),
+            "heavysleetandthunder":        i18n("Heavy sleet and thunder"),
+            "heavysleetshowers":           i18n("Heavy sleet showers"),
+            "heavysleetshowersandthunder": i18n("Heavy sleet showers and thunder"),
+            "heavysnow":                   i18n("Heavy snow"),
+            "heavysnowandthunder":         i18n("Heavy snow and thunder"),
+            "heavysnowshowers":            i18n("Heavy snow showers"),
+            "heavysnowshowersandthunder":  i18n("Heavy snow showers and thunder"),
+            "lightrain":                   i18n("Light rain"),
+            "lightrainandthunder":         i18n("Light rain and thunder"),
+            "lightrainshowers":            i18n("Light rain showers"),
+            "lightrainshowersandthunder":  i18n("Light rain showers and thunder"),
+            "lightsleet":                  i18n("Light sleet"),
+            "lightsleetandthunder":        i18n("Light sleet and thunder"),
+            "lightsleetshowers":           i18n("Light sleet showers"),
+            "lightsnow":                   i18n("Light snow"),
+            "lightsnowandthunder":         i18n("Light snow and thunder"),
+            "lightsnowshowers":            i18n("Light snow showers"),
+            "lightssleetshowersandthunder":i18n("Light sleet showers and thunder"),
+            "lightssnowshowersandthunder": i18n("Light snow showers and thunder"),
+            "partlycloudy":                i18n("Partly cloudy"),
+            "rain":                        i18n("Rain"),
+            "rainandthunder":              i18n("Rain and thunder"),
+            "rainshowers":                 i18n("Rain showers"),
+            "rainshowersandthunder":       i18n("Rain showers and thunder"),
+            "sleet":                       i18n("Sleet"),
+            "sleetandthunder":             i18n("Sleet and thunder"),
+            "sleetshowers":                i18n("Sleet showers"),
+            "sleetshowersandthunder":      i18n("Sleet showers and thunder"),
+            "snow":                        i18n("Snow"),
+            "snowandthunder":              i18n("Snow and thunder"),
+            "snowshowers":                 i18n("Snow showers"),
+            "snowshowersandthunder":       i18n("Snow showers and thunder")
+        }
+        return descriptionByCode[iconCode]
+    }
 }
