@@ -333,4 +333,8 @@ Item {
     function reloadMeteogramImage(placeIdentifier) {
         main.overviewImageSource = ''
     }
+
+    function getIconDescription(iconCode) {
+        return ""
+    }
 }
