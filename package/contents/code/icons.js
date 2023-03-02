@@ -359,18 +359,12 @@ var MetNo = {
     }
 }
 
-function getIconCode(iconVal, providerId, partOfDay) {
+function getIconCode(iconVal, currentProvider, partOfDay) {
     if (partOfDay === undefined) {
         partOfDay = 0
     }
 
-    let irName = null
-    if (providerId === "metno") {
-        irName = iconVal
-    } else if (providerId === "owm" || providerId === "owm2") {
-        irName = OwmToIr[iconVal]
-    }
-
+    let irName = irName = currentProvider.getIconIr(iconVal)
     if (irName === null) {
         return "\uf07b"  // wi-na
     }

@@ -475,7 +475,7 @@ Item {
            return
         }
         var nearFutureWeather = currentWeatherModel.nearFuture
-        var futureWeatherIcon = IconTools.getIconCode(nearFutureWeather.iconName, currentProvider.providerId, getPartOfDayIndex())
+        var futureWeatherIcon = IconTools.getIconCode(nearFutureWeather.iconName, currentProvider, getPartOfDayIndex())
         var wind1=Math.round(currentWeatherModel.windDirection)
         var windDirectionIcon = IconTools.getWindDirectionIconCode(wind1)
 
