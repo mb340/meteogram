@@ -308,6 +308,9 @@ Dialog {
         if (providerId === "metno") {
             url = "lat=" + lat + "&lon=" + lon + "&altitude=" + alt
         }
+        if (providerId === "openMeteo") {
+            url = "latitude=" + lat + "&longitude=" + lon
+        }
         return url
     }
 
