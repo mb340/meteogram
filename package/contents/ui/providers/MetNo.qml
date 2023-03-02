@@ -410,6 +410,10 @@ Item {
         return(Directions[brg])
     }
 
+    function getIconIr(iconCode) {
+        return iconCode
+    }
+
     function getIconDescription(iconCode) {
         if (!iconCode) {
             return ""
