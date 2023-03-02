@@ -103,7 +103,7 @@ Item {
             return
         }
 
-        currentWeatherModel.iconName = hourly.weathercode[hourlyIdx]
+        currentWeatherModel.iconName = String(hourly.weathercode[hourlyIdx])
         currentWeatherModel.temperature = parseFloat(hourly.temperature_2m[hourlyIdx])
         currentWeatherModel.windDirection = parseFloat(hourly.winddirection_10m[hourlyIdx])
         currentWeatherModel.windSpeedMps = parseFloat(hourly.windspeed_10m[hourlyIdx])
@@ -193,7 +193,7 @@ Item {
             let item = dailyModel.models[dailyPeriodIdx]
             if (isNearestHour) {
                 item.partOfDay = partOfDay
-                // item.iconName = iconNumber
+                item.iconName = String(hourly.weathercode[i])
 
                 item.temperature = temperature
                 item.feelsLike = parseFloat(hourly.apparent_temperature[i])
@@ -274,6 +274,7 @@ Item {
 
             var item = meteogramModel.createItem()
             item.from = date
+            item.iconName = String(hourly.weathercode[i])
             item.temperature = parseFloat(hourly.temperature_2m[i])
             item.feelsLike = parseFloat(hourly.apparent_temperature[i])
             item.dewPoint = parseFloat(hourly.dewpoint_2m[i])
@@ -334,7 +335,83 @@ Item {
         main.overviewImageSource = ''
     }
 
+    function getIconIr(iconCode) {
+        const OpenMeteoToIr = {
+            0:  "clearsky",
+            1:  "fair",
+            2:  "partlycloudy",
+            3:  "cloudy",
+            45: "fog",
+            48: "fog",
+            51: "lightrain",
+            53: "rain",
+            55: "heavyrain",
+            56: "lightsleet",
+            57: "sleet",
+            61: "lightrain",
+            63: "rain",
+            65: "heavyrain",
+            66: "lightsleet",
+            67: "sleet",
+            71: "lightsnow",
+            73: "snow",
+            75: "heavysnow",
+            77: "snow",
+            80: "lightrainshowers",
+            81: "rainshowers",
+            82: "heavyrainshowers",
+            85: "lightsnowshowers",
+            86: "heavysnowshowers",
+            95: "rainandthunder",
+            96: "lightsleetandthunder",
+            99: "heavysleetandthunder"
+        }
+
+        let irName = null
+        let code = parseInt(iconCode)
+        if (!isNaN(code)) {
+            irName = OpenMeteoToIr[code]
+        }
+        return irName
+    }
+
     function getIconDescription(iconCode) {
-        return ""
+
+        const descriptionByCode = {
+            0:  i18n("Clear sky"),
+            1:  i18n("Mainly clear"),
+            2:  i18n("Partly cloudy"),
+            3:  i18n("Overcast"),
+            45: i18n("Fog"),
+            48: i18n("Depositing rime fog"),
+            51: i18n("Light drizzle"),
+            53: i18n("Moderate drizzle"),
+            55: i18n("Heavy drizzle"),
+            56: i18n("Light freezing drizzle"),
+            57: i18n("Dense freezing drizzle"),
+            61: i18n("Slight rain"),
+            63: i18n("Moderate rain"),
+            65: i18n("Heavy rain"),
+            66: i18n("Light freezing rain"),
+            67: i18n("Heavy freezing rain"),
+            71: i18n("Slight snow fall"),
+            73: i18n("Moderate snow fall"),
+            75: i18n("Heave snow fall"),
+            77: i18n("Snow grains"),
+            80: i18n("Slight rain showers"),
+            81: i18n("Moderate rain showers"),
+            82: i18n("Violent rain showers"),
+            85: i18n("Slight snow showers"),
+            86: i18n("Heavy snow showers"),
+            95: i18n("Slight or moderate thunderstorm"),
+            96: i18n("Thunderstorm with slight hail"),
+            99: i18n("Thunderstorm with heavy hail")
+        }
+
+        let code = parseInt(iconCode)
+        if (isNaN(code)) {
+            return ""
+        }
+        return descriptionByCode[code]
     }
 }
