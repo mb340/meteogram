@@ -365,11 +365,17 @@ function getIconCode(iconVal, currentProvider, partOfDay) {
     }
 
     let irName = irName = currentProvider.getIconIr(iconVal)
-    if (irName === null) {
+    if (irName === null || irName === undefined) {
         return "\uf07b"  // wi-na
     }
 
-    let fontSymbol = Ir.ToWeatherFont[irName][partOfDay]
+    let parts = Ir.ToWeatherFont[irName]
+    if (!parts) {
+        print("Error: Invalid weather font IR name: " + irName)
+        return "\uf07b"
+    }
+
+    let fontSymbol = parts[partOfDay]
     return WeatherFont.codeByName[fontSymbol]
 }
 
