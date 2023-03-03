@@ -206,6 +206,10 @@ function getIconResource(iconVal, currentProvider, iconSetType, partOfDay) {
         partOfDay = 0
     }
 
+    if (!currentProvider) {
+        return null
+    }
+
     let irName = currentProvider.getIconIr(iconVal)
     if (irName === null || irName === "") {
         return null
