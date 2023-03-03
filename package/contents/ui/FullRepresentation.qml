@@ -433,20 +433,18 @@ Item {
             anchors.bottom: parent.bottom
             verticalAlignment: Text.AlignBottom
 
-            text: !pressAndHoldTimer.running ? '\u21bb '+ i18n("Reload") :
-                                               '\u21bb '+ i18n("Reloading in ") + pressCountdownTimer.reloadTimerTs
+            text: !pressAndHoldTimer.running ? reloadTime.nextReloadText :
+                        '\u21bb '+ i18n("Reloading in ") + pressCountdownTimer.reloadTimerTs
             visible: false
         }
 
         onEntered: {
             reloadTime.updateNextReloadText(cacheKey)
-            lastReloadedTextComponent.text = reloadTime.nextReloadText
-            lastReloadedTextComponent.visible = true
-            reloadTextComponent.visible = false
+            lastReloadedTextComponent.visible = false
+            reloadTextComponent.visible = true
         }
 
         onExited: {
-            lastReloadedTextComponent.text = lastReloadedText
             lastReloadedTextComponent.visible = true
             reloadTextComponent.visible = false
             pressAndHoldTimer.stop()
