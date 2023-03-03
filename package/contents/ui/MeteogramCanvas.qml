@@ -199,6 +199,7 @@ Canvas {
 
     function drawPrecipitationBars(context, rectWidth) {
         precLabelPositions = ({})
+        context.fillStyle = palette.rainColor()
         for (var i = 0; i < meteogramModel.count; i++) {
             var item = meteogramModel.get(i)
             if (item.precipitationAmount <= 0) {
@@ -218,7 +219,6 @@ Canvas {
                 barWidth = width - x
             }
 
-            context.fillStyle = palette.rainColor()
             var h = (precipitationScale.range[0]) - y
             var w = barWidth - (0.5 * units.devicePixelRatio)
             context.fillRect(x, y, w, h)
