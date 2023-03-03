@@ -393,8 +393,6 @@ Canvas {
             var str = IconTools.getIconResource(iconName, currentProvider, iconSetType,
                                                 timePeriod)
 
-            var metrics = context.measureText(str)
-            var textWidth = metrics.width
             var x0 = x
             var y0 = y - rectWidth
 
@@ -420,6 +418,8 @@ Canvas {
             y0 = Math.min(newY0, newY1)
 
             if (iconSetType === 0) {
+                var metrics = context.measureText(str)
+                var textWidth = metrics.width
                 x0 = x - (textWidth / 2.0)
                 context.fillStyle = theme.textColor
                 context.fillText(str, x0, y0)
