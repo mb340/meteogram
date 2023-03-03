@@ -227,14 +227,10 @@ function dateNow(timezoneType) {
 }
 
 
-function isDST(DSTPeriods, timezoneType) {
+function isDST(DSTPeriods) {
     if(DSTPeriods === undefined) {
         return false
     }
-    if (timezoneType === undefined) {
-        timezoneType = main.timezoneType
-    }
-
     let now = (new Date).getTime() / 1000
     for (let f = 0; f < DSTPeriods.length; f++) {
         if ((now >= DSTPeriods[f].DSTStart) && (now <= DSTPeriods[f].DSTEnd)) {
@@ -244,10 +240,22 @@ function isDST(DSTPeriods, timezoneType) {
     return false
 }
 
+function getTimeZoneOffset(timezoneId) {
+    if (timezoneId === undefined) {
+        timezoneId = main.timezoneID
+    }
+    if (timezoneId < 0 || timezoneId >= TZ.TZData.length) {
+        return NaN
+    }
+    let tz = TZ.TZData[timezoneId]
+    let offset = isDST(tz.DSTData, timezoneId) ? tz.DSTOffset : tz.Offset
+    return parseInt(offset) * 1000
+}
+
 /*
  * Convert from system time to UTC or location-local time.
  */
-function convertDate(date, timezoneType, timezoneId = undefined, offset = undefined) {
+function convertDate(date, timezoneType, offset = undefined) {
     if (typeof(date) === "string") {
         date = new Date(Date.parse(date))
     } else if (typeof(date) === "number") {
@@ -259,21 +267,15 @@ function convertDate(date, timezoneType, timezoneId = undefined, offset = undefi
     if (timezoneType === undefined) {
         timezoneType = main.timezoneType
     }
-    if (timezoneId === undefined) {
-        timezoneId = main.timezoneID
+    if (offset === undefined) {
+        offset = main.timezoneOffset
     }
 
     if (timezoneType === TimezoneType.UTC) {
         convertDateToUTC(date)
     } else if (timezoneType === TimezoneType.LOCATION_LOCAL_TIME) {
         convertDateToUTC(date)
-        var _offset = offset
-        if (_offset == undefined) {
-            var tz = TZ.TZData[timezoneId]
-            _offset = isDST(tz.DSTData, timezoneType, timezoneId) ? tz.DSTOffset : tz.Offset
-        }
-        _offset = parseInt(_offset) * 1000
-        date.setTime(date.getTime() + _offset)
+        date.setTime(date.getTime() + offset)
     }
     return date
 }

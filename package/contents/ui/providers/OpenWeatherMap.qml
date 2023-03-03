@@ -252,7 +252,7 @@ Item {
 
     function parseDate(dateString) {
         let d = new Date(dateString + '.000Z')
-        return UnitUtils.convertDate(d, timezoneType, undefined, tzOffset)
+        return UnitUtils.convertDate(d, timezoneType, tzOffset)
     }
 
     onXmlModelCurrentStatusChanged: {
@@ -305,7 +305,7 @@ Item {
         dbgprint('all xml models ready')
         if (xmlModelLocation.count > 0) {
             let item = xmlModelLocation.get(0)
-            tzOffset = item.timezone
+            tzOffset = item.timezone * 1000
         } else {
             tzOffset = 0
             print("warning: OpenWeatherMap timezone offset data not available")
@@ -450,7 +450,7 @@ Item {
 
         var firstFromMs = null
         var limitMsDifference = 1000 * 60 * 60 * 63 // 2.50 days
-        var dateNow = UnitUtils.convertDate(new Date(), timezoneType, undefined, tzOffset)
+        var dateNow = UnitUtils.convertDate(new Date(), timezoneType, tzOffset)
         var intervalStart = UnitUtils.floorDate(dateNow)
 
         for (var i = 0; i < xmlModelHourByHour.count; i++) {

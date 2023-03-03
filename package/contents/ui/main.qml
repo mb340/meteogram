@@ -35,6 +35,7 @@ Item {
     property string placeAlias
     property string cacheKey
     property int timezoneID
+    property int timezoneOffset
     property string timezoneShortName
     property bool renderMeteogram: plasmoid.configuration.renderMeteogram
     property int temperatureType: plasmoid.configuration.temperatureType
@@ -311,10 +312,12 @@ Item {
         var placeObject = places[placeIndex]
         placeIdentifier = placeObject.placeIdentifier
         placeAlias = placeObject.placeAlias
-        if (placeObject.timezoneID  === undefined ) {
+        if (placeObject.timezoneID  === undefined || placeObject.providerId === 'owm') {
           placeObject.timezoneID = -1
         }
         timezoneID = parseInt(placeObject.timezoneID)
+        timezoneOffset = UnitUtils.getTimeZoneOffset(timezoneID)
+
         dbgprint('next placeIdentifier is: ' + placeIdentifier)
         cacheKey = DataLoader.generateCacheKey(placeIdentifier)
         dbgprint('next cacheKey is: ' + cacheKey)
