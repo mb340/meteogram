@@ -335,7 +335,6 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: hourLegendMargin
         height: nextDaysHeight
-        clip: true
 
         model: dailyWeatherModels.model
         orientation: Qt.Horizontal
