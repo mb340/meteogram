@@ -215,12 +215,7 @@ var TimezoneType = {
 }
 
 function convertDateToUTC(date) {
-    return new Date(date.getUTCFullYear(),
-                    date.getUTCMonth(),
-                    date.getUTCDate(),
-                    date.getUTCHours(),
-                    date.getUTCMinutes(),
-                    date.getUTCSeconds())
+    return date.setTime(date.getTime() + (date.getTimezoneOffset() * 60 * 1000))
 }
 
 function dateNow(timezoneType) {
@@ -230,6 +225,7 @@ function dateNow(timezoneType) {
     var now = convertDate(new Date(), timezoneType)
     return now
 }
+
 
 function isDST(DSTPeriods, timezoneType) {
     if(DSTPeriods === undefined) {
@@ -269,16 +265,16 @@ function convertDate(date, timezoneType, timezoneId = undefined, offset = undefi
     }
 
     if (timezoneType === TimezoneType.UTC) {
-        return convertDateToUTC(date)
+        convertDateToUTC(date)
     } else if (timezoneType === TimezoneType.LOCATION_LOCAL_TIME) {
-        var utcDate = convertDateToUTC(date)
+        convertDateToUTC(date)
         var _offset = offset
         if (_offset == undefined) {
             var tz = TZ.TZData[timezoneId]
             _offset = isDST(tz.DSTData, timezoneType, timezoneId) ? tz.DSTOffset : tz.Offset
         }
         _offset = parseInt(_offset) * 1000
-        return new Date(utcDate.getTime() + _offset)
+        date.setTime(date.getTime() + _offset)
     }
     return date
 }
