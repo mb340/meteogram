@@ -89,7 +89,7 @@ Dialog {
         print("newMetnoUrl.text = " + newMetnoUrl.text)
         var resultString = newMetnoUrl.text
         if (resultString.length === 0) {
-            if (addMetnoCityIdDialog.providerId === 'meto') {
+            if (addMetnoCityIdDialog.providerId === 'metno') {
                 resultString="lat="+newMetnoCityLatitudeField.text+"&lon="+newMetnoCityLongitudeField.text+"&altitude="+newMetnoCityAltitudeField.text
             } else if (addMetnoCityIdDialog.providerId === 'owm2') {
                 resultString="lat="+newMetnoCityLatitudeField.text+"&lon="+newMetnoCityLongitudeField.text
