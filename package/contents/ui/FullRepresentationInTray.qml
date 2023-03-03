@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
-import QtQuick 2.2
+import QtQuick 2.5
 import org.kde.plasma.plasmoid 2.0
 import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
@@ -25,15 +25,14 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 Item {
     id: fullRepresentation
 
-    width: parent.width
+    width: parent ? parent.width : 1
+
+    property double nextDayRowFontPixelSize: 24 * units.devicePixelRatio
 
     property double defaultFontPixelSize: theme.defaultFont.pixelSize
     property double footerHeight: defaultFontPixelSize * 3.5
 
-    property int nextDaysSpacing: 5 * units.devicePixelRatio
-    property int nextDayHeight: defaultFontPixelSize * 4.9
     property int headingHeight: defaultFontPixelSize * 3
-    property int nextDayItemSpacing: defaultFontPixelSize * 0.7
 
     property double headingTopMargin: defaultFontPixelSize
 
@@ -106,120 +105,35 @@ Item {
 
             model: dailyWeatherModels.model
             orientation: Qt.Vertical
-            spacing: nextDayItemSpacing
+            spacing: 0
             interactive: false
 
-            delegate: Item {
+            delegate: NextDayItem {
+                width: parent.width
+                height: titleHeight + rowHeight
 
-                width: nextDaysView.width
-                height: nextDayHeight
+                titleHeight: nextDayTitleMetrics.height
+                rowHeight: nextDayRowMetrics.height
 
-                property string svgLineName: 'horizontal-line'
-
-                PlasmaCore.SvgItem {
-                    id: dayTitleLine
-                    width: parent.width
-                    height: lineSvg.elementSize(svgLineName).height
-                    elementId: svgLineName
-                    svg: PlasmaCore.Svg {
-                        id: lineSvg
-                        imagePath: 'widgets/line'
-                    }
-                }
-
-                PlasmaComponents.Label {
-                    id: dayTitleText
-
-                    anchors.top: dayTitleLine.bottom
-                    anchors.topMargin: units.smallSpacing * 0.5
-                    verticalAlignment: Text.AlignTop
-
-                    text: dayTitle
-                }
-
-
-
-                /*
-                *
-                * four item data
-                *
-                */
-                property double periodMargin: defaultFontPixelSize * 1.5
-                property double periodItemWidth: (width - periodMargin * 4) / 4
-                property double periodItemHeight: nextDayHeight - headingTopMargin
-                property double periodFontSize: periodItemHeight * 0.45
-
-                Item {
-
-                    anchors.top: parent.top
-                    anchors.topMargin: headingTopMargin
-
-                    height: periodItemHeight
-
-                    NextDayPeriodItem {
-                        id: period1
-                        width: periodItemWidth
-                        height: parent.height
-                        temperature: temperature0
-                        iconName: iconName0
-                        hidden: hidden0
-                        past: isPast0
-                        partOfDay: 1
-                        pixelFontSize: periodFontSize
-                    }
-
-                    NextDayPeriodItem {
-                        id: period2
-                        width: periodItemWidth
-                        height: parent.height
-                        temperature: temperature1
-                        iconName: iconName1
-                        hidden: hidden1
-                        past: isPast1
-                        partOfDay: 0
-                        pixelFontSize: periodFontSize
-
-                        anchors.left: period1.right
-                        anchors.leftMargin: periodMargin
-                    }
-
-                    NextDayPeriodItem {
-                        id: period3
-                        width: periodItemWidth
-                        height: parent.height
-                        temperature: temperature2
-                        iconName: iconName2
-                        hidden: hidden2
-                        past: isPast2
-                        partOfDay: 0
-                        pixelFontSize: periodFontSize
-
-                        anchors.left: period2.right
-                        anchors.leftMargin: periodMargin
-                    }
-
-                    NextDayPeriodItem {
-                        id: period4
-                        width: periodItemWidth
-                        height: parent.height
-                        temperature: temperature3
-                        iconName: iconName3
-                        hidden: hidden3
-                        past: isPast3
-                        partOfDay: 1
-                        pixelFontSize: periodFontSize
-
-                        anchors.left: period3.right
-                        anchors.leftMargin: periodMargin
-                    }
-                }
-
+                periodFontSize: nextDayRowMetrics.font.pixelSize
             }
         }
+
     }
 
+    TextMetrics {
+        id: nextDayRowMetrics
+        font.family: theme.defaultFont.family
+        font.pixelSize: nextDayRowFontPixelSize
+        text: "MMMMMM"
+    }
 
-
+    TextMetrics {
+        id: nextDayTitleMetrics
+        font.family: theme.defaultFont.family
+        font.pixelSize: theme.defaultFont.pixelSize
+        text: "MMMMMM"
+    }
 
     /*
      *

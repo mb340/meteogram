@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
-import QtQuick 2.2
+import QtQuick 2.5
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.1
 import org.kde.plasma.plasmoid 2.0
@@ -343,23 +343,44 @@ Item {
 
         delegate: NextDayItem {
             width: nextDayItemWidth
-            height: nextDaysHeight
+            height: nextDaysView.height
+
+            titleHeight: nextDayTitleMetrics.height
+            rowHeight: (nextDaysView.height - titleHeight) / 4
         }
+    }
+
+    TextMetrics {
+        id: nextDayTitleMetrics
+        font.family: theme.defaultFont.family
+        font.pixelSize: theme.defaultFont.pixelSize
+        text: "MMMMMM"
     }
 
     Column {
         id: hourLegend
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: footerHeight + nextDaysVerticalMargin
-        spacing: 1 * units.devicePixelRatio
+        anchors.top: nextDaysView.top
         width: hourLegendMargin
-        height: nextDaysHeight - defaultFontPixelSize
+        height: nextDaysView.height
 
+        property double itemHeight: (hourLegend.height - nextDayTitleMetrics.height) / 4
         property double fontPixelSize: defaultFontPixelSize * 1.25
 
         PlasmaComponents.Label {
+            id: hourLegendSpacer
+            text: " "
+            height: nextDayTitleMetrics.height
+        }
+
+        Item {
+            id: hourLegendLineSpacer
+            width: 1
+            height: 1
+        }
+
+        PlasmaComponents.Label {
             text: "\uf0d2"  // wi-moon-alt-waxing-crescent-3
-            height: parent.height / 4
+            height: parent.itemHeight
             font.family: 'weathericons'
             font.pixelSize: hourLegend.fontPixelSize
             font.pointSize: -1
@@ -369,7 +390,7 @@ Item {
         }
         PlasmaComponents.Label {
             text: "\uf051"  // wi-horizon-alt
-            height: parent.height / 4
+            height: parent.itemHeight
             font.family: 'weathericons'
             font.pixelSize: hourLegend.fontPixelSize
             font.pointSize: -1
@@ -379,7 +400,7 @@ Item {
         }
         PlasmaComponents.Label {
             text: "\uf00d"  // wi-day-sunny
-            height: parent.height / 4
+            height: parent.itemHeight
             font.family: 'weathericons'
             font.pixelSize: hourLegend.fontPixelSize
             font.pointSize: -1
@@ -389,7 +410,7 @@ Item {
         }
         PlasmaComponents.Label {
             text: "\uf052"  // wi-horizon
-            height: parent.height / 4
+            height: parent.itemHeight
             font.family: 'weathericons'
             font.pixelSize: hourLegend.fontPixelSize
             font.pointSize: -1

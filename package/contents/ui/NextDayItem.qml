@@ -21,16 +21,21 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 
 Item {
 
-    property int itemRowSpacing: 5 * units.devicePixelRatio
     property double periodFontSize: theme.defaultFont.pixelSize
-    property double periodHeight: (height - periodFontSize - itemRowSpacing * 4) / 4
     property color lineColor: theme.textColor
+
+    property double titleHeight: NaN
+    property double rowHeight: NaN
+
+    property bool mainInTray: main.inTray
 
     PlasmaComponents.Label {
         id: dayTitleText
         text: date.toLocaleDateString(Qt.locale(), 'ddd d MMM')
         anchors.top: parent.top
-        height: periodFontSize
+        anchors.topMargin: mainInTray ? dayTitleLine.height : 0
+        anchors.bottomMargin: 0
+        height: !isNaN(titleHeight) ? titleHeight : null
         verticalAlignment: Text.AlignBottom
     }
 
@@ -38,8 +43,9 @@ Item {
         id: dayTitleLine
         width: parent.width
         height: 1 * units.devicePixelRatio
-        anchors.top: parent.top
-        anchors.topMargin: periodFontSize * 0.8
+        anchors.top: mainInTray ? dayTitleText.top : dayTitleText.bottom
+        anchors.topMargin: 0
+        anchors.bottomMargin: 0
 
         LinearGradient {
             anchors.fill: parent
@@ -71,22 +77,27 @@ Item {
         _periodModels.endList()
     }
 
-    GridLayout {
-        anchors.fill: parent
-        anchors.topMargin: periodFontSize
+    Grid {
+        id: itemGrid
+        anchors.top: dayTitleText.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.topMargin: 0
 
-        columns: 1
-        rowSpacing: 5 * units.devicePixelRatio
+        spacing: 0
 
-        height: parent.height - anchors.topMargin
-        width: parent.width
+        columns: mainInTray ? 4 : 1
+
+        height: parent.height - (dayTitleText.height + dayTitleLine.height)
+
 
         Repeater {
             model: _periodModels.model
 
             NextDayPeriodItem {
-                width: parent.width
-                height: periodHeight
+                width: parent.width / parent.columns
+                height: rowHeight
+
                 temperature: model.temperature
                 temperature_min: model.temperatureLow
                 temperature_max: model.temperatureHigh
@@ -102,9 +113,12 @@ Item {
     MouseArea {
         anchors.fill: parent
 
-        hoverEnabled: true
+        hoverEnabled: !mainInTray
 
         onEntered: {
+            if (mainInTray) {
+                return
+            }
             if (currentProvider.providerId === "metno" || currentProvider.providerId === "openMeteo") {
                 metnoDailyWeatherInfo.model = dailyWeatherModels.get(index)
             } else if (currentProvider.providerId === "owm") {
@@ -113,6 +127,9 @@ Item {
         }
 
         onExited: {
+            if (mainInTray) {
+                return
+            }
             metnoDailyWeatherInfo.model = null
             owmDailyWeatherInfo.model = null
         }

@@ -18,7 +18,6 @@ import QtQuick 2.2
 import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
 import org.kde.plasma.components 2.0 as PlasmaComponents
-import org.kde.plasma.core 2.0 as PlasmaCore
 
 import "../code/icons.js" as IconTools
 import "../code/unit-utils.js" as UnitUtils
@@ -39,13 +38,7 @@ RowLayout {
 
     property int iconSetType: (plasmoid && plasmoid.configuration && plasmoid.configuration.iconSetType) ?
                                plasmoid.configuration.iconSetType : 0
-    
-    onPixelFontSizeChanged: {
-        if (pixelFontSize > 0) {
-            temperatureText.font.pixelSize = pixelFontSize
-        }
-    }
-    
+
     opacity: past ? 0.5 : 1
 
     Item {
@@ -57,14 +50,12 @@ RowLayout {
     PlasmaComponents.Label {
         id: temperatureText
 
+        font.pixelSize: pixelFontSize
         font.pointSize: -1
 
         height: parent.height
         Layout.alignment: Qt.AlignRight
-        Layout.fillWidth: true
-
-        horizontalAlignment: Text.AlignRight
-        verticalAlignment: Text.AlignVCenter
+        Layout.fillWidth: false
 
         text: hidden ? '' :
               (!hasMinMax ? UnitUtils.getTemperatureText(temperature, temperatureType, 0) :
@@ -74,7 +65,7 @@ RowLayout {
 
     Item {
         id: iconParent
-        width: parent.width / 3
+        width: height
         height: parent.height
 
         WeatherIcon {
