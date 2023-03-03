@@ -356,40 +356,46 @@ Item {
         width: hourLegendMargin
         height: nextDaysHeight - defaultFontPixelSize
 
+        property double fontPixelSize: defaultFontPixelSize * 1.25
+
         PlasmaComponents.Label {
-            text: i18n("NGT")
-            width: parent.width
+            text: "\uf0d2"  // wi-moon-alt-waxing-crescent-3
             height: parent.height / 4
-            font.pixelSize: defaultFontPixelSize * 0.8
+            font.family: 'weathericons'
+            font.pixelSize: hourLegend.fontPixelSize
             font.pointSize: -1
-            horizontalAlignment: Text.AlignRight
+            horizontalAlignment: Text.AlignCenter
+            anchors.horizontalCenter: parent.horizontalCenter
             opacity: 0.6
         }
         PlasmaComponents.Label {
-            text: i18n("MRNG")
-            width: parent.width
+            text: "\uf051"  // wi-horizon-alt
             height: parent.height / 4
-            font.pixelSize: defaultFontPixelSize * 0.8
+            font.family: 'weathericons'
+            font.pixelSize: hourLegend.fontPixelSize
             font.pointSize: -1
-            horizontalAlignment: Text.AlignRight
+            horizontalAlignment: Text.AlignCenter
+            anchors.horizontalCenter: parent.horizontalCenter
             opacity: 0.6
         }
         PlasmaComponents.Label {
-            text: i18n("AFTN")
-            width: parent.width
+            text: "\uf00d"  // wi-day-sunny
             height: parent.height / 4
-            font.pixelSize: defaultFontPixelSize * 0.8
+            font.family: 'weathericons'
+            font.pixelSize: hourLegend.fontPixelSize
             font.pointSize: -1
-            horizontalAlignment: Text.AlignRight
+            horizontalAlignment: Text.AlignCenter
+            anchors.horizontalCenter: parent.horizontalCenter
             opacity: 0.6
         }
         PlasmaComponents.Label {
-            text: i18n("EVE")
-            width: parent.width
+            text: "\uf052"  // wi-horizon
             height: parent.height / 4
-            font.pixelSize: defaultFontPixelSize * 0.8
+            font.family: 'weathericons'
+            font.pixelSize: hourLegend.fontPixelSize
             font.pointSize: -1
-            horizontalAlignment: Text.AlignRight
+            horizontalAlignment: Text.AlignCenter
+            anchors.horizontalCenter: parent.horizontalCenter
             opacity: 0.6
         }
     }
