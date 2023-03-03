@@ -34,7 +34,7 @@ Item {
     property int labelHeight: textMetrics.height
 
     property int cloudarea: 0
-    property int windarea: 28 * units.devicePixelRatio
+    property int windarea: 24 * units.devicePixelRatio
 
     readonly property int minTemperatureYGridCount: 20
 
@@ -343,6 +343,8 @@ Item {
                     height: labelHeight
                     x: xPos
                     y: 0
+
+                    anchors.verticalCenter: parent.verticalCenter
 
                     Image {
                         id: wind

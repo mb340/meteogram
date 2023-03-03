@@ -227,7 +227,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: nextDaysView.top
-        anchors.bottomMargin: 14 /* wind area */
+        anchors.bottomMargin: windarea /* wind area */
         visible: !isShowAlert && !metnoDailyWeatherInfo.visible && !owmDailyWeatherInfo.visible
      }
 
@@ -244,7 +244,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: nextDaysView.top
-        anchors.bottomMargin: 14 /* wind area */
+        anchors.bottomMargin: meteogram.windarea /* wind area */
 
         anchors.leftMargin: units.largeSpacing
         anchors.rightMargin: units.largeSpacing
@@ -261,7 +261,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: nextDaysView.top
-        anchors.bottomMargin: 14 /* wind area */
+        anchors.bottomMargin: meteogram.windarea /* wind area */
 
         anchors.leftMargin: units.largeSpacing
         anchors.rightMargin: units.largeSpacing
