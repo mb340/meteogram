@@ -288,14 +288,7 @@ Item {
                 font.pointSize: -1
                 visible: date.getHours() === 0 && (itemEndX < hourGrid.width)
 
-                property double itemEndX: dayTest.parent.x + dayTest.x + dayLabelMetrics.width
-            }
-
-            TextMetrics {
-                id: dayLabelMetrics
-                font.family: dayTest.font.family
-                font.pixelSize: dayTest.font.pixelSize
-                text: dayTest.text
+                property double itemEndX: timeScale.translate(date) + dayTest.width
             }
         }
     }
@@ -428,6 +421,7 @@ Item {
                                             theme.highlightColor.g,
                                             theme.highlightColor.b,
                                             0.25)
+
 
                 var [x0, x1] = meteogramCanvas.getItemIntervalX(meteogramInfo.idx)
                 context.fillRect(x0, 0, x1 - x0, height);
