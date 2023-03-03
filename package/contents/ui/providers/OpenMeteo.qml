@@ -252,7 +252,6 @@ Item {
         }
 
         dailyWeatherModels.endList()
-        main.nextDaysCount = dailyWeatherModels.count
     }
 
     function buildMeteogramModel(data) {
