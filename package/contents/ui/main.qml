@@ -310,6 +310,11 @@ Item {
         plasmoid.configuration.placeIndex = placeIndex
         dbgprint('placeIndex now: ' + plasmoid.configuration.placeIndex)
         var placeObject = places[placeIndex]
+        if (!placeObject) {
+            print("warning: No place object")
+            return
+        }
+
         placeIdentifier = placeObject.placeIdentifier
         placeAlias = placeObject.placeAlias
         if (placeObject.timezoneID  === undefined || placeObject.providerId === 'owm') {
