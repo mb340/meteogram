@@ -57,10 +57,7 @@ RowLayout {
         Layout.alignment: Qt.AlignRight
         Layout.fillWidth: false
 
-        text: hidden ? '' :
-              (!hasMinMax ? UnitUtils.getTemperatureText(temperature, temperatureType, 0) :
-                            UnitUtils.getTemperatureText(temperature_max, temperatureType, 0) + " / " +
-                            UnitUtils.getTemperatureText(temperature_min, temperatureType, 0))
+        text: hidden ? '' : UnitUtils.getTemperatureText(temperature, temperatureType, 0)
     }
 
     Item {
