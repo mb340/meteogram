@@ -34,7 +34,7 @@ Item {
     property int labelHeight: textMetrics.height
 
     property int cloudarea: 0
-    property int windarea: 24 * units.devicePixelRatio
+    property int windarea: 20 * units.devicePixelRatio
 
     readonly property int minTemperatureYGridCount: 20
 
