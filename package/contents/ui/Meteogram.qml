@@ -203,6 +203,7 @@ Item {
         anchors.bottom: graphArea.top
         anchors.bottomMargin: 6
     }
+
     ListView {
         id: hourGrid
         model: hourGridModel.model
@@ -238,7 +239,7 @@ Item {
             property string hourFromStr: UnitUtils.getHourText(hourFrom, twelveHourClockEnabled)
             property string hourFromEnding: twelveHourClockEnabled ? UnitUtils.getAmOrPm(hourFrom) : '00'
             property bool dayBegins: hourFrom === 0
-            property bool hourVisible: hourFrom % 2 === 0
+            property bool hourVisible: (hourFrom + 0) % meteogramCanvas.hourStep === 0
             property bool textVisible: hourVisible && model.index < root.nHours - 1
 
             Rectangle {
@@ -314,7 +315,7 @@ Item {
                 }
 
                 let t = item.from
-                if (meteogramModel.hourInterval === 1 && (t.getHours()) % 2 === 0) {
+                if (meteogramModel.hourInterval === 1 && (t.getHours()) % meteogramCanvas.hourStep !== 0) {
                     continue
                 }
 
@@ -332,7 +333,7 @@ Item {
             model: windSpeedModel.model
             delegate: windIconDelegate
 
-            property double rectWidth: 2 * (meteogramCanvas.rectWidth)
+            property double rectWidth: meteogramCanvas.hourStep * (meteogramCanvas.rectWidth)
 
             Component {
                 id: windIconDelegate

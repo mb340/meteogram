@@ -43,6 +43,9 @@ Canvas {
 
     property var cloudPathItems: []
 
+    property double hourStrWidth: NaN
+    property int hourStep: 2
+
     property alias temperatureScale: temperatureScale
     property alias temperatureAxisScale: temperatureAxisScale
     property alias rightAxisScale: rightAxisScale
@@ -551,7 +554,6 @@ Canvas {
             return
         }
 
-
         context.globalCompositeOperation = "source-over"
 
 
@@ -882,6 +884,8 @@ Canvas {
         precipitationScale.setDomain(0, 50)
         precipitationMaxGraphY = 15
 
+        computeHourStep(root.hourStrWidth, root.rectWidth)
+
         xIndexScale.setDomain(0, meteogramModel.count - 1)
         timeScale.setDomain(startTime.getTime(), endTime.getTime())
         windSpeedArea.setModel(meteogramModel.count)
@@ -889,11 +893,53 @@ Canvas {
         hourGrid.setModel(startTime)
     }
 
+    function computeHourStrWidth() {
+        var context = root.context ? root.context : getContext("2d")
+        hourStrWidth = 0
+        let fontSize = 11 * units.devicePixelRatio
+        context.font = fontSize + 'px "' + theme.defaultFont.family + '"'
+        let metrics = context.measureText("00")
+        hourStrWidth += metrics.width
+
+        fontSize = 7 * units.devicePixelRatio
+        context.font = fontSize + 'px "' + theme.defaultFont.family + '"'
+        metrics = context.measureText("00")
+        hourStrWidth += metrics.width
+
+        // print("rectWidth ", rectWidth)
+        // print("hourStrWidth ", hourStrWidth)
+    }
+
+    function computeHourStep(hourStrWidth, rectWidth) {
+        hourStep = Math.ceil(meteogramCanvas.hourStrWidth / meteogramCanvas.rectWidth)
+        if (hourStep <= 2) {
+            hourStep = 2
+        }
+        if (hourStep <= 4) {
+            // hourStep
+        } else if (hourStep <= 6) {
+            hourStep = 6
+        } else if (hourStep <= 8) {
+            hourStep = 8
+        } else if (hourStep <= 12) {
+            hourStep = 12
+        } else {
+            hourStep = 24
+        }
+        // print("hourStep ", hourStep)
+    }
+
     function fullRedraw() {
+        if (!available) {
+            return
+        }
+
+        computeHourStrWidth()
         processMeteogramData()
         buildMetogramData()
         buildCurves()
         buildCloudPath()
+
         initialized = true
         requestPaint()
     }
