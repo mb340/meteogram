@@ -33,21 +33,22 @@ Item {
         Item {
             x: iconModel.iconX
             y: iconModel.iconY
-            width: isFinite(iconModel.iconDim) ? adjustDim(iconModel.iconDim)  : parent.width
+            width: isFinite(iconModel.iconDim) ? adjustDim(iconModel.iconDim) : parent.width
             height: width
+
+            // Re-usable components use the same font and size accross all instances of the
+            // component. Work around this by forcing the font size.
+            onWidthChanged: {
+                if (textItem.font.pixelSize !== width) {
+                    textItem.font.pixelSize = width
+                }
+            }
 
             PlasmaComponents.Label {
                 id: textItem
                 text: IconTools.getIconResource(iconModel.iconName, currentProvider,
                                                 iconSetType, iconModel.partOfDay)
-
-                // Re-usable components need a custom icon to avoid the same
-                // font size for ever instance of the component.
-                font: Qt.font({
-                        pixelSize: Math.max(1, parent.width),
-                        family: 'weathericons',
-                })
-
+                font.family: 'weathericons'
                 anchors.centerIn: parent
             }
         }
