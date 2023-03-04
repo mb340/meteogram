@@ -20,6 +20,25 @@ ManagedListModel {
     property double hourInterval: 1.0
 
     function createItem() {
+        let item = get(index)
+        if (item) {
+            item.from = null
+            item.temperature = NaN
+            item.feelsLike = NaN
+            item.dewPoint = NaN
+            item.precipitationProb = NaN
+            item.precipitationAmount = NaN
+            item.windDirection = NaN
+            item.windSpeed = NaN
+            item.windGust = NaN
+            item.pressure = NaN
+            item.iconName = ""
+            item.humidity = NaN
+            item.cloudArea = NaN
+            item.uvi = NaN
+            return item
+        }
+
         return {
             from: null,
             temperature: NaN,
