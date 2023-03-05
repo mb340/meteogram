@@ -48,6 +48,7 @@ ManagedListModel {
             if (isFinite(val)) {
                 return true
             }
+            break
         }
         return false
     }
