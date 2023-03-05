@@ -162,6 +162,7 @@ Canvas {
             if (prevHeight === height && prevWidth === width) {
                 windSpeedArea.setModel(meteogramModel.count)
                 buildCurves()
+                buildCloudPath()
                 requestPaint()
                 stop()
             }
