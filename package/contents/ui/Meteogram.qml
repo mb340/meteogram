@@ -256,13 +256,14 @@ Item {
                 id: hourText
                 text: hourFromStr
                 verticalAlignment: Text.AlignBottom
-                horizontalAlignment: Text.AlignHCenter
+                horizontalAlignment: Text.AlignRight
                 height: labelHeight
                 width: hourGrid.hourItemWidth
                 anchors.top: verticalLine.bottom
                 anchors.topMargin: 2
                 //                anchors.horizontalCenter: verticalLine.left
                 anchors.horizontalCenter: verticalLine.horizontalCenter
+                anchors.rightMargin: 1 * units.devicePixelRatio
                 font.pixelSize: 11 * units.devicePixelRatio
                 font.pointSize: -1
                 visible: textVisible
