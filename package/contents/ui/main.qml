@@ -427,6 +427,30 @@ Item {
         }
     }
 
+    Timer {
+        id: updateWorker
+        interval: 0
+        running: false
+        repeat: false
+        triggeredOnStart: true
+        onTriggered: {
+
+            weatherAlertsModel.clear()
+
+            var content = providerCache.getContent(cacheKey)
+            var success = currentProvider.setWeatherContents(content)
+            if (!success) {
+                print('error: setting weather contents not successful')
+                return false
+            }
+
+            updateLastReloadedText()
+            refreshTooltipSubText()
+            reloadMeteogram()
+            alreadyLoadedFromCache = true
+        }
+    }
+
     function loadFromCache() {
          dbgprint('loading from cache, config key: ' + cacheKey)
 
@@ -443,19 +467,8 @@ Item {
             return false
         }
 
-        weatherAlertsModel.clear()
+        updateWorker.restart()
 
-        var content = providerCache.getContent(cacheKey)
-        var success = currentProvider.setWeatherContents(content)
-        if (!success) {
-            print('error: setting weather contents not successful')
-            return false
-        }
-
-        updateLastReloadedText()
-        refreshTooltipSubText()
-        reloadMeteogram()
-        alreadyLoadedFromCache = true
         return true
     }
 
