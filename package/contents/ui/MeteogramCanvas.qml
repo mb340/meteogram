@@ -30,10 +30,18 @@ Canvas {
     property var precLabelPositions: ({})
 
     property bool graphCurvedLine: plasmoid.configuration.graphCurvedLine
-    property bool hasGraphCurvedLineChanged: false
 
     property int nHours: 0
     property double rectWidth: width / nHours
+
+    property var xArr: []
+
+    property var temperaturePathItems: []
+    property var humidityPathItems: []
+    property var y1PathItems: []
+    property var y2PathItems: []
+
+    property var cloudPathItems: []
 
     property alias temperatureScale: temperatureScale
     property alias temperatureAxisScale: temperatureAxisScale
@@ -122,6 +130,56 @@ Canvas {
         pathElements: []
     }
 
+    Component {
+        id: pathLine
+        PathLine {
+            x: !xData || i < 0 || i >= xData.length ? NaN : xData[i]
+            y: !scale || !model || !varName || varName === "" ? NaN :
+                    scale.translate(UnitUtils.convertValue(model[varName], varName))
+
+            property int i
+            property var xData
+
+            property var model
+            property var scale
+            property string varName
+        }
+    }
+
+    Component {
+        id: pathCurve
+        PathCurve {
+            x: !xData || i < 0 || i >= xData.length ? 0 : xData[i]
+            y: !scale || !model || !varName || varName === "" ? 0 :
+                    scale.translate(UnitUtils.convertValue(model[varName], varName))
+
+            property int i
+            property var xData
+
+            property var model
+            property var scale
+            property string varName
+        }
+    }
+
+    Component {
+        id: cloudPathLine
+        PathLine {
+            x: !xData || i < 0 || i >= xData.length ? NaN : xData[i]
+            property int i
+            property var xData
+        }
+    }
+
+    Component {
+        id: cloudPathCurve
+        PathCurve {
+            x: !xData || i < 0 || i >= xData.length ? NaN : xData[i]
+            property int i
+            property var xData
+        }
+    }
+
     MeteogramIconOverlay {
         id: iconOverlay
         anchors.fill: parent
@@ -140,7 +198,10 @@ Canvas {
     }
 
     onGraphCurvedLineChanged: {
-        hasGraphCurvedLineChanged = true
+        temperaturePath.pathElements = []
+        humidityPath.pathElements = []
+        y1Path.pathElements = []
+        y2Path.pathElements = []
         fullRedraw()
     }
 
@@ -516,15 +577,17 @@ Canvas {
         if (plasmoid.configuration.renderHumidity) {
             drawPath(context, humidityPath, palette.humidityColor(), 1 * units.devicePixelRatio)
         }
-        if (plasmoid.configuration.renderPressure) {
+        if (plasmoid.configuration.renderPressure && y2VarName && y2VarName !== "") {
             drawPath(context, y2Path, palette.pressureColor(), 1 * units.devicePixelRatio)
         }
         if (plasmoid.configuration.renderTemperature) {
             drawWarmTemp(context, temperaturePath, palette.temperatureWarmColor(), 2 * units.devicePixelRatio)
             drawColdTemp(context, temperaturePath, palette.temperatureColdColor(), 2 * units.devicePixelRatio)
 
-            let color = !textColorLight ? 'black' : 'white'
-            drawPath(context, y1Path, color, 1 * units.devicePixelRatio)
+            if (y1VarName && y1VarName !== "") {
+                let color = !textColorLight ? 'black' : 'white'
+                drawPath(context, y1Path, color, 1 * units.devicePixelRatio)
+            }
         }
 
         if (plasmoid.configuration.renderIcons) {
@@ -544,155 +607,128 @@ Canvas {
         }
     }
 
+    function updatePathElement(index, path, pathList, xData, model, scale, varName) {
+        if (index >= pathList.length) {
+            let obj = pathLine.createObject(path, {
+                i: index,
+                xData: xData,
+
+                model: model,
+                scale: scale,
+                varName: varName
+            })
+            if (obj != null) {
+                pathList.push(obj)
+            } else {
+                print("Error: PathLine createObject returned null.")
+            }
+        } else {
+            let item = pathList[index]
+            let tmp = item.i
+            item.i = index
+            item.model = model
+            item.scale = scale
+            item.varName = varName
+            if (tmp === index) {
+                item.iChanged()
+            }
+        }
+    }
+
     function buildCurves() {
-        var newPathElements = temperaturePath.pathElements
-        var newY1Elements = y1Path.pathElements
-        var newY2Elements = y2Path.pathElements
-        var newCloudElements = cloudAreaPath.pathElements
-        var newCloudElements2 = []
-        var newHumidityElements = humidityPath.pathElements
-
-        if (meteogramModel.count === 0) {
-            return
-        }
-        var pathType = 'PathCurve'
-        if (!graphCurvedLine) {
-            pathType = 'PathLine'
-        }
-
-        var reuse = meteogramModel.count <= newPathElements.length
-        reuse &= !hasGraphCurvedLineChanged
-        hasGraphCurvedLineChanged = false
-
-        if (!reuse) {
-            newPathElements = []
-            newY1Elements = []
-            newY2Elements = []
-            newCloudElements = []
-            newCloudElements2 = []
-            newHumidityElements = []
-        }
-
+        let y1Count = 0
+        let y2Count = 0
+        let hasY1Chart = y1VarName && y1VarName !== ""
+        let hasY2Chart = y2VarName && y2VarName !== ""
         for (var i = 0; i < meteogramModel.count; i++) {
             var dataObj = meteogramModel.get(i)
 
-            var t = dataObj.from
-            var x = timeScale.translate(t)
-
-            let y2Value = dataObj[y2VarName]
-
-            var temperatureY = temperatureScale.translate(UnitUtils.convertTemperature(dataObj.temperature, temperatureType))
-            var y2 = rightAxisScale.translate(UnitUtils.convertValue(y2Value, y2VarName))
-            var humidityY = humidityScale.translate(dataObj.humidity)
-
-            var y1 = y1VarName === "" ? NaN :
-                        temperatureScale.translate(
-                            UnitUtils.convertValue(dataObj[y1VarName], y1VarName))
-
-            if (i === 0) {
-                temperaturePath.startY = temperatureY
-                y2Path.startY = y2
-                humidityPath.startY = isFinite(humidityY) ? humidityY : 0
-                y1Path.startY = y1
+            var x = timeScale.translate(dataObj.from)
+            if (i < xArr.length) {
+                xArr[i] = x
+            } else {
+                xArr.push(x)
             }
 
-            if (!reuse) {
-                newPathElements.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
-                                     '{ x: ' + x + '; y: ' + temperatureY + ' }',
-                                     graphArea, "dynamicTemperature" + i))
-            } else {
-                newPathElements[i].x = x
-                newPathElements[i].y = temperatureY
+            updatePathElement(i, temperaturePath, temperaturePathItems, xArr, dataObj, temperatureScale, "temperature")
+            updatePathElement(i, humidityPath, humidityPathItems, xArr, dataObj, humidityScale, "humidity")
+
+            if (hasY1Chart) {
+                updatePathElement(i, y1Path, y1PathItems, xArr, dataObj, temperatureScale, y1VarName)
+                y1Count++
             }
 
-            if (!reuse) {
-                newY1Elements.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
-                                     '{ x: ' + x + '; y: ' + y1 + ' }',
-                                     graphArea, "dynamicFeelsLike" + i))
-            } else {
-                newY1Elements[i].x = x
-                newY1Elements[i].y = y1
-            }
-
-            if (!reuse) {
-                newY2Elements.push(Qt.createQmlObject('import QtQuick 2.0; '+ pathType +
-                                         '{ x: ' + x + '; y: ' + y2 + ' }',
-                                         graphArea, "dynamicY2" + i))
-            } else {
-                newY2Elements[i].x = x
-                newY2Elements[i].y = y2
-            }
-
-            if (isFinite(dataObj.cloudArea)) {
-                var cloudY0 = cloudAreaScale.translate(50 + (dataObj.cloudArea / 2))
-                var cloudY1 = cloudAreaScale.translate(50 - ((dataObj.cloudArea) / 4))
-                if (i === 0) {
-                    cloudAreaPath.startY = cloudY0
-                }
-
-                if (!reuse) {
-                    newCloudElements.push(Qt.createQmlObject('import QtQuick 2.0; ' + 'PathCurve' +
-                                         '{ x: ' + x + '; y: ' + cloudY1 + ' }',
-                                         graphArea, "dynamicCloudArea" + i))
-                    newCloudElements2.push(Qt.createQmlObject('import QtQuick 2.0; ' + 'PathLine' +
-                                         '{ x: ' + x + '; y: ' + cloudY0 + ' }',
-                                         graphArea, "dynamicCloudArea" + (meteogramModel.count + i)))
-                } else {
-                    newCloudElements[i].x = x
-                    newCloudElements[i].y = cloudY1
-                    newCloudElements[(2 * meteogramModel.count) - 1 - i].x = x
-                    newCloudElements[(2 * meteogramModel.count) - 1 - i].y = cloudY0
-                }
-            } else {
-                if (i < newCloudElements.length) {
-                    newCloudElements[i].x = NaN
-                    newCloudElements[i].y = NaN
-                    newCloudElements[(2 * meteogramModel.count) - 1 - i].x = NaN
-                    newCloudElements[(2 * meteogramModel.count) - 1 - i].y = NaN
-                }
-            }
-            if (isFinite(humidityY)) {
-                if (!reuse) {
-                    newHumidityElements.push(Qt.createQmlObject('import QtQuick 2.0; ' + pathType +
-                                             '{ x: ' + x + '; y: ' + humidityY + ' }',
-                                             graphArea, "dynamicHumidity" + i))
-                } else {
-                    newHumidityElements[i].x = x
-                    newHumidityElements[i].y = humidityY
-                }
-            } else {
-                if (i < newHumidityElements.length) {
-                    newHumidityElements[i].x = NaN
-                    newHumidityElements[i].y = NaN
-                }
+            if (hasY2Chart) {
+                updatePathElement(i, y2Path, y2PathItems, xArr, dataObj, rightAxisScale, y2VarName)
+                y2Count++
             }
         }
 
-        // Don't paint unused elements
-        for (var i = meteogramModel.count; i < newCloudElements.length; i++) {
-            if (i < newPathElements.length) {
-                newPathElements[i].x = NaN
-                newPathElements[i].y = NaN
-                newY1Elements[i].x = NaN
-                newY1Elements[i].y = NaN
-                newY2Elements[i].x = NaN
-                newY2Elements[i].y = NaN
-                newHumidityElements[i].x = NaN
-                newHumidityElements[i].y = NaN
-            }
-            if (i >= 2 * meteogramModel.count) {
-                newCloudElements[i].x = NaN
-                newCloudElements[i].y = NaN
-            }
+        temperaturePath.startY = temperaturePathItems[0].y
+        temperaturePath.pathElements = temperaturePathItems.slice(0, meteogramModel.count)
+
+        humidityPath.startY = humidityPathItems[0].y
+        humidityPath.pathElements = humidityPathItems.slice(0, meteogramModel.count)
+
+        y1Path.pathElements = y1PathItems.slice(0, y1Count)
+        if (y1Count > 0) {
+            y1Path.startY = y1PathItems[0].y
         }
 
-        if (!reuse) {
-            temperaturePath.pathElements = newPathElements
-            y2Path.pathElements = newY2Elements
-            cloudAreaPath.pathElements = newCloudElements.concat(newCloudElements2.reverse())
-            humidityPath.pathElements = newHumidityElements
-            y1Path.pathElements = newY1Elements
+        y2Path.pathElements = y2PathItems.slice(0, y2Count)
+        if (y2Count > 0) {
+            y2Path.startY = y2PathItems[0].y
         }
+    }
+
+    function buildCloudPath() {
+        let count = 0
+        for (var i = 0; i < meteogramModel.count; i++) {
+            var dataObj = meteogramModel.get(i)
+
+            let y = cloudAreaScale.translate(50 + (dataObj.cloudArea / 2))
+
+            if (i >= cloudPathItems.length) {
+                cloudPathItems.push(cloudPathLine.createObject(humidityPath, {
+                    i: i,
+                    xData: xArr,
+                    y: y,
+                }))
+            } else {
+                cloudPathItems[i].i = i
+                cloudPathItems[i].y = y
+                cloudPathItems[i].iChanged()
+            }
+
+            count++
+        }
+
+        for (var i = meteogramModel.count - 1, j = 0; i > -1; i--, j++) {
+            var dataObj = meteogramModel.get(i)
+
+            let pathElementsIdx = meteogramModel.count + j
+            let y = cloudAreaScale.translate(50 - ((dataObj.cloudArea) / 4))
+
+            if (pathElementsIdx >= cloudPathItems.length) {
+                cloudPathItems.push(cloudPathLine.createObject(humidityPath, {
+                    i: i,
+                    xData: xArr,
+                    y: y,
+                }))
+            } else {
+                cloudPathItems[pathElementsIdx].i = i
+                cloudPathItems[pathElementsIdx].y = y
+                cloudPathItems[pathElementsIdx].iChanged()
+            }
+
+            count++
+        }
+
+        if (count > 0) {
+            cloudAreaPath.startY = cloudPathItems[(2 * meteogramModel.count) - 1].y
+        }
+
+        cloudAreaPath.pathElements = cloudPathItems.slice(0, count)
     }
 
     function processMeteogramData() {
@@ -857,6 +893,7 @@ Canvas {
         processMeteogramData()
         buildMetogramData()
         buildCurves()
+        buildCloudPath()
         initialized = true
         requestPaint()
     }
