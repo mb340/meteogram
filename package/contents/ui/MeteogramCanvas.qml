@@ -160,6 +160,7 @@ Canvas {
         property double prevWidth: -1
         onTriggered: {
             if (prevHeight === height && prevWidth === width) {
+                windSpeedArea.setModel(meteogramModel.count)
                 buildCurves()
                 requestPaint()
                 stop()
