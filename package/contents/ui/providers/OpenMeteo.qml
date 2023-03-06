@@ -259,7 +259,7 @@ Item {
         let now = UnitUtils.dateNow()
         now.setMinutes(0, 0, 0)
 
-        const maxHours = 62
+        let maxHours = main.maxMeteogramHours
         let hourCount = 0
 
         meteogramModel.beginList()
