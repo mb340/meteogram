@@ -10,6 +10,7 @@ ColumnLayout {
     id: root
 
     property bool cfg_graphCurvedLine: plasmoid.configuration.graphCurvedLine
+    property alias cfg_maxMeteogramHours: maxMeteogramHours.value
 
     property bool cfg_renderTemperature: plasmoid.configuration.renderTemperature
     property bool cfg_renderPressure: plasmoid.configuration.renderPressure
@@ -167,6 +168,25 @@ ColumnLayout {
             width: 2
             height: 10
             Layout.columnSpan: 3
+        }
+
+        Label {
+            text: i18n("Maximum Hours")
+            Layout.alignment: Qt.AlignVCenter|Qt.AlignRight
+
+            Layout.preferredWidth: maxColWidth
+            onWidthChanged: updateMaxColWidth(width)
+        }
+
+        SpinBox {
+            id: maxMeteogramHours
+            property int decimals: 0
+            stepSize: 1
+            from: 24
+            to: 72
+            textFromValue: function(value, locale) {
+                return qsTr("%1").arg(value)
+            }
         }
     }
 

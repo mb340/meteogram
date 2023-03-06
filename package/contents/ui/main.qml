@@ -90,6 +90,8 @@ Item {
 
     property bool meteogramModelChanged: false
 
+    property int maxMeteogramHours: plasmoid.configuration.maxMeteogramHours
+
     anchors.fill: parent
 
     property Component crInTray: CompactRepresentationInTray { }
@@ -607,6 +609,14 @@ Item {
     }
 
     onTimezoneTypeChanged: {
+        if (!initialized) {
+            return
+        }
+        alreadyLoadedFromCache = false
+        loadFromCache()
+    }
+
+    onMaxMeteogramHoursChanged: {
         if (!initialized) {
             return
         }

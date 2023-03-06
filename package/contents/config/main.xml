@@ -152,6 +152,10 @@
         <entry name="y2VarName" type="String">
             <default>pressure</default>
         </entry>
+
+        <entry name="maxMeteogramHours" type="Int">
+            <default>60</default>
+        </entry>
     </group>
 
     <group name="Units">
