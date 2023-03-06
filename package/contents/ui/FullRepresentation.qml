@@ -132,11 +132,22 @@ Item {
             radioButtonMode: false
             meteogram: fullRepresentation.meteogram
             meteogramModel: main.meteogramModel
+
+            property bool chartAllData: false
+
             model: [
                 { label: String.fromCodePoint(0x1F3F7), varName: "precipitationAmount",
                     tooltip: i18n("Precipitation Labels"),
                     isSelected: plasmoid.configuration.renderPrecipitationLabels
                 },
+                { label: main.maxMeteogramHours === plasmoid.configuration.maxMeteogramHours ?
+                            String.fromCodePoint(0xFF0B) :
+                            String.fromCodePoint(0xFF0D) /*String.fromCodePoint(0x1F5D6)*/,
+                    varName: "maxMeteogramHours",
+                    tooltip: i18n("Chart all data"),
+                    hasVariable: true,
+                    isSelected: true,
+                }
             ]
             callback: function callback(modelData, viewObj) {
                 if (modelData.varName === "precipitationAmount") {
@@ -144,6 +155,13 @@ Item {
                     plasmoid.configuration.renderPrecipitationLabels = !val
                     viewObj.isSelected = plasmoid.configuration.renderPrecipitationLabels
                     main.reloadMeteogram()
+                } else if (modelData.varName === "maxMeteogramHours") {
+                    if (main.maxMeteogramHours == 1000) {
+                        main.maxMeteogramHours = plasmoid.configuration.maxMeteogramHours
+                    } else {
+                        main.maxMeteogramHours = 1000
+                        chartAllData = true
+                    }
                 }
             }
 
