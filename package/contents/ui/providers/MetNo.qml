@@ -130,8 +130,11 @@ Item {
         var intervalStart = UnitUtils.floorDate(dateNow)
         var precipitation_unit = readingsArray.properties.meta.units["precipitation_amount"]
         var i = 0
+        let hourCount = 0
         var timeseries = readingsArray.properties.timeseries
-        while (i < timeseries.length && timeseries[i].data.next_1_hours) {
+        while (i < timeseries.length && hourCount < main.maxMeteogramHours &&
+               timeseries[i].data.next_1_hours)
+        {
             var obj = timeseries[i]
             var dateFrom = UnitUtils.convertDate(obj.time, timezoneType)
             if (dateFrom < intervalStart) {
@@ -163,6 +166,7 @@ Item {
             item.uvi = parseFloat(uvi)
             meteogramModel.addItem(item)
             i++
+            hourCount++
         }
         meteogramModel.endList()
     }
