@@ -447,12 +447,11 @@ Item {
 
         meteogramModel.beginList()
 
-        var firstFromMs = null
-        var limitMsDifference = 1000 * 60 * 60 * 63 // 2.50 days
+        var hourCount = 0
         var dateNow = UnitUtils.convertDate(new Date(), timezoneType, tzOffset)
         var intervalStart = UnitUtils.floorDate(dateNow)
 
-        for (var i = 0; i < xmlModelHourByHour.count; i++) {
+        for (var i = 0; i < xmlModelHourByHour.count && hourCount < main.maxMeteogramHours; i++) {
             var obj = xmlModelHourByHour.get(i)
             var dateFrom = parseDate(obj.from)
             var dateTo = parseDate(obj.to)
@@ -479,14 +478,7 @@ Item {
             item.cloudArea = parseFloat(obj.clouds)
             meteogramModel.addItem(item)
 
-            if (firstFromMs === null) {
-                firstFromMs = dateFrom.getTime()
-            }
-
-            if (dateTo.getTime() - firstFromMs > limitMsDifference) {
-                dbgprint('breaking')
-                break
-            }
+            hourCount += 3
         }
 
         meteogramModel.endList()
