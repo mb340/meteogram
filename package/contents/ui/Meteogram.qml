@@ -433,6 +433,7 @@ Item {
         }
 
         MouseArea {
+            cursorShape: Qt.PointingHandCursor
             anchors.fill: parent
 
             onPressed: {
