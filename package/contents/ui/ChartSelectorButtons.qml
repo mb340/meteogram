@@ -72,7 +72,7 @@ RowLayout {
                 cursorShape: Qt.PointingHandCursor
                 hoverEnabled: true
                 anchors.fill: parent
-                onClicked: callback(modelData.varName)
+                onClicked: callback(modelData, varNameLabel)
                 onEntered: varNameLabel.isHighlighted = true
                 onExited: varNameLabel.isHighlighted = false
             }

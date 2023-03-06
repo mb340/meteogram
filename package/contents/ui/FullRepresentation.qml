@@ -110,11 +110,11 @@ Item {
                     tooltip: i18n("Feels Like")
                 },
             ]
-            callback: function callback(varName) {
-                if (meteogram.y1VarName === varName) {
+            callback: function callback(modelData) {
+                if (meteogram.y1VarName === modelData.varName) {
                     meteogram.y1VarName = ""
                 } else {
-                    meteogram.y1VarName = varName
+                    meteogram.y1VarName = modelData.varName
                 }
             }
 
@@ -137,8 +137,8 @@ Item {
                     tooltip: i18n("Precipitation Labels")
                 },
             ]
-            callback: function callback(varName) {
-                if (varName === "precipitationAmount") {
+            callback: function callback(modelData, viewObj) {
+                if (modelData.varName === "precipitationAmount") {
                     let val = plasmoid.configuration.renderPrecipitationLabels
                     plasmoid.configuration.renderPrecipitationLabels = !val
                     main.reloadMeteogram()
@@ -166,11 +166,11 @@ Item {
                 { label: "\uf084", varName: "precipitationProb", tooltip: i18n("POP") },
                 { label: "\uf00d", varName: "uvi", tooltip: i18n("UV Index") },
             ]
-            callback: function callback(varName) {
-                if (meteogram.y2VarName === varName) {
+            callback: function callback(modelData) {
+                if (meteogram.y2VarName === modelData.varName) {
                     meteogram.y2VarName = ""
                 } else {
-                    meteogram.y2VarName = varName
+                    meteogram.y2VarName = modelData.varName
                 }
             }
 
