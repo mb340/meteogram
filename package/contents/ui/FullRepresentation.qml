@@ -129,18 +129,20 @@ Item {
         }
 
         ChartSelectorButtons {
-            selectedVarName: "precipitationAmount"
+            radioButtonMode: false
             meteogram: fullRepresentation.meteogram
             meteogramModel: main.meteogramModel
             model: [
                 { label: String.fromCodePoint(0x1F3F7), varName: "precipitationAmount",
-                    tooltip: i18n("Precipitation Labels")
+                    tooltip: i18n("Precipitation Labels"),
+                    isSelected: plasmoid.configuration.renderPrecipitationLabels
                 },
             ]
             callback: function callback(modelData, viewObj) {
                 if (modelData.varName === "precipitationAmount") {
                     let val = plasmoid.configuration.renderPrecipitationLabels
                     plasmoid.configuration.renderPrecipitationLabels = !val
+                    viewObj.isSelected = plasmoid.configuration.renderPrecipitationLabels
                     main.reloadMeteogram()
                 }
             }
