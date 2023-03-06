@@ -14,6 +14,7 @@ RowLayout {
     property var callback: function(varName) { }
 
     property string selectedVarName: ""
+    property bool radioButtonMode: true
 
     Component {
         id: rightAxisButtonComponent
@@ -35,9 +36,16 @@ RowLayout {
                 color: textColor
 
                 property bool isHighlighted: false
-                property bool isVarSelected: (selectedVarName === modelData.varName)
+                property bool isSelected: modelData.isSelected !== undefined ?
+                                            modelData.isSelected : false
 
-                property bool hasVariable: meteogramModel.hasVariable(modelData.varName)
+                property bool isVarSelected: radioButtonMode ?
+                                                (selectedVarName === modelData.varName) :
+                                                isSelected
+
+                property bool hasVariable: modelData.hasVariable !== undefined ? modelData.hasVariable :
+                                            meteogramModel.hasVariable(modelData.varName)
+
                 property var textColor: isHighlighted ? theme.highlightColor :
                                         ((isVarSelected && hasVariable) ? theme.textColor :
                                                          PlasmaCore.Theme.disabledTextColor)
