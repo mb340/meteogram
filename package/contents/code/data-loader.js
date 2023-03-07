@@ -44,7 +44,7 @@ function isXmlStringValid(xmlString) {
     return xmlString.indexOf('<?xml ') === 0 || xmlString.indexOf('<weatherdata>') === 0 || xmlString.indexOf('<current>') === 0
 }
 
-function fetchXmlFromInternet(getUrl, successCallback, failureCallback) {
+function fetchXmlFromInternet(getUrl, successCallback, failureCallback, cacheKey) {
     var xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function () {
         if (xhr.readyState !== XMLHttpRequest.DONE) {
@@ -55,7 +55,7 @@ function fetchXmlFromInternet(getUrl, successCallback, failureCallback) {
         if (xhr.status !== 200) {
             print('ERROR - status: ' + xhr.status)
             print('ERROR - responseText: ' + xhr.responseText)
-            failureCallback()
+            failureCallback(cacheKey)
             return
         }
 
@@ -82,7 +82,7 @@ function fetchXmlFromInternet(getUrl, successCallback, failureCallback) {
     return xhr
 }
 
-function fetchJsonFromInternet(getUrl, successCallback, failureCallback) {
+function fetchJsonFromInternet(getUrl, successCallback, failureCallback, cacheKey) {
     var xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function () {
         if (xhr.readyState !== XMLHttpRequest.DONE) {
@@ -92,7 +92,7 @@ function fetchJsonFromInternet(getUrl, successCallback, failureCallback) {
         if (xhr.status !== 200) {
             print('ERROR - status: ' + xhr.status)
             print('ERROR - responseText: ' + xhr.responseText)
-            failureCallback()
+            failureCallback(cacheKey)
             return
         }
 
