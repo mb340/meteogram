@@ -25,6 +25,8 @@ Item {
 
     property string providerId: 'owm'
 
+    readonly property int updateInterval: 3 * 60 * 60 * 1000
+
     property string urlPrefix: 'http://api.openweathermap.org/data/2.5'
     property string appIdAndModeSuffix: '&units=metric&mode=xml&appid=5819a34c58f8f07bc282820ca08948f1'
 
@@ -624,15 +626,31 @@ Item {
 
         function successHourByHour(xmlString) {
             loadedData.hourByHour = xmlString
-            DataLoader.fetchXmlFromInternet(urlPrefix + '/forecast/daily?id=' + placeIdentifier + '&cnt=8' + appIdAndModeSuffix + versionParam, successLongTerm, failureCallback)
+            let url = urlPrefix +
+                        '/forecast/daily?id=' +
+                        placeIdentifier +
+                        '&cnt=8' +
+                        appIdAndModeSuffix +
+                        versionParam
+            DataLoader.fetchXmlFromInternet(url, successLongTerm, failureCallback, cacheKey)
         }
 
         function successCurrent(xmlString) {
             loadedData.current = xmlString
-            DataLoader.fetchXmlFromInternet(urlPrefix + '/forecast?id=' + placeIdentifier + appIdAndModeSuffix + versionParam, successHourByHour, failureCallback)
+            let url = urlPrefix +
+                        '/forecast?id=' +
+                        placeIdentifier +
+                        appIdAndModeSuffix +
+                        versionParam
+            DataLoader.fetchXmlFromInternet(url, successHourByHour, failureCallback, cacheKey)
         }
 
-        var xhr1 = DataLoader.fetchXmlFromInternet(urlPrefix + '/weather?id=' + placeIdentifier + appIdAndModeSuffix + versionParam, successCurrent, failureCallback)
+        let url = urlPrefix +
+                    '/weather?id=' +
+                    placeIdentifier +
+                    appIdAndModeSuffix +
+                    versionParam
+        var xhr1 = DataLoader.fetchXmlFromInternet(url, successCurrent, failureCallback, cacheKey)
 
         return [xhr1]
     }
