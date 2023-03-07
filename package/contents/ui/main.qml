@@ -554,22 +554,6 @@ Item {
         return currentWeatherModel.sunRise < now && now < currentWeatherModel.sunSet ? 0 : 1
     }
 
-    function abortTooLongConnection(forceAbort) {
-        if (!loadingData) {
-            return
-        }
-        if (forceAbort) {
-            dbgprint('timeout reached, aborting existing xhrs')
-            loadingXhrs.forEach(function (xhr) {
-                xhr.abort()
-            })
-            reloadDataFailureCallback()
-        } else {
-            dbgprint('regular loading, no aborting yet')
-            return
-        }
-    }
-
     function tryReload() {
        updateLastReloadedText()
 
