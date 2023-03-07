@@ -387,8 +387,9 @@ Item {
         }
         console.log(TZURL)
 
-        var xhr1 = DataLoader.fetchJsonFromInternet(urlPrefix + placeIdentifier, successWeather, failureCb)
-        var xhr2 = DataLoader.fetchJsonFromInternet(TZURL, successSRAS, failureCb)
+        let url = urlPrefix + placeIdentifier
+        var xhr1 = DataLoader.fetchJsonFromInternet(url, successWeather, failureCb, cacheKey)
+        var xhr2 = DataLoader.fetchJsonFromInternet(TZURL, successSRAS, failureCb, cacheKey)
 //         var xhr1 = DataLoader.fetchJsonFromInternet('http://localhost/weather.json', successWeather, failureCallback)
 //         var xhr2 = DataLoader.fetchJsonFromInternet('http://localhost/sunrisesunset.json?' + TZURL, successSRAS, failureCallback)
         return [xhr1, xhr2]
