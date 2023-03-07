@@ -314,6 +314,7 @@ Item {
         updateTodayModels()
         updateMeteogramModel()
         updateNextDaysModel()
+        fixupNextDaysModel()
         refreshTooltipSubText()
         updateSemaphore = false
     }
@@ -383,6 +384,116 @@ Item {
         dbgprint('result currentWeatherModel.valid: ' + currentWeatherModel.valid)
         dbgprint('result nearFutureWeather.iconName: ' + currentWeatherModel.nearFuture.iconName)
 
+    }
+
+    /* Update next days model with more granular data from hourly data */
+    function fixupNextDaysModel() {
+        var dateNow = UnitUtils.convertDate(new Date(), timezoneType, tzOffset)
+        var intervalStart = UnitUtils.floorDate(dateNow)
+
+        var prevHour = -1;
+        var nearestHour = [NaN, NaN, NaN, NaN]
+
+        let dailyPeriodIdx = -1
+        let prevPeriodIdx = -1
+
+        function checkIsNearestHour(obj_num, targetHour, hour) {
+            if (isNaN(nearestHour[obj_num])) {
+                nearestHour[obj_num] = hour
+                return true
+            }
+
+            if (Math.abs(targetHour - hour) < Math.abs(nearestHour[obj_num] - hour)) {
+                nearestHour[obj_num] = hour
+                return true
+            }
+            return false
+        }
+
+        function getDailyModelIndex(startIndex, date) {
+            var date = new Date(date)
+            date.setHours(0, 0, 0, 0)
+            startIndex = Math.max(0, startIndex)
+            // print("getDailyModelIndex ", startIndex, date)
+            for (var i = startIndex; i < dailyWeatherModels.count; i++) {
+                let item = dailyWeatherModels.get(i)
+                let d = new Date(item.date)
+                d.setHours(0, 0, 0, 0)
+                if (d.getTime() == date.getTime()) {
+                    return i
+                }
+                if (d > date) {
+                    break
+                }
+            }
+            return -i
+        }
+
+        var hourCount = 0
+
+        var prevHour = -1
+        var dailyModelIdx = -1
+        var dailyItem = null
+        var dailyItemDate = null
+
+        for (var i = 0; i < xmlModelHourByHour.count && hourCount < main.maxMeteogramHours; i++) {
+            var obj = xmlModelHourByHour.get(i)
+            var dateFrom = parseDate(obj.from)
+            var dateTo = parseDate(obj.to)
+            var hour = dateFrom.getHours()
+
+            var dayStart = dateFrom.setHours(0, 0, 0, 0)
+
+            if (intervalStart > dateTo) {
+                continue
+            }
+
+            if (dailyModelIdx === -1 || dailyItemDate !== dayStart) {
+                dailyModelIdx = getDailyModelIndex(dailyModelIdx, dateFrom)
+                if (dailyModelIdx < 0) {
+                    break
+                }
+
+                dailyItem = dailyWeatherModels.get(dailyModelIdx)
+                dailyItemDate = new Date(dailyItem.date)
+                dailyItemDate.setHours(0, 0, 0, 0)
+            }
+
+            if (prevHour > hour) {
+                nearestHour = [NaN, NaN, NaN, NaN]
+            }
+            prevHour = hour
+
+            // Match exact hour.
+            // Take the next closest if exact match isn't available.
+            let isNearestHour = false
+            let targetHour = -1
+            if  (hour < 6) {
+                dailyPeriodIdx = 0
+                targetHour = 3
+            } else if (hour < 12) {
+                dailyPeriodIdx = 1
+                targetHour = 9
+            } else if (hour < 18) {
+                dailyPeriodIdx = 2
+                targetHour = 15
+            } else if (hour < 24) {
+                dailyPeriodIdx = 3
+                targetHour = 21
+            }
+
+            isNearestHour = checkIsNearestHour(dailyPeriodIdx, targetHour, hour)
+            if (isNearestHour) {
+                var item = dailyItem.models.get(dailyPeriodIdx)
+                if (item.iconName != obj.iconName) {
+                    item.iconName = obj.iconName
+                    dailyItem.models.set(dailyPeriodIdx, item)
+                    dailyWeatherModels.set(dailyModelIdx, dailyItem)
+                }
+            }
+
+            hourCount++
+        }
     }
 
     function updateNextDaysModel() {
