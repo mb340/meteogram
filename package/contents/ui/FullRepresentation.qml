@@ -497,7 +497,6 @@ Item {
         }
 
         onClicked: {
-            main.tryReload()
         }
 
         onPressed: {
@@ -511,6 +510,9 @@ Item {
             pressAndHoldTimer.stop()
             lastReloadedTextComponent.visible = true
             reloadTextComponent.visible = false
+            if (!pressAndHoldTimer.running) {
+                main.tryReload()
+            }
         }
 
         Timer {
