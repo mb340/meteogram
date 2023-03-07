@@ -306,7 +306,8 @@ Item {
         }
 
         var getUrl = url + placeIdentifier + args
-        var xhr1 = DataLoader.fetchJsonFromInternet(getUrl, successCurrent, failureCallback)
+        var xhr1 = DataLoader.fetchJsonFromInternet(getUrl, successCurrent, failureCallback,
+                                                    cacheKey)
 
         return [xhr1]
     }
