@@ -14,6 +14,8 @@ Item {
 
     property double retryTimeMs: 60 * 1000
 
+    readonly property double maxTimeMs: 8640000000000000
+
     property var abortTimers: ({})
     property var lastReloadedMsMap: ({})
     property var expiresMsMap: {}
@@ -58,11 +60,20 @@ Item {
         expiresMsMap = expiresMsMap || {}
     }
 
-    function start(interval) {
-        reloadTimer.interval = interval
-        dbgprint("Start reload timer. interval = " + reloadTimer.interval +
-                 ", next update in " + DataLoader.getLastReloadedTimeText(interval))
-        reloadTimer.start()
+    function start(cacheKey) {
+        const INT_MAX = 2147483647
+        var interval = getNextReloadTime(cacheKey) - Date.now()
+        interval = Math.min(interval, INT_MAX)
+
+        if (interval > 0) {
+            reloadTimer.interval = interval
+            dbgprint("ReloadTime: Start reload timer. interval = " + reloadTimer.interval +
+                     ", next update in " + DataLoader.getLastReloadedTimeText(interval))
+            reloadTimer.start()
+        } else {
+            main.tryReload()
+        }
+
     }
 
     function stop() {
@@ -99,18 +110,45 @@ Item {
     }
 
     function hasLoadingError(key) {
-        return (key in loadingError) && (loadingError[key] === true)
+        return (loadingError.hasOwnProperty(key)) && (loadingError[key].hasError === true)
     }
 
-    function setLoadingError(key, val) {
-        loadingError[key] = val
+    function setLoadingError(key, retryTimeMs) {
+        if (!hasLoadingError(key)) {
+            loadingError[key] = {
+                hasError: true,
+                time: maxTimeMs
+            }
+        }
+
+        loadingError[key].hasError = true
+        if (retryTimeMs === undefined) {
+            loadingError[key].time = maxTimeMs
+        } else {
+            loadingError[key].time = Date.now() + retryTimeMs
+        }
+    }
+
+    function clearLoadingError(key) {
+        if (!loadingError.hasOwnProperty(key)) {
+            return
+        }
+        loadingError[key].hasError = false
+        loadingError[key].time = maxTimeMs
+    }
+
+    function getErrorRetryTime(key) {
+        if (!hasLoadingError(key)) {
+            return maxTimeMs
+        }
+        return loadingError[key].time
     }
 
     function getNextReloadTime(key) {
         var now = (new Date()).getTime()
 
-        if (key in loadingError && loadingError[key] === true) {
-            var t = now + retryTimeMs
+        if (hasLoadingError(key)) {
+            var t = getErrorRetryTime(key)
             print("getNextReloadTime: has loading error. Reload at " + (new Date(t)).toString())
             return t
         }
@@ -138,6 +176,20 @@ Item {
     function setExpireTime(time, cacheKey) {
         expiresMsMap[cacheKey] = time
         plasmoid.configuration.expiresMsJson = JSON.stringify(expiresMsMap)
+    }
+
+    function getExpireTime(cacheKey) {
+        return expiresMsMap[cacheKey]
+    }
+
+    function isExpired(key) {
+        var expireTime = expiresMsMap[key]
+        if (expireTime === undefined) {
+            return true
+        }
+
+        var now = new Date()
+        return now > expireTime
     }
 
     function updateNextReloadText(cacheKey) {

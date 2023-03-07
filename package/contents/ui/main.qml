@@ -168,7 +168,7 @@ Item {
         if (updatingPaused) {
             reloadTime.stop()
         } else {
-            rearmTimer()
+            rearmTimer(cacheKey)
         }
     }
 
@@ -185,7 +185,7 @@ Item {
     Connections {
         target: plasmoid
         function onExpandedChanged() {
-            rearmTimer()
+            rearmTimer(cacheKey)
         }
     }
 
@@ -338,7 +338,7 @@ Item {
             reloadData()
         }
 
-        rearmTimer()
+        rearmTimer(cacheKey)
     }
 
     function clearLoadingXhrs() {
@@ -375,16 +375,28 @@ Item {
         if (main.cacheKey === cacheKey) {
             alreadyLoadedFromCache = false
             loadFromCache()
-            rearmTimer()
+            rearmTimer(cacheKey)
         }
     }
 
     function reloadDataFailureCallback(cacheKey) {
         print("Failed to load data. cacheKey = " + cacheKey)
+        reloadTime.stop()
+        reloadTime.stopAbortTimer(cacheKey)
+        var noConnection = false
+        loadingXhrs.forEach(function (xhr) {
+            noConnection |= (xhr.status === 0)
+        })
         clearLoadingXhrs()
-        reloadTime.setLoadingError(cacheKey, true)
+
+        if (noConnection) {
+            reloadTime.setLoadingError(cacheKey, reloadTime.retryTimeMs)
+        } else {
+            reloadTime.setLoadingError(cacheKey)
+        }
+
         if (main.cacheKey === cacheKey) {
-            rearmTimer()
+            rearmTimer(cacheKey)
         }
     }
 
@@ -398,7 +410,7 @@ Item {
 
         loadingData = true
         reloadTime.stopAbortTimer(cacheKey)
-        reloadTime.setLoadingError(cacheKey, false)
+        reloadTime.clearLoadingError(cacheKey)
 
         var args = {
             placeIdentifier: placeIdentifier,
@@ -416,17 +428,11 @@ Item {
         currentProvider.reloadMeteogramImage(placeIdentifier)
     }
 
-    function rearmTimer() {
-        var t = reloadTime.getNextReloadTime(cacheKey) - (new Date()).getTime()
-        dbgprint("rearmTimer: t = " + t)
-        if (t > 0) {
-            reloadTime.stop()
-            reloadTime.start(t)
-            updateLastReloadedText()
-        } else {
-            dbgprint("rearmTimer: try reload now")
-            reloadData()
-        }
+    function rearmTimer(cacheKey) {
+
+        reloadTime.stop()
+        reloadTime.start(cacheKey)
+        updateLastReloadedText()
     }
 
     Timer {
@@ -555,22 +561,12 @@ Item {
     }
 
     function tryReload() {
-       updateLastReloadedText()
-
         if (updatingPaused) {
             return
         }
 
-        var res = false
         if (reloadTime.isReadyToReload(cacheKey)) {
-            dbgprint("tryReload: reloading key = " + cacheKey)
-            res = reloadData()
-        } else {
-            loadFromCache()
-        }
-
-        if (!res) {
-            rearmTimer()
+            reloadData()
         }
     }
 
