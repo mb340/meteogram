@@ -58,6 +58,10 @@ Item {
         return _model.get(index)
     }
 
+    function set(index, dict) {
+        _model.set(index, dict)
+    }
+
     function setProperty(index, property, value) {
         return _model.setProperty(index, property, value)
     }
