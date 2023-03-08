@@ -395,10 +395,6 @@ Item {
         return [xhr1, xhr2]
     }
 
-    function reloadMeteogramImage(placeIdentifier) {
-        main.overviewImageSource = ''
-    }
-
     function geticonNumber(text) {
 
         var underscore = text.indexOf("_")
