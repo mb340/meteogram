@@ -572,6 +572,7 @@ Item {
 
     onTwelveHourClockEnabledChanged: {
         refreshTooltipSubText()
+        reloadMeteogram()
     }
 
     onTimezoneTypeChanged: {
