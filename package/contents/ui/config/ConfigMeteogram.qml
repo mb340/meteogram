@@ -51,7 +51,7 @@ ColumnLayout {
         { colorVal: cfg_rainColor, colorVar: "rainColor", colorLabel: i18n("Rain") },
         { colorVal: cfg_cloudAreaColor, colorVar: "cloudAreaColor", colorLabel: i18n("Cloud Cover Top") },
         { colorVal: cfg_cloudAreaColor2, colorVar: "cloudAreaColor2", colorLabel: i18n("Cloud Cover Bottom") },
-        { colorVal: cfg_humidityColor, colorVar: "humidityColor", colorLabel: i18n("Humidity") }
+        { colorVal: cfg_humidityColor, colorVar: "humidityColor", colorLabel: i18n("Relative Humidity") }
     ]
 
     property var darkModeColors: [
@@ -62,7 +62,7 @@ ColumnLayout {
         { colorVal: cfg_rainColorDark, colorVar: "rainColorDark", colorLabel: i18n("Rain") },
         { colorVal: cfg_cloudAreaColorDark, colorVar: "cloudAreaColorDark", colorLabel: i18n("Cloud Cover Top") },
         { colorVal: cfg_cloudAreaColor2Dark, colorVar: "cloudAreaColor2Dark", colorLabel: i18n("Cloud Cover Bottom") },
-        { colorVal: cfg_humidityColorDark, colorVar: "humidityColorDark", colorLabel: i18n("Humidity") }
+        { colorVal: cfg_humidityColorDark, colorVar: "humidityColorDark", colorLabel: i18n("Relative Humidity") }
     ]
 
     property var maxColWidth: 0
@@ -202,7 +202,7 @@ ColumnLayout {
         property var labels: [
             i18n("Temperature"),
             i18n("Pressure"),
-            i18n("Humidity"),
+            i18n("Relative Humidity"),
             i18n("Precipitation"),
             i18n("Cloud Cover"),
             i18n("Icons"),

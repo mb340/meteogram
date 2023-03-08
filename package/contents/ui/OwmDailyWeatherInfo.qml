@@ -211,7 +211,7 @@ ColumnLayout {
                 { tileSymbol: "\uf084", tileTitle: i18n("Precipitation"),
                     varNames: ["precipitationProb", "precipitationAmount"],
                 },
-                { tileSymbol: "\uf07a", tileTitle: i18n("Humidity"), varName: "humidity" },
+                { tileSymbol: "\uf07a", tileTitle: i18n("Relative Humidity"), varName: "humidity" },
                 { tileSymbol: "\uf079", tileTitle: i18n("Pressure"), varName: "pressure" },
                 { tileSymbol: "\uf041", tileTitle: i18n("Cloud Cover"), varName: "cloudArea" },
                 { tileSymbol: "\uf0b1", tileTitle: i18n("Wind"), varName: "windDirection",

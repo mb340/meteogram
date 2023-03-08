@@ -62,7 +62,7 @@ Item {
         i18n("Precipitation"),
         i18n("Wind"),
         i18n("Pressure"),
-        i18n("Humidity"),
+        i18n("Relative Humidity"),
         i18n("Cloud Cover"),
         // i18n("UV Index"),
     ]
