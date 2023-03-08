@@ -73,11 +73,6 @@ ColumnLayout {
         Layout.minimumHeight: childrenRect.height
 
         Label {
-            text: i18n("Plasmoid version:") + ' 2.2.4'
-            Layout.alignment: Qt.AlignRight
-        }
-
-        Label {
             text: i18n("Location")
             font.bold: true
             Layout.alignment: Qt.AlignLeft
