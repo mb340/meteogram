@@ -446,7 +446,10 @@ Item {
 
             updateLastReloadedText()
             refreshTooltipSubText()
-            reloadMeteogram()
+
+            if (currentProvider.providerId !== "owm") {
+                reloadMeteogram()
+            }
         }
     }
 
