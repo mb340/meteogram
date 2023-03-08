@@ -49,9 +49,6 @@ Item {
     property bool twelveHourClockEnabled: Qt.locale().timeFormat(Locale.ShortFormat).toString().indexOf('AP') > -1
     property bool onlyOnePlace: true
 
-    property string datetimeFormat: 'yyyy-MM-dd\'T\'hh:mm:ss'
-    property var xmlLocale: Qt.locale('en_GB')
-
     property alias currentWeatherModel: currentWeatherModel
     property alias meteogramModel: meteogramModel
 
@@ -60,7 +57,6 @@ Item {
 
     property bool loadingData: false              // Download Attempt in progress Flag.
     property var loadingXhrs: []                  // Array of Download Attempt Objects
-    property bool imageLoadingError: true
 
     property string lastReloadedText: '⬇ 0m ago'
     property string tooltipSubText: ''
