@@ -47,7 +47,6 @@ Item {
     property int widgetFontSize: plasmoid.configuration.widgetFontSize
 
     property bool twelveHourClockEnabled: Qt.locale().timeFormat(Locale.ShortFormat).toString().indexOf('AP') > -1
-    property string placesJsonStr: plasmoid.configuration.places
     property bool onlyOnePlace: true
 
     property string datetimeFormat: 'yyyy-MM-dd\'T\'hh:mm:ss'
@@ -260,17 +259,6 @@ Item {
         updateViewsTimer.init()
     }
 
-    onPlacesJsonStrChanged: {
-        if (!initialized) {
-            return
-        }
-        if (placesJsonStr === '') {
-            return
-        }
-        onlyOnePlace = ConfigUtils.getPlacesArray().length === 1
-        setNextPlace(true)
-    }
-
     function setCurrentProviderAccordingId(providerId) {
         if (providerId === 'owm') {
             dbgprint('setting provider OpenWeatherMap')
@@ -476,9 +464,6 @@ Item {
 
     onInTrayActiveTimeoutSecChanged: {
         initUtils()
-        if (placesJsonStr === '') {
-            return
-        }
         updateLastReloadedText()
     }
 
