@@ -639,14 +639,4 @@ Item {
             print('updateViewsTimer: ' + (new Date(Date.now() + dt)))
         }
     }
-
-    Connections {
-        target: plasmoid
-        function onExpandedChanged() {
-            if (!alreadyLoadedFromCache) {
-                alreadyLoadedFromCache = true
-                loadFromCache()
-            }
-        }
-    }
 }
