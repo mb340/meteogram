@@ -557,12 +557,12 @@ Item {
 
     onTemperatureTypeChanged: {
         refreshTooltipSubText()
-        meteogramModelChanged = !meteogramModelChanged
+        reloadMeteogram()
     }
 
     onPressureTypeChanged: {
         refreshTooltipSubText()
-        meteogramModelChanged = !meteogramModelChanged
+        reloadMeteogram()
     }
 
     onWindSpeedTypeChanged: {
