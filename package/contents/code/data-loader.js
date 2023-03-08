@@ -5,6 +5,10 @@ var i18n = null
 var dbgprint = null
 
 function formatTimeIntervalString(time) {
+    if (time < 60 * 1000) {
+        return i18n("%1 s", Math.round(time / 1000))
+    }
+
     var mins = time / 60000
     if (mins <= 180) {
         return i18n("%1 m", Math.round(mins))
