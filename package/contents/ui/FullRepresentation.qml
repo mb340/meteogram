@@ -500,6 +500,14 @@ Item {
         }
 
         onPressed: {
+            // Disallow force reloading before API expire time
+            if (!reloadTime.isExpired(cacheKey)) {
+                let ts = reloadTime.getExpireTime(cacheKey)
+                let date = new Date(ts)
+                print("Can't force reload until ", date)
+                return
+            }
+
             pressCountdownTimer.reloadTimerStartTs = Date.now() + (pressAndHoldTimer.interval)
             pressAndHoldTimer.restart()
             lastReloadedTextComponent.visible = false
