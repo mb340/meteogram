@@ -37,7 +37,7 @@ Item {
     property int timezoneID
     property int timezoneOffset
     property string timezoneShortName
-    property bool renderMeteogram: plasmoid.configuration.renderMeteogram
+
     property int temperatureType: plasmoid.configuration.temperatureType
     property int pressureType: plasmoid.configuration.pressureType
     property int windSpeedType: plasmoid.configuration.windSpeedType
@@ -56,7 +56,6 @@ Item {
     property alias currentWeatherModel: currentWeatherModel
     property alias meteogramModel: meteogramModel
 
-    property string overviewImageSource
     property string creditLink
     property string creditLabel
 
@@ -428,7 +427,6 @@ Item {
 
     function reloadMeteogram() {
         meteogramModelChanged = !meteogramModelChanged
-        currentProvider.reloadMeteogramImage(placeIdentifier)
     }
 
     function rearmTimer(cacheKey) {
