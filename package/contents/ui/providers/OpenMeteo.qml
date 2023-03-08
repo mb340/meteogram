@@ -331,10 +331,6 @@ Item {
         return "https://open-meteo.com/"
     }
 
-    function reloadMeteogramImage(placeIdentifier) {
-        main.overviewImageSource = ''
-    }
-
     function getIconIr(iconCode) {
         const OpenMeteoToIr = {
             0:  "clearsky",
