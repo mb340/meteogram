@@ -24,7 +24,7 @@ GridLayout {
 
     RowLayout {
         Text {
-            text: i18n("Source:")
+            text: i18n("Source") + ":"
             color: theme.textColor
             font.pixelSize: theme.smallFont ? theme.smallFont.pixelSize : 11 * units.devicePixelRatio
             font.pointSize: -1
@@ -37,7 +37,7 @@ GridLayout {
     }
     RowLayout {
         Text {
-            text: i18n("Event:")
+            text: i18n("Event") + ":"
             color: theme.textColor
             font.pixelSize: theme.smallFont ? theme.smallFont.pixelSize : 11 * units.devicePixelRatio
             font.pointSize: -1
@@ -50,7 +50,7 @@ GridLayout {
     }
     RowLayout {
         Text {
-            text: i18n("Start:")
+            text: i18n("Start") + ":"
             color: theme.textColor
             font.pixelSize: theme.smallFont ? theme.smallFont.pixelSize : 11 * units.devicePixelRatio
             font.pointSize: -1
@@ -63,7 +63,7 @@ GridLayout {
     }
     RowLayout {
         Text {
-            text: i18n("End:")
+            text: i18n("End") + ":"
             color: theme.textColor
             font.pixelSize: theme.smallFont ? theme.smallFont.pixelSize : 11 * units.devicePixelRatio
             font.pointSize: -1
@@ -79,7 +79,7 @@ GridLayout {
         Layout.preferredWidth: parent.width
 
         Text {
-            text: i18n("Description:")
+            text: i18n("Description") + ":"
             color: theme.textColor
             font.pixelSize: theme.smallFont ? theme.smallFont.pixelSize : 11 * units.devicePixelRatio
         }

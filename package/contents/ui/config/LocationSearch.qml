@@ -236,7 +236,7 @@ Dialog {
         anchors.bottomMargin: 0
         Label {
             id: countryLabel
-            text: i18n("Country:")
+            text: i18n("Country") + ":"
             anchors.left: parent.left
             anchors.leftMargin: 10
             anchors.verticalCenter: parent.verticalCenter
@@ -264,7 +264,7 @@ Dialog {
             anchors.right: locationEdit.left
             anchors.rightMargin: 10
             anchors.verticalCenter: parent.verticalCenter
-            text: i18n("Filter:")
+            text: i18n("Filter") + ":"
         }
         TextField {
             id: locationEdit
