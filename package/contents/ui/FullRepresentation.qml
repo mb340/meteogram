@@ -103,10 +103,10 @@ Item {
             meteogram: fullRepresentation.meteogram
             meteogramModel: main.meteogramModel
             model: [
-                { label: String.fromCodePoint(0x2614), varName: "dewPoint",
+                { label: String.fromCodePoint(0xf078), varName: "dewPoint",
                     tooltip: i18n("Dew Point")
                 },
-                { label: String.fromCodePoint(0x2615), varName: "feelsLike",
+                { label: String.fromCodePoint(0xf055), varName: "feelsLike",
                     tooltip: i18n("Feels Like")
                 },
             ]
