@@ -354,4 +354,26 @@ Dialog {
             }
         }
     }
+
+    function clearFields() {
+        newMetnoCityAlias.text = ''
+        newMetnoCityLatitudeField.text = ''
+        newMetnoCityLongitudeField.text = ''
+        newMetnoCityAltitudeField.text = ''
+        newMetnoUrl.text = ''
+        newMetnoCityLatitudeField.focus = true
+    }
+
+    function populateFields(entry) {
+        let url = entry.placeIdentifier
+        newMetnoUrl.text = url
+        var data = url.match(RegExp("([+-]?[0-9]{1,5}[.]?[0-9]{0,5})","g"))
+        newMetnoCityLatitudeField.text = Number(data[0]).toLocaleString(Qt.locale(),"f",5)
+        newMetnoCityLongitudeField.text = Number(data[1]).toLocaleString(Qt.locale(),"f",5)
+        newMetnoCityAltitudeField.text = (data[2] === undefined) ? 0:data[2]
+        addMetnoCityIdDialog.setTimezone(entry.timezoneID)
+        newMetnoCityAlias.text = entry.placeAlias
+        addMetnoCityIdDialog.providerId = entry.providerId
+        addMetnoCityIdDialog.open()
+    }
 }

@@ -203,13 +203,7 @@ ColumnLayout {
                 text: 'metno'
                 width: 100
                 onClicked: {
-                    editEntryNumber = -1
-                    newMetnoCityAlias.text = ''
-                    newMetnoCityLatitudeField.text = ''
-                    newMetnoCityLongitudeField.text = ''
-                    newMetnoCityAltitudeField.text = ''
-                    newMetnoUrl.text = ''
-                    newMetnoCityLatitudeField.focus = true
+                    addMetnoCityIdDialog.clearFields()
                     addMetnoCityIdDialog.providerId = 'metno'
                     addMetnoCityIdDialog.open()
                 }
@@ -221,12 +215,7 @@ ColumnLayout {
                 width: 100
                 onClicked: {
                     editEntryNumber = -1
-                    newMetnoCityAlias.text = ''
-                    newMetnoCityLatitudeField.text = ''
-                    newMetnoCityLongitudeField.text = ''
-                    newMetnoCityAltitudeField.text = ''
-                    newMetnoUrl.text = ''
-                    newMetnoCityLatitudeField.focus = true
+                    addMetnoCityIdDialog.clearFields()
                     addMetnoCityIdDialog.providerId = 'openMeteo'
                     addMetnoCityIdDialog.open()
                 }
@@ -291,34 +280,16 @@ ColumnLayout {
                     onClicked: {
                         editEntryNumber = tableView.currentRow
                         let entry = placesModel.get(editEntryNumber)
-                        if (entry.providerId === "metno") {
-                            let url=entry.placeIdentifier
-                            newMetnoUrl.text = url
-                            var data = url.match(RegExp("([+-]?[0-9]{1,5}[.]?[0-9]{0,5})","g"))
-                            newMetnoCityLatitudeField.text = Number(data[0]).toLocaleString(Qt.locale(),"f",5)
-                            newMetnoCityLongitudeField.text = Number(data[1]).toLocaleString(Qt.locale(),"f",5)
-                            newMetnoCityAltitudeField.text = (data[2] === undefined) ? 0:data[2]
-                            addMetnoCityIdDialog.setTimezone(entry.timezoneID)
-                            newMetnoCityAlias.text = entry.placeAlias
-                            addMetnoCityIdDialog.providerId = entry.providerId
+                        if (entry.providerId === "metno" ||
+                            entry.providerId === "openMeteo")
+                        {
+                            addMetnoCityIdDialog.populateFields(entry)
                             addMetnoCityIdDialog.open()
                         }
                         if (entry.providerId === "owm") {
                             newOwmCityIdField.text = "https://openweathermap.org/city/"+entry.placeIdentifier
                             newOwmCityAlias.text = entry.placeAlias
                             addOwmCityIdDialog.open()
-                        }
-                        if (entry.providerId === "openMeteo") {
-                            let url=entry.placeIdentifier
-                            newMetnoUrl.text = url
-                            var data = url.match(RegExp("([+-]?[0-9]{1,5}[.]?[0-9]{0,5})","g"))
-                            newMetnoCityLatitudeField.text = Number(data[0]).toLocaleString(Qt.locale(),"f",5)
-                            newMetnoCityLongitudeField.text = Number(data[1]).toLocaleString(Qt.locale(),"f",5)
-                            newMetnoCityAltitudeField.text = (data[2] === undefined) ? 0:data[2]
-                            addMetnoCityIdDialog.setTimezone(entry.timezoneID)
-                            newMetnoCityAlias.text = entry.placeAlias
-                            addMetnoCityIdDialog.providerId = entry.providerId
-                            addMetnoCityIdDialog.open()
                         }
                     }
                 }
