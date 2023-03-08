@@ -68,7 +68,7 @@ Item {
         if (interval > 0) {
             reloadTimer.interval = interval
             dbgprint("ReloadTime: Start reload timer. interval = " + reloadTimer.interval +
-                     ", next update in " + DataLoader.getLastReloadedTimeText(interval))
+                     ", next update in " + DataLoader.formatTimeIntervalString(interval))
             reloadTimer.start()
         } else {
             main.tryReload()
@@ -195,6 +195,6 @@ Item {
     function updateNextReloadText(cacheKey) {
         var nextReloadTime = getNextReloadTime(cacheKey)
         var t = nextReloadTime - Date.now()
-        nextReloadText = i18n('Next update is in %1', DataLoader.getReloadedTimeText(t))
+        nextReloadText = i18n("Next update is in %1", DataLoader.formatTimeIntervalString(t))
     }
 }

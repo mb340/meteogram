@@ -498,8 +498,8 @@ Item {
         }
 
         var lastReloadedMs = (new Date()).getTime() - reloadTime.getLastReloadedMs(cacheKey)
-        lastReloadedText = '⬇ ' + i18n('%1 ago',
-                            DataLoader.getLastReloadedTimeText(lastReloadedMs))
+        lastReloadedText = '⬇ ' + i18n("%1 ago",
+                            DataLoader.formatTimeIntervalString(lastReloadedMs))
         plasmoid.status = getPlasmoidStatus(lastReloadedMs, inTrayActiveTimeoutSec)
     }
 
