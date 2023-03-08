@@ -215,20 +215,21 @@ Item {
           }
             switch (Qt.locale().measurementSystem) {
                 case (Locale.MetricSystem):
-                  plasmoid.configuration.temperatureType = 0
-                  plasmoid.configuration.pressureType = 0
-                  plasmoid.configuration.windSpeedType = 2
-                  break;
+                    temperatureType = UnitUtils.TemperatureType.CELSIUS
+                    pressureType = UnitUtils.PressureType.HPA
+                    windSpeedType = UnitUtils.WindSpeedType.KMH
+                    break;
                 case (Locale.ImperialUSSystem):
-                  plasmoid.configuration.temperatureType = 1
-                  plasmoid.configuration.pressureType = 1
-                  plasmoid.configuration.windSpeedType = 1
-                  break;
+                    temperatureType = UnitUtils.TemperatureType.FAHRENHEIT
+                    pressureType = UnitUtils.PressureType.INHG
+                    windSpeedType = UnitUtils.WindSpeedType.MPH
+                    break;
                 case (Locale.ImperialUKSystem):
-                  plasmoid.configuration.temperatureType = 0
-                  plasmoid.configuration.pressureType = 0
-                  plasmoid.configuration.windSpeedType = 1
-                  break;
+                    temperatureType = UnitUtils.TemperatureType.CELSIUS
+                    pressureType = UnitUtils.PressureType.HPA
+                    windSpeedType = UnitUtils.WindSpeedType.MPH
+                    break;
+                default:
             }
             plasmoid.configuration.firstRun = false
         }
