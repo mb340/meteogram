@@ -221,6 +221,13 @@ Item {
                 var suffix = i18nc("Abbreviation for seconds", "sec")
                 return qsTr("%1 %2").arg(num).arg(suffix)
             }
+            valueFromText: function(text) {
+                let data = text.split(" ")
+                if (data.length < 1) {
+                    return 3600
+                }
+                return Number.fromLocaleString(data[0])
+            }
         }
 
         Label {
@@ -276,9 +283,16 @@ Item {
                 cfg_widgetFontSize = widgetFontSize.value
             }
             textFromValue: function(value, locale) {
-                var num = Number(value).toLocaleString(locale, 'f', inTrayActiveTimeoutSec.decimals)
+                var num = Number(value).toLocaleString(locale, 'f', widgetFontSize.decimals)
                 var suffix = i18nc("pixels", "px")
                 return qsTr("%1 %2").arg(num).arg(suffix)
+            }
+            valueFromText: function(text) {
+                let data = text.split(" ")
+                if (data.length < 1) {
+                    return 32
+                }
+                return Number.fromLocaleString(data[0])
             }
         }
     }

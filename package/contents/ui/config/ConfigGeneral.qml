@@ -343,12 +343,19 @@ ColumnLayout {
                 id: reloadIntervalMin
                 property int decimals: 0
                 stepSize: 10
-                from: 20
-                to: 120
+                from: 60
+                to: 1440
                 textFromValue: function(value, locale) {
                     var num = Number(value).toLocaleString(locale, 'f', reloadIntervalMin.decimals)
                     var suffix = i18nc("Abbreviation for minutes", "min")
                     return qsTr("%1 %2").arg(num).arg(suffix)
+                }
+                valueFromText: function(text) {
+                    let data = text.split(" ")
+                    if (data.length < 1) {
+                        return 60
+                    }
+                    return Number.fromLocaleString(data[0])
                 }
             }
         }
