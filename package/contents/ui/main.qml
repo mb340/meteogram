@@ -63,7 +63,6 @@ Item {
     property bool loadingData: false              // Download Attempt in progress Flag.
     property var loadingXhrs: []                  // Array of Download Attempt Objects
     property bool imageLoadingError: true
-    property bool alreadyLoadedFromCache: false
 
     property string lastReloadedText: '⬇ 0m ago'
     property string tooltipSubText: ''
@@ -332,8 +331,6 @@ Item {
         cacheKey = DataLoader.generateCacheKey(placeIdentifier)
         dbgprint('next cacheKey is: ' + cacheKey)
 
-        alreadyLoadedFromCache = false
-
         setCurrentProviderAccordingId(placeObject.providerId)
 
         var ok = loadFromCache()
@@ -375,7 +372,6 @@ Item {
         providerErrors[cacheKey] = null
 
         if (main.cacheKey === cacheKey) {
-            alreadyLoadedFromCache = false
             loadFromCache()
             rearmTimer(cacheKey)
         }
@@ -463,29 +459,22 @@ Item {
                 return false
             }
 
+            creditLink = currentProvider.getCreditLink(placeIdentifier, placeAlias)
+            creditLabel = currentProvider.getCreditLabel(placeIdentifier)
+
             updateLastReloadedText()
             refreshTooltipSubText()
             reloadMeteogram()
-            alreadyLoadedFromCache = true
         }
     }
 
     function loadFromCache() {
-         dbgprint('loading from cache, config key: ' + cacheKey)
-
-        if (alreadyLoadedFromCache) {
-            print('already loaded from cache')
-            return true
-        }
-
-        creditLink = currentProvider.getCreditLink(placeIdentifier, placeAlias)
-        creditLabel = currentProvider.getCreditLabel(placeIdentifier)
-
         if (!providerCache.hasKey(cacheKey)) {
             print('error: cache not available')
             return false
         }
 
+        dbgprint('loading from cache, config key: ' + cacheKey)
         updateWorker.restart()
 
         return true
@@ -609,7 +598,6 @@ Item {
         if (!initialized) {
             return
         }
-        alreadyLoadedFromCache = false
         loadFromCache()
     }
 
@@ -617,7 +605,6 @@ Item {
         if (!initialized) {
             return
         }
-        alreadyLoadedFromCache = false
         loadFromCache()
     }
 
@@ -635,7 +622,6 @@ Item {
         running: false
         triggeredOnStart: false
         onTriggered: {
-            alreadyLoadedFromCache = false
             if (!loadFromCache()) {
                 print('updateViewsTimer error')
             } else {

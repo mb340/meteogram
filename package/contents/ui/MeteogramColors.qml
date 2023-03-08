@@ -117,7 +117,6 @@ Item {
 
     onColorPaletteTypeChanged: {
         print("onColorPaletteTypeChanged")
-        main.alreadyLoadedFromCache = false
         main.loadFromCache()
     }
 
