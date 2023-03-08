@@ -6,7 +6,7 @@
 
 void PlasmoidPlugin::registerTypes(const char *uri)
 {
-    Q_ASSERT(uri == QLatin1String("org.kde.private.weatherWidget2"));
+    Q_ASSERT(uri == QLatin1String("org.kde.private.meteogram"));
     
     qmlRegisterType<Backend>(uri, 2, 0, "Backend");
 }

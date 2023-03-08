@@ -1,0 +1,28 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "mb340@protonmail.com",
+                "Name": "mb340"
+            }
+        ],
+        "Category": "Environment and Weather",
+        "Dependencies": [
+        ],
+        "Description": "Weather meteogram",
+        "EnabledByDefault": false,
+        "Icon": "weather-clouds",
+        "Id": "com.mb340.meteogram",
+        "License": "GPL2",
+        "Name": "Weather Meteogram",
+        "ServiceTypes": [
+            "Plasma/Applet"
+        ],
+        "Version": "0.1",
+        "Website": ""
+    },
+    "X-KDE-ParentApp": "",
+    "X-Plasma-API": "declarativeappletscript",
+    "X-Plasma-MainScript": "ui/main.qml",
+    "X-Plasma-NotificationArea": "true"
+}
