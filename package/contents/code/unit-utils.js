@@ -178,7 +178,7 @@ function formatWindDirectionStr(degrees, digits = undefined) {
 }
 
 function getWindDirectionUnit() {
-    return i18n('°')
+    return "°"
 }
 
 function getWindDirectionText(degrees, digits = undefined) {
