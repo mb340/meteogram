@@ -117,7 +117,7 @@ Item {
 
     onColorPaletteTypeChanged: {
         print("onColorPaletteTypeChanged")
-        main.loadFromCache()
+        main.reloadMeteogram()
     }
 
     function backgroundColor() {
