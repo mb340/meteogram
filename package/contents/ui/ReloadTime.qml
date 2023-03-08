@@ -51,7 +51,7 @@ Item {
             lastReloadedMsMap = JSON.parse(lastReloadedMsJson)
         }
         lastReloadedMsMap = lastReloadedMsMap || {}
-        print("init: lastReloadedMsMap = " + JSON.stringify(lastReloadedMsMap))
+        dbgprint("init: lastReloadedMsMap = " + JSON.stringify(lastReloadedMsMap))
 
         var expiresMsJson = plasmoid.configuration.expiresMsJson
         if (expiresMsJson) {
