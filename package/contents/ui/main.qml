@@ -144,7 +144,6 @@ Item {
         id: meteogramModel
     }
 
-
     ListModel {
         id: weatherAlertsModel
     }
@@ -344,7 +343,7 @@ Item {
         }
     }
 
-    function dataLoadedFromInternet(contentToCache, cacheKey) {
+    function reloadDataSuccessCallback(contentToCache, cacheKey) {
         dbgprint("Data Loaded From Internet successfully.")
         reloadTime.stopAbortTimer(cacheKey)
 
@@ -418,7 +417,8 @@ Item {
             timezoneID: timezoneID,
             cacheKey, cacheKey
         }
-        loadingXhrs = currentProvider.loadDataFromInternet(dataLoadedFromInternet, reloadDataFailureCallback, args)
+        loadingXhrs = currentProvider.loadDataFromInternet(reloadDataSuccessCallback,
+                                                           reloadDataFailureCallback, args)
 
         reloadTime.startAbortTimer(cacheKey, () => reloadDataFailureCallback(cacheKey))
         return true
