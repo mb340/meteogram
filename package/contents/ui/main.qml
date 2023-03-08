@@ -599,6 +599,7 @@ Item {
         print('[weatherWidget] ' + msg)
     }
 
+    /* Update the view models every hour */
     Timer {
         id: updateViewsTimer
         interval: 60 * 60 * 1000
