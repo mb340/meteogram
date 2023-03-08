@@ -567,6 +567,7 @@ Item {
 
     onWindSpeedTypeChanged: {
         refreshTooltipSubText()
+        reloadMeteogram()
     }
 
     onTwelveHourClockEnabledChanged: {
