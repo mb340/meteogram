@@ -116,7 +116,6 @@ Item {
     }
 
     onColorPaletteTypeChanged: {
-        print("onColorPaletteTypeChanged")
         main.reloadMeteogram()
     }
 
