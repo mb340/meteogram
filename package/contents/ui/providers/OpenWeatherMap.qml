@@ -318,6 +318,7 @@ Item {
         updateNextDaysModel()
         fixupNextDaysModel()
         refreshTooltipSubText()
+        main.reloadMeteogram()
         updateSemaphore = false
     }
 
@@ -597,8 +598,6 @@ Item {
         meteogramModel.endList()
         meteogramModel.hourInterval = 3
         dbgprint('meteogramModel.count = ' + meteogramModel.count)
-
-        main.meteogramModelChanged = !main.meteogramModelChanged
     }
 
     /**
@@ -677,10 +676,6 @@ Item {
 
     function getCreditLink(placeIdentifier) {
         return 'http://openweathermap.org/city/' + placeIdentifier
-    }
-
-    function reloadMeteogramImage(placeIdentifier) {
-        main.overviewImageSource = ''
     }
 
     function getIconIr(iconCode) {
