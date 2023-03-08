@@ -137,10 +137,6 @@ Item {
         id: openMeteo
     }
 
-    ListModel {
-        id: actualWeatherModel
-    }
-
     CurrentWeatherModel {
         id: currentWeatherModel
     }
