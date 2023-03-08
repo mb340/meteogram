@@ -248,10 +248,10 @@ Item {
         }
     }
 
-    property var xmlModelLocationStatus: xmlModelLocation.status
-    property var xmlModelLongTermStatus: xmlModelLongTerm.status
-    property var xmlModelCurrentStatus: xmlModelCurrent.status
-    property var xmlModelHourByHourStatus: xmlModelHourByHour.status
+    property alias xmlModelLocationStatus: xmlModelLocation.status
+    property alias xmlModelLongTermStatus: xmlModelLongTerm.status
+    property alias xmlModelCurrentStatus: xmlModelCurrent.status
+    property alias xmlModelHourByHourStatus: xmlModelHourByHour.status
 
     function parseDate(dateString) {
         let d = new Date(dateString + '.000Z')
@@ -321,6 +321,11 @@ Item {
         refreshTooltipSubText()
         main.reloadMeteogram()
         updateSemaphore = false
+
+        xmlModelLocation.xml = ''
+        xmlModelCurrent.xml = ''
+        xmlModelLongTerm.xml = ''
+        xmlModelHourByHour.xml = ''
     }
 
     function createTodayTimeObj() {
@@ -660,13 +665,9 @@ Item {
             return false
         }
         updateSemaphore = true
-        xmlModelLocation.xml = ''
         xmlModelLocation.xml = cacheContent.longTerm
-        xmlModelCurrent.xml = ''
         xmlModelCurrent.xml = cacheContent.current
-        xmlModelLongTerm.xml = ''
         xmlModelLongTerm.xml = cacheContent.longTerm
-        xmlModelHourByHour.xml = ''
         xmlModelHourByHour.xml = cacheContent.hourByHour
         return true
     }
