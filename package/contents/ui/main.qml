@@ -351,8 +351,6 @@ Item {
             })
             loadingXhrs = []
         }
-
-        loadingData = false
     }
 
     function dataLoadedFromInternet(contentToCache, cacheKey) {
@@ -381,6 +379,8 @@ Item {
             loadFromCache()
             rearmTimer(cacheKey)
         }
+
+        loadingData = false
     }
 
     function reloadDataFailureCallback(cacheKey) {
@@ -407,6 +407,8 @@ Item {
         if (main.cacheKey === cacheKey) {
             rearmTimer(cacheKey)
         }
+
+        loadingData = false
     }
 
     function reloadData() {
