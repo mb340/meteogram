@@ -119,6 +119,9 @@ Item {
         id: providerCache
     }
 
+
+    property var providerErrors: ({})
+
     ReloadTime {
         id: reloadTime
     }
@@ -371,6 +374,7 @@ Item {
         }
 
         clearLoadingXhrs()
+        providerErrors[cacheKey] = null
 
         if (main.cacheKey === cacheKey) {
             alreadyLoadedFromCache = false
@@ -386,6 +390,11 @@ Item {
         var noConnection = false
         loadingXhrs.forEach(function (xhr) {
             noConnection |= (xhr.status === 0)
+            if (noConnection) {
+                providerErrors[cacheKey] = "No connection"
+            } else if (xhr.status !== 200) {
+                providerErrors[cacheKey] = xhr.status
+            }
         })
         clearLoadingXhrs()
 
@@ -498,6 +507,12 @@ Item {
     }
 
     function updateLastReloadedText() {
+        var providerError = providerErrors[cacheKey]
+        if (providerError) {
+            lastReloadedText = i18n("Error") + ": " + providerError
+            return
+        }
+
         var lastReloadedMs = (new Date()).getTime() - reloadTime.getLastReloadedMs(cacheKey)
         lastReloadedText = '⬇ ' + i18n('%1 ago',
                             DataLoader.getLastReloadedTimeText(lastReloadedMs))
