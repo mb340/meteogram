@@ -236,10 +236,6 @@ Item {
         }
     }
 
-    MeteogramColors {
-        id: palette
-    }
-
     Meteogram {
         id: meteogram2
         anchors.top: parent.top

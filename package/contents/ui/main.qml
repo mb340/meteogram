@@ -148,6 +148,10 @@ Item {
         id: weatherAlertsModel
     }
 
+    MeteogramColors {
+        id: palette
+    }
+
     function initPausedAction() {
         plasmoid.setAction('toggleUpdatingPaused',
                            updatingPaused ? i18n("Resume Updating") : i18n("Pause Updating"),
