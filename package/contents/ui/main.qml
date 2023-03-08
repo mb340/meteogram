@@ -218,16 +218,19 @@ Item {
                     temperatureType = UnitUtils.TemperatureType.CELSIUS
                     pressureType = UnitUtils.PressureType.HPA
                     windSpeedType = UnitUtils.WindSpeedType.KMH
+                    precipitationType = UnitUtils.PrecipitationType.CM
                     break;
                 case (Locale.ImperialUSSystem):
                     temperatureType = UnitUtils.TemperatureType.FAHRENHEIT
                     pressureType = UnitUtils.PressureType.INHG
                     windSpeedType = UnitUtils.WindSpeedType.MPH
+                    precipitationType = UnitUtils.PrecipitationType.INCH
                     break;
                 case (Locale.ImperialUKSystem):
                     temperatureType = UnitUtils.TemperatureType.CELSIUS
                     pressureType = UnitUtils.PressureType.HPA
                     windSpeedType = UnitUtils.WindSpeedType.MPH
+                    precipitationType = UnitUtils.PrecipitationType.CM
                     break;
                 default:
             }
