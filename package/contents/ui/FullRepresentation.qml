@@ -218,7 +218,7 @@ Item {
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true
                         anchors.fill: parent
-                        onClicked: main.setNextPlace(false, modelData.direction)
+                        onClicked: main.setNextPlace(modelData.previous)
                         onEntered: parent.color = theme.highlightColor
                         onExited: parent.color = theme.textColor
                     }
@@ -227,8 +227,8 @@ Item {
 
             Repeater {
                 model: [
-                    { label: "     \u25C4", direction: "-" },
-                    { label: "\u25BA     ", direction: "+" }
+                    { label: "     \u25C4", previous: true },
+                    { label: "\u25BA     ", previous: false }
                 ]
 
                 delegate: buttonComponent

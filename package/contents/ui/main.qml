@@ -31,6 +31,7 @@ Item {
 
     property bool initialized: false
 
+    property int placeIndex: -1
     property string placeIdentifier
     property string placeAlias
     property string cacheKey
@@ -258,7 +259,7 @@ Item {
         initialized = true
 
         // set initial place
-        setNextPlace(true)
+        setNextPlace()
 
         updateViewsTimer.init()
     }
@@ -277,29 +278,35 @@ Item {
         }
      }
 
-    function setNextPlace(initial,direction) {
+    function updatePlaceIndex(index, count, previous) {
+        let step = 0
+        if (index === -1) {
+            index = Math.min(count - 1, Math.max(0, plasmoid.configuration.placeIndex))
+        } else if (previous === true) {
+            step = -1
+        } else {
+            step = 1
+        }
+
+        index = (index + count + step) % count
+        return index
+    }
+
+    function setNextPlace(previous) {
         currentWeatherModel.clear()
         meteogramModel.hourInterval = 1
 
-        if (direction === undefined) {
-          direction = "+"
-        }
-
         var places = ConfigUtils.getPlacesArray()
         onlyOnePlace = places.length === 1
-        dbgprint('places count=' + places.length + ', placeIndex=' + plasmoid.configuration.placeIndex)
-        var placeIndex = plasmoid.configuration.placeIndex
-        if (!initial) {
-            (direction === "+") ? placeIndex++ :placeIndex--
+
+        placeIndex = updatePlaceIndex(placeIndex, places.length, previous)
+        if (placeIndex < 0 || placeIndex >= places.length) {
+            print("Error: Invalid place index " + placeIndex)
+            return
         }
-        if (placeIndex > places.length - 1) {
-            placeIndex = 0
-        }
-        if (placeIndex < 0 ) {
-            placeIndex = places.length - 1
-        }
+
         plasmoid.configuration.placeIndex = placeIndex
-        dbgprint('placeIndex now: ' + plasmoid.configuration.placeIndex)
+
         var placeObject = places[placeIndex]
         if (!placeObject) {
             print("warning: No place object")
