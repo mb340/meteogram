@@ -366,24 +366,6 @@ Item {
 
             Button {
                 icon.name: 'list-add'
-                text: 'OWM 2'
-                width: 100
-                onClicked: {
-                    editEntryNumber = -1
-                    newMetnoCityAlias.text = ''
-                    newMetnoCityLatitudeField.text = ''
-                    newMetnoCityLongitudeField.text = ''
-                    newMetnoCityAltitudeField.text = ''
-                    newMetnoUrl.text = ''
-                    newMetnoCityLatitudeField.focus = true
-                    addMetnoCityIdDialog.providerId = 'owm2'
-                    addMetnoCityIdDialog.open()
-                }
-            }
-
-
-            Button {
-                icon.name: 'list-add'
                 text: 'metno'
                 width: 100
                 onClicked: {
@@ -479,24 +461,6 @@ Item {
                             newOwmCityIdField.text = "https://openweathermap.org/city/"+entry.placeIdentifier
                             newOwmCityAlias.text = entry.placeAlias
                             addOwmCityIdDialog.open()
-                        }
-                        if (entry.providerId === "owm2") {
-                            let url=entry.placeIdentifier
-                            newMetnoUrl.text = url
-                            var data = url.match(RegExp("([+-]?[0-9]{1,5}[.]?[0-9]{0,5})","g"))
-                            newMetnoCityLatitudeField.text = Number(data[0]).toLocaleString(Qt.locale(),"f",5)
-                            newMetnoCityLongitudeField.text = Number(data[1]).toLocaleString(Qt.locale(),"f",5)
-                            newMetnoCityAltitudeField.text = (data[2] === undefined) ? 0:data[2]
-                            for (var i = 0; i < timezoneDataModel.count; i++) {
-                                if (timezoneDataModel.get(i).id == Number(entry.timezoneID)) {
-                                    tzComboBox.currentIndex = i
-                                    addMetnoCityIdDialog.timezoneID = entry.timezoneID
-                                    break
-                                }
-                            }
-                            newMetnoCityAlias.text = entry.placeAlias
-                            addMetnoCityIdDialog.providerId = entry.providerId
-                            addMetnoCityIdDialog.open()
                         }
                     }
                 }
