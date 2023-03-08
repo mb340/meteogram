@@ -573,6 +573,11 @@ Item {
         reloadMeteogram()
     }
 
+    onPrecipitationTypeChanged: {
+        refreshTooltipSubText()
+        reloadMeteogram()
+    }
+
     onTwelveHourClockEnabledChanged: {
         refreshTooltipSubText()
         reloadMeteogram()
