@@ -26,6 +26,7 @@ Item {
     property string providerId: 'owm'
 
     readonly property int updateInterval: 3 * 60 * 60 * 1000
+    readonly property var xmlLocale: Qt.locale('en_GB')
 
     property string urlPrefix: 'http://api.openweathermap.org/data/2.5'
     property string appIdAndModeSuffix: '&units=metric&mode=xml&appid=5819a34c58f8f07bc282820ca08948f1'
