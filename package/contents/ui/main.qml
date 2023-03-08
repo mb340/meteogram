@@ -607,9 +607,9 @@ Item {
         triggeredOnStart: false
         onTriggered: {
             if (!loadFromCache()) {
-                print('updateViewsTimer error')
+                dbgprint('updateViewsTimer error')
             } else {
-                print('updateViewsTimer loaded from cache')
+                dbgprint('updateViewsTimer loaded from cache')
             }
             init()
         }
@@ -620,7 +620,7 @@ Item {
             updateViewsTimer.interval = dt
             updateViewsTimer.restart()
 
-            print('updateViewsTimer: ' + (new Date(Date.now() + dt)))
+            dbgprint('updateViewsTimer: ' + (new Date(Date.now() + dt)))
         }
     }
 }
