@@ -209,10 +209,10 @@ Item {
     Component.onCompleted: {
         initUtils()
         if (plasmoid.configuration.firstRun) {
-          if (plasmoid.configuration.widgetFontSize === undefined) {
-            plasmoid.configuration.widgetFontSize = 32
-            widgetFontSize = 32
-          }
+            if (plasmoid.configuration.widgetFontSize === undefined) {
+                plasmoid.configuration.widgetFontSize = 32
+                widgetFontSize = 32
+            }
             switch (Qt.locale().measurementSystem) {
                 case (Locale.MetricSystem):
                     temperatureType = UnitUtils.TemperatureType.CELSIUS
