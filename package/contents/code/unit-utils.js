@@ -218,11 +218,11 @@ function convertDateToUTC(date) {
     return date.setTime(date.getTime() + (date.getTimezoneOffset() * 60 * 1000))
 }
 
-function dateNow(timezoneType) {
+function dateNow(timezoneType, offset = undefined) {
     if (timezoneType === undefined) {
         timezoneType = main.timezoneType
     }
-    var now = convertDate(new Date(), timezoneType)
+    var now = convertDate(new Date(), timezoneType, offset)
     return now
 }
 
