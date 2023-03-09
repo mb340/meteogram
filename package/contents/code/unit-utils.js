@@ -284,8 +284,8 @@ function convertDate(date, timezoneType, offset = undefined) {
  * Round date to the previous half hour
  */
 function floorDate(date) {
-    let ts = date.getTime()
-    return new Date(ts - (ts % (60 * 60 * 1000)))
+    date.setMinutes(0, 0, 0)
+    return date
 }
 
 function hasSunriseSunsetData() {
