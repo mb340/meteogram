@@ -353,9 +353,7 @@ Item {
 
         dbgprint('updating today models')
 
-        var now = new Date()
-        dbgprint('now: ' + now)
-        var tooOldCurrentDataLimit = new Date(now.getTime() - (2 * 60 * 60 * 1000))
+        var now = UnitUtils.dateNow(timezoneType, tzOffset)
 
         // set current models
         var foundNow = false
@@ -397,7 +395,7 @@ Item {
 
     /* Update next days model with more granular data from hourly data */
     function fixupNextDaysModel() {
-        var dateNow = UnitUtils.convertDate(new Date(), timezoneType, tzOffset)
+        var dateNow = UnitUtils.dateNow(timezoneType, tzOffset)
         var intervalStart = UnitUtils.floorDate(dateNow)
 
         var prevHour = -1;
@@ -568,7 +566,7 @@ Item {
         meteogramModel.beginList()
 
         var hourCount = 0
-        var dateNow = UnitUtils.convertDate(new Date(), timezoneType, tzOffset)
+        var dateNow = UnitUtils.dateNow(timezoneType, tzOffset)
         var intervalStart = UnitUtils.floorDate(dateNow)
 
         for (var i = 0; i < xmlModelHourByHour.count && hourCount < main.maxMeteogramHours; i++) {
