@@ -15,7 +15,7 @@
         <entry name="places" type="String">
           <default>
           [
-            { "providerId": "openMeteo", "placeAlias": "123", "placeIdentifier": "latitude=64.8000&amp;longitude=-147.5333", "timezoneID": 399 }
+            { "providerId": "openMeteo", "placeAlias": "Some Place", "placeIdentifier": "latitude=64.8000&amp;longitude=-147.5333", "timezoneID": 399 }
           ]
         </default>
         </entry>
@@ -46,6 +46,10 @@
                 <choice name="Compact"/>
             </choices>
             <default>0</default>
+        </entry>
+        <entry name="compactItemOrder" type="StringList">
+            <!-- <default>0, 1, 2</default> -->
+            <default>0,1,2</default>
         </entry>
         <entry name="inTrayActiveTimeoutSec" type="Int">
             <default>3600</default>

@@ -39,6 +39,8 @@ Item {
     property int timezoneOffset
     property string timezoneShortName
 
+    property string places: plasmoid.configuration.places
+
     property int temperatureType: plasmoid.configuration.temperatureType
     property int pressureType: plasmoid.configuration.pressureType
     property int windSpeedType: plasmoid.configuration.windSpeedType
@@ -291,17 +293,19 @@ Item {
         return index
     }
 
-    function setNextPlace(previous) {
+    function setNextPlace(previous, initialize) {
         currentWeatherModel.clear()
         meteogramModel.hourInterval = 1
 
         var places = ConfigUtils.getPlacesArray()
         onlyOnePlace = places.length === 1
 
-        placeIndex = updatePlaceIndex(placeIndex, places.length, previous)
-        if (placeIndex < 0 || placeIndex >= places.length) {
-            print("Error: Invalid place index " + placeIndex)
-            return
+        if (initialize !== true) {
+            placeIndex = updatePlaceIndex(placeIndex, places.length, previous)
+            if (placeIndex < 0 || placeIndex >= places.length) {
+                print("Error: Invalid place index " + placeIndex)
+                return
+            }
         }
 
         plasmoid.configuration.placeIndex = placeIndex
@@ -590,6 +594,13 @@ Item {
         if (reloadTime.isReadyToReload(cacheKey)) {
             reloadData()
         }
+    }
+
+    onPlacesChanged: {
+        if (!initialized) {
+            return
+        }
+        setNextPlace(false, true)
     }
 
     onTemperatureTypeChanged: {

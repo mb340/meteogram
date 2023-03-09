@@ -22,9 +22,8 @@ Item {
     
     anchors.fill: parent
     
-    CompactItem {
+    CompactItem2 {
         id: compactItem
-        inTray: true
     }
     
     Plasmoid.toolTipMainText: placeAlias

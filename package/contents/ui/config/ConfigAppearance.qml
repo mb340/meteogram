@@ -12,6 +12,12 @@ Item {
     property string cfg_widgetFontSize: plasmoid.configuration.widgetFontSize
     property int cfg_iconSetType: plasmoid.configuration.iconSetType
 
+    property alias cfg_compactItemOrder: compactItemOrder.order
+
+    onCfg_compactItemOrderChanged: {
+        print(JSON.stringify(cfg_compactItemOrder))
+    }
+
     onCfg_layoutTypeChanged: {
         switch (cfg_layoutType) {
         case 0:
@@ -196,6 +202,25 @@ Item {
             width: 2
             height: 20
             Layout.columnSpan: 3
+        }
+
+        Item {
+            width: 2
+            height: 20
+            Layout.columnSpan: 1
+        }
+
+        CompactItemOrder {
+            id: compactItemOrder
+            Layout.fillWidth: true
+            Layout.minimumHeight: childrenRect.height
+            Layout.columnSpan: 2
+        }
+
+        Item {
+            width: 2
+            height: 20
+            Layout.columnSpan: 1
         }
 
         Label {

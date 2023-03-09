@@ -15,63 +15,37 @@
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
 import QtQuick 2.2
-import QtQuick.Layouts 1.1
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
 
 Item {
     id: compactRepresentation
 
-    anchors.fill: parent
+    Plasmoid.backgroundHints: PlasmaCore.Types.DefaultBackground
+                                | PlasmaCore.Types.ConfigurableBackground
 
-    CompactItem {
+    CompactItem2 {
         id: compactItem
-        inTray: false
     }
 
-    property double partHeight: compactItem.widgetHeight
+    Rectangle {
+        anchors.fill: parent
+        color: "red"
+        z: -1
+        visible: false
+    }
 
-    PlasmaComponents.Label {
-        id: lastReloadedNotifier
-
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: - partHeight * 0.05
-        verticalAlignment: Text.AlignBottom
-
-        font.pixelSize: partHeight * 0.26 * (layoutType === 2 ? 0.7 : 1)
-        font.pointSize: -1
-        color: theme.highlightColor
-
-        text: lastReloadedText
-
+    Rectangle {
+        anchors.fill: compactItem
+        color: "green"
+        z: -1
         visible: false
     }
 
     MouseArea {
         anchors.fill: parent
-
-        acceptedButtons: Qt.LeftButton | Qt.MiddleButton
-
-        hoverEnabled: true
-
-        onEntered: {
-            lastReloadedNotifier.visible = !plasmoid.expanded
-        }
-
-        onExited: {
-            lastReloadedNotifier.visible = false
-        }
-
-        onClicked: {
-            if (mouse.button == Qt.MiddleButton) {
-                main.tryReload()
-            } else {
-                plasmoid.expanded = !plasmoid.expanded
-                lastReloadedNotifier.visible = !plasmoid.expanded
-            }
-        }
+        acceptedButtons: Qt.LeftButton
+        onClicked: plasmoid.expanded = !plasmoid.expanded
 
         PlasmaCore.ToolTipArea {
             id: toolTipArea
