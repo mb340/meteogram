@@ -507,12 +507,18 @@ Item {
         dbgprint('refreshing sub text')
         if (!currentWeatherModel.valid) {
             dbgprint('model not yet ready')
-           return
+            tooltipSubText = ""
+            return
         }
-        var nearFutureWeather = currentWeatherModel.nearFuture
-        var futureWeatherIcon = IconTools.getIconCode(nearFutureWeather.iconName, currentProvider, getPartOfDayIndex())
-        var wind1=Math.round(currentWeatherModel.windDirection)
-        var windDirectionIcon = IconTools.getWindDirectionIconCode(wind1)
+
+        var temperature = UnitUtils.formatValue(currentWeatherModel.temperature, "temperature")
+        var windDir = Math.round(currentWeatherModel.windDirection)
+        var windDirectionIcon = IconTools.getWindDirectionIconCode(windDir)
+        var windSpeed = UnitUtils.getWindSpeedText(currentWeatherModel.windSpeedMps, windSpeedType)
+        var pressure = UnitUtils.getPressureText(currentWeatherModel.pressureHpa, pressureType)
+        var iconDesc = currentProvider.getIconDescription(currentWeatherModel.iconName)
+        var dateStr = currentWeatherModel.date.toLocaleDateString(Qt.locale(), 'dddd, dd MMMM')
+        var timeStr = currentWeatherModel.date.toLocaleTimeString(Qt.locale(), Locale.ShortFormat)
 
         var sunRiseTime = ""
         var sunSetTime = ""
@@ -523,31 +529,48 @@ Item {
             sunSetTime = Qt.formatTime(sunSet, Qt.locale().timeFormat(Locale.ShortFormat))
         }
 
-        var subText = ''
-        subText += '<br /><font size="4" style="font-family: weathericons;">' + windDirectionIcon + '</font><font size="4"> ' + wind1 + '\u00B0 &nbsp; @ ' + UnitUtils.getWindSpeedText(currentWeatherModel.windSpeedMps, windSpeedType) + '</font>'
-        subText += '<br /><font size="4">' + UnitUtils.getPressureText(currentWeatherModel.pressureHpa, pressureType) + '</font>'
-        subText += '<br /><table>'
-        if ((currentWeatherModel.humidity !== undefined) && (currentWeatherModel.cloudArea !== undefined)) {
-            subText += '<tr>'
-            subText += '<td><font size="4"><font style="font-family: weathericons">\uf07a</font>&nbsp;' + currentWeatherModel.humidity + '%</font></td>'
-            subText += '<td><font size="4"><font style="font-family: weathericons">\uf013</font>&nbsp;' + currentWeatherModel.cloudArea + '%</font></td>'
-            subText += '</tr>'
-            subText += '<tr><td>&nbsp;</td><td></td></tr>'
+        var subText = '<br />'
+        subText += '<font size="4">' + dateStr + '</font>'
+        subText += '<br />'
+        subText += '<font size="4">' + timeStr + '</font>'
+        subText += '<br /><br />'
+        subText += '<font size="4">' + iconDesc + '</font>'
+        subText += '<br /><br />'
+        subText += '<font size="4" style="font-family: weathericons;">\uf055 </font>'
+        subText += '<font size="4">' + temperature + '</font>'
+        subText += '<br />'
+        subText += '<font size="4" style="font-family: weathericons;">' + windDirectionIcon + '</font>'
+        subText += '<font size="4"> ' + windDir + '\u00B0&nbsp;@ ' + windSpeed + '</font>'
+        subText += '<br />'
+        subText += '<font size="4" style="font-family: weathericons;">\uf079 </font>'
+        subText += '<font size="4">' + pressure + '</font>'
+        subText += '<br />'
+        
+        if (currentWeatherModel.humidity !== undefined) {
+            let humidity = UnitUtils.formatValue(currentWeatherModel.humidity, "humidity")
+            subText += '<font size="4" style="font-family: weathericons;">\uf07a </font>'
+            subText += '<font size="4">' + humidity + '</font>'
+            subText += '<br />'
+        }
+        if (currentWeatherModel.cloudArea !== undefined) {
+            let cloudArea = UnitUtils.formatValue(currentWeatherModel.cloudArea, "cloudArea")
+            subText += '<font size="4" style="font-family: weathericons;">\uf041 </font>'
+            subText += '<font size="4">' + cloudArea + '</font>'
+            subText += '<br />'
         }
         if (UnitUtils.hasSunriseSunsetData()) {
+            subText += '<table>'
             subText += '<tr>'
-            subText += '<td><font size="4"><font style="font-family: weathericons">\uf051</font>&nbsp;' + sunRiseTime + ' '+timezoneShortName + '&nbsp;&nbsp;&nbsp;</font></td>'
-            subText += '<td><font size="4"><font style="font-family: weathericons">\uf052</font>&nbsp;' + sunSetTime + ' '+timezoneShortName + '</font></td>'
+            subText += '<td><font size="4">'
+            subText += '<font style="font-family: weathericons">\uf051</font>&nbsp;'
+            subText += sunRiseTime + ' '+timezoneShortName + '&nbsp;&nbsp;&nbsp;</font></td>'
+            subText += '<td><font size="4">'
+            subText += '<font style="font-family: weathericons">\uf052</font>&nbsp;'
+            subText += sunSetTime + ' '+timezoneShortName + '</font></td>'
             subText += '</tr>'
+            subText += '</table>'
         }
-        subText += '</table>'
 
-        subText += '<br /><br />'
-        subText += '<font size="3">' + i18n("near future") + '</font>'
-        subText += '<b>'
-        subText += '<font size="6">&nbsp;&nbsp;&nbsp;' + UnitUtils.getTemperatureText(nearFutureWeather.temperature, temperatureType, 2)
-        subText += '&nbsp;&nbsp;&nbsp;<font style="font-family: weathericons">' + futureWeatherIcon + '</font></font>'
-        subText += '</b>'
         tooltipSubText = subText
     }
 
