@@ -451,7 +451,7 @@ Item {
 
             var dayStart = dateFrom.setHours(0, 0, 0, 0)
 
-            if (intervalStart > dateTo) {
+            if (intervalStart >= dateTo) {
                 continue
             }
 
@@ -575,7 +575,7 @@ Item {
             var dateTo = parseDate(obj.to)
 //             dbgprint('meteo fill: i=' + i + ', from=' + obj.from + ', to=' + obj.to)
 //             dbgprint('parsed: from=' + dateFrom + ', to=' + dateTo)
-            if (intervalStart > dateTo) {
+            if (intervalStart >= dateTo) {
                 continue
             }
 
