@@ -5,11 +5,11 @@ QtObject {
 
     property double temperature: NaN
     property var iconName: null
-    property string windDirection: ""
-    property string windSpeedMps: ""
-    property string pressureHpa: ""
-    property string humidity: ""
-    property string cloudArea: ""
+    property double windDirection: NaN
+    property double windSpeedMps: NaN
+    property double pressureHpa: NaN
+    property double humidity: NaN
+    property double cloudArea: NaN
 
     property date sunRise: new Date(0)
     property date sunSet: new Date(0)
@@ -24,11 +24,11 @@ QtObject {
 
         temperature = NaN
         iconName = null
-        windDirection = ""
-        windSpeedMps = ""
-        pressureHpa = ""
-        humidity = ""
-        cloudArea = ""
+        windDirection = NaN
+        windSpeedMps = NaN
+        pressureHpa = NaN
+        humidity = NaN
+        cloudArea = NaN
 
         sunRise = new Date(0)
         sunSet = new Date(0)
