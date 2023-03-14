@@ -264,7 +264,7 @@ Canvas {
 
     function drawPrecipitationBars(context, rectWidth) {
         precLabelPositions = ({})
-        context.fillStyle = palette.rainColor()
+        context.fillStyle = colorPalette.rainColor()
         for (var i = 0; i < meteogramModel.count; i++) {
             var item = meteogramModel.get(i)
             if (item.precipitationAmount <= 0) {
@@ -435,7 +435,7 @@ Canvas {
     function drawWeatherIcons(context, rectWidth) {
         context.font =  (fontSize + 1) + 'px "%1"'.arg(weatherIconFont.name)
 
-        var bgColor = palette.backgroundColor()
+        var bgColor = colorPalette.backgroundColor()
         var dropShadowColor = invertColor(bgColor)
 
         iconOverlay.beginList()
@@ -518,8 +518,8 @@ Canvas {
         var y0 = cloudAreaScale.translate(50 - (100 / 2))
         var y1 = cloudAreaScale.translate(50 + (100 / 4))
         var gradient = context.createLinearGradient(0, y1, 0, y0);
-        gradient.addColorStop(0, palette.cloudAreaColor());
-        gradient.addColorStop(1, palette.cloudAreaColor2());
+        gradient.addColorStop(0, colorPalette.cloudAreaColor());
+        gradient.addColorStop(1, colorPalette.cloudAreaColor2());
         context.fillStyle = gradient;
         context.path = cloudAreaPath
         context.closePath()
@@ -579,14 +579,14 @@ Canvas {
             drawCloudArea(context)
         }
         if (plasmoid.configuration.renderHumidity) {
-            drawPath(context, humidityPath, palette.humidityColor(), 1 * units.devicePixelRatio)
+            drawPath(context, humidityPath, colorPalette.humidityColor(), 1 * units.devicePixelRatio)
         }
         if (plasmoid.configuration.renderPressure && y2VarName && y2VarName !== "") {
-            drawPath(context, y2Path, palette.pressureColor(), 1 * units.devicePixelRatio)
+            drawPath(context, y2Path, colorPalette.pressureColor(), 1 * units.devicePixelRatio)
         }
         if (plasmoid.configuration.renderTemperature) {
-            drawWarmTemp(context, temperaturePath, palette.temperatureWarmColor(), 2 * units.devicePixelRatio)
-            drawColdTemp(context, temperaturePath, palette.temperatureColdColor(), 2 * units.devicePixelRatio)
+            drawWarmTemp(context, temperaturePath, colorPalette.temperatureWarmColor(), 2 * units.devicePixelRatio)
+            drawColdTemp(context, temperaturePath, colorPalette.temperatureColdColor(), 2 * units.devicePixelRatio)
 
             if (y1VarName && y1VarName !== "") {
                 let color = !textColorLight ? 'black' : 'white'

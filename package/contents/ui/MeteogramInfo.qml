@@ -210,16 +210,16 @@ Item {
         model.addItem({
             nameStr: i18n("Temperature") + ":",
             valueStr: unitUtils.getTemperatureText(hourModel.temperature, temperatureType, 2),
-            valueColor: (hourModel.temperature >= 0 ? palette.temperatureWarmColor() :
-                                                     palette.temperatureColdColor()).toString()
+            valueColor: (hourModel.temperature >= 0 ? colorPalette.temperatureWarmColor() :
+                                                     colorPalette.temperatureColdColor()).toString()
         })
 
         if (isFinite(hourModel.feelsLike)) {
             model.addItem({
                 nameStr: i18n("Feels Like") + ":",
                 valueStr: unitUtils.getTemperatureText(hourModel.feelsLike, temperatureType, 2),
-                valueColor: (hourModel.feelsLike >= 0 ? palette.temperatureWarmColor() :
-                                                         palette.temperatureColdColor()).toString()
+                valueColor: (hourModel.feelsLike >= 0 ? colorPalette.temperatureWarmColor() :
+                                                         colorPalette.temperatureColdColor()).toString()
             })
         }
 
@@ -227,15 +227,15 @@ Item {
             model.addItem({
                 nameStr: i18n("Dew Point") + ":",
                 valueStr: unitUtils.getTemperatureText(hourModel.dewPoint, temperatureType, 2),
-                valueColor: (hourModel.dewPoint >= 0 ? palette.temperatureWarmColor() :
-                                                         palette.temperatureColdColor()).toString()
+                valueColor: (hourModel.dewPoint >= 0 ? colorPalette.temperatureWarmColor() :
+                                                         colorPalette.temperatureColdColor()).toString()
             })
         }
 
         model.addItem({
             nameStr: i18n("Pressure") + ":",
             valueStr: unitUtils.getPressureText(hourModel.pressure, pressureType),
-            valueColor: palette.pressureColor().toString()
+            valueColor: colorPalette.pressureColor().toString()
         })
 
         var windStr = unitUtils.getWindSpeedText(hourModel.windSpeed, windSpeedType)
@@ -270,7 +270,7 @@ Item {
             model.addItem({
                 nameStr: i18n("Relative Humidity") + ":",
                 valueStr: humidityStr,
-                valueColor: palette.humidityColor().toString()
+                valueColor: colorPalette.humidityColor().toString()
             })
         }
 
@@ -281,7 +281,7 @@ Item {
             model.addItem({
                 nameStr: i18n("Precipitation") + ":",
                 valueStr: precipitationStr,
-                valueColor: palette.rainColor().toString()
+                valueColor: colorPalette.rainColor().toString()
             })
         }
 
@@ -289,7 +289,7 @@ Item {
             model.addItem({
                 nameStr: i18n("PoP") + ":",
                 valueStr: unitUtils.getPopText(hourModel.precipitationProb),
-                valueColor: palette.rainColor().toString()
+                valueColor: colorPalette.rainColor().toString()
             })
         }
 

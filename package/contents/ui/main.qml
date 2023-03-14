@@ -158,7 +158,7 @@ Item {
     }
 
     MeteogramColors {
-        id: palette
+        id: colorPalette
     }
 
     function initPausedAction() {

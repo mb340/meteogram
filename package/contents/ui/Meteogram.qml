@@ -102,7 +102,7 @@ Item {
         anchors.rightMargin: labelWidth
         anchors.topMargin: labelHeight  + cloudarea
         border.color:gridColor
-        color: palette.backgroundColor()
+        color: colorPalette.backgroundColor()
     }
     ListView {
         id: horizontalLines1
@@ -169,7 +169,7 @@ Item {
                 horizontalAlignment: Text.AlignLeft
                 font.pixelSize: 11 * units.devicePixelRatio
                 font.pointSize: -1
-                color: palette.pressureColor()
+                color: colorPalette.pressureColor()
 
                 visible: y2AxisVisble
             }
@@ -184,7 +184,7 @@ Item {
         anchors.rightMargin: -labelWidth
         font.pixelSize: 11 * units.devicePixelRatio
         font.pointSize: -1
-        color: palette.pressureColor()
+        color: colorPalette.pressureColor()
         anchors.bottom: graphArea.top
         anchors.bottomMargin: 6
         visible: y2AxisVisble
