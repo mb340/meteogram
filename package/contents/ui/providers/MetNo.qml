@@ -50,6 +50,8 @@ Item {
     }
 
     function setWeatherContents(cacheContent) {
+        cacheContent = JSON.parse(cacheContent)
+
         var weatherData = cacheContent.weatherData
         updateCurrentWeather(weatherData)
         updateNextDaysModel(weatherData)
@@ -328,7 +330,7 @@ Item {
             cacheContent["sunRiseData"] = JSON.parse(sunRiseDataJson)
             weatherDataJson = ""
             sunRiseDataJson = ""
-            successCallback(cacheContent, cacheKey)
+            successCallback(JSON.stringify(cacheContent), cacheKey)
         }
 
         function successWeather(jsonString) {
