@@ -25,6 +25,7 @@ import "../code/icons.js" as IconTools
 import "../code/unit-utils.js" as UnitUtils
 import "../code/chart-utils.js" as ChartUtils
 import "providers"
+import "utils"
 
 Item {
     id: main
@@ -115,6 +116,13 @@ Item {
         id: providerCache
     }
 
+    UnitUtils {
+        id: unitUtils
+    }
+
+    TimeUtils {
+        id: timeUtils
+    }
 
     property var providerErrors: ({})
 
