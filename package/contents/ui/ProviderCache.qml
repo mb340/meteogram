@@ -12,10 +12,6 @@ QtObject {
             try {
                 cacheMap = JSON.parse(cacheContent)
                 dbgprint('cacheMap initialized - keys:')
-                for (var key in cacheMap) {
-                    dbgprint('  ' + key + ', data: ' + cacheMap[key])
-                    lastTryReloadMap[key] = 0
-                }
             } catch (error) {
                 dbgprint('error parsing cacheContent')
             }

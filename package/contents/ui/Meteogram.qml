@@ -43,7 +43,6 @@ Item {
     // Decimal places for pressure y-axis labels
     property int rightAxisDecimals: 0
 
-    readonly property double precipitationMinVisible: 0.05
     property double precipitationMaxGraphY: 10
 
     property bool textColorLight: ((theme.textColor.r + theme.textColor.g + theme.textColor.b) / 3) > 0.5
