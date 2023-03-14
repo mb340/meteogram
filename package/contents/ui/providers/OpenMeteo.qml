@@ -52,13 +52,13 @@ Item {
 
     function parseDate(dateString) {
         let d = new Date(dateString + ':00.000Z')
-        return UnitUtils.convertDate(d)
+        return UnitUtils.convertDate(d, timezoneType, main.timezoneOffset)
     }
 
     function getCurrentHourDay(data) {
         let hourly = data.hourly
         let daily = data.daily
-        let now = UnitUtils.dateNow()
+        let now = UnitUtils.dateNow(timezoneType, main.timezoneOffset)
         now.setMinutes(0, 0, 0)
 
         var hourlyIdx = -1
@@ -218,7 +218,7 @@ Item {
     function buildDailyModel(data) {
         let daily = data.daily
 
-        let today = UnitUtils.dateNow()
+        let today = UnitUtils.dateNow(timezoneType, main.timezoneOffset)
         today.setHours(0, 0, 0, 0)
 
         dailyWeatherModels.beginList()
@@ -256,7 +256,7 @@ Item {
 
     function buildMeteogramModel(data) {
         let hourly = data.hourly
-        let now = UnitUtils.dateNow()
+        let now = UnitUtils.dateNow(timezoneType, main.timezoneOffset)
         now.setMinutes(0, 0, 0)
 
         let maxHours = main.maxMeteogramHours
