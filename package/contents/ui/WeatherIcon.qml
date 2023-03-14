@@ -69,7 +69,7 @@ Item {
         Item {
             x: iconModel.iconX ? iconModel.iconX : 0
             y: iconModel.iconY ? iconModel.iconY : 0
-            width: isFinite(iconModel.iconDim) ? adjustDim(iconModel.iconDim)  : parent.width
+            width: isFinite(iconModel.iconDim) ? iconModel.iconDim  : parent.width
             height: width
 
             property var imgSrc: IconTools.getIconResource(iconModel.iconName,
@@ -104,7 +104,7 @@ Item {
             x: iconModel.iconX
             y: iconModel.iconY
 
-            width: isFinite(iconModel.iconDim) ? adjustDim(iconModel.iconDim) : parent.width
+            width: isFinite(iconModel.iconDim) ? iconModel.iconDim : parent.width
             height: width
 
             PlasmaCore.IconItem {
@@ -149,19 +149,5 @@ Item {
             }
             return null
         }
-    }
-
-    // Empirically determined size adjustements
-    function adjustDim(dim) {
-        if (iconSetType === 1) {
-            return dim * (1.75 / 2.0)
-        }
-        if (iconSetType === 2) {
-            return dim * (2.5 / 2.0)
-        }
-        if (iconSetType === 3) {
-            return 1.00 * dim
-        }
-        return dim
     }
 }
