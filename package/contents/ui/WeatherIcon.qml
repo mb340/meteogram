@@ -81,6 +81,7 @@ Item {
                 id: image
                 source: imgSrc ? imgSrc : "images/placeholder.svg"
                 smooth: true
+                asynchronous: true
                 anchors.fill: parent
             }
 
