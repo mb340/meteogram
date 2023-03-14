@@ -149,7 +149,7 @@ Item {
 
         if (hasLoadingError(key)) {
             var t = getErrorRetryTime(key)
-            print("getNextReloadTime: has loading error. Reload at " + (new Date(t)).toString())
+            dbgprint("getNextReloadTime: has loading error. Reload at " + (new Date(t)).toString())
             return t
         }
 
