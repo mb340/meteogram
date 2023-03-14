@@ -200,10 +200,6 @@ Item {
             DataLoader.dbgprint = dbgprint
             DataLoader.initialized = true
         }
-        if (!UnitUtils.initialized) {
-            UnitUtils.i18n = i18n
-            UnitUtils.initialized = true
-        }
         if (!IconTools.initialized) {
             IconTools.i18n = i18n
             IconTools.initialized = true
@@ -677,18 +673,4 @@ Item {
             dbgprint('updateViewsTimer: ' + (new Date(Date.now() + dt)))
         }
     }
-
-    function getUnitType(varName) {
-        if (unitUtils.isTemperatureVarName(varName)) {
-            return plasmoid.configuration.temperatureType
-        } else if (varName === "pressure") {
-            return plasmoid.configuration.pressureType
-        } else if (varName === "windSpeed" || varName === "windGust") {
-            return plasmoid.configuration.windSpeedType
-        } else if (varName === "precipitationAmount") {
-            return plasmoid.configuration.precipitationType
-        }
-        return undefined
-    }
-
 }
