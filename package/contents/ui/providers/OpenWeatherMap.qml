@@ -18,7 +18,6 @@ import QtQuick 2.2
 import QtQuick.XmlListModel 2.0
 import "../../code/model-utils.js" as ModelUtils
 import "../../code/data-loader.js" as DataLoader
-import "../../code/unit-utils.js" as UnitUtils
 
 Item {
     id: owm
@@ -255,7 +254,7 @@ Item {
 
     function parseDate(dateString) {
         let d = new Date(dateString + '.000Z')
-        return UnitUtils.convertDate(d, timezoneType, tzOffset)
+        return timeUtils.convertDate(d, timezoneType, tzOffset)
     }
 
     onXmlModelCurrentStatusChanged: {
@@ -353,7 +352,7 @@ Item {
 
         dbgprint('updating today models')
 
-        var now = UnitUtils.dateNow(timezoneType, tzOffset)
+        var now = timeUtils.dateNow(timezoneType, tzOffset)
 
         // set current models
         var foundNow = false
@@ -395,8 +394,8 @@ Item {
 
     /* Update next days model with more granular data from hourly data */
     function fixupNextDaysModel() {
-        var dateNow = UnitUtils.dateNow(timezoneType, tzOffset)
-        var intervalStart = UnitUtils.floorDate(dateNow)
+        var dateNow = timeUtils.dateNow(timezoneType, tzOffset)
+        var intervalStart = timeUtils.floorDate(dateNow)
 
         var prevHour = -1;
         var nearestHour = [NaN, NaN, NaN, NaN]
@@ -566,8 +565,8 @@ Item {
         meteogramModel.beginList()
 
         var hourCount = 0
-        var dateNow = UnitUtils.dateNow(timezoneType, tzOffset)
-        var intervalStart = UnitUtils.floorDate(dateNow)
+        var dateNow = timeUtils.dateNow(timezoneType, tzOffset)
+        var intervalStart = timeUtils.floorDate(dateNow)
 
         for (var i = 0; i < xmlModelHourByHour.count && hourCount < main.maxMeteogramHours; i++) {
             var obj = xmlModelHourByHour.get(i)
