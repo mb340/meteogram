@@ -622,7 +622,8 @@ Item {
 
         function successLongTerm(xmlString) {
             loadedData.longTerm = xmlString
-            successCallback(loadedData, cacheKey)
+            let jsonString = JSON.stringify(loadedData)
+            successCallback(jsonString, cacheKey)
         }
 
         function successHourByHour(xmlString) {
@@ -657,6 +658,7 @@ Item {
     }
 
     function setWeatherContents(cacheContent) {
+        cacheContent = JSON.parse(cacheContent)
         if (!cacheContent.longTerm || !cacheContent.hourByHour || !cacheContent.current) {
             return false
         }
