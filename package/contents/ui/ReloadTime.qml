@@ -1,5 +1,4 @@
 import QtQuick 2.0
-import "../code/data-loader.js" as DataLoader
 
 Item {
 
@@ -18,7 +17,7 @@ Item {
 
     property var abortTimers: ({})
     property var lastReloadedMsMap: ({})
-    property var expiresMsMap: {}
+    property var expiresMsMap: ({})
     property var loadingError: ({})
 
     property string nextReloadText: ''
@@ -42,22 +41,6 @@ Item {
             repeat: false
             triggeredOnStart: false
         }
-    }
-
-    function init() {
-        // fill last reloaded
-        var lastReloadedMsJson = plasmoid.configuration.lastReloadedMsJson
-        if (lastReloadedMsJson) {
-            lastReloadedMsMap = JSON.parse(lastReloadedMsJson)
-        }
-        lastReloadedMsMap = lastReloadedMsMap || {}
-        dbgprint("init: lastReloadedMsMap = " + JSON.stringify(lastReloadedMsMap))
-
-        var expiresMsJson = plasmoid.configuration.expiresMsJson
-        if (expiresMsJson) {
-            expiresMsMap = JSON.parse(expiresMsJson)
-        }
-        expiresMsMap = expiresMsMap || {}
     }
 
     function start(cacheKey) {
@@ -95,60 +78,122 @@ Item {
         }
     }
 
-    function setLastReloadedMs(key) {
-        var lastReloadedMs = new Date().getTime()
-        lastReloadedMsMap[key] = lastReloadedMs
-        var data = JSON.stringify(lastReloadedMsMap)
-        plasmoid.configuration.lastReloadedMsJson = data
+    function setLastReloadedMs(key, timestamp) {
+        if (lastReloadedMsMap[key] !== undefined) {
+            timestamp = Math.max(timestamp, lastReloadedMsMap[key])
+        }
+        lastReloadedMsMap[key] = timestamp
     }
 
     function getLastReloadedMs(key) {
-        if (!lastReloadedMsMap || !lastReloadedMsMap[key]) {
-            return undefined
-        }
-        return lastReloadedMsMap[key]
-    }
-
-    function hasLoadingError(key) {
-        return (loadingError.hasOwnProperty(key)) && (loadingError[key].hasError === true)
-    }
-
-    function setLoadingError(key, retryTimeMs) {
-        if (!hasLoadingError(key)) {
-            loadingError[key] = {
-                hasError: true,
-                time: maxTimeMs
+        if (!lastReloadedMsMap.hasOwnProperty(key)) {
+            let ts = cacheDb.readPlaceCacheTimestamp(key)
+            if (ts >= 0) {
+                lastReloadedMsMap[key] = ts
             }
         }
 
-        loadingError[key].hasError = true
-        if (retryTimeMs === undefined) {
-            loadingError[key].time = maxTimeMs
-        } else {
-            loadingError[key].time = Date.now() + retryTimeMs
+        let lastReload = lastReloadedMsMap[key]
+        let nextReload = lastReload + reloadIntervalMs
+        if (Date.now() < nextReload) {
+            // Check if someone else updated the cache more recently
+            let ts = cacheDb.readPlaceCacheTimestamp(key)
+            if (ts > lastReload) {
+                lastReloadedMsMap[key] = ts
+                lastReload = ts
+            }
         }
+
+        if (lastReload >= 0) {
+            return lastReload
+        }
+        return undefined
+    }
+
+    function setLoadingError(key, timestamp, status) {
+        if (loadingError.hasOwnProperty(key)) {
+            // Do nothing if there is a more recent error
+            if (loadingError[key].timestamp > timestamp) {
+                return
+            }
+        }
+
+        loadingError[key] = {
+            timestamp: timestamp,
+            status, status
+        }
+    }
+
+    function getLoadingError(key) {
+        if (!loadingError.hasOwnProperty(key)) {
+            let res = cacheDb.readLoadingError(key)
+            if (res !== null) {
+                loadingError[key] = {
+                    timestamp: res.timestamp,
+                    status: res.status
+                }
+            }
+        }
+
+        let res = loadingError[key]
+        let nextExpire = 0
+        if (res != null) {
+            let interval = getRetryIntervalFromStatus(res.status)
+            if (interval !== undefined) {
+                nextExpire = res.timestamp + interval
+            }
+        }
+
+        if (Date.now() > nextExpire) {
+            // Check if someone else updated the cache more recently
+            let _res = cacheDb.readLoadingError(key)
+            if (_res !== null) {
+                let interval = getRetryIntervalFromStatus(_res.status)
+                if (nextExpire < _res.timestamp + interval) {
+                    loadingError[key] = _res
+                    res = _res
+                }
+            }
+        }
+
+        return res
     }
 
     function clearLoadingError(key) {
         if (!loadingError.hasOwnProperty(key)) {
             return
         }
-        loadingError[key].hasError = false
-        loadingError[key].time = maxTimeMs
+        delete loadingError[key]
+    }
+
+    function getRetryIntervalFromStatus(status) {
+        if (status === 0) {
+            return retryTimeMs
+        } else if (status >= 100 || status < 600) {
+            return (60 * 60 * 1000)
+        }
+        return undefined
     }
 
     function getErrorRetryTime(key) {
-        if (!hasLoadingError(key)) {
-            return maxTimeMs
+        let res = getLoadingError(key)
+        if (res === undefined) {
+            return undefined
         }
-        return loadingError[key].time
+
+        let interval = getRetryIntervalFromStatus(res.status)
+        if (interval !== undefined) {
+            return res.timestamp + interval
+        }
+
+        return undefined
     }
 
     function getNextReloadTime(key) {
         var now = (new Date()).getTime()
 
-        if (hasLoadingError(key)) {
-            var t = getErrorRetryTime(key)
+        var t = getErrorRetryTime(key)
+        if (t !== undefined && t >= 0) {
             dbgprint("getNextReloadTime: has loading error. Reload at " + (new Date(t)).toString())
             return t
         }
@@ -175,15 +220,35 @@ Item {
 
     function setExpireTime(time, cacheKey) {
         expiresMsMap[cacheKey] = time
-        plasmoid.configuration.expiresMsJson = JSON.stringify(expiresMsMap)
     }
 
     function getExpireTime(cacheKey) {
-        return expiresMsMap[cacheKey]
+        if (!expiresMsMap.hasOwnProperty(cacheKey)) {
+            let ts = cacheDb.readPlaceCacheExpireTime(cacheKey)
+            if (ts >= 0) {
+                expiresMsMap[key] = ts
+            }
+        }
+
+        let expireTime = expiresMsMap[cacheKey]
+        if (Date.now() < expireTime) {
+            // Check if someone else updated the cache more recently
+            let ts = cacheDb.readPlaceCacheExpireTime(cacheKey)
+            if (ts > expireTime) {
+                expiresMsMap[key] = ts
+                expireTime = ts
+            }
+        }
+
+        if (expireTime >= 0) {
+            return expireTime
+        }
+
+        return undefined
     }
 
     function isExpired(key) {
-        var expireTime = expiresMsMap[key]
+        var expireTime = getExpireTime(key)
         if (expireTime === undefined) {
             return true
         }

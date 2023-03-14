@@ -115,6 +115,12 @@ Item {
         id: providerCache
     }
 
+    CacheDb {
+        id: cacheDb
+
+        plasmoidCacheId: main.plasmoidCacheId
+    }
+
     UnitUtils {
         id: unitUtils
     }
@@ -123,10 +129,15 @@ Item {
         id: timeUtils
     }
 
-    property var providerErrors: ({})
-
     ReloadTime {
         id: reloadTime
+    }
+
+    ReloadTimer {
+        id: reloadTimer
+
+        main: main
+        cacheDb: cacheDb
     }
 
     MetNo {
@@ -171,9 +182,9 @@ Item {
         updatingPaused = !updatingPaused
         initPausedAction()
         if (updatingPaused) {
-            reloadTime.stop()
+            reloadTimer.stop()
         } else {
-            rearmTimer(cacheKey)
+            reloadTimer.updateState(cacheKey)
         }
     }
 
@@ -182,19 +193,20 @@ Item {
         cacheId: plasmoidCacheId
     }
 
-    function saveCache() {
-        var s = JSON.stringify(providerCache.cacheMap)
-        weatherCache.writeCache(s)
-    }
-
     Connections {
         target: plasmoid
         function onExpandedChanged() {
-            rearmTimer(cacheKey)
+            if (plasmoid.expanded === true) {
+                reloadTimer.updateNextLoadText()
+                reloadTimer.updateLastLoadText()
+                reloadTimer.checkNextLoadElapsed(cacheKey)
+            }
         }
     }
 
     Component.onCompleted: {
+        print("main: onCompleted: plasmoid.id", plasmoid.id, plasmoid.parent.id)
+
         if (plasmoid.configuration.firstRun) {
             if (plasmoid.configuration.widgetFontSize === undefined) {
                 plasmoid.configuration.widgetFontSize = 32
@@ -236,11 +248,13 @@ Item {
         // init contextMenu
         initPausedAction()
 
-        // fill xml cache xml
-        var cacheContent = weatherCache.readCache()
-        providerCache.initCache(cacheContent)
-
-        reloadTime.init()
+        var db = cacheDb.open()
+        cacheDb.initialize()
+        if (db === null) {
+            print('error initializing cache database')
+        } else {
+            print('cache database initialized')
+        }
 
         initialized = true
 
@@ -291,6 +305,8 @@ Item {
                 print("Error: Invalid place index " + placeIndex)
                 return
             }
+        } else {
+            placeIndex = plasmoid.configuration.placeIndex
         }
 
         plasmoid.configuration.placeIndex = placeIndex
@@ -319,74 +335,70 @@ Item {
         if (!ok) {
             reloadData()
         }
-
-        rearmTimer(cacheKey)
     }
 
-    function clearLoadingXhrs() {
+    function clearLoadingXhrs(abort) {
         if (loadingXhrs) {
-            loadingXhrs.forEach(function (xhr) {
-                xhr.abort()
-            })
+            if (abort === true) {
+                loadingXhrs.forEach(function (xhr) {
+                    xhr.abort()
+                })
+            }
             loadingXhrs = []
         }
     }
 
     function reloadDataSuccessCallback(contentToCache, cacheKey) {
-        dbgprint("Data Loaded From Internet successfully.")
-        reloadTime.stopAbortTimer(cacheKey)
+        print("Data Loaded From Internet successfully.")
 
-        providerCache.setContent(cacheKey, contentToCache)
-        providerCache.printKeys()
-
-        saveCache()
-        reloadTime.setLastReloadedMs(cacheKey)
-
+        var expireTime = -1
         if (loadingXhrs.length > 0) {
             var xhr = loadingXhrs[0]
             var expires = xhr.getResponseHeader("expires");
             if (expires) {
-                reloadTime.setExpireTime(Date.parse(expires), cacheKey)
+                expireTime = Date.parse(expires)
             }
         }
 
+        var ts = new Date().getTime()
+        cacheDb.writePlaceCache(cacheKey, contentToCache, ts, expireTime)
+        cacheDb.clearLoadingError(cacheKey)
+
         clearLoadingXhrs()
-        providerErrors[cacheKey] = null
+
+        cacheDb.releaseUpdateSemaphore(cacheKey)
+        loadingData = false
 
         if (main.cacheKey === cacheKey) {
             loadFromCache()
-            rearmTimer(cacheKey)
+        } else {
+            reloadTimer.resetState(cacheKey)
         }
-
-        loadingData = false
     }
 
     function reloadDataFailureCallback(cacheKey) {
         print("Failed to load data. cacheKey = " + cacheKey)
-        reloadTime.stop()
-        reloadTime.stopAbortTimer(cacheKey)
+
         var noConnection = false
+        var errorXhr = null
         loadingXhrs.forEach(function (xhr) {
             noConnection |= (xhr.status === 0)
             if (noConnection) {
-                providerErrors[cacheKey] = "No connection"
+                errorXhr = !errorXhr ? xhr : errorXhr
             } else if (xhr.status !== 200) {
-                providerErrors[cacheKey] = xhr.status
+                errorXhr = !errorXhr ? xhr : errorXhr
             }
         })
-        clearLoadingXhrs()
+        clearLoadingXhrs(true)
 
-        if (noConnection) {
-            reloadTime.setLoadingError(cacheKey, reloadTime.retryTimeMs)
-        } else {
-            reloadTime.setLoadingError(cacheKey)
-        }
+        var ts = Date.now()
+        cacheDb.writeLoadingError(cacheKey, ts, errorXhr.status)
 
-        if (main.cacheKey === cacheKey) {
-            rearmTimer(cacheKey)
-        }
 
+        cacheDb.releaseUpdateSemaphore(cacheKey)
         loadingData = false
+
+        reloadTimer.resetState(cacheKey)
     }
 
     function reloadData() {
@@ -397,9 +409,14 @@ Item {
             return false
         }
 
+        let sem = cacheDb.obtainUpdateSemaphore(cacheKey)
+        if (sem === false) {
+            print("reloadData: Couldn't obtain update semaphore")
+            reloadTimer.updateState(cacheKey)
+            return false
+        }
+
         loadingData = true
-        reloadTime.stopAbortTimer(cacheKey)
-        reloadTime.clearLoadingError(cacheKey)
 
         var args = {
             placeIdentifier: placeIdentifier,
@@ -409,19 +426,12 @@ Item {
         loadingXhrs = currentProvider.loadDataFromInternet(reloadDataSuccessCallback,
                                                            reloadDataFailureCallback, args)
 
-        reloadTime.startAbortTimer(cacheKey, () => reloadDataFailureCallback(cacheKey))
+        // reloadTime.startAbortTimer(cacheKey, () => reloadDataFailureCallback(cacheKey))
         return true
     }
 
     function reloadMeteogram() {
         meteogramModelChanged = !meteogramModelChanged
-    }
-
-    function rearmTimer(cacheKey) {
-
-        reloadTime.stop()
-        reloadTime.start(cacheKey)
-        updateLastReloadedText()
     }
 
     Timer {
@@ -434,7 +444,11 @@ Item {
 
             weatherAlertsModel.clear()
 
-            var content = providerCache.getContent(cacheKey)
+            var content = cacheDb.getContent(cacheKey)
+            if (content === null) {
+                return false
+            }
+
             var success = currentProvider.setWeatherContents(content)
             if (!success) {
                 print('error: setting weather contents not successful')
@@ -444,7 +458,8 @@ Item {
             creditLink = currentProvider.getCreditLink(placeIdentifier, placeAlias)
             creditLabel = currentProvider.getCreditLabel(placeIdentifier)
 
-            updateLastReloadedText()
+            reloadTimer.resetState(cacheKey)
+
             refreshTooltipSubText()
 
             if (currentProvider.providerId !== "owm") {
@@ -454,8 +469,9 @@ Item {
     }
 
     function loadFromCache() {
-        if (!providerCache.hasKey(cacheKey)) {
+        if (!cacheDb.hasKey(cacheKey)) {
             print('error: cache not available')
+            reloadData()
             return false
         }
 
@@ -465,10 +481,6 @@ Item {
         return true
     }
 
-    onInTrayActiveTimeoutSecChanged: {
-        updateLastReloadedText()
-    }
-
     function getPlasmoidStatus(lastReloaded, inTrayActiveTimeoutSec) {
         var reloadedAgoMs = DataLoader.getReloadedAgoMs(lastReloaded)
         if (reloadedAgoMs < inTrayActiveTimeoutSec * 1000) {
@@ -476,24 +488,6 @@ Item {
         } else {
             return PlasmaCore.Types.PassiveStatus
         }
-    }
-
-    function updateLastReloadedText() {
-        var providerError = providerErrors[cacheKey]
-        if (providerError) {
-            lastReloadedText = i18n("Error") + ": " + providerError
-            return
-        }
-
-        var timestamp = reloadTime.getLastReloadedMs(cacheKey)
-        var lastReloadedMs = 0
-        if (timestamp !== undefined) {
-            lastReloadedMs = (new Date()).getTime() - timestamp
-            lastReloadedText = '⬇ ' + i18n("%1 ago", timeUtils.formatTimeIntervalString(lastReloadedMs))
-        } else {
-            lastReloadedText = i18n("Never")
-        }
-        plasmoid.status = getPlasmoidStatus(lastReloadedMs, inTrayActiveTimeoutSec)
     }
 
     function refreshTooltipSubText() {
@@ -580,10 +574,7 @@ Item {
         if (updatingPaused) {
             return
         }
-
-        if (reloadTime.isReadyToReload(cacheKey)) {
-            reloadData()
-        }
+        reloadTimer.updateState(cacheKey)
     }
 
     onPlacesChanged: {

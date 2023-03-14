@@ -457,7 +457,7 @@ Item {
             anchors.bottom: parent.bottom
             verticalAlignment: Text.AlignBottom
 
-            text: lastReloadedText
+            text: reloadTimer.lastLoadText
 
             Connections {
                 target: plasmoid
@@ -474,13 +474,14 @@ Item {
             anchors.bottom: parent.bottom
             verticalAlignment: Text.AlignBottom
 
-            text: !pressAndHoldTimer.running ? reloadTime.nextReloadText :
+            text: !pressAndHoldTimer.running ? reloadTimer.nextLoadText :
                         '\u21bb '+ i18n("Reloading in ") + pressCountdownTimer.reloadTimerTs
             visible: false
         }
 
         onEntered: {
-            reloadTime.updateNextReloadText(cacheKey)
+            // reloadTime.updateNextReloadText(cacheKey)
+            reloadTimer.updateNextLoadText(cacheKey)
             lastReloadedTextComponent.visible = false
             reloadTextComponent.visible = true
         }
@@ -496,12 +497,12 @@ Item {
 
         onPressed: {
             // Disallow force reloading before API expire time
-            if (!reloadTime.isExpired(cacheKey)) {
-                let ts = reloadTime.getExpireTime(cacheKey)
-                let date = new Date(ts)
-                print("Can't force reload until ", date)
-                return
-            }
+            // if (!reloadTime.isExpired(cacheKey)) {
+            //     let ts = reloadTime.getExpireTime(cacheKey)
+            //     let date = new Date(ts)
+            //     print("Can't force reload until ", date)
+            //     return
+            // }
 
             pressCountdownTimer.reloadTimerStartTs = Date.now() + (pressAndHoldTimer.interval)
             pressAndHoldTimer.restart()
@@ -513,9 +514,6 @@ Item {
             pressAndHoldTimer.stop()
             lastReloadedTextComponent.visible = true
             reloadTextComponent.visible = false
-            if (!pressAndHoldTimer.running) {
-                main.tryReload()
-            }
         }
 
         Timer {
@@ -525,7 +523,7 @@ Item {
             running: false
             triggeredOnStart: false
             onTriggered: {
-                main.reloadData()
+                reloadTimer.forceLoad()
             }
         }
 
