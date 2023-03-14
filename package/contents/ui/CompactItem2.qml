@@ -18,7 +18,7 @@ import QtGraphicalEffects 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import "../code/icons.js" as IconTools
-import "../code/unit-utils.js" as UnitUtils
+import "utils"
 
 Grid {
     id: compactItem
@@ -38,9 +38,9 @@ Grid {
                                                           currentProvider, getPartOfDayIndex())
 
     property double temperature: !currentWeatherModel.valid ? NaN : currentWeatherModel.temperature
-    property int nDigits: UnitUtils.convertTemperature(temperature, temperatureType) >= 200 ? 0 : 1
+    property int nDigits: unitUtils.convertTemperature(temperature, temperatureType) >= 200 ? 0 : 1
     property string temperatureStr: isNaN(temperature) ? "--" :
-                                    UnitUtils.getTemperatureText(temperature, temperatureType,
+                                    unitUtils.getTemperatureText(temperature, temperatureType,
                                                                  nDigits)
 
     property bool isPanelVertical: plasmoid.formFactor === PlasmaCore.Types.Vertical
@@ -102,8 +102,8 @@ Grid {
         parentHeight: compactItem.parentHeight
 
         sizerText: isHorizontalState ?
-            UnitUtils.getTemperatureText(-0.8, UnitUtils.TemperatureType.CELSIUS, 1) :
-            UnitUtils.getTemperatureText(-100.8, UnitUtils.TemperatureType.CELSIUS, 1)
+            unitUtils.getTemperatureText(-0.8, UnitUtils.TemperatureType.CELSIUS, 1) :
+            unitUtils.getTemperatureText(-100.8, UnitUtils.TemperatureType.CELSIUS, 1)
         actualText: temperatureStr
 
         sizerWidth: compactItem.sizerWidth
@@ -360,7 +360,7 @@ Grid {
                 columns: 1
 
                 temperatureStr: isNaN(temperature) ? "--" :
-                                    UnitUtils.getTemperatureText(temperature, temperatureType, 0)
+                                    unitUtils.getTemperatureText(temperature, temperatureType, 0)
             }
             ParentChange {
                 target: placeAliasContainer

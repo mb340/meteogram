@@ -20,7 +20,6 @@ import QtGraphicalEffects 1.0
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
 import "../code/icons.js" as IconTools
-import "../code/unit-utils.js" as UnitUtils
 
 RowLayout {
     id: root
@@ -57,7 +56,7 @@ RowLayout {
         Layout.alignment: Qt.AlignRight
         Layout.fillWidth: false
 
-        text: hidden ? '' : UnitUtils.getTemperatureText(temperature, temperatureType, 0)
+        text: hidden ? '' : unitUtils.getTemperatureText(temperature, temperatureType, 0)
     }
 
     Item {

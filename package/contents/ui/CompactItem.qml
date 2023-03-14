@@ -19,7 +19,6 @@ import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import "../code/icons.js" as IconTools
-import "../code/unit-utils.js" as UnitUtils
 
 Item {
     id: compactItem
@@ -87,7 +86,7 @@ Item {
     property double fontPixelSize: boxHeight * (layoutType === 2 ? 0.7 : 0.7)
 
     property string iconNameStr:    currentWeatherModel.valid ? IconTools.getIconCode(currentWeatherModel.iconName, currentProvider, getPartOfDayIndex()) : '\uf07b'
-    property string temperatureStr: currentWeatherModel.valid ? UnitUtils.getTemperatureText(currentWeatherModel.temperature, temperatureType, 0) : '--'
+    property string temperatureStr: currentWeatherModel.valid ? unitUtils.getTemperatureText(currentWeatherModel.temperature, temperatureType, 0) : '--'
     Item {
         id: innerWindow
         anchors.fill: parent

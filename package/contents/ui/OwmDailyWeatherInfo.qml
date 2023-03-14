@@ -19,7 +19,6 @@ import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 // import org.kde.plasma.components 2.0 as PlasmaComponents
-import "../code/unit-utils.js" as UnitUtils
 import "../code/icons.js" as IconTools
 
 ColumnLayout {
@@ -188,7 +187,7 @@ ColumnLayout {
 
                 Label {
                     text: !root.model ? "" :
-                            UnitUtils.getTemperatureText(
+                            unitUtils.getTemperatureText(
                                 root.model[modelData.varName],
                                 temperatureType, 2)
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -230,9 +229,9 @@ ColumnLayout {
                 property string tileSymbol: !root.model ? "" : formatSymbol(root.model[modelData.varName], modelData.varName)
                 property string tileTitle: modelData.tileTitle
                 property string tileValue: !root.model || !modelData.varName || modelData.varNames ? "" :
-                                                UnitUtils.formatValue(root.model[modelData.varName],
+                                                unitUtils.formatValue(root.model[modelData.varName],
                                                                       modelData.varName,
-                                                                      main.getUnitType(modelData.varName))
+                                                                      unitUtils.getUnitType(modelData.varName))
                 property var tileValuesArr: !root.model || !modelData.varNames ? null :
                                                 formatValues(root.model, modelData.varNames, modelData.varTitles)
 
@@ -247,9 +246,9 @@ ColumnLayout {
                     let valueStrings = []
                     for (var i = 0; i < varNames.length; i++) {
                         let varName = varNames[i]
-                        let unitType = main.getUnitType(varName)
+                        let unitType = unitUtils.getUnitType(varName)
                         let varTitle = varTitles && varTitles[varName] ? varTitles[varName] : null
-                        let text = UnitUtils.formatValue(model[varName], varName, unitType)
+                        let text = unitUtils.formatValue(model[varName], varName, unitType)
                         valueStrings.push({ valueStr: text, titleStr: varTitle })
                     }
                     return valueStrings

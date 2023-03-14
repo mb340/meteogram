@@ -21,7 +21,6 @@ import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import QtQuick.Controls 2.5
-import "../code/unit-utils.js" as UnitUtils
 import "../code/icons.js" as IconTools
 
 Item {
@@ -178,7 +177,7 @@ Item {
         }
     }
     PlasmaComponents.Label {
-        text: UnitUtils.formatUnits(y2VarName, main.getUnitType(y2VarName))
+        text: unitUtils.formatUnits(y2VarName, unitUtils.getUnitType(y2VarName))
         height: labelHeight
         width: labelWidth
         horizontalAlignment: (text.length > 4) ? Text.AlignRight : Text.AlignLeft
@@ -192,7 +191,7 @@ Item {
         visible: y2AxisVisble
     }
     PlasmaComponents.Label {
-        text: UnitUtils.getTemperatureEnding(temperatureType)
+        text: unitUtils.getTemperatureEnding(temperatureType)
         height: labelHeight
         width: labelWidth
         horizontalAlignment: Text.AlignHCenter
@@ -235,8 +234,8 @@ Item {
             property var date: new Date(Number(hourGrid.startTime) + (model.index * onHourMs))
 
             property int hourFrom: date.getHours()
-            property string hourFromStr: UnitUtils.getHourText(hourFrom, twelveHourClockEnabled)
-            property string hourFromEnding: twelveHourClockEnabled ? UnitUtils.getAmOrPm(hourFrom) : '00'
+            property string hourFromStr: timeUtils.getHourText(hourFrom, twelveHourClockEnabled)
+            property string hourFromEnding: twelveHourClockEnabled ? timeUtils.getAmOrPm(hourFrom) : '00'
             property bool dayBegins: hourFrom === 0
             property bool hourVisible: (hourFrom + 0) % meteogramCanvas.hourStep === 0
             property bool textVisible: hourVisible && model.index < root.nHours - 1
@@ -360,7 +359,7 @@ Item {
 
                     ToolTip{
                         id: windspeedhover
-                        text: UnitUtils.getWindSpeedText(windSpeed, windSpeedType)
+                        text: unitUtils.getWindSpeedText(windSpeed, windSpeedType)
                         padding: 4
                         x: windspeedAnchor.width + 6
                         y: (windspeedAnchor.height / 2)

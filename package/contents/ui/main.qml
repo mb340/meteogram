@@ -22,7 +22,6 @@ import QtQuick.Controls 2.15
 import "../code/data-loader.js" as DataLoader
 import "../code/config-utils.js" as ConfigUtils
 import "../code/icons.js" as IconTools
-import "../code/unit-utils.js" as UnitUtils
 import "../code/chart-utils.js" as ChartUtils
 import "providers"
 import "utils"
@@ -325,7 +324,7 @@ Item {
           placeObject.timezoneID = -1
         }
         timezoneID = parseInt(placeObject.timezoneID)
-        timezoneOffset = UnitUtils.getTimeZoneOffset(timezoneID)
+        timezoneOffset = timeUtils.getTimeZoneOffset(timezoneID)
 
         dbgprint('next placeIdentifier is: ' + placeIdentifier)
         cacheKey = DataLoader.generateCacheKey(placeIdentifier)
@@ -518,19 +517,19 @@ Item {
             return
         }
 
-        var temperature = UnitUtils.formatValue(currentWeatherModel.temperature, "temperature",
+        var temperature = unitUtils.formatValue(currentWeatherModel.temperature, "temperature",
                                                 temperatureType)
         var windDir = Math.round(currentWeatherModel.windDirection)
         var windDirectionIcon = IconTools.getWindDirectionIconCode(windDir)
-        var windSpeed = UnitUtils.getWindSpeedText(currentWeatherModel.windSpeedMps, windSpeedType)
-        var pressure = UnitUtils.getPressureText(currentWeatherModel.pressureHpa, pressureType)
+        var windSpeed = unitUtils.getWindSpeedText(currentWeatherModel.windSpeedMps, windSpeedType)
+        var pressure = unitUtils.getPressureText(currentWeatherModel.pressureHpa, pressureType)
         var iconDesc = currentProvider.getIconDescription(currentWeatherModel.iconName)
         var dateStr = currentWeatherModel.date.toLocaleDateString(Qt.locale(), 'dddd, dd MMMM')
         var timeStr = currentWeatherModel.date.toLocaleTimeString(Qt.locale(), Locale.ShortFormat)
 
         var sunRiseTime = ""
         var sunSetTime = ""
-        if (UnitUtils.hasSunriseSunsetData(currentWeatherModel)) {
+        if (timeUtils.hasSunriseSunsetData(currentWeatherModel)) {
             let sunRise = currentWeatherModel.sunRise
             let sunSet = currentWeatherModel.sunSet
             sunRiseTime = Qt.formatTime(sunRise, Qt.locale().timeFormat(Locale.ShortFormat))
@@ -555,18 +554,18 @@ Item {
         subText += '<br />'
         
         if (currentWeatherModel.humidity !== undefined) {
-            let humidity = UnitUtils.formatValue(currentWeatherModel.humidity, "humidity")
+            let humidity = unitUtils.formatValue(currentWeatherModel.humidity, "humidity")
             subText += '<font size="4" style="font-family: weathericons;">\uf07a </font>'
             subText += '<font size="4">' + humidity + '</font>'
             subText += '<br />'
         }
         if (currentWeatherModel.cloudArea !== undefined) {
-            let cloudArea = UnitUtils.formatValue(currentWeatherModel.cloudArea, "cloudArea")
+            let cloudArea = unitUtils.formatValue(currentWeatherModel.cloudArea, "cloudArea")
             subText += '<font size="4" style="font-family: weathericons;">\uf041 </font>'
             subText += '<font size="4">' + cloudArea + '</font>'
             subText += '<br />'
         }
-        if (UnitUtils.hasSunriseSunsetData(currentWeatherModel)) {
+        if (timeUtils.hasSunriseSunsetData(currentWeatherModel)) {
             subText += '<table>'
             subText += '<tr>'
             subText += '<td><font size="4">'
@@ -583,7 +582,7 @@ Item {
     }
 
     function getPartOfDayIndex() {
-        if (!UnitUtils.hasSunriseSunsetData(currentWeatherModel)) {
+        if (!timeUtils.hasSunriseSunsetData(currentWeatherModel)) {
             return 0
         }
         var now = new Date()
@@ -680,7 +679,7 @@ Item {
     }
 
     function getUnitType(varName) {
-        if (UnitUtils.isTemperatureVarName(varName)) {
+        if (unitUtils.isTemperatureVarName(varName)) {
             return plasmoid.configuration.temperatureType
         } else if (varName === "pressure") {
             return plasmoid.configuration.pressureType

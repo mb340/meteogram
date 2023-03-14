@@ -19,7 +19,6 @@ import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 // import org.kde.plasma.components 2.0 as PlasmaComponents
-import "../code/unit-utils.js" as UnitUtils
 import "../code/icons.js" as IconTools
 
 Item {
@@ -201,8 +200,8 @@ Item {
                     property var iconDesc: (value && varName !== "iconName") ? null :
                                                 currentProvider ? currentProvider.getIconDescription(value) : ""
                     property string valueStr: isNaN(value) || value === null ? "-" :
-                                                UnitUtils.formatValue(value, varName,
-                                                                      main.getUnitType(varName),
+                                                unitUtils.formatValue(value, varName,
+                                                                      unitUtils.getUnitType(varName),
                                                                       dayPart)
 
                     text: varName === "iconName" ? (iconDesc ? iconDesc : "-") : valueStr

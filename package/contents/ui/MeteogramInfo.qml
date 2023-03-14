@@ -17,7 +17,6 @@ import QtQuick 2.5
 import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
-import "../code/unit-utils.js" as UnitUtils
 import "../code/icons.js" as IconTools
 
 
@@ -191,15 +190,15 @@ Item {
         var hourFrom = dateFrom.getHours()
         var dateStr = dateFrom.toLocaleDateString(Qt.locale(), 'ddd d MMM') +
                             " " + i18n("at") + " " +
-                            UnitUtils.getHourText(hourFrom, twelveHourClockEnabled) + " " +
-                            (twelveHourClockEnabled ? UnitUtils.getAmOrPm(hourFrom) : '00')
+                            timeUtils.getHourText(hourFrom, twelveHourClockEnabled) + " " +
+                            (twelveHourClockEnabled ? timeUtils.getAmOrPm(hourFrom) : '00')
         dateLabel.text = dateStr
 
         var iconNameStr = ""
         if (hourModel.iconName) {
             var sunRise = main.currentWeatherModel.sunRise
             var sunSet = main.currentWeatherModel.sunSet
-            var timePeriod = UnitUtils.isSunRisen(dateFrom, sunRise, sunSet) ? 0 : 1
+            var timePeriod = timeUtils.isSunRisen(dateFrom, sunRise, sunSet) ? 0 : 1
             var iconNameStr = currentProvider.getIconDescription(hourModel.iconName)
             model.addItem({
                 nameStr: i18n("Conditions") + ":",
@@ -210,7 +209,7 @@ Item {
 
         model.addItem({
             nameStr: i18n("Temperature") + ":",
-            valueStr: UnitUtils.getTemperatureText(hourModel.temperature, temperatureType, 2),
+            valueStr: unitUtils.getTemperatureText(hourModel.temperature, temperatureType, 2),
             valueColor: (hourModel.temperature >= 0 ? palette.temperatureWarmColor() :
                                                      palette.temperatureColdColor()).toString()
         })
@@ -218,7 +217,7 @@ Item {
         if (isFinite(hourModel.feelsLike)) {
             model.addItem({
                 nameStr: i18n("Feels Like") + ":",
-                valueStr: UnitUtils.getTemperatureText(hourModel.feelsLike, temperatureType, 2),
+                valueStr: unitUtils.getTemperatureText(hourModel.feelsLike, temperatureType, 2),
                 valueColor: (hourModel.feelsLike >= 0 ? palette.temperatureWarmColor() :
                                                          palette.temperatureColdColor()).toString()
             })
@@ -227,7 +226,7 @@ Item {
         if (isFinite(hourModel.dewPoint)) {
             model.addItem({
                 nameStr: i18n("Dew Point") + ":",
-                valueStr: UnitUtils.getTemperatureText(hourModel.dewPoint, temperatureType, 2),
+                valueStr: unitUtils.getTemperatureText(hourModel.dewPoint, temperatureType, 2),
                 valueColor: (hourModel.dewPoint >= 0 ? palette.temperatureWarmColor() :
                                                          palette.temperatureColdColor()).toString()
             })
@@ -235,11 +234,11 @@ Item {
 
         model.addItem({
             nameStr: i18n("Pressure") + ":",
-            valueStr: UnitUtils.getPressureText(hourModel.pressure, pressureType),
+            valueStr: unitUtils.getPressureText(hourModel.pressure, pressureType),
             valueColor: palette.pressureColor().toString()
         })
 
-        var windStr = UnitUtils.getWindSpeedText(hourModel.windSpeed, windSpeedType)
+        var windStr = unitUtils.getWindSpeedText(hourModel.windSpeed, windSpeedType)
         model.addItem({
             nameStr: i18n("Wind Speed") + ":",
             valueStr: windStr,
@@ -247,7 +246,7 @@ Item {
         })
 
         if (isFinite(hourModel.windGust)) {
-            var gustStr = UnitUtils.getWindSpeedText(hourModel.windGust, windSpeedType)
+            var gustStr = unitUtils.getWindSpeedText(hourModel.windGust, windSpeedType)
             model.addItem({
                 nameStr: i18n("Wind Gust") + ":",
                 valueStr: gustStr,
@@ -277,7 +276,7 @@ Item {
 
         var precipitationStr = ""
         if (isFinite(hourModel.precipitationAmount) && hourModel.precipitationAmount > 0) {
-            precipitationStr = UnitUtils.getPrecipitationText(hourModel.precipitationAmount,
+            precipitationStr = unitUtils.getPrecipitationText(hourModel.precipitationAmount,
                                                               precipitationType)
             model.addItem({
                 nameStr: i18n("Precipitation") + ":",
@@ -289,7 +288,7 @@ Item {
         if (isFinite(hourModel.precipitationProb) && hourModel.precipitationProb > 0) {
             model.addItem({
                 nameStr: i18n("PoP") + ":",
-                valueStr: UnitUtils.getPopText(hourModel.precipitationProb),
+                valueStr: unitUtils.getPopText(hourModel.precipitationProb),
                 valueColor: palette.rainColor().toString()
             })
         }

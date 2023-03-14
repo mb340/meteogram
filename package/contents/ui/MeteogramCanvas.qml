@@ -13,7 +13,6 @@
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
 import QtQuick 2.0
-import "../code/unit-utils.js" as UnitUtils
 import "../code/icons.js" as IconTools
 import "../code/chart-utils.js" as ChartUtils
 
@@ -138,7 +137,7 @@ Canvas {
         PathLine {
             x: !xData || i < 0 || i >= xData.length ? NaN : xData[i]
             y: !scale || !model || !varName || varName === "" ? NaN :
-                    scale.translate(UnitUtils.convertValue(model[varName], varName, unitType))
+                    scale.translate(unitUtils.convertValue(model[varName], varName, unitType))
 
             property int i
             property var xData
@@ -155,7 +154,7 @@ Canvas {
         PathCurve {
             x: !xData || i < 0 || i >= xData.length ? 0 : xData[i]
             y: !scale || !model || !varName || varName === "" ? 0 :
-                    scale.translate(UnitUtils.convertValue(model[varName], varName, unitType))
+                    scale.translate(unitUtils.convertValue(model[varName], varName, unitType))
 
             property int i
             property var xData
@@ -312,7 +311,7 @@ Canvas {
 
         var prevPrecStr = undefined
 
-        let pType = UnitUtils.getSmallestPrecipitationType(precipitationType)
+        let pType = unitUtils.getSmallestPrecipitationType(precipitationType)
 
 
         for (var i = 0; i < meteogramModel.count; i++) {
@@ -331,7 +330,7 @@ Canvas {
 
             var x = timeScale.translate(item.from)
             var y = precipitationScale.translate(Math.min(precipitationMaxGraphY, prec))
-            var precStr = UnitUtils.formatPrecipitationStr(prec, pType)
+            var precStr = unitUtils.formatPrecipitationStr(prec, pType)
             const textPad = 2
             var y0 = y - textPad
 
@@ -342,7 +341,7 @@ Canvas {
             prevPrecStr = precStr
 
             if (showPrecUnit) {
-                precStr = precStr + " " + UnitUtils.getPrecipitationUnit(pType)
+                precStr = precStr + " " + unitUtils.getPrecipitationUnit(pType)
             }
 
             // Show arrow to indicate truncation at max value
@@ -379,7 +378,7 @@ Canvas {
     }
 
     function drawWarmTemp(context, path, color, lineWidth) {
-        var freezing_temp = UnitUtils.convertTemperature(0, temperatureType)
+        var freezing_temp = unitUtils.convertTemperature(0, temperatureType)
         var h = temperatureScale.translate(freezing_temp);
         if (h <= 0.0) {
             return;
@@ -397,7 +396,7 @@ Canvas {
     }
 
     function drawColdTemp(context, path, color, lineWidth) {
-        var freezing_temp = UnitUtils.convertTemperature(0, temperatureType)
+        var freezing_temp = unitUtils.convertTemperature(0, temperatureType)
         var y0 = temperatureScale.translate(freezing_temp);
         var h = height - y0;
         if (h <= 0.0) {
@@ -456,9 +455,9 @@ Canvas {
             var t = item.from
             t.setMinutes(0, 0, 0)
             var x = timeScale.translate(t)
-            var y = temperatureScale.translate(UnitUtils.convertTemperature(
+            var y = temperatureScale.translate(unitUtils.convertTemperature(
                                                item.temperature, temperatureType))
-            var timePeriod = UnitUtils.isSunRisen(item.from, sunRise, sunSet) ? 0 : 1
+            var timePeriod = timeUtils.isSunRisen(item.from, sunRise, sunSet) ? 0 : 1
             var str = IconTools.getIconResource(iconName, currentProvider, iconSetType,
                                                 timePeriod)
 
@@ -776,13 +775,13 @@ Canvas {
             maxY2 = Math.max(maxY2, obj[y2VarName])
         }
 
-        minValue = UnitUtils.convertTemperature(minValue, temperatureType)
-        maxValue = UnitUtils.convertTemperature(maxValue, temperatureType)
+        minValue = unitUtils.convertTemperature(minValue, temperatureType)
+        maxValue = unitUtils.convertTemperature(maxValue, temperatureType)
         var [minT, maxT] = computeTemperatureAxisRange(minValue, maxValue)
 
         if (isFinite(minY1) && isFinite(maxY1)) {
-            minY1 = UnitUtils.convertValue(minY1, y1VarName, getUnitType(y1VarName))
-            maxY1 = UnitUtils.convertValue(maxY1, y1VarName, getUnitType(y1VarName))
+            minY1 = unitUtils.convertValue(minY1, y1VarName, unitUtils.getUnitType(y1VarName))
+            maxY1 = unitUtils.convertValue(maxY1, y1VarName, unitUtils.getUnitType(y1VarName))
 
             if (minY1 < minT || maxY1 > maxT) {
                 minValue = Math.min(minValue, minY1)
@@ -795,10 +794,10 @@ Canvas {
         temperatureAxisScale.setDomain(minT, maxT)
         temperatureAxisScale.setRange(temperatureYGridCount, 0)
 
-        minY2 = UnitUtils.convertValue(minY2, y2VarName, getUnitType(y2VarName))
-        maxY2 = UnitUtils.convertValue(maxY2, y2VarName, getUnitType(y2VarName))
+        minY2 = unitUtils.convertValue(minY2, y2VarName, unitUtils.getUnitType(y2VarName))
+        maxY2 = unitUtils.convertValue(maxY2, y2VarName, unitUtils.getUnitType(y2VarName))
 
-        var minGridRange = ChartUtils.getMinGridRange(y2VarName, getUnitType(y2VarName))
+        var minGridRange = ChartUtils.getMinGridRange(y2VarName, unitUtils.getUnitType(y2VarName))
         // var [minP, maxP, decimalPlaces] = ChartUtils.computeRightAxisRange(minY2, maxY2,
         //                                                                    minGridRange,
         //                                                                    false, false,
