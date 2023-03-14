@@ -1,8 +1,5 @@
 .pragma library
 
-var initialized = false
-var i18n = null
-
 function getWindDirectionIconCode(angle) {
     const iconCodes = ['\uf060', '\uf05e', '\uf061', '\uf05b', '\uf05c', '\uf05a', '\uf059', '\uf05d']
     let n = Math.round((angle + 22.5) / 45) - 1

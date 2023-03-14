@@ -1,9 +1,13 @@
 .pragma library
 
-var initialized = false
-var i18n = null
-var dbgprint = null
+var debugLogging = false
 
+function dbgprint(msg) {
+    if (!debugLogging) {
+        return
+    }
+    print('[weatherWidget] ' + msg)
+}
 
 function scheduleDataReload() {
     var now = new Date().getTime()
