@@ -1,7 +1,5 @@
 .pragma library
 
-var initialized = false
-var main = null
 
 
 function getValueRange(varName) {
@@ -17,14 +15,14 @@ function getValueRange(varName) {
     return [-Infinity, Infinity]
 }
 
-function getMinGridRange(varName) {
+function getMinGridRange(varName, unitType) {
     if (varName === "pressure") {
         const minPressureYGridCount = {
             0: 30,
             1: 0.5,
             2: 20,
         }
-        return minPressureYGridCount[main.pressureType]
+        return minPressureYGridCount[unitType]
     }
     return 0.0
 }

@@ -138,7 +138,7 @@ Canvas {
         PathLine {
             x: !xData || i < 0 || i >= xData.length ? NaN : xData[i]
             y: !scale || !model || !varName || varName === "" ? NaN :
-                    scale.translate(UnitUtils.convertValue(model[varName], varName))
+                    scale.translate(UnitUtils.convertValue(model[varName], varName, unitType))
 
             property int i
             property var xData
@@ -146,6 +146,7 @@ Canvas {
             property var model
             property var scale
             property string varName
+            property int unitType
         }
     }
 
@@ -154,7 +155,7 @@ Canvas {
         PathCurve {
             x: !xData || i < 0 || i >= xData.length ? 0 : xData[i]
             y: !scale || !model || !varName || varName === "" ? 0 :
-                    scale.translate(UnitUtils.convertValue(model[varName], varName))
+                    scale.translate(UnitUtils.convertValue(model[varName], varName, unitType))
 
             property int i
             property var xData
@@ -162,6 +163,7 @@ Canvas {
             property var model
             property var scale
             property string varName
+            property int unitType
         }
     }
 
@@ -439,6 +441,9 @@ Canvas {
 
         iconOverlay.beginList()
 
+        var sunRise = main.currentWeatherModel.sunRise
+        var sunSet = main.currentWeatherModel.sunSet
+
         for (var i = 0; i < meteogramModel.count; i++) {
             var item = meteogramModel.get(i)
             var iconName = item.iconName
@@ -453,7 +458,7 @@ Canvas {
             var x = timeScale.translate(t)
             var y = temperatureScale.translate(UnitUtils.convertTemperature(
                                                item.temperature, temperatureType))
-            var timePeriod = UnitUtils.isSunRisen(item.from) ? 0 : 1
+            var timePeriod = UnitUtils.isSunRisen(item.from, sunRise, sunSet) ? 0 : 1
             var str = IconTools.getIconResource(iconName, currentProvider, iconSetType,
                                                 timePeriod)
 
@@ -607,7 +612,11 @@ Canvas {
         }
     }
 
-    function updatePathElement(index, path, pathList, xData, model, scale, varName) {
+    function updatePathElement(index, path, pathList, xData, model, scale, varName, unitType) {
+        if (unitType === undefined) {
+            unitType = -1
+        }
+
         if (index >= pathList.length) {
             let obj = pathLine.createObject(path, {
                 i: index,
@@ -615,7 +624,8 @@ Canvas {
 
                 model: model,
                 scale: scale,
-                varName: varName
+                varName: varName,
+                unitType: unitType
             })
             if (obj != null) {
                 pathList.push(obj)
@@ -629,6 +639,7 @@ Canvas {
             item.model = model
             item.scale = scale
             item.varName = varName
+            item.unitType = unitType
             if (tmp === index) {
                 item.iChanged()
             }
@@ -650,16 +661,21 @@ Canvas {
                 xArr.push(x)
             }
 
-            updatePathElement(i, temperaturePath, temperaturePathItems, xArr, dataObj, temperatureScale, "temperature")
-            updatePathElement(i, humidityPath, humidityPathItems, xArr, dataObj, humidityScale, "humidity")
+            updatePathElement(i, temperaturePath, temperaturePathItems, xArr, dataObj,
+                              temperatureScale, "temperature", main.temperatureType)
+            updatePathElement(i, humidityPath, humidityPathItems, xArr, dataObj,humidityScale,
+                              "humidity")
 
             if (hasY1Chart) {
-                updatePathElement(i, y1Path, y1PathItems, xArr, dataObj, temperatureScale, y1VarName)
+                updatePathElement(i, y1Path, y1PathItems, xArr, dataObj, temperatureScale,
+                                  y1VarName, main.temperatureType)
                 y1Count++
             }
 
             if (hasY2Chart) {
-                updatePathElement(i, y2Path, y2PathItems, xArr, dataObj, rightAxisScale, y2VarName)
+
+                updatePathElement(i, y2Path, y2PathItems, xArr, dataObj, rightAxisScale, y2VarName,
+                                  y2VarName === "pressure" ? main.pressureType : -1)
                 y2Count++
             }
         }
@@ -765,8 +781,8 @@ Canvas {
         var [minT, maxT] = computeTemperatureAxisRange(minValue, maxValue)
 
         if (isFinite(minY1) && isFinite(maxY1)) {
-            minY1 = UnitUtils.convertValue(minY1, y1VarName)
-            maxY1 = UnitUtils.convertValue(maxY1, y1VarName)
+            minY1 = UnitUtils.convertValue(minY1, y1VarName, getUnitType(y1VarName))
+            maxY1 = UnitUtils.convertValue(maxY1, y1VarName, getUnitType(y1VarName))
 
             if (minY1 < minT || maxY1 > maxT) {
                 minValue = Math.min(minValue, minY1)
@@ -779,10 +795,10 @@ Canvas {
         temperatureAxisScale.setDomain(minT, maxT)
         temperatureAxisScale.setRange(temperatureYGridCount, 0)
 
-        minY2 = UnitUtils.convertValue(minY2, y2VarName)
-        maxY2 = UnitUtils.convertValue(maxY2, y2VarName)
+        minY2 = UnitUtils.convertValue(minY2, y2VarName, getUnitType(y2VarName))
+        maxY2 = UnitUtils.convertValue(maxY2, y2VarName, getUnitType(y2VarName))
 
-        var minGridRange = ChartUtils.getMinGridRange(y2VarName)
+        var minGridRange = ChartUtils.getMinGridRange(y2VarName, getUnitType(y2VarName))
         // var [minP, maxP, decimalPlaces] = ChartUtils.computeRightAxisRange(minY2, maxY2,
         //                                                                    minGridRange,
         //                                                                    false, false,

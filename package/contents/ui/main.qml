@@ -194,17 +194,12 @@ Item {
             DataLoader.initialized = true
         }
         if (!UnitUtils.initialized) {
-            UnitUtils.main = main
             UnitUtils.i18n = i18n
             UnitUtils.initialized = true
         }
         if (!IconTools.initialized) {
             IconTools.i18n = i18n
             IconTools.initialized = true
-        }
-        if (!ChartUtils.initialized) {
-            ChartUtils.initialized = true
-            ChartUtils.main = main
         }
     }
 
@@ -515,7 +510,8 @@ Item {
             return
         }
 
-        var temperature = UnitUtils.formatValue(currentWeatherModel.temperature, "temperature")
+        var temperature = UnitUtils.formatValue(currentWeatherModel.temperature, "temperature",
+                                                temperatureType)
         var windDir = Math.round(currentWeatherModel.windDirection)
         var windDirectionIcon = IconTools.getWindDirectionIconCode(windDir)
         var windSpeed = UnitUtils.getWindSpeedText(currentWeatherModel.windSpeedMps, windSpeedType)
@@ -526,7 +522,7 @@ Item {
 
         var sunRiseTime = ""
         var sunSetTime = ""
-        if (UnitUtils.hasSunriseSunsetData()) {
+        if (UnitUtils.hasSunriseSunsetData(currentWeatherModel)) {
             let sunRise = currentWeatherModel.sunRise
             let sunSet = currentWeatherModel.sunSet
             sunRiseTime = Qt.formatTime(sunRise, Qt.locale().timeFormat(Locale.ShortFormat))
@@ -562,7 +558,7 @@ Item {
             subText += '<font size="4">' + cloudArea + '</font>'
             subText += '<br />'
         }
-        if (UnitUtils.hasSunriseSunsetData()) {
+        if (UnitUtils.hasSunriseSunsetData(currentWeatherModel)) {
             subText += '<table>'
             subText += '<tr>'
             subText += '<td><font size="4">'
@@ -579,7 +575,7 @@ Item {
     }
 
     function getPartOfDayIndex() {
-        if (!UnitUtils.hasSunriseSunsetData()) {
+        if (!UnitUtils.hasSunriseSunsetData(currentWeatherModel)) {
             return 0
         }
         var now = new Date()
@@ -674,4 +670,18 @@ Item {
             dbgprint('updateViewsTimer: ' + (new Date(Date.now() + dt)))
         }
     }
+
+    function getUnitType(varName) {
+        if (UnitUtils.isTemperatureVarName(varName)) {
+            return plasmoid.configuration.temperatureType
+        } else if (varName === "pressure") {
+            return plasmoid.configuration.pressureType
+        } else if (varName === "windSpeed" || varName === "windGust") {
+            return plasmoid.configuration.windSpeedType
+        } else if (varName === "precipitationAmount") {
+            return plasmoid.configuration.precipitationType
+        }
+        return undefined
+    }
+
 }

@@ -230,7 +230,9 @@ ColumnLayout {
                 property string tileSymbol: !root.model ? "" : formatSymbol(root.model[modelData.varName], modelData.varName)
                 property string tileTitle: modelData.tileTitle
                 property string tileValue: !root.model || !modelData.varName || modelData.varNames ? "" :
-                                                UnitUtils.formatValue(root.model[modelData.varName], modelData.varName)
+                                                UnitUtils.formatValue(root.model[modelData.varName],
+                                                                      modelData.varName,
+                                                                      main.getUnitType(modelData.varName))
                 property var tileValuesArr: !root.model || !modelData.varNames ? null :
                                                 formatValues(root.model, modelData.varNames, modelData.varTitles)
 
@@ -245,8 +247,9 @@ ColumnLayout {
                     let valueStrings = []
                     for (var i = 0; i < varNames.length; i++) {
                         let varName = varNames[i]
+                        let unitType = main.getUnitType(varName)
                         let varTitle = varTitles && varTitles[varName] ? varTitles[varName] : null
-                        let text = UnitUtils.formatValue(model[varName], varName)
+                        let text = UnitUtils.formatValue(model[varName], varName, unitType)
                         valueStrings.push({ valueStr: text, titleStr: varTitle })
                     }
                     return valueStrings

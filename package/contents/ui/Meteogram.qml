@@ -69,7 +69,6 @@ Item {
     property alias nHours: meteogramCanvas.nHours
 
     Component.onCompleted: {
-        UnitUtils.precipitationMinVisible = precipitationMinVisible
         meteogramCanvas.fullRedraw()
     }
 
@@ -179,7 +178,7 @@ Item {
         }
     }
     PlasmaComponents.Label {
-        text: UnitUtils.formatUnits(y2VarName)
+        text: UnitUtils.formatUnits(y2VarName, main.getUnitType(y2VarName))
         height: labelHeight
         width: labelWidth
         horizontalAlignment: (text.length > 4) ? Text.AlignRight : Text.AlignLeft

@@ -201,7 +201,9 @@ Item {
                     property var iconDesc: (value && varName !== "iconName") ? null :
                                                 currentProvider ? currentProvider.getIconDescription(value) : ""
                     property string valueStr: isNaN(value) || value === null ? "-" :
-                                                UnitUtils.formatValue(value, varName, dayPart)
+                                                UnitUtils.formatValue(value, varName,
+                                                                      main.getUnitType(varName),
+                                                                      dayPart)
 
                     text: varName === "iconName" ? (iconDesc ? iconDesc : "-") : valueStr
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter

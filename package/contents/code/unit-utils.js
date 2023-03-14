@@ -2,9 +2,7 @@
 .import "./db/timezoneData.js" as TZ
 
 var initialized = false
-var main = null
 var i18n = null
-var precipitationMinVisible = null
 
 /*
  * TEMPERATURE
@@ -13,6 +11,13 @@ var TemperatureType = {
     CELSIUS: 0,
     FAHRENHEIT: 1,
     KELVIN: 2
+}
+
+function isTemperatureVarName(varName) {
+    return typeof(varName) === 'string' &&
+            (varName.startsWith("temperature") ||
+             varName.startsWith("feelsLike") ||
+             varName === "dewPoint")
 }
 
 function toFahrenheit(celsia) {
@@ -29,7 +34,8 @@ function kelvinToCelsia(kelvin) {
 
 function convertTemperature(celsia, temperatureType) {
     if (temperatureType === undefined) {
-        temperatureType = main.temperatureType
+        print("error: temperatureType not defined")
+        console.trace()
     }
     if (temperatureType === TemperatureType.FAHRENHEIT) {
         return toFahrenheit(celsia)
@@ -48,7 +54,8 @@ function formatTemperatureStr(temperature, temperatureType, digits = undefined) 
 
 function getTemperatureUnit(temperatureType) {
     if (temperatureType === undefined) {
-        temperatureType = main.temperatureType
+        print("error: temperatureType not defined")
+        console.trace()
     }
     if (temperatureType === TemperatureType.CELSIUS ||
         temperatureType === TemperatureType.FAHRENHEIT)
@@ -95,7 +102,8 @@ function convertPressure(hpa, pressureType) {
 
 function formatPressureStr(val, pressureType, digits = undefined) {
     if (pressureType === undefined) {
-        pressureType = main.pressureType
+        print("error: pressureType not defined")
+        console.trace()
     }
     if (digits === undefined) {
         if (pressureType === PressureType.INHG) {
@@ -118,7 +126,8 @@ function getPressureText(hpa, pressureType, digits = undefined) {
 
 function getPressureUnit(pressureType) {
     if (pressureType === undefined) {
-        pressureType = main.pressureType
+        print("error: pressureType not defined")
+        console.trace()
     }
     if (pressureType === PressureType.INHG) {
         return i18n("inHg")
@@ -160,7 +169,8 @@ function getWindSpeedText(mps, windSpeedType, digits = undefined) {
 
 function getWindSpeedUnit(windSpeedType) {
     if (windSpeedType === undefined) {
-        windSpeedType = main.windSpeedType
+        print("error: windSpeedType not defined")
+        console.trace()
     }
     if (windSpeedType === WindSpeedType.MPH) {
         return i18n("mph")
@@ -218,14 +228,10 @@ function convertDateToUTC(date) {
     return date.setTime(date.getTime() + (date.getTimezoneOffset() * 60 * 1000))
 }
 
-function dateNow(timezoneType, offset = undefined) {
-    if (timezoneType === undefined) {
-        timezoneType = main.timezoneType
-    }
+function dateNow(timezoneType, offset) {
     var now = convertDate(new Date(), timezoneType, offset)
     return now
 }
-
 
 function isDST(DSTPeriods) {
     if(DSTPeriods === undefined) {
@@ -242,10 +248,11 @@ function isDST(DSTPeriods) {
 
 function getTimeZoneOffset(timezoneId) {
     if (timezoneId === undefined) {
-        timezoneId = main.timezoneID
+        print("error: timezoneId undefined")
+        console.trace()
     }
     if (timezoneId < 0 || timezoneId >= TZ.TZData.length) {
-        return NaN
+        return 0
     }
     let tz = TZ.TZData[timezoneId]
     let offset = isDST(tz.DSTData, timezoneId) ? tz.DSTOffset : tz.Offset
@@ -255,7 +262,7 @@ function getTimeZoneOffset(timezoneId) {
 /*
  * Convert from system time to UTC or location-local time.
  */
-function convertDate(date, timezoneType, offset = undefined) {
+function convertDate(date, timezoneType, timezoneOffset) {
     if (typeof(date) === "string") {
         date = new Date(Date.parse(date))
     } else if (typeof(date) === "number") {
@@ -265,17 +272,19 @@ function convertDate(date, timezoneType, offset = undefined) {
         date = new Date(date)
     }
     if (timezoneType === undefined) {
-        timezoneType = main.timezoneType
+        print("error: timezoneType undefined")
+        console.trace()
     }
-    if (offset === undefined) {
-        offset = main.timezoneOffset
+    if (timezoneOffset === undefined) {
+        print("error: timezoneOffset undefined")
+        console.trace()
     }
 
     if (timezoneType === TimezoneType.UTC) {
         convertDateToUTC(date)
     } else if (timezoneType === TimezoneType.LOCATION_LOCAL_TIME) {
         convertDateToUTC(date)
-        date.setTime(date.getTime() + offset)
+        date.setTime(date.getTime() + timezoneOffset)
     }
     return date
 }
@@ -288,19 +297,16 @@ function floorDate(date) {
     return date
 }
 
-function hasSunriseSunsetData() {
-    return Number(main.currentWeatherModel.sunRise) !== 0 &&
-            Number(main.currentWeatherModel.sunSet) !== 0
+function hasSunriseSunsetData(currentWeatherModel) {
+    return currentWeatherModel && Number(currentWeatherModel.sunRise) !== 0 &&
+            Number(currentWeatherModel.sunSet) !== 0
 }
 
-function isSunRisen(t) {
+function isSunRisen(t, sunRise, sunSet) {
     var hourFrom = t.getHours()
     if (!hasSunriseSunsetData()) {
         return 6 <= hourFrom && hourFrom <= 18
     }
-
-    var sunRise = main.currentWeatherModel.sunRise
-    var sunSet = main.currentWeatherModel.sunSet
 
     var res = undefined
     // print('isSunRisen: sunRise = ' + sunRise)
@@ -426,19 +432,17 @@ function getPercentageUnit() {
     return i18n("%")
 }
 
-function convertValue(value, varName) {
-    let temperatureType = main.temperatureType
-    let pressureType = main.pressureType
-    let windSpeedType = main.windSpeedType
+function convertValue(value, varName, unitType) {
+    unitType = unitType > -1 ? unitType : -1
 
-    if (varName === "temperature" || varName === "feelsLike" || varName === "dewPoint") {
-        return convertTemperature(value, temperatureType)
+    if (isTemperatureVarName(varName)) {
+        return convertTemperature(value, unitType)
     } else if (varName === "precipitationProb") {
         return convertPop(value)
     } else if (varName === "windSpeed" || varName === "windGust") {
-        return convertWindspeed(value, windSpeedType)
+        return convertWindspeed(value, unitType)
     } else if (varName === "pressure") {
-        return convertPressure(value, pressureType)
+        return convertPressure(value, unitType)
     } else if (varName === "humidity") {
         return convertPercentage(value)
     } else if (varName === "cloudArea") {
@@ -447,21 +451,19 @@ function convertValue(value, varName) {
     return value
 }
 
-function formatUnits(varName) {
-    if (varName === "temperature" || varName === "feelsLike"  || varName === "dewPoint" ||
-        varName === "temperatureHigh" || varName === "temperatureLow")
-    {
-        return getTemperatureUnit(main.temperatureType)
+function formatUnits(varName, unitType) {
+    if (isTemperatureVarName(varName)) {
+        return getTemperatureUnit(unitType)
     } else if (varName === "precipitationProb") {
         return getPercentageUnit()
     } else if (varName === "precipitationAmount") {
         return getPrecipitationUnit("mm")
     } else if (varName === "windSpeed" || varName === "windGust") {
-        return getWindSpeedUnit()
+        return getWindSpeedUnit(unitType)
     } else if (varName === "windDirection") {
         return getWindDirectionUnit()
     } else if (varName === "pressure") {
-        return getPressureUnit()
+        return getPressureUnit(unitType)
     } else if (varName === "humidity") {
         return getPercentageUnit()
     } else if (varName === "cloudArea") {
@@ -470,27 +472,22 @@ function formatUnits(varName) {
     return ""
 }
 
-function formatValue(value, varName, partOfDay, digits = undefined) {
+function formatValue(value, varName, unitType, partOfDay, digits = undefined) {
+    unitType = unitType > -1 ? unitType : -1
     partOfDay = (partOfDay !== undefined) ? partOfDay : 0
-    let temperatureType = main.temperatureType
-    let pressureType = main.pressureType
-    let windSpeedType = main.windSpeedType
-    let precipitationType = main.precipitationType
 
-    if (varName === "temperature" || varName === "feelsLike"  || varName === "dewPoint" ||
-        varName === "temperatureHigh" || varName === "temperatureLow")
-    {
-        return getTemperatureText(value, temperatureType, digits)
+    if (isTemperatureVarName(varName)) {
+        return getTemperatureText(value, unitType, digits)
     } else if (varName === "precipitationProb") {
         return getPopText(value, digits)
     } else if (varName === "precipitationAmount") {
-        return getPrecipitationText(value, precipitationType, digits)
+        return getPrecipitationText(value, unitType, digits)
     } else if (varName === "windSpeed" || varName === "windGust") {
-        return getWindSpeedText(value, windSpeedType, digits)
+        return getWindSpeedText(value, unitType, digits)
     } else if (varName === "windDirection") {
         return getWindDirectionText(value, digits)
     } else if (varName === "pressure") {
-        return getPressureText(value, pressureType, digits)
+        return getPressureText(value, unitType, digits)
     } else if (varName === "humidity") {
         return getPercentageText(value, digits)
     } else if (varName === "cloudArea") {
