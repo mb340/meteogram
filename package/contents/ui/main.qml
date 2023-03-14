@@ -485,8 +485,14 @@ Item {
             return
         }
 
-        var lastReloadedMs = (new Date()).getTime() - reloadTime.getLastReloadedMs(cacheKey)
-        lastReloadedText = '⬇ ' + i18n("%1 ago", timeUtils.formatTimeIntervalString(lastReloadedMs))
+        var timestamp = reloadTime.getLastReloadedMs(cacheKey)
+        var lastReloadedMs = 0
+        if (timestamp !== undefined) {
+            lastReloadedMs = (new Date()).getTime() - timestamp
+            lastReloadedText = '⬇ ' + i18n("%1 ago", timeUtils.formatTimeIntervalString(lastReloadedMs))
+        } else {
+            lastReloadedText = i18n("Never")
+        }
         plasmoid.status = getPlasmoidStatus(lastReloadedMs, inTrayActiveTimeoutSec)
     }
 
