@@ -25,17 +25,6 @@
         <entry name="debugLogging" type="Bool">
             <default>false</default>
         </entry>
-
-        <entry name="xmlCacheJson" type="String">
-            <default></default>
-        </entry>
-
-        <entry name="lastReloadedMsJson" type="String">
-            <default></default>
-        </entry>
-        <entry name="expiresMsJson" type="String">
-            <default></default>
-        </entry>
     </group>
 
     <group name="Appearance">

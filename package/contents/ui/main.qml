@@ -111,10 +111,6 @@ Item {
         source: '../fonts/weathericons-regular-webfont-2.0.10.ttf'
     }
 
-    ProviderCache {
-        id: providerCache
-    }
-
     CacheDb {
         id: cacheDb
 
@@ -186,11 +182,6 @@ Item {
         } else {
             reloadTimer.updateState(cacheKey)
         }
-    }
-
-    WeatherCache {
-        id: weatherCache
-        cacheId: plasmoidCacheId
     }
 
     Connections {
