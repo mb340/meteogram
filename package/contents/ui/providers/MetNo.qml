@@ -2,7 +2,6 @@ import QtQuick 2.2
 import "../../code/model-utils.js" as ModelUtils
 import "../../code/data-loader.js" as DataLoader
 import "../../code/icons.js" as IconTools
-import "../../code/unit-utils.js" as UnitUtils
 import "../../code/db/timezoneData.js" as TZ
 
 
@@ -37,12 +36,12 @@ Item {
     function getIndexOfCurrentHour(weatherData) {
         let i = 0
         let timeseries = weatherData.properties.timeseries
-        var dateNow = UnitUtils.dateNow(timezoneType, main.timezoneOffset)
+        var dateNow = timeUtils.dateNow(timezoneType, main.timezoneOffset)
         var hour = dateNow.getHours()
 
         while (i < timeseries.length) {
             let weather = timeseries[i]
-            var date = UnitUtils.convertDate(weather.time, timezoneType, main.timezoneOffset)
+            var date = timeUtils.convertDate(weather.time, timezoneType, main.timezoneOffset)
             if (Math.abs(dateNow - date) < 60 * 60 * 1000) {
                 return i
             }
@@ -78,8 +77,8 @@ Item {
         }
 
         if (sunRise && sunSet) {
-            currentWeatherModel.sunRise = UnitUtils.convertDate(sunRise, timezoneType, main.timezoneOffset)
-            currentWeatherModel.sunSet = UnitUtils.convertDate(sunSet, timezoneType, main.timezoneOffset)
+            currentWeatherModel.sunRise = timeUtils.convertDate(sunRise, timezoneType, main.timezoneOffset)
+            currentWeatherModel.sunSet = timeUtils.convertDate(sunSet, timezoneType, main.timezoneOffset)
         }
 
         return true
@@ -121,8 +120,8 @@ Item {
 
     function buildMetogramData(readingsArray) {
         meteogramModel.beginList()
-        var dateNow = UnitUtils.dateNow(timezoneType, main.timezoneOffset)
-        var intervalStart = UnitUtils.floorDate(dateNow)
+        var dateNow = timeUtils.dateNow(timezoneType, main.timezoneOffset)
+        var intervalStart = timeUtils.floorDate(dateNow)
         var precipitation_unit = readingsArray.properties.meta.units["precipitation_amount"]
         var i = 0
         let hourCount = 0
@@ -131,7 +130,7 @@ Item {
                timeseries[i].data.next_1_hours)
         {
             var obj = timeseries[i]
-            var dateFrom = UnitUtils.convertDate(obj.time, timezoneType, main.timezoneOffset)
+            var dateFrom = timeUtils.convertDate(obj.time, timezoneType, main.timezoneOffset)
             if (dateFrom < intervalStart) {
                 i++
                 continue
@@ -209,7 +208,7 @@ Item {
         for (var i = 0; i < readingsLength; i++) {
             var reading = readingsArray.properties.timeseries[i]
             var details = reading.data.instant.details
-            var date = UnitUtils.convertDate(new Date(Date.parse(reading.time)), timezoneType,
+            var date = timeUtils.convertDate(new Date(Date.parse(reading.time)), timezoneType,
                                              main.timezoneOffset)
 
             // Hour convention [0 - 23]
@@ -310,7 +309,7 @@ Item {
       if(DSTPeriods === undefined)
         return (false)
 
-      let now = UnitUtils.dateNow(timezoneType, main.timezoneOffset).getTime() / 1000
+      let now = timeUtils.dateNow(timezoneType, main.timezoneOffset).getTime() / 1000
       let isDSTflag = false
       for (let f = 0; f < DSTPeriods.length; f++) {
         if ((now >= DSTPeriods[f].DSTStart) && (now <= DSTPeriods[f].DSTEnd)) {
