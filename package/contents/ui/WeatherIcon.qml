@@ -33,7 +33,7 @@ Item {
         Item {
             x: iconModel.iconX
             y: iconModel.iconY
-            width: isFinite(iconModel.iconDim) ? adjustDim(iconModel.iconDim) : parent.width
+            width: iconModel.iconDim
             height: width
 
             // Re-usable components use the same font and size accross all instances of the
@@ -49,7 +49,17 @@ Item {
                 text: IconTools.getIconResource(iconModel.iconName, currentProvider,
                                                 iconSetType, iconModel.partOfDay)
                 font.family: 'weathericons'
-                anchors.centerIn: parent
+
+                width: parent.width
+                height: parent.height
+
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+
+                font.pointSize: -1
+                font.pixelSize: 1024
+                minimumPixelSize: 1
+                fontSizeMode: Text.Fit
             }
         }
     }
@@ -142,9 +152,6 @@ Item {
 
     // Empirically determined size adjustements
     function adjustDim(dim) {
-        if (iconSetType === 0) {
-            return dim * 0.75
-        }
         if (iconSetType === 1) {
             return dim * (1.75 / 2.0)
         }
