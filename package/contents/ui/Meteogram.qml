@@ -15,12 +15,8 @@
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
 import QtQuick 2.5
-import QtQuick.Window 2.5
-import QtQml.Models 2.5
-import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
 import QtQuick.Controls 2.5
+import org.kde.plasma.plasmoid 2.0
 import "../code/icons.js" as IconTools
 
 Item {
@@ -146,7 +142,7 @@ Item {
                 height: 1 * units.devicePixelRatio
                 color: gridColor
             }
-            PlasmaComponents.Label {
+            Label {
                 text: temperatureLabel
                 height: labelHeight
                 width: labelWidth
@@ -158,7 +154,7 @@ Item {
                 font.pixelSize: 11 * units.devicePixelRatio
                 font.pointSize: -1
             }
-            PlasmaComponents.Label {
+            Label {
                 text: rightAxisLabel
                 height: labelHeight
                 width: labelWidth
@@ -175,7 +171,7 @@ Item {
             }
         }
     }
-    PlasmaComponents.Label {
+    Label {
         text: unitUtils.formatUnits(y2VarName, unitUtils.getUnitType(y2VarName))
         height: labelHeight
         width: labelWidth
@@ -189,7 +185,7 @@ Item {
         anchors.bottomMargin: 6
         visible: y2AxisVisble
     }
-    PlasmaComponents.Label {
+    Label {
         text: unitUtils.getTemperatureEnding(temperatureType)
         height: labelHeight
         width: labelWidth
@@ -249,7 +245,7 @@ Item {
                 anchors.top: parent.top
             }
             anchors.leftMargin: labelWidth
-            PlasmaComponents.Label {
+            Label {
                 id: hourText
                 text: hourFromStr
                 verticalAlignment: Text.AlignBottom
@@ -265,7 +261,7 @@ Item {
                 font.pointSize: -1
                 visible: textVisible
             }
-            PlasmaComponents.Label {
+            Label {
                 text: hourFromEnding
                 verticalAlignment: Text.AlignTop
                 horizontalAlignment: Text.AlignLeft
@@ -275,7 +271,7 @@ Item {
                 font.pointSize: -1
                 visible: textVisible
             }
-            PlasmaComponents.Label {
+            Label {
                 id: dayTest
                 text: Qt.locale().dayName(date.getDay(), Locale.LongFormat)
                 height: labelHeight

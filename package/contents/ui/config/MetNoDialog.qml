@@ -2,7 +2,6 @@ import QtQuick 2.2
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
-import org.kde.plasma.core 2.0 as PlasmaCore
 import "../../code/placesearch-helpers.js" as Helper
 import "../../code/db/timezoneData.js" as TZData
 

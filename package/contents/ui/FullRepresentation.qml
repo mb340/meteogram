@@ -18,7 +18,6 @@ import QtQuick 2.5
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.1
 import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 Item {
@@ -51,7 +50,7 @@ Item {
     property bool hasAlerts: weatherAlertsModel.count > 0
     property bool isShowAlert: isShowAlertClicked && hasAlerts
 
-    PlasmaComponents.Label {
+    Label {
         id: currentLocationText
 
         anchors.left: parent.left
@@ -61,7 +60,7 @@ Item {
         text: main.placeAlias
     }
 
-    PlasmaComponents.Label {
+    Label {
         id: weatherAlertNotifierText
 
         anchors.left: currentLocationText.right
@@ -382,7 +381,7 @@ Item {
         property double itemHeight: (hourLegend.height - nextDayTitleMetrics.height) / 4
         property double fontPixelSize: defaultFontPixelSize * 1.25
 
-        PlasmaComponents.Label {
+        Label {
             id: hourLegendSpacer
             text: " "
             height: nextDayTitleMetrics.height
@@ -394,7 +393,7 @@ Item {
             height: 1
         }
 
-        PlasmaComponents.Label {
+        Label {
             text: "\uf0d2"  // wi-moon-alt-waxing-crescent-3
             height: parent.itemHeight
             font.family: 'weathericons'
@@ -404,7 +403,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             opacity: 0.6
         }
-        PlasmaComponents.Label {
+        Label {
             text: "\uf051"  // wi-horizon-alt
             height: parent.itemHeight
             font.family: 'weathericons'
@@ -414,7 +413,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             opacity: 0.6
         }
-        PlasmaComponents.Label {
+        Label {
             text: "\uf00d"  // wi-day-sunny
             height: parent.itemHeight
             font.family: 'weathericons'
@@ -424,7 +423,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             opacity: 0.6
         }
-        PlasmaComponents.Label {
+        Label {
             text: "\uf052"  // wi-horizon
             height: parent.itemHeight
             font.family: 'weathericons'
@@ -452,7 +451,7 @@ Item {
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
 
-        PlasmaComponents.Label {
+        Label {
             id: lastReloadedTextComponent
             anchors.left: parent.left
             anchors.bottom: parent.bottom
@@ -469,7 +468,7 @@ Item {
             }
         }
 
-        PlasmaComponents.Label {
+        Label {
             id: reloadTextComponent
             anchors.left: parent.left
             anchors.bottom: parent.bottom
@@ -548,7 +547,7 @@ Item {
     }
 
 
-    PlasmaComponents.Label {
+    Label {
         id: creditText
 
         anchors.right: parent.right

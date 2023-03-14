@@ -15,12 +15,12 @@
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
 import QtQuick 2.5
-import org.kde.plasma.plasmoid 2.0
+import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
-import QtQuick.Controls 1.0
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
+import QtQuick.Controls 1.0 as QtQuickOne
+import org.kde.plasma.plasmoid 2.0
+
 
 Item {
     id: fullRepresentation
@@ -38,7 +38,7 @@ Item {
 
     property color lineColor: theme.textColor
 
-    PlasmaComponents.Label {
+    Label {
         id: currentLocationText
 
         anchors.left: parent.left
@@ -47,7 +47,7 @@ Item {
         text: main.placeAlias
     }
 
-    PlasmaComponents.Label {
+    Label {
         id: nextLocationText
 
         anchors.right: parent.right
@@ -86,7 +86,7 @@ Item {
      * NEXT DAYS
      *
      */
-    ScrollView {
+    QtQuickOne.ScrollView {
         id: nextDays
 
         anchors.top: parent.top
@@ -154,7 +154,7 @@ Item {
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
 
-        PlasmaComponents.Label {
+        Label {
             id: lastReloadedTextComponent
             anchors.fill: parent
 
@@ -163,7 +163,7 @@ Item {
             text: lastReloadedText
         }
 
-        PlasmaComponents.Label {
+        Label {
             id: reloadTextComponent
             anchors.fill: parent
 
@@ -209,7 +209,7 @@ Item {
     }
 
 
-    PlasmaComponents.Label {
+    Label {
         id: creditText
 
         anchors.top: nextDays.bottom

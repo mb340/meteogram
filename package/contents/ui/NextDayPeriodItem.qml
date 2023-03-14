@@ -15,9 +15,9 @@
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
 import QtQuick 2.2
+import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
-import org.kde.plasma.components 2.0 as PlasmaComponents
 
 import "../code/icons.js" as IconTools
 
@@ -46,7 +46,7 @@ RowLayout {
         height: parent.height
     }
 
-    PlasmaComponents.Label {
+    Label {
         id: temperatureText
 
         font.pixelSize: pixelFontSize

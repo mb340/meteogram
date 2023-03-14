@@ -14,9 +14,8 @@
  */
 
 import QtQuick 2.5
+import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
 import "../code/icons.js" as IconTools
 
 
@@ -71,7 +70,7 @@ Item {
 
         width: dateLabel.width + textPad
 
-        PlasmaComponents.Label {
+        Label {
             id: dateLabel
             text: ""
             Layout.alignment: Qt.AlignHCenter
@@ -104,7 +103,7 @@ Item {
                 id: valueItem
                 width: hoverItem.width
 
-                PlasmaComponents.Label {
+                Label {
                     id: nameLabel
                     text: nameStr
                     font.pixelSize: 11 * units.devicePixelRatio
@@ -113,7 +112,7 @@ Item {
 
                     Layout.fillHeight: true
                 }
-                PlasmaComponents.Label {
+                Label {
                     id: valueLabel
                     text: valueStr
                     color: valueColor ? valueColor : theme.textColor

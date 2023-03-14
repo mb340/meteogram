@@ -14,7 +14,6 @@
  */
 import QtQuick 2.5
 import QtQuick.Controls 2.5
-import org.kde.plasma.components 2.0 as PlasmaComponents
 
 
 Item {

@@ -1,7 +1,7 @@
 import QtQuick 2.0
+import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
-import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 import "../code/icons.js" as IconTools
@@ -44,7 +44,7 @@ Item {
                 }
             }
 
-            PlasmaComponents.Label {
+            Label {
                 id: textItem
                 text: IconTools.getIconResource(iconModel.iconName, currentProvider,
                                                 iconSetType, iconModel.partOfDay)
