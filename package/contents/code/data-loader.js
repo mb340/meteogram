@@ -4,28 +4,6 @@ var initialized = false
 var i18n = null
 var dbgprint = null
 
-function formatTimeIntervalString(time) {
-    if (time < 60 * 1000) {
-        return i18n("%1 s", Math.round(time / 1000))
-    }
-
-    var mins = time / 60000
-    if (mins <= 180) {
-        return i18n("%1 m", Math.round(mins))
-    }
-
-    var hours = mins / 60
-    if (hours <= 48) {
-        return i18n("%1 h", Math.round(hours))
-    }
-
-    var days = hours / 24
-    if (days <= 14) {
-        return i18n("%1 d", Math.round(days))
-    }
-
-    return i18n("a long time")
-}
 
 function scheduleDataReload() {
     var now = new Date().getTime()
