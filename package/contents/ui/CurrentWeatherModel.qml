@@ -3,6 +3,8 @@ import QtQuick 2.0
 QtObject {
     property bool valid: false
 
+    property var date: null
+
     property double temperature: NaN
     property var iconName: null
     property double windDirection: NaN
@@ -21,6 +23,8 @@ QtObject {
 
     function clear() {
         valid = false
+
+        date = null
 
         temperature = NaN
         iconName = null
