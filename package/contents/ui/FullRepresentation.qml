@@ -463,7 +463,6 @@ Item {
                 target: plasmoid
                 function onExpandedChanged() {
                     isShowAlertClicked = false
-                    main.updateLastReloadedText()
                 }
             }
         }
