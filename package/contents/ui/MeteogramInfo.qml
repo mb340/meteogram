@@ -197,7 +197,6 @@ Item {
         if (hourModel.iconName) {
             var sunRise = main.currentWeatherModel.sunRise
             var sunSet = main.currentWeatherModel.sunSet
-            var timePeriod = timeUtils.isSunRisen(dateFrom, sunRise, sunSet) ? 0 : 1
             var iconNameStr = currentProvider.getIconDescription(hourModel.iconName)
             model.addItem({
                 nameStr: i18n("Conditions") + ":",
