@@ -71,7 +71,9 @@ Item {
             iconDim: Math.min(temperatureIcon.width,
                               temperatureIcon.height +
                                 (isVerticalState ? temperatureIconMetrics.descent : 0)),
-            partOfDay: 0,
+            partOfDay: timeUtils.isSunRisen(currentWeatherModel.date, currentWeatherModel.sunRise,
+                                            currentWeatherModel.sunSet) ? 0 : 1
+
         })
 
         width: temperatureIcon.width
