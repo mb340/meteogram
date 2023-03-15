@@ -71,8 +71,8 @@ Item {
         property color temperatureWarmColor: "#E20134"
         property color temperatureColdColor: "#E20134"
         property color rainColor: "#8400CD"
-        property color cloudAreaColor: defaultcolorPalette.cloudAreaColor
-        property color cloudAreaColor2: defaultcolorPalette.cloudAreaColor2
+        property color cloudAreaColor: defaultPalette.cloudAreaColor
+        property color cloudAreaColor2: defaultPalette.cloudAreaColor2
         property color humidityColor: "#008DF9"
     }
 
@@ -98,8 +98,8 @@ Item {
         property color temperatureWarmColor: "#E20134"
         property color temperatureColdColor: "#E20134"
         property color rainColor: "#00C2F9"
-        property color cloudAreaColor: defaultcolorPalette.cloudAreaColor
-        property color cloudAreaColor2: defaultcolorPalette.cloudAreaColor2
+        property color cloudAreaColor: defaultPalette.cloudAreaColor
+        property color cloudAreaColor2: defaultPalette.cloudAreaColor2
         property color humidityColor: "#008DF9"
     }
 
