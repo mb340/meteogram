@@ -162,6 +162,10 @@ Item {
         id: openMeteo
     }
 
+    PhonyProvider {
+        id: phonyProvider
+    }
+
     CurrentWeatherModel {
         id: currentWeatherModel
     }
@@ -278,6 +282,9 @@ Item {
         if (providerId === 'openMeteo') {
             currentProvider = openMeteo
         }
+        if (providerId === 'phonyprovider') {
+            currentProvider = phonyProvider
+        }
      }
 
     function updatePlaceIndex(index, count, previous) {
@@ -299,6 +306,15 @@ Item {
         meteogramModel.hourInterval = 1
 
         var places = ConfigUtils.getPlacesArray()
+        var phony = {
+            providerId: "phonyprovider",
+            placeIdentifier: "Phony Place",
+            placeAlias: "Phony Place",
+            timezoneID: 88
+        }
+        places.push(phony)
+        // places = [places[0], phony]
+
         onlyOnePlace = places.length === 1
 
         if (initialize !== true) {
