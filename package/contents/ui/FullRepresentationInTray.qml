@@ -203,7 +203,7 @@ Item {
             running: false
             triggeredOnStart: false
             onTriggered: {
-                main.reloadData()
+                main.tryReload()
             }
         }
     }
