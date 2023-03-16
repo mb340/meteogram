@@ -375,6 +375,5 @@ Dialog {
         addMetnoCityIdDialog.setTimezone(entry.timezoneID)
         newMetnoCityAlias.text = entry.placeAlias
         addMetnoCityIdDialog.providerId = entry.providerId
-        addMetnoCityIdDialog.open()
     }
 }
