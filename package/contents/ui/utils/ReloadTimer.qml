@@ -58,7 +58,7 @@ Item {
         repeat: false
         triggeredOnStart: false
         onTriggered: {
-            print("ReloadTimer: onTriggered: state", stateToString(state))
+            // print("ReloadTimer: onTriggered: state", stateToString(state))
             switch (state) {
                 case ReloadTimer.State.WAIT_SEMAPHORE:
                     main.loadFromCache()
@@ -102,7 +102,7 @@ Item {
         interval = Math.max(0, interval)
         nextLoadTime = getDateNow() + interval
 
-        print("fireTimer: nextLoadTime ", nextLoadTime, new Date(nextLoadTime))
+        // print("fireTimer: nextLoadTime ", nextLoadTime, new Date(nextLoadTime))
 
         reloadTimer.interval = interval
         reloadTimer.start()
@@ -113,14 +113,6 @@ Item {
     }
 
     function handleLoadingErrorState() {
-        if (loadingErr === null) {
-            print("oops")
-            console.trace()
-            return
-        }
-
-        // print("handleLoadingErrorState: loadingErr = ", JSON.stringify(loadingErr))
-
         let timerInterval = 0
         let interval = getRetryInterval(loadingErr.status)
         if (interval !== undefined) {
@@ -129,28 +121,23 @@ Item {
             state = ReloadTimer.State.INITIAL
         }
 
-        // print("handleLoadingErrorState: timerInterval = ", timerInterval)
         fireTimer(timerInterval)
     }
 
     function handleExpireTime() {
         let timerInterval = getTimerInterval(expireTime)
-        // print("handleExpireTime: expireTime =", expireTime, new Date(expireTime))
         fireTimer(timerInterval)
     }
 
     function handleNextReload() {
-        // print("handleNextReload: lastLoadTime:", lastLoadTime, new Date(lastLoadTime))
         let timerInterval = undefined
         if (lastLoadTime === -1) {
             timerInterval = 0
         } else {
             let nextLoadTime = lastLoadTime + (reloadInterval * msPerMin)
-            // print("handleNextReload: nextLoadTime:", nextLoadTime, new Date(nextLoadTime))
             timerInterval = getTimerInterval(nextLoadTime)
         }
 
-        // print("handleNextReload: nextLoadTime:", timerInterval)
         fireTimer(timerInterval)
     }
 
