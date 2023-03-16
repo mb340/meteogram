@@ -109,7 +109,7 @@ Item {
             interactive: false
 
             delegate: NextDayItem {
-                width: parent.width
+                width: nextDaysView.width
                 height: titleHeight + rowHeight
 
                 titleHeight: nextDayTitleMetrics.height
