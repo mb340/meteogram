@@ -26,6 +26,8 @@ Item {
 
     width: parent ? parent.width : 1
 
+    property int temperatureType: plasmoid.configuration.temperatureType
+
     property double nextDayRowFontPixelSize: 24 * units.devicePixelRatio
 
     property double defaultFontPixelSize: theme.defaultFont.pixelSize
@@ -243,6 +245,10 @@ Item {
         onExited: {
             creditText.font.underline = false
         }
+    }
+
+    onTemperatureTypeChanged: {
+        nextDaysView.model = dailyWeatherModels.model
     }
 
 }
