@@ -686,9 +686,8 @@ Canvas {
             }
 
             if (hasY2Chart) {
-
                 updatePathElement(i, y2Path, y2PathItems, xArr, dataObj, rightAxisScale, y2VarName,
-                                  y2VarName === "pressure" ? main.pressureType : -1)
+                                  unitUtils.getUnitType(y2VarName))
                 y2Count++
             }
         }
