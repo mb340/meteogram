@@ -365,8 +365,20 @@ ColumnLayout {
                     url: 'https://openweathermap.org/about-us'
                 },
                 {
+                    text: i18n("Open-Meteo weather data by Open-Meteo.com."),
+                    url: "https://open-meteo.com/"
+                },
+                {
                     text: i18n("Weather icons created by Erik Flowers."),
                     url: 'https://erikflowers.github.io/weather-icons/'
+                },
+                {
+                    text: i18n("Weather icons created by Bas Milius."),
+                    url: 'https://basmilius.github.io/weather-icons/'
+                },
+                {
+                    text: i18n("Weather icons created by Norwegian National Broadcasting."),
+                    url: 'https://nrkno.github.io/yr-weather-symbols/'
                 }
             ]
             delegate: Label {
