@@ -208,29 +208,26 @@ Item {
     Component.onCompleted: {
         print("main: onCompleted: plasmoid.id", plasmoid.id, plasmoid.parent.id)
 
-        if (plasmoid.configuration.firstRun) {
-            if (plasmoid.configuration.widgetFontSize === undefined) {
-                plasmoid.configuration.widgetFontSize = 32
-                widgetFontSize = 32
-            }
+        if (plasmoid.configuration.firstRun === true) {
+            plasmoid.configuration.widgetFontSize = theme.defaultFont.pixelSize
             switch (Qt.locale().measurementSystem) {
                 case (Locale.MetricSystem):
-                    temperatureType = UnitUtils.TemperatureType.CELSIUS
-                    pressureType = UnitUtils.PressureType.HPA
-                    windSpeedType = UnitUtils.WindSpeedType.KMH
-                    precipitationType = UnitUtils.PrecipitationType.CM
+                    plasmoid.configuration.temperatureType = UnitUtils.TemperatureType.CELSIUS
+                    plasmoid.configuration.pressureType = UnitUtils.PressureType.HPA
+                    plasmoid.configuration.windSpeedType = UnitUtils.WindSpeedType.KMH
+                    plasmoid.configuration.precipitationType = UnitUtils.PrecipitationType.CM
                     break;
                 case (Locale.ImperialUSSystem):
-                    temperatureType = UnitUtils.TemperatureType.FAHRENHEIT
-                    pressureType = UnitUtils.PressureType.INHG
-                    windSpeedType = UnitUtils.WindSpeedType.MPH
-                    precipitationType = UnitUtils.PrecipitationType.INCH
+                    plasmoid.configuration.temperatureType = UnitUtils.TemperatureType.FAHRENHEIT
+                    plasmoid.configuration.pressureType = UnitUtils.PressureType.INHG
+                    plasmoid.configuration.windSpeedType = UnitUtils.WindSpeedType.MPH
+                    plasmoid.configuration.precipitationType = UnitUtils.PrecipitationType.INCH
                     break;
                 case (Locale.ImperialUKSystem):
-                    temperatureType = UnitUtils.TemperatureType.CELSIUS
-                    pressureType = UnitUtils.PressureType.HPA
-                    windSpeedType = UnitUtils.WindSpeedType.MPH
-                    precipitationType = UnitUtils.PrecipitationType.CM
+                    plasmoid.configuration.temperatureType = UnitUtils.TemperatureType.CELSIUS
+                    plasmoid.configuration.pressureType = UnitUtils.PressureType.HPA
+                    plasmoid.configuration.windSpeedType = UnitUtils.WindSpeedType.MPH
+                    plasmoid.configuration.precipitationType = UnitUtils.PrecipitationType.CM
                     break;
                 default:
             }
