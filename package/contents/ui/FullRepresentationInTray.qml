@@ -15,10 +15,9 @@
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
 import QtQuick 2.5
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.9
 import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
-import QtQuick.Controls 1.0 as QtQuickOne
 import org.kde.plasma.plasmoid 2.0
 
 
@@ -86,7 +85,7 @@ Item {
      * NEXT DAYS
      *
      */
-    QtQuickOne.ScrollView {
+    ScrollView {
         id: nextDays
 
         anchors.top: parent.top
@@ -100,6 +99,7 @@ Item {
             id: nextDaysView
 
             anchors.fill: parent
+            anchors.rightMargin: nextDays.ScrollBar.vertical.width
             width: parent.width
             height: parent.height
 
