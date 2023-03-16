@@ -132,6 +132,20 @@ Item {
         cacheDb: cacheDb
     }
 
+    DataDownloader {
+        id: dataDownloader
+
+        cacheDb: cacheDb
+        reloadTimer: reloadTimer
+
+        currentCacheKey: main.cacheKey
+        currentProvider: main.currentProvider
+
+        Component.onCompleted: {
+            dataDownloader.loadFromCache.connect(main.loadFromCache)
+        }
+    }
+
     MetNo {
         id: metnoProvider
     }
@@ -324,96 +338,8 @@ Item {
         }
     }
 
-    function clearLoadingXhrs(abort) {
-        if (loadingXhrs) {
-            if (abort === true) {
-                loadingXhrs.forEach(function (xhr) {
-                    xhr.abort()
-                })
-            }
-            loadingXhrs = []
-        }
-    }
-
-    function reloadDataSuccessCallback(contentToCache, cacheKey) {
-        print("Data Loaded From Internet successfully.")
-
-        var expireTime = -1
-        if (loadingXhrs.length > 0) {
-            var xhr = loadingXhrs[0]
-            var expires = xhr.getResponseHeader("expires");
-            if (expires) {
-                expireTime = Date.parse(expires)
-            }
-        }
-
-        var ts = new Date().getTime()
-        cacheDb.writePlaceCache(cacheKey, contentToCache, ts, expireTime)
-        cacheDb.clearLoadingError(cacheKey)
-
-        clearLoadingXhrs()
-
-        cacheDb.releaseUpdateSemaphore(cacheKey)
-        loadingData = false
-
-        if (main.cacheKey === cacheKey) {
-            loadFromCache()
-        } else {
-            reloadTimer.resetState(cacheKey)
-        }
-    }
-
-    function reloadDataFailureCallback(cacheKey) {
-        print("Failed to load data. cacheKey = " + cacheKey)
-
-        var noConnection = false
-        var errorXhr = null
-        loadingXhrs.forEach(function (xhr) {
-            noConnection |= (xhr.status === 0)
-            if (noConnection) {
-                errorXhr = !errorXhr ? xhr : errorXhr
-            } else if (xhr.status !== 200) {
-                errorXhr = !errorXhr ? xhr : errorXhr
-            }
-        })
-        clearLoadingXhrs(true)
-
-        var ts = Date.now()
-        cacheDb.writeLoadingError(cacheKey, ts, errorXhr.status)
-
-
-        cacheDb.releaseUpdateSemaphore(cacheKey)
-        loadingData = false
-
-        reloadTimer.resetState(cacheKey)
-    }
-
     function reloadData() {
-        dbgprint("reloadData")
-
-        if (loadingData) {
-            dbgprint('still loading')
-            return false
-        }
-
-        let sem = cacheDb.obtainUpdateSemaphore(cacheKey)
-        if (sem === false) {
-            print("reloadData: Couldn't obtain update semaphore")
-            reloadTimer.updateState(cacheKey)
-            return false
-        }
-
-        loadingData = true
-
-        var args = {
-            placeIdentifier: placeIdentifier,
-            timezoneID: timezoneID,
-            cacheKey, cacheKey
-        }
-        loadingXhrs = currentProvider.loadDataFromInternet(reloadDataSuccessCallback,
-                                                           reloadDataFailureCallback, args)
-
-        return true
+        dataDownloader.reloadData(cacheKey)
     }
 
     function reloadMeteogram() {
