@@ -346,108 +346,43 @@ ColumnLayout {
         Layout.fillHeight: true
     }
 
-    Item {
+    Column {
         Layout.fillWidth: true
         Layout.minimumHeight: childrenRect.height
 
-        Label {
-            id: attribution1
-            anchors.bottom: attribution2.top
-            anchors.bottomMargin: 2
-            font.pointSize: 8
-            text: i18n("Met.no weather forecast data provided by The Norwegian Meteorological Institute.")
-        }
-        Label {
-            id: attribution2
-            anchors.bottom: attribution3.top
-            anchors.bottomMargin: 2
-            font.pointSize: 8
-            text: i18n("Sunrise/sunset data provided by Sunrise - Sunset.")
-        }
-        Label {
-            id: attribution3
-            anchors.bottom: attribution4.top
-            anchors.bottomMargin: 2
-            font.pointSize: 8
-            text: i18n("OWM weather forecast data provided by OpenWeather.")
-        }
-        Label {
-            id: attribution4
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 2
-            font.pointSize: 8
-            text: i18n("Weather icons created by Erik Flowers.")
-        }
-        MouseArea {
-            cursorShape: Qt.PointingHandCursor
-            anchors.fill: attribution1
+        Repeater {
+            model: [
+                {
+                    text: i18n("Met.no weather forecast data provided by The Norwegian Meteorological Institute."),
+                    url: 'https://www.met.no/en/About-us'
+                },
+                {
+                    text: i18n("Sunrise/sunset data provided by Sunrise - Sunset."),
+                    url: 'https://sunrise-sunset.org/about'
+                },
+                {
+                    text: i18n("OWM weather forecast data provided by OpenWeather."),
+                    url: 'https://openweathermap.org/about-us'
+                },
+                {
+                    text: i18n("Weather icons created by Erik Flowers."),
+                    url: 'https://erikflowers.github.io/weather-icons/'
+                }
+            ]
+            delegate: Label {
+                id: attribution
+                anchors.bottomMargin: 2
+                font.pointSize: 8
+                text: modelData.text
 
-            hoverEnabled: true
-
-            onClicked: {
-                Qt.openUrlExternally('https://www.met.no/en/About-us')
-            }
-
-            onEntered: {
-                attribution1.font.underline = true
-            }
-
-            onExited: {
-                attribution1.font.underline = false
-            }
-        }
-        MouseArea {
-            cursorShape: Qt.PointingHandCursor
-            anchors.fill: attribution2
-
-            hoverEnabled: true
-
-            onClicked: {
-                Qt.openUrlExternally('https://sunrise-sunset.org/about')
-            }
-
-            onEntered: {
-                attribution2.font.underline = true
-            }
-
-            onExited: {
-                attribution2.font.underline = false
-            }
-        }
-        MouseArea {
-            cursorShape: Qt.PointingHandCursor
-            anchors.fill: attribution3
-
-            hoverEnabled: true
-
-            onClicked: {
-                Qt.openUrlExternally('https://openweathermap.org/about-us')
-            }
-
-            onEntered: {
-                attribution3.font.underline = true
-            }
-
-            onExited: {
-                attribution3.font.underline = false
-            }
-        }
-        MouseArea {
-            cursorShape: Qt.PointingHandCursor
-            anchors.fill: attribution4
-
-            hoverEnabled: true
-
-            onClicked: {
-                Qt.openUrlExternally('https://erikflowers.github.io/weather-icons/')
-            }
-
-            onEntered: {
-                attribution4.font.underline = true
-            }
-
-            onExited: {
-                attribution4.font.underline = false
+                MouseArea {
+                    cursorShape: Qt.PointingHandCursor
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onClicked: Qt.openUrlExternally(modelData.url)
+                    onEntered: parent.font.underline = true
+                    onExited: parent.font.underline = false
+                }
             }
         }
     }
