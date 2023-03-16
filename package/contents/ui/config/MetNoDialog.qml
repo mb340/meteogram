@@ -28,11 +28,13 @@ Dialog {
         id: timezoneDataModel
     }
 
-    Component.onCompleted: {
-        let timezoneArray = TZData.TZData.sort(dynamicSort("displayName"))
-        timezoneArray.forEach(function (tz) {
-            timezoneDataModel.append({displayName: tz.displayName.replace(/_/gi, " "), id: tz.id});
-        })
+    onVisibleChanged: {
+        if (visible === true && timezoneDataModel.count === 0) {
+            let timezoneArray = TZData.TZData.sort(dynamicSort("displayName"))
+            timezoneArray.forEach(function (tz) {
+                timezoneDataModel.append({displayName: tz.displayName.replace(/_/gi, " "), id: tz.id});
+            })
+        }
     }
 
     onActionChosen: {
