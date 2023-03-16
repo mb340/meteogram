@@ -384,7 +384,7 @@ ColumnLayout {
             delegate: Label {
                 id: attribution
                 anchors.bottomMargin: 2
-                font.pointSize: 8
+                font.pointSize: units.iconSizes.tiny
                 text: modelData.text
 
                 MouseArea {
