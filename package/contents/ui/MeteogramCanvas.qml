@@ -433,6 +433,19 @@ Canvas {
     }
 
     function drawWeatherIcons(context, rectWidth) {
+
+        // Avoid icons overlapping with precipitation labels.
+        // Estimate the typical height of a precipitation label
+        var labelHeight = 0.
+        if (plasmoid.configuration.renderPrecipitationLabels) {
+            let pType = unitUtils.getSmallestPrecipitationType(precipitationType)
+            var precStr = unitUtils.getPrecipitationText(0.1, pType, 1)
+            context.font = (fontSize * 0.75) + 'px "' + theme.defaultFont.family + '"'
+            var metrics = context.measureText(precStr)
+            labelHeight = metrics.width
+        }
+
+
         context.font =  (fontSize + 1) + 'px "%1"'.arg(weatherIconFont.name)
 
         var bgColor = colorPalette.backgroundColor()
@@ -471,16 +484,17 @@ Canvas {
             var labelPosY1 = precLabelPositions[i]
             var newY0 = y0
             var newY1 = y0
+
             if (labelPosY0 - (2 * rectWidth) <= y0 && y0 <= labelPosY0 + (2 * rectWidth)) {
-                newY0 = Math.min(y0, labelPosY0 - (1.0 * rectWidth))
+                newY0 = Math.min(y0, labelPosY0 - (labelHeight))
                 if (labelPosY1 - (2 * rectWidth) <= newY0 && newY0 <= labelPosY1 + (1 * rectWidth)) {
-                    newY0 = Math.min(newY0, labelPosY1 - (1.0 * rectWidth))
+                    newY0 = Math.min(newY0, labelPosY1 - (labelHeight))
                 }
             }
             if (labelPosY1 - (2 * rectWidth) <= y0 && y0 <= labelPosY1 + (2 * rectWidth)) {
-                newY1 = Math.min(y0, labelPosY1 - (1.0 * rectWidth))
+                newY1 = Math.min(y0, labelPosY1 - (labelHeight))
                 if (labelPosY0 - (2 * rectWidth) <= newY1 && newY1 <= labelPosY0 + (1 * rectWidth)) {
-                    newY1 = Math.min(newY1, labelPosY0 - (1.0 * rectWidth))
+                    newY1 = Math.min(newY1, labelPosY0 - (labelHeight))
                 }
             }
             y0 = Math.min(newY0, newY1)
