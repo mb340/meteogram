@@ -125,10 +125,6 @@ Item {
         id: timeUtils
     }
 
-    ReloadTime {
-        id: reloadTime
-    }
-
     ReloadTimer {
         id: reloadTimer
 
@@ -417,7 +413,6 @@ Item {
         loadingXhrs = currentProvider.loadDataFromInternet(reloadDataSuccessCallback,
                                                            reloadDataFailureCallback, args)
 
-        // reloadTime.startAbortTimer(cacheKey, () => reloadDataFailureCallback(cacheKey))
         return true
     }
 

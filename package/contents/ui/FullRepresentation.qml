@@ -480,7 +480,6 @@ Item {
         }
 
         onEntered: {
-            // reloadTime.updateNextReloadText(cacheKey)
             reloadTimer.updateNextLoadText(cacheKey)
             lastReloadedTextComponent.visible = false
             reloadTextComponent.visible = true
