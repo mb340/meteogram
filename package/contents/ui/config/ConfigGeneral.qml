@@ -353,31 +353,33 @@ ColumnLayout {
         Repeater {
             model: [
                 {
-                    text: i18n("Met.no weather forecast data provided by The Norwegian Meteorological Institute."),
+                    text: i18n("%1 weather forecast data provided by %2.", "Met.no",
+                               "The Norwegian Meteorological Institute"),
                     url: 'https://www.met.no/en/About-us'
                 },
                 {
-                    text: i18n("Sunrise/sunset data provided by Sunrise - Sunset."),
+                    text: i18n("Sunrise/sunset data provided by %1.", "Sunrise - Sunset"),
                     url: 'https://sunrise-sunset.org/about'
                 },
                 {
-                    text: i18n("OWM weather forecast data provided by OpenWeather."),
+                    text: i18n("%1 weather forecast data provided by %2.", "OWM", "OpenWeather"),
                     url: 'https://openweathermap.org/about-us'
                 },
                 {
-                    text: i18n("Open-Meteo weather data by Open-Meteo.com."),
+                    text: i18n("%1 weather forecast data provided by %2.", "Open-Meteo",
+                               "Open-Meteo.com"),
                     url: "https://open-meteo.com/"
                 },
                 {
-                    text: i18n("Weather icons created by Erik Flowers."),
+                    text: i18n("Weather icons created by %1.", "Erik Flowers"),
                     url: 'https://erikflowers.github.io/weather-icons/'
                 },
                 {
-                    text: i18n("Weather icons created by Bas Milius."),
+                    text: i18n("Weather icons created by %1.", "Bas Milius"),
                     url: 'https://basmilius.github.io/weather-icons/'
                 },
                 {
-                    text: i18n("Weather icons created by Norwegian National Broadcasting."),
+                    text: i18n("Weather icons created by %1.", "Norwegian National Broadcasting"),
                     url: 'https://nrkno.github.io/yr-weather-symbols/'
                 }
             ]
