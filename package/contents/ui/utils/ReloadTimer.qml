@@ -241,7 +241,9 @@ Item {
         }
 
         loadingErr = cacheDb.readLoadingError(key)
-        if (loadingErr !== null) {
+        if (loadingErr && loadingErr.hasOwnProperty("status") &&
+            loadingErr.hasOwnProperty("timestamp"))
+        {
             state = ReloadTimer.State.LOADING_ERROR
             handleState(key)
             return
