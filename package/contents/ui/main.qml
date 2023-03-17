@@ -128,11 +128,11 @@ Item {
     ReloadTimer {
         id: reloadTimer
 
-        main: main
         cacheDb: cacheDb
 
         Component.onCompleted: {
             loadFromCache.connect(main.loadFromCache)
+            reloadData.connect(dataDownloader.reloadData)
         }
     }
 
@@ -337,12 +337,8 @@ Item {
         if (ok) {
             reloadTimer.updateState(cacheKey)
         } else {
-            reloadData()
+            dataDownloader.reloadData(cacheKey)
         }
-    }
-
-    function reloadData() {
-        dataDownloader.reloadData(cacheKey)
     }
 
     function reloadMeteogram() {
@@ -356,9 +352,14 @@ Item {
         repeat: false
         triggeredOnStart: true
 
-        property var cacheKey:
+        property var cacheKey: null
 
         onTriggered: {
+
+            if (cacheKey !== main.cacheKey) {
+                cacheKey = null
+                return
+            }
 
             weatherAlertsModel.clear()
 
@@ -370,6 +371,7 @@ Item {
             var success = currentProvider.setWeatherContents(content)
             if (!success) {
                 print('error: setting weather contents not successful')
+                cacheKey = null
                 return false
             }
 
@@ -382,6 +384,8 @@ Item {
             if (currentProvider.providerId !== "owm") {
                 reloadMeteogram()
             }
+
+            cacheKey = null
         }
     }
 

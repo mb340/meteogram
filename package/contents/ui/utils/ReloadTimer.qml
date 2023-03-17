@@ -15,6 +15,7 @@
 import QtQuick 2.0
 
 Item {
+    id: root
 
     readonly property double msPerMin: 60 * 1000
 
@@ -37,12 +38,12 @@ Item {
     property string nextLoadText: ''
     property string lastLoadText: ''
 
-    required property var main
     required property var cacheDb
 
     property alias reloadTimer: reloadTimer
 
     signal loadFromCache(string key);
+    signal reloadData(string key);
 
 
     enum State {
@@ -61,18 +62,27 @@ Item {
         running: false
         repeat: false
         triggeredOnStart: false
+
+        property var cacheKey: null
+
         onTriggered: {
             // print("ReloadTimer: onTriggered: state", stateToString(state))
+
+            if (!cacheKey) {
+                print("error: ReloadTimer cacheKey is null")
+                return
+            }
+
             switch (state) {
                 case ReloadTimer.State.WAIT_SEMAPHORE:
-                    loadFromCache()
+                    loadFromCache(cacheKey)
                     break
 
                 case ReloadTimer.State.LOADING_ERROR:
                 case ReloadTimer.State.EXPIRE_TIME:
                 case ReloadTimer.State.SCHEDULED_RELOAD:
                     state = ReloadTimer.State.LOADING
-                    main.reloadData()
+                    reloadData(cacheKey)
                     break
 
                 default:
@@ -100,7 +110,7 @@ Item {
         return dt
     }
 
-    function fireTimer(interval) {
+    function fireTimer(key, interval) {
         reloadTimer.stop()
 
         interval = Math.max(0, interval)
@@ -108,15 +118,16 @@ Item {
 
         // print("fireTimer: nextLoadTime ", nextLoadTime, new Date(nextLoadTime))
 
+        reloadTimer.cacheKey = key
         reloadTimer.interval = interval
         reloadTimer.start()
     }
 
-    function handleWaitSemaphoreState() {
-        fireTimer(semaphoreWaitTime)
+    function handleWaitSemaphoreState(key) {
+        fireTimer(key, semaphoreWaitTime)
     }
 
-    function handleLoadingErrorState() {
+    function handleLoadingErrorState(key) {
         let timerInterval = 0
         let interval = getRetryInterval(loadingErr.status)
         if (interval !== undefined) {
@@ -125,15 +136,15 @@ Item {
             state = ReloadTimer.State.INITIAL
         }
 
-        fireTimer(timerInterval)
+        fireTimer(key, timerInterval)
     }
 
-    function handleExpireTime() {
+    function handleExpireTime(key) {
         let timerInterval = getTimerInterval(expireTime)
-        fireTimer(timerInterval)
+        fireTimer(key, timerInterval)
     }
 
-    function handleNextReload() {
+    function handleNextReload(key) {
         let timerInterval = undefined
         if (lastLoadTime === -1) {
             timerInterval = 0
@@ -142,27 +153,27 @@ Item {
             timerInterval = getTimerInterval(nextLoadTime)
         }
 
-        fireTimer(timerInterval)
+        fireTimer(key, timerInterval)
     }
 
-    function handleState() {
+    function handleState(key) {
         print("ReloadTimer: handleState",  stateToString(state))
         switch (state) {
             default:
             case ReloadTimer.State.INITIAL:
-                updateState()
+                updateState(key)
                 break
             case ReloadTimer.State.WAIT_SEMAPHORE:
-                handleWaitSemaphoreState()
+                handleWaitSemaphoreState(key)
                 break
             case ReloadTimer.State.LOADING_ERROR:
-                handleLoadingErrorState()
+                handleLoadingErrorState(key)
                 break
             case ReloadTimer.State.EXPIRE_TIME:
-                handleExpireTime()
+                handleExpireTime(key)
                 break
             case ReloadTimer.State.SCHEDULED_RELOAD:
-                handleNextReload()
+                handleNextReload(key)
                 break
         }
         updateLastLoadText()
@@ -171,6 +182,7 @@ Item {
 
     function stop() {
         reloadTimer.stop()
+        reloadTimer.cacheKey = null
         state = ReloadTimer.State.INITIAL
     }
 
@@ -182,7 +194,7 @@ Item {
 
     function forceState(key, _state) {
         state = _state
-        handleState(state)
+        handleState(key)
     }
 
     function checkNextLoadElapsed(cacheKey) {
@@ -209,6 +221,7 @@ Item {
         reloadTimer.stop()
         state = ReloadTimer.State.SCHEDULED_RELOAD
         reloadTimer.interval = 0
+        reloadTimer.cacheKey = key
         reloadTimer.start()
     }
 
@@ -223,14 +236,14 @@ Item {
         var flag = cacheDb.checkUpdateSemaphore(key)
         if (flag === false) {
             state = ReloadTimer.State.WAIT_SEMAPHORE
-            handleState()
+            handleState(key)
             return
         }
 
         loadingErr = cacheDb.readLoadingError(key)
         if (loadingErr !== null) {
             state = ReloadTimer.State.LOADING_ERROR
-            handleState()
+            handleState(key)
             return
         }
 
@@ -259,7 +272,7 @@ Item {
         } else {
             state = ReloadTimer.State.SCHEDULED_RELOAD
         }
-        handleState()
+        handleState(key)
     }
 
     function setLocalLoadTime(key, timestamp) {

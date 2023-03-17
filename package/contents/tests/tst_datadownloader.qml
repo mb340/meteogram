@@ -61,7 +61,6 @@ TestCase {
     Component {
         id: reloadTimerComponent
         ReloadTimer {
-            main: mockMain
             cacheDb: mockCacheDb
 
             Component.onCompleted: {

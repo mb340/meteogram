@@ -522,7 +522,7 @@ Item {
             running: false
             triggeredOnStart: false
             onTriggered: {
-                reloadTimer.forceLoad()
+                reloadTimer.forceLoad(main.cacheKey)
             }
         }
 

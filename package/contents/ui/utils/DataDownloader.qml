@@ -67,7 +67,6 @@ Item {
         cacheDb.writePlaceCache(cacheKey, contentToCache, ts, expireTime)
         cacheDb.clearLoadingError(cacheKey)
 
-        reloadTimer.setLocalLoadTime(cacheKey, ts)
 
         clearLoadingXhrs(cacheKey)
 
@@ -75,9 +74,10 @@ Item {
         loadingData = false
 
         if (currentCacheKey === cacheKey) {
-            loadFromCache()
-        } else {
+            loadFromCache(cacheKey)
         }
+
+        reloadTimer.setLocalLoadTime(cacheKey, ts)
         reloadTimer.resetState(cacheKey)
     }
 
