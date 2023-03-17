@@ -10,11 +10,6 @@ QtObject {
     property string placeIdentifier: "Mock Place"
     property int timezoneID: 88
 
-
-    function reloadData() {
-        print("mockMain: reloadData")
-    }
-
     function loadFromCache() {
         print("mockMain: loadFromCache")
     }
