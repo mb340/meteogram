@@ -130,6 +130,10 @@ Item {
 
         main: main
         cacheDb: cacheDb
+
+        Component.onCompleted: {
+            loadFromCache.connect(main.loadFromCache)
+        }
     }
 
     DataDownloader {

@@ -67,6 +67,8 @@ Item {
         cacheDb.writePlaceCache(cacheKey, contentToCache, ts, expireTime)
         cacheDb.clearLoadingError(cacheKey)
 
+        reloadTimer.setLocalLoadTime(cacheKey, ts)
+
         clearLoadingXhrs(cacheKey)
 
         cacheDb.releaseUpdateSemaphore(cacheKey)

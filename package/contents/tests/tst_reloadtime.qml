@@ -164,4 +164,28 @@ TestCase {
         compare(reloadTimer.nextLoadTime, expireTime)
         compare(reloadTimer.reloadTimer.interval, expireTime - now)
     }
+
+    function test_scheduleAndLoadFromCache() {
+        let reloadInterval = plasmoid.configuration.reloadIntervalMin * reloadTimer.msPerMin
+        mockCacheDb.lastLoadTime = 2000
+
+        reloadTimer.setLocalLoadTime(123, 1000)
+
+        let now = reloadInterval / 2
+        reloadTimer.getDateNow = function(){
+            return now
+        }
+
+        let isloadFromCacheCalled = false
+        reloadTimer.loadFromCache.connect(() => {
+            isloadFromCacheCalled = true
+        })
+
+        reloadTimer.updateState(123)
+        compare(reloadTimer.state, ReloadTimer.State.SCHEDULED_RELOAD)
+        compare(reloadTimer.nextLoadTime, mockCacheDb.lastLoadTime + now + (reloadInterval / 2))
+        compare(reloadTimer.reloadTimer.interval, mockCacheDb.lastLoadTime + (reloadInterval / 2))
+
+        compare(isloadFromCacheCalled, true)
+    }
 }

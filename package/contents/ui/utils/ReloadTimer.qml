@@ -32,6 +32,8 @@ Item {
     property double nextLoadTime: -1
     property double expireTime: -1
 
+    property var localLastLoadTimes: ({})
+
     property string nextLoadText: ''
     property string lastLoadText: ''
 
@@ -39,6 +41,8 @@ Item {
     required property var cacheDb
 
     property alias reloadTimer: reloadTimer
+
+    signal loadFromCache(string key);
 
 
     enum State {
@@ -61,7 +65,7 @@ Item {
             // print("ReloadTimer: onTriggered: state", stateToString(state))
             switch (state) {
                 case ReloadTimer.State.WAIT_SEMAPHORE:
-                    main.loadFromCache()
+                    loadFromCache()
                     break
 
                 case ReloadTimer.State.LOADING_ERROR:
@@ -232,11 +236,21 @@ Item {
 
         expireTime = cacheDb.readPlaceCacheExpireTime(key)
         lastLoadTime = cacheDb.readPlaceCacheTimestamp(key)
+
+        let localLastLoadTime = localLastLoadTimes[key]
+
         print("ReloadTimer: updateState: lastLoadTime:", lastLoadTime,  new Date(lastLoadTime))
-        print("ReloadTimer: updateState: expireTime:", expireTime,  new Date(expireTime))
+        print("ReloadTimer: updateState: expireTime:", expireTime,
+              (expireTime >= 0 ? new Date(expireTime) : "never"))
+        print("ReloadTimer: updateState: localLastLoadTime:", localLastLoadTime,
+              (localLastLoadTime ? new Date(localLastLoadTime) : "never"))
 
         if (lastLoadTime === -1) {
             lastLoadTime = 0
+        }
+
+        if (lastLoadTime > localLastLoadTime) {
+            loadFromCache(key)
         }
 
         let nextLoadTime = lastLoadTime + (reloadInterval * msPerMin)        
@@ -246,6 +260,10 @@ Item {
             state = ReloadTimer.State.SCHEDULED_RELOAD
         }
         handleState()
+    }
+
+    function setLocalLoadTime(key, timestamp) {
+        localLastLoadTimes[key] = timestamp
     }
 
     function updateNextLoadText() {
