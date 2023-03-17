@@ -660,6 +660,10 @@ Canvas {
     }
 
     function buildCurves() {
+        if (meteogramModel.count <= 0) {
+            return
+        }
+
         let y1Count = 0
         let y2Count = 0
         let hasY1Chart = y1VarName && y1VarName !== ""
