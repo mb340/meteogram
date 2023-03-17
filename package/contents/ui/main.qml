@@ -351,6 +351,9 @@ Item {
         running: false
         repeat: false
         triggeredOnStart: true
+
+        property var cacheKey:
+
         onTriggered: {
 
             weatherAlertsModel.clear()
@@ -378,13 +381,18 @@ Item {
         }
     }
 
-    function loadFromCache() {
+    function loadFromCache(key) {
+        if (key !== undefined && key !== cacheKey) {
+            return false
+        }
+
         if (!cacheDb.hasKey(cacheKey)) {
             print('error: cache not available')
             return false
         }
 
         dbgprint('loading from cache, config key: ' + cacheKey)
+        updateWorker.cacheKey = cacheKey
         updateWorker.restart()
 
         return true
