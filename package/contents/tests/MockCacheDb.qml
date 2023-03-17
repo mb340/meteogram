@@ -5,8 +5,6 @@ QtObject {
     id: mockCacheDb
 
     property bool semaphoreFlag: true
-    property double lastLoadTime: NaN
-    property double expireTime: -1
     property var loadingError: null
 
     property var nullLoadingError: null
@@ -60,11 +58,11 @@ QtObject {
     }
 
     function readPlaceCacheTimestamp(key) {
-        return lastLoadTime
+        return _content[key].timestamp
     }
 
     function readPlaceCacheExpireTime(key) {
-        return expireTime
+        return _content[key].expireTime
     }
 
     function hasKey(cacheKey) {

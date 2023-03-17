@@ -330,7 +330,9 @@ Item {
         setCurrentProviderAccordingId(placeObject.providerId)
 
         var ok = loadFromCache()
-        if (!ok) {
+        if (ok) {
+            reloadTimer.updateState(cacheKey)
+        } else {
             reloadData()
         }
     }
@@ -367,7 +369,6 @@ Item {
             creditLink = currentProvider.getCreditLink(placeIdentifier, placeAlias)
             creditLabel = currentProvider.getCreditLabel(placeIdentifier)
 
-            reloadTimer.resetState(cacheKey)
 
             refreshTooltipSubText()
 
@@ -380,7 +381,6 @@ Item {
     function loadFromCache() {
         if (!cacheDb.hasKey(cacheKey)) {
             print('error: cache not available')
-            reloadData()
             return false
         }
 
@@ -552,6 +552,7 @@ Item {
             } else {
                 dbgprint('updateViewsTimer loaded from cache')
             }
+            reloadTimer.updateState(cacheKey)
             init()
         }
 

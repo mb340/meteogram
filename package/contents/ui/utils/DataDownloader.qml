@@ -75,8 +75,8 @@ Item {
         if (currentCacheKey === cacheKey) {
             loadFromCache()
         } else {
-            reloadTimer.resetState(cacheKey)
         }
+        reloadTimer.resetState(cacheKey)
     }
 
     function reloadDataFailureCallback(cacheKey) {

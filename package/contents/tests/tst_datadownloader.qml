@@ -57,6 +57,11 @@ TestCase {
         ReloadTimer {
             main: mockMain
             cacheDb: mockCacheDb
+
+            Component.onCompleted: {
+                // loadFromCache.connect(mockMain.loadFromCache)
+                // reloadData.connect(dataDownloader.reloadData)
+            }
         }
 
     }
@@ -86,14 +91,16 @@ TestCase {
             return 0
         }
 
-        reloadTimer.state = ReloadTimer.State.INITIAL
-
         mockProvider = createTemporaryObject(mockProviderComponent, root)
         mockCacheDb = createTemporaryObject(mockCacheDbComponent, root)
 
         verify(mockMain.currentProvider !== null)
 
         dataDownloader = createTemporaryObject(dataDownloaderComponent, root)
+
+        reloadTimer.state = ReloadTimer.State.INITIAL
+        reloadTimer.loadFromCache.connect(mockMain.loadFromCache)
+        reloadTimer.reloadData.connect(dataDownloader.reloadData)
     }
 
     function test_successCallback() {
@@ -106,7 +113,7 @@ TestCase {
         let sem = mockCacheDb.checkUpdateSemaphore(mockMain.cacheKey)
         compare(sem, true)
 
-        compare(reloadTimer.state, ReloadTimer.State.INITIAL)
+        compare(reloadTimer.state, ReloadTimer.State.SCHEDULED_RELOAD)
 
         verify(dataDownloader.loadingXhrs.hasOwnProperty(mockMain.cacheKey))
         compare(dataDownloader.loadingXhrs[mockMain.cacheKey].length, 0)
