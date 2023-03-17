@@ -47,7 +47,7 @@ Item {
         "pressure",
         "humidity",
         "cloudArea",
-        // "uvi"
+        "uvi"
     ]
 
     property var dayPartTitles: [
@@ -62,7 +62,7 @@ Item {
         i18n("Pressure"),
         i18n("Relative Humidity"),
         i18n("Cloud Cover"),
-        // i18n("UV Index"),
+        i18n("UV Index"),
     ]
 
     ColumnLayout {
