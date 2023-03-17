@@ -22,7 +22,8 @@ Item {
                                   "cloudcover," +
                                   "windspeed_10m," +
                                   "winddirection_10m," +
-                                  "windgusts_10m&" +
+                                  "windgusts_10m," +
+                                  "uv_index_clear_sky&" +
 
                                   "models=best_match&" +
 
@@ -283,6 +284,7 @@ Item {
             item.pressure = parseFloat(hourly.pressure_msl[i])
             item.humidity = parseFloat(hourly.relativehumidity_2m[i])
             item.cloudArea = parseFloat(hourly.cloudcover[i])
+            item.uvi = parseFloat(hourly.uv_index_clear_sky.[i])
             meteogramModel.addItem(item)
 
             hourCount++
