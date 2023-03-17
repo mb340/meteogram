@@ -134,6 +134,7 @@ Item {
         let temperatureMax = -Infinity
         let temperatureCount = 0
         let precipitationSum = 0
+        let uviMax = 0
 
         for (i = hourlyIdx; i < hourly.time.length; i++) {
             let day = parseDate(hourly.time[i])
@@ -179,6 +180,7 @@ Item {
                 temperatureMax = -Infinity
                 temperatureCount = 0
                 precipitationSum = 0
+                uviMax = 0
             }
             prevPeriodIdx = dailyPeriodIdx
 
@@ -188,6 +190,9 @@ Item {
 
             let precipitation = parseFloat(hourly.precipitation[i])
             precipitationSum += precipitation
+
+            let uvi = parseFloat(hourly.uv_index_clear_sky[i])
+            uviMax = Math.max(uviMax, uvi)
 
             let item = dailyModel.models[dailyPeriodIdx]
             if (isNearestHour) {
@@ -204,6 +209,7 @@ Item {
                 item.pressure = parseFloat(hourly.pressure_msl[i])
                 item.humidity = parseFloat(hourly.relativehumidity_2m[i])
                 item.cloudArea = parseFloat(hourly.cloudcover[i])
+                item.uvi = uviMax
             }
 
             item.temperatureLow = temperatureMin
@@ -245,6 +251,8 @@ Item {
             dailyModel.precipitationProb = parseFloat(daily.precipitation_probability_max[i]) / 100.0
             dailyModel.precipitationAmount = parseFloat(daily.precipitation_sum[i])
 
+            dailyModel.uvi = parseFloat(daily.uv_index_clear_sky_max[i])
+
             hourlyIdx = buildDailyPart(data, date, hourlyIdx, dailyModel)
 
             dailyWeatherModels.addItem(dailyModel)
@@ -284,7 +292,7 @@ Item {
             item.pressure = parseFloat(hourly.pressure_msl[i])
             item.humidity = parseFloat(hourly.relativehumidity_2m[i])
             item.cloudArea = parseFloat(hourly.cloudcover[i])
-            item.uvi = parseFloat(hourly.uv_index_clear_sky.[i])
+            item.uvi = parseFloat(hourly.uv_index_clear_sky[i])
             meteogramModel.addItem(item)
 
             hourCount++
