@@ -27,6 +27,12 @@ TestCase {
         print(text)
     }
 
+    property alias plasmoid: mockPlasmoid
+
+    MockPlasmoid {
+        id: mockPlasmoid
+    }
+
     MockMain {
         id: mockMain
 
@@ -86,10 +92,9 @@ TestCase {
 
 
     function init() {
+        plasmoid.configuration.reloadIntervalMin = 60 * 60 * 1000
+
         reloadTimer = createTemporaryObject(reloadTimerComponent, root)
-        reloadTimer.getDateNow = function(){
-            return 0
-        }
 
         mockProvider = createTemporaryObject(mockProviderComponent, root)
         mockCacheDb = createTemporaryObject(mockCacheDbComponent, root)
