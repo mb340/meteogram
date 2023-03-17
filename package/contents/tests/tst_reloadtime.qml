@@ -8,7 +8,7 @@ TestCase {
     id: root
     name: "ReloadTimeTests"
 
-    property alias plasmoid: mockPlasmoid
+    property var plasmoid
     property alias timeUtils: timeUtils
 
     property var mockCacheDb: null
@@ -23,8 +23,11 @@ TestCase {
         id: timeUtils
     }
 
-    MockPlasmoid {
-        id: mockPlasmoid
+    Component {
+        id: mockPlasmoidComponent
+        MockPlasmoid {
+            id: mockPlasmoid
+        }
     }
 
     MockMain {
@@ -75,6 +78,8 @@ TestCase {
     }
 
     function init() {
+        plasmoid = createTemporaryObject(mockPlasmoidComponent, root)
+
         reloadTimer = createTemporaryObject(reloadTimerComponent, root)
         reloadTimer.getDateNow = function(){
             return 0
@@ -186,5 +191,23 @@ TestCase {
         compare(reloadTimer.reloadTimer.interval, mockCacheDb.lastLoadTime + (reloadInterval / 2))
 
         compare(isloadFromCacheCalled, true)
+    }
+
+    function test_reloadSpam() {
+        plasmoid.configuration.reloadIntervalMin = 1
+        mockCacheDb.lastLoadTime = 0
+
+        reloadTimer.getDateNow = function(){
+            return 0
+        }
+
+        reloadTimer.forceState(123, ReloadTimer.State.SCHEDULED_RELOAD)
+        reloadTimer.forceState(123, ReloadTimer.State.SCHEDULED_RELOAD)
+        compare(reloadTimer.reloadTimer.running, false)
+
+        reloadTimer.forceState(456, ReloadTimer.State.SCHEDULED_RELOAD)
+        plasmoid.configuration.reloadIntervalMin = 60 * 60 * 1000
+        reloadTimer.forceState(123, ReloadTimer.State.SCHEDULED_RELOAD)
+        compare(reloadTimer.reloadTimer.running, true)
     }
 }
