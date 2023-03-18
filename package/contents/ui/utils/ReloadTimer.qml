@@ -13,9 +13,13 @@
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
 import QtQuick 2.0
+import "../../code/print.js" as PrintUtil
 
 Item {
     id: root
+
+    objectName: "ReloadTimer"
+    property var dbgprint: PrintUtil.init(this, plasmoidCacheId)
 
     readonly property double msPerMin: 60 * 1000
 
@@ -70,10 +74,10 @@ Item {
         property var cacheKey: null
 
         onTriggered: {
-            // print("ReloadTimer: onTriggered: state", stateToString(state))
+            dbgprint("onTriggered: state", stateToString(state))
 
             if (!cacheKey) {
-                print("error: ReloadTimer cacheKey is null")
+                dbgprint("error: cacheKey is null")
                 return
             }
 
@@ -92,6 +96,7 @@ Item {
                     if (localLastLoadTimes.hasOwnProperty(cacheKey) &&
                         lastLoadTime > localLastLoadTime)
                     {
+                        dbgprint("onTriggered: lastLoadTime > localLastLoadTime")
                         loadFromCache(cacheKey)
                         updateState(cacheKey)
                         break
@@ -127,12 +132,13 @@ Item {
     }
 
     function fireTimer(key, interval) {
+        dbgprint("fireTimer: key", key, ", interval", interval)
         reloadTimer.stop()
 
         interval = Math.max(0, interval)
         nextLoadTime = getDateNow() + interval
 
-        // print("fireTimer: nextLoadTime ", nextLoadTime, new Date(nextLoadTime))
+        // dbgprint("fireTimer: nextLoadTime ", nextLoadTime, new Date(nextLoadTime))
         if (prevCacheKey === key && prevInterval < minInterval && interval < minInterval) {
             console.exception("ReloadTimer interval too low. interval = ", interval)
             return
@@ -183,7 +189,7 @@ Item {
     }
 
     function handleState(key) {
-        print("ReloadTimer: handleState",  stateToString(state))
+        dbgprint("handleState",  stateToString(state))
         switch (state) {
             default:
             case ReloadTimer.State.INITIAL:
@@ -207,6 +213,7 @@ Item {
     }
 
     function stop() {
+        dbgprint("stop")
         reloadTimer.stop()
         reloadTimer.cacheKey = null
         state = ReloadTimer.State.INITIAL
@@ -230,7 +237,7 @@ Item {
 
         let now = getDateNow()
         if (nextLoadTime >= 0 && nextLoadTime < now) {
-            // print("ReloadTimer: rearmTimer")
+            // dbgprint("rearmTimer")
             updateState(cacheKey)
         }
     }
@@ -239,7 +246,7 @@ Item {
         let expireTime = cacheDb.readPlaceCacheExpireTime(key)
         if (expireTime > 0) {
             if (expireTime > getDateNow()) {
-                print("ReloadTimer: forceLoad: Can't force load.")
+                dbgprint("forceLoad: Can't force load.")
                 return
             }
         }
@@ -252,7 +259,7 @@ Item {
     }
 
     function updateState(key) {
-        print("ReloadTimer: updateState: key", key,", state =", stateToString(state))
+        dbgprint("updateState: key", key,", state =", stateToString(state))
 
         if (state === ReloadTimer.State.LOADING) {
             reloadTimer.stop()
@@ -280,11 +287,11 @@ Item {
 
         let localLastLoadTime = localLastLoadTimes[key]
 
-        print("ReloadTimer: updateState: lastLoadTime:", lastLoadTime,  new Date(lastLoadTime))
-        print("ReloadTimer: updateState: expireTime:", expireTime,
+        dbgprint("updateState: lastLoadTime:", lastLoadTime,  new Date(lastLoadTime))
+        dbgprint("updateState: expireTime:", expireTime,
               (expireTime >= 0 ? new Date(expireTime) : "never"))
-        print("ReloadTimer: updateState: localLastLoadTime:", localLastLoadTime,
-              (localLastLoadTime ? new Date(localLastLoadTime) : "never"))
+        dbgprint("updateState: localLastLoadTime:", localLastLoadTime,
+              (localLastLoadTime !== undefined ? new Date(localLastLoadTime) : "never"))
 
         if (lastLoadTime === -1) {
             lastLoadTime = 0
@@ -323,7 +330,7 @@ Item {
         let interval = nextLoadTime - getDateNow()
         let intervalStr = timeUtils.formatTimeIntervalString(interval)
         nextLoadText = i18n("Next update is in %1", intervalStr)
-        // print("nextLoadText = ", nextLoadText)
+        // dbgprint("nextLoadText = ", nextLoadText)
     }
 
     function updateLastLoadText() {
@@ -351,7 +358,7 @@ Item {
             let intervalStr = timeUtils.formatTimeIntervalString(interval)
             lastLoadText = i18n("↓ %1 ago", intervalStr)
         }
-        // print("lastLoadText = ", lastLoadText)
+        // dbgprint("lastLoadText = ", lastLoadText)
     }
 
     function stateToString(state) {
