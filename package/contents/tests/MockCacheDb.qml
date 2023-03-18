@@ -4,7 +4,6 @@ import QtQuick 2.0
 QtObject {
     id: mockCacheDb
 
-    property bool semaphoreFlag: true
     property var loadingError: null
 
     property var nullLoadingError: null
