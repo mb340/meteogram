@@ -86,6 +86,17 @@ Item {
                 case ReloadTimer.State.LOADING_ERROR:
                 case ReloadTimer.State.EXPIRE_TIME:
                 case ReloadTimer.State.SCHEDULED_RELOAD:
+
+                    lastLoadTime = cacheDb.readPlaceCacheTimestamp(cacheKey)
+                    let localLastLoadTime = localLastLoadTimes[cacheKey]
+                    if (localLastLoadTimes.hasOwnProperty(cacheKey) &&
+                        lastLoadTime > localLastLoadTime)
+                    {
+                        loadFromCache(cacheKey)
+                        updateState(cacheKey)
+                        break
+                    }
+
                     state = ReloadTimer.State.LOADING
                     reloadData(cacheKey)
                     break
