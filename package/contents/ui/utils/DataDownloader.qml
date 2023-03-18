@@ -13,10 +13,13 @@
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
 import QtQuick 2.0
-
+import "../../code/print.js" as PrintUtil
 
 Item {
     id: dataDownloader
+
+    objectName: "DataDownloader "
+    property var dbgprint: PrintUtil.init(this, plasmoidCacheId)
 
     property int abortTimeInterval: 60 * 1000
 
@@ -48,7 +51,7 @@ Item {
     }
 
     function reloadDataSuccessCallback(contentToCache, cacheKey) {
-        print("Data Loaded From Internet successfully.")
+        dbgprint("Data Loaded From Internet successfully.")
 
         stopAbortTimer(cacheKey)
 
@@ -82,7 +85,7 @@ Item {
     }
 
     function reloadDataFailureCallback(cacheKey) {
-        print("Failed to load data. cacheKey = " + cacheKey)
+        dbgprint("Failed to load data. cacheKey = " + cacheKey)
 
         stopAbortTimer(cacheKey)
 
@@ -120,10 +123,11 @@ Item {
 
         let sem = cacheDb.obtainUpdateSemaphore(cacheKey)
         if (sem === false) {
-            print("reloadData: Couldn't obtain update semaphore")
+            dbgprint("reloadData: Couldn't obtain update semaphore")
             reloadTimer.forceState(cacheKey, ReloadTimer.State.WAIT_SEMAPHORE)
             return false
         }
+        dbgprint("reloadData: Obtained semaphore")
 
         loadingData = true
 
