@@ -15,6 +15,9 @@ TestCase {
     property var reloadTimer: null
 
 
+    property string plasmoidCacheId: mockMain.plasmoidCacheId
+
+
     function i18n(text) {
         return text
     }

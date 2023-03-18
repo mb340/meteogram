@@ -23,6 +23,7 @@ import "../code/data-loader.js" as DataLoader
 import "../code/config-utils.js" as ConfigUtils
 import "../code/icons.js" as IconTools
 import "../code/chart-utils.js" as ChartUtils
+import "../code/print.js" as PrintUtil
 import "providers"
 import "utils"
 
@@ -30,6 +31,9 @@ Item {
     id: main
 
     property bool initialized: false
+
+    objectName: ""
+    property var dbgprint: debugLogging ? PrintUtil.init(this, plasmoidCacheId) : ((...args) => {})
 
     property int placeIndex: -1
     property string placeIdentifier

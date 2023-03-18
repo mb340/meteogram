@@ -18,6 +18,7 @@ TestCase {
     property alias placeIdentifier: mockMain.placeIdentifier
     property alias timezoneID: mockMain.timezoneID
 
+    property string plasmoidCacheId: mockMain.plasmoidCacheId
 
     function i18n(text) {
         return text
