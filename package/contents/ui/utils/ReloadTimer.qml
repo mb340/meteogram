@@ -290,8 +290,12 @@ Item {
             lastLoadTime = 0
         }
 
-        if (lastLoadTime > localLastLoadTime) {
+        if (localLastLoadTimes.hasOwnProperty(key) &&  lastLoadTime > localLastLoadTime) {
             loadFromCache(key)
+        }
+
+        if (!localLastLoadTimes.hasOwnProperty(key)) {
+            localLastLoadTimes[key] = lastLoadTime
         }
 
         let nextLoadTime = lastLoadTime + (reloadInterval * msPerMin)        
