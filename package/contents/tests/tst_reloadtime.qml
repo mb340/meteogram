@@ -108,8 +108,16 @@ TestCase {
     function test_reloadTime_semaphore() {
         mockCacheDb._semaphoreHolder = 0
 
+        reloadTimer.minInterval = 0
+        reloadTimer.semaphoreWaitTime = 100
+        reloadTimer.loadFromCache.connect(() => {
+            mockCacheDb._semaphoreHolder = 123
+        })
+
         reloadTimer.updateState(123)
         compare(reloadTimer.state, ReloadTimer.State.WAIT_SEMAPHORE)
+        wait(500)
+        compare(reloadTimer.state, ReloadTimer.State.SCHEDULED_RELOAD)
     }
 
     function test_reloadTime_load_error() {

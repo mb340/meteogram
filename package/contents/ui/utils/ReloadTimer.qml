@@ -21,7 +21,7 @@ Item {
 
     readonly property double noConnectionRetryTime: 1 * msPerMin
     readonly property double httpErrorRetryTime: 60 * msPerMin
-    readonly property double semaphoreWaitTime: 1 * msPerMin
+    property double semaphoreWaitTime: 1 * msPerMin
 
 
     property int reloadInterval: plasmoid.configuration.reloadIntervalMin
@@ -33,7 +33,7 @@ Item {
     property double nextLoadTime: -1
     property double expireTime: -1
 
-    readonly property double minInterval: 1 * msPerMin
+    property double minInterval: 1 * msPerMin
     property var prevCacheKey: null
     property double prevInterval: NaN
 
@@ -80,6 +80,7 @@ Item {
             switch (state) {
                 case ReloadTimer.State.WAIT_SEMAPHORE:
                     loadFromCache(cacheKey)
+                    resetState(cacheKey)
                     break
 
                 case ReloadTimer.State.LOADING_ERROR:
