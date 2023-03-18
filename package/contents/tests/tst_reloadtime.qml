@@ -45,6 +45,8 @@ TestCase {
     Component {
         id: reloadTimerComponent
         ReloadTimer {
+            fuzzFactorEnabled: false
+
             cacheDb: mockCacheDb
         }
 

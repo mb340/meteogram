@@ -22,7 +22,7 @@ Item {
     readonly property double noConnectionRetryTime: 1 * msPerMin
     readonly property double httpErrorRetryTime: 60 * msPerMin
     property double semaphoreWaitTime: 1 * msPerMin
-
+    property bool fuzzFactorEnabled: true
 
     property int reloadInterval: plasmoid.configuration.reloadIntervalMin
 
@@ -128,6 +128,10 @@ Item {
         }
         prevCacheKey = key
         prevInterval = interval
+
+        // Fuzz factor to avoid overlapping timers when multiple same plasmoids are running
+        let fuzz = fuzzFactorEnabled ? 1000 + (Math.random() * 1 * 1000) : 0
+        interval = interval + fuzz
 
         reloadTimer.cacheKey = key
         reloadTimer.interval = interval
