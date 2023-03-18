@@ -15,8 +15,10 @@
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
 import QtQuick 2.2
+import QtQuick.Controls 2.0
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
+import "utils"
 
 Item {
     id: compactRepresentation
@@ -57,6 +59,11 @@ Item {
             textFormat: Text.RichText
             icon: Qt.resolvedUrl('../images/weather-widget.svg')
         }
+    }
+
+    BusyIndicator {
+        anchors.fill: parent
+        running: reloadTimer.state === ReloadTimer.State.LOADING
     }
 
 }
