@@ -37,35 +37,8 @@ TestCase {
     Component {
         id: mockCacheDbComponent
 
-        QtObject {
-            id: mockCacheDb
+        MockCacheDb {
 
-            property bool semaphoreFlag: true
-            property double lastLoadTime: NaN
-            property double expireTime: -1
-            property var loadingError: null
-
-            property var nullLoadingError: null
-            property var noConnectionloadingError: ({
-                    timestamp: 0,
-                    status: 0
-            })
-
-            function checkUpdateSemaphore(key) {
-                return semaphoreFlag
-            }
-
-            function readPlaceCacheTimestamp(key) {
-                return lastLoadTime
-            }
-
-            function readPlaceCacheExpireTime(key) {
-                return expireTime
-            }
-
-            function readLoadingError(key) {
-                return loadingError
-            }
         }
     }
 
@@ -88,6 +61,12 @@ TestCase {
         reloadTimer.state = ReloadTimer.State.INITIAL
         
         mockCacheDb = createTemporaryObject(mockCacheDbComponent, root)
+        let key = 123
+        mockCacheDb._content[key] = {
+            content: "{}",
+            timestamp: 0,
+            expireTime: -1
+        }
     }
 
     function cleanup() {
@@ -100,7 +79,6 @@ TestCase {
 
     function test_reloadTime_immediate() {
         let reloadInterval = plasmoid.configuration.reloadIntervalMin * reloadTimer.msPerMin
-        mockCacheDb.lastLoadTime = 0
 
         let now = reloadInterval + 1000
         reloadTimer.getDateNow = function(){
@@ -115,7 +93,6 @@ TestCase {
 
     function test_reloadTime() {
         let reloadInterval = plasmoid.configuration.reloadIntervalMin * reloadTimer.msPerMin
-        mockCacheDb.lastLoadTime = 0
 
         let now = reloadInterval / 2
         reloadTimer.getDateNow = function(){
@@ -129,24 +106,22 @@ TestCase {
     }
 
     function test_reloadTime_semaphore() {
-        mockCacheDb.lastLoadTime = 0
-        mockCacheDb.semaphoreFlag = false
+        mockCacheDb._semaphoreHolder = 0
+
         reloadTimer.updateState(123)
         compare(reloadTimer.state, ReloadTimer.State.WAIT_SEMAPHORE)
     }
 
     function test_reloadTime_load_error() {
-        mockCacheDb.lastLoadTime = 0
-        mockCacheDb.loadingError = mockCacheDb.noConnectionloadingError
+        mockCacheDb._loadingErrors[123] = mockCacheDb.noConnectionloadingError
         reloadTimer.updateState(123)
         compare(reloadTimer.state, ReloadTimer.State.LOADING_ERROR)
         compare(reloadTimer.reloadTimer.interval, reloadTimer.noConnectionRetryTime)
     }
 
     function test_reloadTime_load_error_http() {
-        mockCacheDb.lastLoadTime = 0
-        mockCacheDb.loadingError = mockCacheDb.noConnectionloadingError
-        mockCacheDb.loadingError.status = 403   // HTTP status
+        mockCacheDb._loadingErrors[123] = mockCacheDb.noConnectionloadingError
+        mockCacheDb._loadingErrors[123].status = 403   // HTTP status
         reloadTimer.updateState(123)
         compare(reloadTimer.state, ReloadTimer.State.LOADING_ERROR)
         compare(reloadTimer.reloadTimer.interval, reloadTimer.httpErrorRetryTime)
@@ -161,8 +136,8 @@ TestCase {
             return now
         }
 
-        mockCacheDb.lastLoadTime = 1000
-        mockCacheDb.expireTime = expireTime
+        mockCacheDb._content[123].timestamp = 1000
+        mockCacheDb._content[123].expireTime = expireTime
         reloadTimer.updateState(123)
         compare(reloadTimer.state, ReloadTimer.State.EXPIRE_TIME)
         compare(reloadTimer.nextLoadTime, expireTime)
@@ -171,7 +146,7 @@ TestCase {
 
     function test_scheduleAndLoadFromCache() {
         let reloadInterval = plasmoid.configuration.reloadIntervalMin * reloadTimer.msPerMin
-        mockCacheDb.lastLoadTime = 2000
+        mockCacheDb._content[123].timestamp = 2000
 
         reloadTimer.setLocalLoadTime(123, 1000)
 
@@ -187,15 +162,14 @@ TestCase {
 
         reloadTimer.updateState(123)
         compare(reloadTimer.state, ReloadTimer.State.SCHEDULED_RELOAD)
-        compare(reloadTimer.nextLoadTime, mockCacheDb.lastLoadTime + now + (reloadInterval / 2))
-        compare(reloadTimer.reloadTimer.interval, mockCacheDb.lastLoadTime + (reloadInterval / 2))
+        compare(reloadTimer.nextLoadTime, mockCacheDb._content[123].timestamp +  + now + (reloadInterval / 2))
+        compare(reloadTimer.reloadTimer.interval, mockCacheDb._content[123].timestamp +  + (reloadInterval / 2))
 
         compare(isloadFromCacheCalled, true)
     }
 
     function test_reloadSpam() {
         plasmoid.configuration.reloadIntervalMin = 1
-        mockCacheDb.lastLoadTime = 0
 
         reloadTimer.getDateNow = function(){
             return 0
