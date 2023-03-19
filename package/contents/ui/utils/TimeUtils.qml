@@ -105,6 +105,10 @@ QtObject {
     }
 
     function isSunRisen(t, sunRise, sunSet) {
+        if (!t) {
+            return true
+        }
+
         var hourFrom = t.getHours()
         if (!hasSunriseSunsetData()) {
             return 6 <= hourFrom && hourFrom <= 18
