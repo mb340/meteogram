@@ -12,7 +12,7 @@ QtObject {
             status: 0
     })
 
-    property var _semaphoreHolder: null
+    property var _semaphoreHolder: ({})
     property var _loadingErrors: ({})
 
     property var _content: ({})
@@ -23,25 +23,28 @@ QtObject {
     }
 
     function obtainUpdateSemaphore(cacheKey, flag = undefined) {
-        if (_semaphoreHolder === null) {
-            _semaphoreHolder = cacheKey
+        flag = (flag !== undefined) ? flag : plasmoidCacheId
+        if (!_semaphoreHolder.hasOwnProperty(cacheKey)) {
+            _semaphoreHolder[cacheKey] = flag
+            return true
+        }
+        if (_semaphoreHolder[cacheKey] === flag || _semaphoreHolder[cacheKey] === -1) {
+            _semaphoreHolder[cacheKey] = flag
             return true
         }
         return false
     }
 
-    function checkUpdateSemaphore(key) {
-        if (_semaphoreHolder === null || _semaphoreHolder === key) {
-            return true
+    function checkUpdateSemaphore(key, flag = undefined) {
+        flag = (flag !== undefined) ? flag : plasmoidCacheId
+        if (_semaphoreHolder.hasOwnProperty(key)) {
+            return _semaphoreHolder[key] === flag || _semaphoreHolder[key] === -1
         }
-        return false
+        return true
     }
 
     function releaseUpdateSemaphore(cacheKey) {
-        if (_semaphoreHolder === cacheKey) {
-            _semaphoreHolder = null
-            return
-        }
+        _semaphoreHolder[cacheKey] = -1
     }
 
     function writePlaceCache(cacheKey, content, timestamp, expireTime) {

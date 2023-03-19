@@ -124,16 +124,18 @@ TestCase {
     }
 
     function test_reloadTime_semaphore() {
-        mockCacheDb._semaphoreHolder = 0
+        let res = mockCacheDb.obtainUpdateSemaphore(mockMain.cacheKey, 1000)
+        verify(res === true)
 
         reloadTimer.minInterval = 0
         reloadTimer.semaphoreWaitTime = 100
-        reloadTimer.loadFromCache.connect(() => {
-            mockCacheDb._semaphoreHolder = mockMain.cacheKey
+        reloadTimer.reloadData.connect((key) => {
+            mockCacheDb.obtainUpdateSemaphore(key)
         })
 
         reloadTimer.updateState(mockMain.cacheKey)
         compare(reloadTimer.state, ReloadTimer.State.WAIT_SEMAPHORE)
+        mockCacheDb.releaseUpdateSemaphore(mockMain.cacheKey)
         wait(500)
         compare(reloadTimer.state, ReloadTimer.State.SCHEDULED_RELOAD)
     }
