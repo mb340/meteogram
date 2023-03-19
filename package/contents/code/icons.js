@@ -371,14 +371,6 @@ var MetNo = {
 }
 
 function getIconCode(iconVal, currentProvider, partOfDay) {
-
-    if (currentProvider.providerId === 'phonyprovider') {
-        if (!iconVal || iconVal === "") {
-            return '\uf07b'
-        }
-        return WeatherFont.codeByName[iconVal]
-    }
-
     if (partOfDay === undefined) {
         partOfDay = 0
     }
