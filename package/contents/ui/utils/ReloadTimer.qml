@@ -47,6 +47,7 @@ Item {
     property string lastLoadText: ''
 
     required property var cacheDb
+    required property var currentCacheKey
 
     property alias reloadTimer: reloadTimer
 
@@ -213,6 +214,10 @@ Item {
     }
 
     function stop() {
+        if (key !== currentCacheKey) {
+            return
+        }
+
         dbgprint("stop")
         reloadTimer.stop()
         reloadTimer.cacheKey = null
@@ -220,12 +225,22 @@ Item {
     }
 
     function resetState(key) {
+        if (key !== currentCacheKey) {
+            return
+        }
+
+        dbgprint("resetState: key =", key)
+
         reloadTimer.stop()
         state = ReloadTimer.State.INITIAL
         updateState(key)
     }
 
     function forceState(key, _state) {
+        if (key !== currentCacheKey) {
+            return
+        }
+
         state = _state
         handleState(key)
     }
@@ -243,6 +258,10 @@ Item {
     }
 
     function forceLoad(key) {
+        if (key !== currentCacheKey) {
+            return
+        }
+
         let expireTime = cacheDb.readPlaceCacheExpireTime(key)
         if (expireTime > 0) {
             if (expireTime > getDateNow()) {
@@ -259,6 +278,10 @@ Item {
     }
 
     function updateState(key) {
+        if (key !== currentCacheKey) {
+            return
+        }
+
         dbgprint("updateState: key", key,", state =", stateToString(state))
 
         if (state === ReloadTimer.State.LOADING) {

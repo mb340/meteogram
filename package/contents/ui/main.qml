@@ -133,6 +133,7 @@ Item {
         id: reloadTimer
 
         cacheDb: cacheDb
+        currentCacheKey: main.cacheKey
 
         Component.onCompleted: {
             loadFromCache.connect(main.loadFromCache)

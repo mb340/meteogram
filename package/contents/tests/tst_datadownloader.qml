@@ -64,6 +64,8 @@ TestCase {
         ReloadTimer {
             cacheDb: mockCacheDb
 
+            currentCacheKey: mockMain.cacheKey
+
             Component.onCompleted: {
                 // loadFromCache.connect(mockMain.loadFromCache)
                 // reloadData.connect(dataDownloader.reloadData)
