@@ -88,7 +88,7 @@ TestCase {
     }
 
     function cleanup() {
-        verify(reloadTimer.getDateNow() > reloadTimer.lastLoadTime,
+        verify(reloadTimer.getDateNow() >= reloadTimer.lastLoadTime,
                "Time now can't be less than last load time.")
 
         reloadTimer = null
