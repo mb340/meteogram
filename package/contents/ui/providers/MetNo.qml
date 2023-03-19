@@ -101,6 +101,8 @@ Item {
         var hm = currentWeather.data.instant.details["relative_humidity"]
         var cld = currentWeather.data.instant.details["cloud_area_fraction"]
 
+        currentWeatherModel.date = timeUtils.convertDate(currentWeather.time, timezoneType,
+                                                         main.timezoneOffset)
         currentWeatherModel.temperature = temperature
         currentWeatherModel.iconName = iconnumber
         currentWeatherModel.windDirection = wd
