@@ -62,6 +62,9 @@ TestCase {
     Component {
         id: reloadTimerComponent
         ReloadTimer {
+
+            fuzzFactorEnabled: false
+
             cacheDb: mockCacheDb
             dataDownloader: root.dataDownloader
 
@@ -101,6 +104,11 @@ TestCase {
 
         mockProvider = createTemporaryObject(mockProviderComponent, root)
         mockCacheDb = createTemporaryObject(mockCacheDbComponent, root)
+        mockCacheDb._content[mockMain.cacheKey] = {
+            content: "{}",
+            timestamp: 0,
+            expireTime: -1
+        }
 
         verify(mockMain.currentProvider !== null)
 
@@ -124,7 +132,7 @@ TestCase {
         compare(reloadTimer.state, ReloadTimer.State.SCHEDULED_RELOAD)
 
         verify(dataDownloader.loadingXhrs.hasOwnProperty(mockMain.cacheKey))
-        compare(dataDownloader.loadingXhrs[mockMain.cacheKey].length, 0)
+        compare(dataDownloader.loadingXhrs[mockMain.cacheKey], null)
     }
 
     function test_failureCallback() {
@@ -141,7 +149,7 @@ TestCase {
         compare(reloadTimer.state, ReloadTimer.State.LOADING_ERROR)
 
         verify(dataDownloader.loadingXhrs.hasOwnProperty(mockMain.cacheKey))
-        compare(dataDownloader.loadingXhrs[mockMain.cacheKey].length, 0)
+        compare(dataDownloader.loadingXhrs[mockMain.cacheKey], null)
     }
 
     function test_downloadAbort() {
@@ -159,9 +167,29 @@ TestCase {
         compare(reloadTimer.state, ReloadTimer.State.LOADING_ERROR)
 
         verify(dataDownloader.loadingXhrs.hasOwnProperty(mockMain.cacheKey))
-        compare(dataDownloader.loadingXhrs[mockMain.cacheKey].length, 0)
+        compare(dataDownloader.loadingXhrs[mockMain.cacheKey], null)
 
         verify(mockProvider.isAborted)
+    }
+
+    function test_downloadInProgress() {
+        mockProvider.interval = 60 * 60 * 1000
+        mockProvider.doFailure = false
+
+        let otherCacheKey = "456"
+        mockCacheDb._content[otherCacheKey] = {
+            content: "{}",
+            timestamp: 0,
+            expireTime: -1
+        }
+
+        reloadTimer.forceState(mockMain.cacheKey, ReloadTimer.State.SCHEDULED_RELOAD)
+
+        wait(1 * 1000)
+
+        let res = dataDownloader.reloadData(mockMain.cacheKey)
+        compare(res, false)
+        compare(reloadTimer.state, ReloadTimer.State.LOADING)
     }
 
 }

@@ -54,7 +54,7 @@ Item {
                 xhr.abort()
             })
         }
-        loadingXhrs[cacheKey] = []
+        loadingXhrs[cacheKey] = null
     }
 
     function reloadDataSuccessCallback(contentToCache, cacheKey) {
@@ -125,6 +125,12 @@ Item {
 
         if (loadingData) {
             dbgprint('still loading')
+            return false
+        }
+
+        if (loadingXhrs[cacheKey] != null && loadingXhrs[cacheKey].length > 0) {
+            dbgprint("xhrs in progress for cacheKey:", cacheKey)
+            reloadTimer.forceState(cacheKey, ReloadTimer.State.LOADING)
             return false
         }
 
