@@ -327,20 +327,23 @@ Item {
     }
 
     function createTodayTimeObj() {
-        if (xmlModelCurrent.count > 0) {
-            var currentTimeObj = xmlModelCurrent.get(0)
-            currentWeatherModel.temperature = currentTimeObj.temperature
-            currentWeatherModel.iconName = currentTimeObj.iconName
-            currentWeatherModel.windDirection = currentTimeObj.windDirection
-            currentWeatherModel.windSpeedMps = currentTimeObj.windSpeedMps
-            currentWeatherModel.pressureHpa = currentTimeObj.pressureHpa
-            currentWeatherModel.humidity = currentTimeObj.humidity
-            currentWeatherModel.cloudArea = currentTimeObj.cloudiness
-            currentWeatherModel.valid = true
+        var currentTimeObj = xmlModelCurrent.count > 0 ? xmlModelCurrent.get(0) : null
+        if (currentTimeObj !== null) {
+            return
         }
+        currentWeatherModel.date = parseDate(currentTimeObj.updated)
+        currentWeatherModel.temperature = currentTimeObj.temperature
+        currentWeatherModel.iconName = currentTimeObj.iconName
+        currentWeatherModel.windDirection = currentTimeObj.windDirection
+        currentWeatherModel.windSpeedMps = currentTimeObj.windSpeedMps
+        currentWeatherModel.pressureHpa = currentTimeObj.pressureHpa
+        currentWeatherModel.humidity = currentTimeObj.humidity
+        currentWeatherModel.cloudArea = currentTimeObj.cloudiness
 
         currentWeatherModel.sunRise = parseDate(currentTimeObj.rise)
         currentWeatherModel.sunSet = parseDate(currentTimeObj.set)
+        currentWeatherModel.valid = true
+
         dbgprint('setting actual weather from current xml model')
         dbgprint('sunRise: ' + currentWeatherModel.sunRise)
         dbgprint('sunSet:  ' + currentWeatherModel.sunSet)
@@ -366,6 +369,7 @@ Item {
                 foundNow = true
                 if (!currentWeatherModel.valid) {
                     dbgprint('adding to actualWeatherModel - temperature: ' + timeObj.temperature + ', iconName: ' + timeObj.iconName)
+                    currentWeatherModel.date = dateFrom
                     currentWeatherModel.temperature = timeObj.temperature
                     currentWeatherModel.iconName = timeObj.iconName
                     currentWeatherModel.windDirection = timeObj.windDirection
