@@ -782,11 +782,14 @@ Canvas {
                                                             fixedMin, fixedMax,
                                                             temperatureYGridCount)
 
+        let prevRatio = NaN
         while (isFinite(minP) && isFinite(maxP) && !fixedMin && !fixedMax) {
             const minSpace = 0.80
-            if (((maxY2 - minY2) / (maxP - minP)) < minSpace) {
+            let ratio = ((maxY2 - minY2) / (maxP - minP))
+            if (ratio < minSpace || ratio === prevRatio) {
                 break
             }
+            prevRatio = ratio
             let stepSize = (maxP - minP) / temperatureYGridCount
             let pad = 1 * stepSize
             var [minP, maxP] = ChartUtils.computeRightAxisRange(minP - pad, maxP + pad,
@@ -826,8 +829,10 @@ Canvas {
         // Pad the window size so the min/max value isn't on the edge of the graph area
         const coverageRatio = 0.80
         var roundedDv = ChartUtils.ceilBase(dV, 10)
-        while (dV / roundedDv > coverageRatio) {
+        var prevRoundedDv = NaN
+        while (dV / roundedDv > coverageRatio && roundedDv !== prevRoundedDv) {
             roundedDv = ChartUtils.ceilBase(roundedDv + 10, 10)
+            prevRoundedDv = roundedDv
         }
 
         roundedDv = Math.max(minGridCount, roundedDv)
