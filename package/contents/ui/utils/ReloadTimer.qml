@@ -414,4 +414,7 @@ Item {
         updateLastLoadText()
     }
 
+    onReloadIntervalChanged: {
+        updateState(reloadTimer.cacheKey)
+    }
 }
