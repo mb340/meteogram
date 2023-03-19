@@ -354,9 +354,9 @@ Item {
 
         setCurrentProviderAccordingId(placeObject.providerId)
 
-        var ok = loadFromCache()
+        var ok = loadFromCache(cacheKey)
         if (ok) {
-            reloadTimer.updateState(cacheKey)
+            reloadTimer.resetState(cacheKey)
         } else {
             dataDownloader.reloadData(cacheKey)
         }
