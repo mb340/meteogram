@@ -208,6 +208,8 @@ Item {
             case ReloadTimer.State.SCHEDULED_RELOAD:
                 handleNextReload(key)
                 break
+            case ReloadTimer.State.LOADING:
+                break
         }
         updateLastLoadText()
         updateNextLoadText()
