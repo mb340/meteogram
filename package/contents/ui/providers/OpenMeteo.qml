@@ -102,6 +102,8 @@ Item {
             return
         }
 
+        currentWeatherModel.date = parseDate(hourly.time[hourlyIdx])
+
         currentWeatherModel.iconName = String(hourly.weathercode[hourlyIdx])
         currentWeatherModel.temperature = parseFloat(hourly.temperature_2m[hourlyIdx])
         currentWeatherModel.windDirection = parseFloat(hourly.winddirection_10m[hourlyIdx])
