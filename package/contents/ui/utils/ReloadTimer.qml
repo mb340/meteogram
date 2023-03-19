@@ -47,13 +47,13 @@ Item {
     property string lastLoadText: ''
 
     required property var cacheDb
+    required property var dataDownloader
     required property var currentCacheKey
 
     property alias reloadTimer: reloadTimer
 
     signal loadFromCache(string key);
     signal reloadData(string key);
-
 
     enum State {
         INITIAL = 0,
@@ -286,6 +286,12 @@ Item {
 
         if (state === ReloadTimer.State.LOADING) {
             reloadTimer.stop()
+            return
+        }
+
+        if (dataDownloader.hasXhrs(key)) {
+            state = ReloadTimer.State.LOADING
+            updateState(key)
             return
         }
 

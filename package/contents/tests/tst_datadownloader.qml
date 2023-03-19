@@ -63,6 +63,7 @@ TestCase {
         id: reloadTimerComponent
         ReloadTimer {
             cacheDb: mockCacheDb
+            dataDownloader: root.dataDownloader
 
             currentCacheKey: mockMain.cacheKey
 

@@ -14,6 +14,7 @@ TestCase {
     property var mockCacheDb: null
     property var reloadTimer: null
 
+    property alias dataDownloader: dataDownloader
 
     property string plasmoidCacheId: mockMain.plasmoidCacheId
 
@@ -45,12 +46,23 @@ TestCase {
         }
     }
 
+    DataDownloader {
+        id: dataDownloader
+
+        cacheDb: mockCacheDb
+        reloadTimer: root.reloadTimer
+
+        currentCacheKey: mockMain.cacheKey
+        currentProvider: mockMain.currentProvider
+    }
+
     Component {
         id: reloadTimerComponent
         ReloadTimer {
             fuzzFactorEnabled: false
 
             cacheDb: root.mockCacheDb
+            dataDownloader: root.dataDownloader
 
             currentCacheKey: mockMain.cacheKey
         }

@@ -35,6 +35,13 @@ Item {
 
     signal loadFromCache()
 
+    function hasXhrs(cacheKey) {
+        let res = loadingXhrs[cacheKey] && loadingXhrs[cacheKey].length &&
+                    loadingXhrs[cacheKey].length > 0
+        dbgprint("hasXhrs: cacheKey =", cacheKey, ", ", res)
+        return res
+    }
+
 
     function clearLoadingXhrs(cacheKey, abort) {
         let xhrs = loadingXhrs[cacheKey]

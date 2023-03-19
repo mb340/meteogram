@@ -133,6 +133,8 @@ Item {
         id: reloadTimer
 
         cacheDb: cacheDb
+        dataDownloader: dataDownloader
+
         currentCacheKey: main.cacheKey
 
         Component.onCompleted: {
