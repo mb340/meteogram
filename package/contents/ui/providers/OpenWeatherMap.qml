@@ -376,7 +376,7 @@ Item {
                     currentWeatherModel.windSpeedMps = timeObj.windSpeedMps
                     currentWeatherModel.pressureHpa = timeObj.pressureHpa
                     currentWeatherModel.humidity = timeObj.humidity
-                    currentWeatherModel.cloudArea = timeObj.cloudiness
+                    currentWeatherModel.cloudArea = timeObj.clouds
                     currentWeatherModel.valid = true
                 }
                 continue
