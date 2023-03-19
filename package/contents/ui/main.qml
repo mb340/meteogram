@@ -598,7 +598,10 @@ Item {
         function init() {
             const ONE_HOUR = (60 * 60 * 1000)
             var dt = ONE_HOUR - (Date.now() % ONE_HOUR)
-            updateViewsTimer.interval = dt
+            if (dt < 10 * 1000) {
+                dt = ONE_HOUR + dt
+            }
+            updateViewsTimer.interval = dt + (10 * 1000)
             updateViewsTimer.restart()
 
             dbgprint('updateViewsTimer: ' + (new Date(Date.now() + dt)))
