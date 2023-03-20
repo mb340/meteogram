@@ -356,12 +356,8 @@ Item {
 
         setCurrentProviderAccordingId(placeObject.providerId)
 
-        var ok = loadFromCache(cacheKey)
-        if (ok) {
-            reloadTimer.resetState(cacheKey)
-        } else {
-            dataDownloader.reloadData(cacheKey)
-        }
+        loadFromCache(cacheKey)
+        reloadTimer.resetState(cacheKey)
     }
 
     function reloadMeteogram() {
@@ -412,21 +408,45 @@ Item {
         }
     }
 
-    function loadFromCache(key) {
-        if (key !== undefined && key !== cacheKey) {
-            return false
+    function _loadFromCache(cacheKey) {
+        if (cacheKey !== main.cacheKey) {
+            return
         }
 
         if (!cacheDb.hasKey(cacheKey)) {
             print('error: cache not available')
-            return false
+            return
         }
 
         dbgprint('loading from cache, config key: ' + cacheKey)
-        updateWorker.cacheKey = cacheKey
-        updateWorker.restart()
 
-        return true
+        weatherAlertsModel.clear()
+
+        var content = cacheDb.getContent(cacheKey)
+        if (content === null) {
+            return
+        }
+
+        var success = currentProvider.setWeatherContents(content)
+        if (!success) {
+            print('error: setting weather contents not successful')
+            cacheKey = null
+            return
+        }
+
+        creditLink = currentProvider.getCreditLink(placeIdentifier, placeAlias)
+        creditLabel = currentProvider.getCreditLabel(placeIdentifier)
+
+
+        refreshTooltipSubText()
+
+        if (currentProvider.providerId !== "owm") {
+            reloadMeteogram()
+        }
+    }
+
+    function loadFromCache(key) {
+        Qt.callLater(_loadFromCache, key)
     }
 
     function getPlasmoidStatus(lastReloaded, inTrayActiveTimeoutSec) {
@@ -561,14 +581,14 @@ Item {
         if (!initialized) {
             return
         }
-        loadFromCache()
+        loadFromCache(cacheKey)
     }
 
     onMaxMeteogramHoursChanged: {
         if (!initialized) {
             return
         }
-        loadFromCache()
+        loadFromCache(cacheKey)
     }
 
     function dbgprint(msg) {
@@ -586,7 +606,7 @@ Item {
         running: false
         triggeredOnStart: false
         onTriggered: {
-            if (!loadFromCache()) {
+            if (!loadFromCache(cacheKey)) {
                 dbgprint('updateViewsTimer error')
             } else {
                 dbgprint('updateViewsTimer loaded from cache')
