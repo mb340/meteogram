@@ -364,50 +364,6 @@ Item {
         meteogramModelChanged = !meteogramModelChanged
     }
 
-    Timer {
-        id: updateWorker
-        interval: 0
-        running: false
-        repeat: false
-        triggeredOnStart: true
-
-        property var cacheKey: null
-
-        onTriggered: {
-
-            if (cacheKey !== main.cacheKey) {
-                cacheKey = null
-                return
-            }
-
-            weatherAlertsModel.clear()
-
-            var content = cacheDb.getContent(cacheKey)
-            if (content === null) {
-                return false
-            }
-
-            var success = currentProvider.setWeatherContents(content)
-            if (!success) {
-                print('error: setting weather contents not successful')
-                cacheKey = null
-                return false
-            }
-
-            creditLink = currentProvider.getCreditLink(placeIdentifier, placeAlias)
-            creditLabel = currentProvider.getCreditLabel(placeIdentifier)
-
-
-            refreshTooltipSubText()
-
-            if (currentProvider.providerId !== "owm") {
-                reloadMeteogram()
-            }
-
-            cacheKey = null
-        }
-    }
-
     function _loadFromCache(cacheKey) {
         if (cacheKey !== main.cacheKey) {
             return
