@@ -31,7 +31,7 @@ Item {
 
     property bool updateSemaphore: false
 
-    property int tzOffset: 0
+    // property int tzOffset: 0
 
 // DEBUGGING URLs
 //     property string urlPrefix: 'http://localhost/forecast'

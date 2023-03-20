@@ -163,6 +163,8 @@ Item {
 
     OpenWeatherMap {
         id: owmProvider
+
+        property alias tzOffset: main.timezoneOffset
     }
 
     OpenMeteo {
