@@ -229,6 +229,9 @@ Item {
             }
             prevHour = hour
 
+            dailyModel.date = new Date(date)
+            dailyModel.date.setHours(0, 0, 0, 0)
+
             // Match exact hour.
             // Take the next closest if exact match isn't available.
             let isNearestHour = false
@@ -282,7 +285,7 @@ Item {
 
             let item = dailyModel.models[dailyPeriodIdx]
             if (isNearestHour) {
-                dailyModel.date = date
+                item.date = date
                 item.partOfDay = partOfDay
                 item.temperature = temperature
                 item.iconName = iconNumber
