@@ -466,7 +466,6 @@ Canvas {
             }
 
             var t = item.from
-            t.setMinutes(0, 0, 0)
             var x = timeScale.translate(t)
             var y = temperatureScale.translate(unitUtils.convertTemperature(
                                                item.temperature, temperatureType))
