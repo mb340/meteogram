@@ -62,9 +62,6 @@ Item {
 
     property alias nHours: meteogramCanvas.nHours
 
-    Component.onCompleted: {
-        meteogramCanvas.fullRedraw()
-    }
 
     onY2VarNameChanged: {
         plasmoid.configuration.y2VarName = y2VarName
