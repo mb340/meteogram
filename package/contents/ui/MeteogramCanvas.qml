@@ -45,6 +45,8 @@ Canvas {
     property double hourStrWidth: NaN
     property int hourStep: 2
 
+    property bool isRectWidthChanged: true
+
     property alias temperatureScale: temperatureScale
     property alias temperatureAxisScale: temperatureAxisScale
     property alias rightAxisScale: rightAxisScale
@@ -197,9 +199,8 @@ Canvas {
         }
     }
 
-    onRectWidthChanged: {
-        computeFontSize()
-    }
+    onRectWidthChanged: isRectWidthChanged = true
+    onNHoursChanged: isRectWidthChanged = true
 
     onGraphCurvedLineChanged: {
         temperaturePath.pathElements = []
@@ -212,27 +213,8 @@ Canvas {
     /*
      * Repaint canvas on resize.
      */
-    onWidthChanged: redrawTimer.restart()
-    onHeightChanged: redrawTimer.restart()
-
-    Timer {
-        id: redrawTimer
-        interval: 300
-        repeat: true
-        running: false
-        triggeredOnStart: true
-        property double prevHeight: -1
-        property double prevWidth: -1
-        onTriggered: {
-            if (prevHeight === height && prevWidth === width) {
-                fullRedraw()
-                stop()
-                return
-            }
-            prevWidth = width
-            prevHeight = height
-        }
-    }
+    onWidthChanged: Qt.callLater(fullRedraw)
+    onHeightChanged: Qt.callLater(fullRedraw)
 
     /*
      * Load weather icons
@@ -241,7 +223,11 @@ Canvas {
                                 plasmoid.configuration.iconSetType : 0
 
     function computeFontSize() {
-        if (!available) {
+        if (!available || !isRectWidthChanged) {
+            return
+        }
+
+        if (!isFinite(rectWidth) || rectWidth <= 0) {
             return
         }
 
@@ -260,6 +246,7 @@ Canvas {
             size += 0.5
         }
         fontSize = size
+        isRectWidthChanged = false
     }
 
     function drawPrecipitationBars(context, rectWidth) {
@@ -963,9 +950,12 @@ Canvas {
             return
         }
 
-        computeHourStrWidth()
         processMeteogramData()
         buildMetogramData()
+
+        computeFontSize()
+        computeHourStrWidth()
+
         buildCurves()
         buildCloudPath()
 
