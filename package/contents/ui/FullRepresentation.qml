@@ -132,8 +132,6 @@ Item {
             meteogram: fullRepresentation.meteogram
             meteogramModel: main.meteogramModel
 
-            property bool chartAllData: false
-
             model: [
                 { label: String.fromCodePoint(0x1F3F7), varName: "precipitationAmount",
                     tooltip: i18n("Precipitation Labels"),
@@ -159,7 +157,6 @@ Item {
                         main.maxMeteogramHours = plasmoid.configuration.maxMeteogramHours
                     } else {
                         main.maxMeteogramHours = 1000
-                        chartAllData = true
                     }
                 }
             }
