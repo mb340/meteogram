@@ -25,8 +25,14 @@ Item {
     property var defaultModel: null
     property var _model: defaultModel ? defaultModel : listModel
 
+    signal onDataChanged(variant topLeft, variant bottomRight)
+
     ListModel {
         id: listModel
+    }
+
+    Component.onCompleted: {
+        listModel.onDataChanged.connect(onDataChanged)
     }
 
     function beginList() {
