@@ -173,23 +173,6 @@ Canvas {
     }
 
     Component {
-        id: pathCurve
-        PathCurve {
-            x: !xData || i < 0 || i >= xData.length ? 0 : xData[i]
-            y: !scale || !model || !varName || varName === "" ? 0 :
-                    scale.translate(unitUtils.convertValue(model[varName], varName, unitType))
-
-            property int i
-            property var xData
-
-            property var model
-            property var scale
-            property string varName
-            property int unitType
-        }
-    }
-
-    Component {
         id: cloudPathLine
         PathLine {
             x: !model ? NaN : timeScale.translate(model.from)
@@ -202,15 +185,6 @@ Canvas {
             property bool isCloudTop: true
 
             property var model: meteogramModel.get(i)
-        }
-    }
-
-    Component {
-        id: cloudPathCurve
-        PathCurve {
-            x: !xData || i < 0 || i >= xData.length ? NaN : xData[i]
-            property int i
-            property var xData
         }
     }
 
