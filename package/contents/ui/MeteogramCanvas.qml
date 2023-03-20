@@ -28,8 +28,6 @@ Canvas {
     property double fontSize: 14 * units.devicePixelRatio
     property var precLabelPositions: ({})
 
-    property bool graphCurvedLine: plasmoid.configuration.graphCurvedLine
-
     property int nHours: 0
     property double rectWidth: width / nHours
 
@@ -203,14 +201,6 @@ Canvas {
 
     onRectWidthChanged: isRectWidthChanged = true
     onNHoursChanged: isRectWidthChanged = true
-
-    onGraphCurvedLineChanged: {
-        temperaturePath.pathElements = []
-        humidityPath.pathElements = []
-        y1Path.pathElements = []
-        y2Path.pathElements = []
-        fullRedraw()
-    }
 
     /*
      * Repaint canvas on resize.

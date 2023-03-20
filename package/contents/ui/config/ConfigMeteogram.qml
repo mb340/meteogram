@@ -9,7 +9,6 @@ import "../../code/color.js" as ColorTools
 ColumnLayout {
     id: root
 
-    property bool cfg_graphCurvedLine: plasmoid.configuration.graphCurvedLine
     property alias cfg_maxMeteogramHours: maxMeteogramHours.value
 
     property bool cfg_renderTemperature: plasmoid.configuration.renderTemperature
@@ -148,27 +147,6 @@ ColumnLayout {
     GridLayout {
         Layout.fillWidth: true
         columns: 3
-
-        Label {
-            text: i18n("Smooth Graph Line:")
-            Layout.alignment: Qt.AlignVCenter|Qt.AlignRight
-
-            Layout.preferredWidth: maxColWidth
-            onWidthChanged: updateMaxColWidth(width)
-        }
-
-        CheckBox {
-            checked: cfg_graphCurvedLine
-            onCheckedChanged: {
-                cfg_graphCurvedLine = checked
-            }
-        }
-
-        Item {
-            width: 2
-            height: 10
-            Layout.columnSpan: 3
-        }
 
         Label {
             text: i18n("Maximum Hours")
