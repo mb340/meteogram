@@ -33,14 +33,36 @@ Canvas {
     property int nHours: 0
     property double rectWidth: width / nHours
 
-    property var xArr: []
-
     property var temperaturePathItems: []
     property var humidityPathItems: []
     property var y1PathItems: []
     property var y2PathItems: []
 
     property var cloudPathItems: []
+
+
+    property var pathLineConfigs: ({
+        "temperature": {
+            scale: temperatureScale,
+            varName: "temperature",
+            unitType: main.temperatureType
+        },
+        "humidity": {
+            scale: humidityScale,
+            varName: "humidity",
+            unitType: -1
+        },
+        "y1Chart": {
+            scale: temperatureScale,
+            varName: y1VarName,
+            unitType: main.temperatureType
+        },
+        "y2Chart": {
+            scale: rightAxisScale,
+            varName: y2VarName,
+            unitType: unitUtils.getUnitType(y2VarName)
+        }
+    })
 
     property double hourStrWidth: NaN
     property int hourStep: 2
@@ -137,17 +159,16 @@ Canvas {
     Component {
         id: pathLine
         PathLine {
-            x: !xData || i < 0 || i >= xData.length ? NaN : xData[i]
-            y: !scale || !model || !varName || varName === "" ? NaN :
-                    scale.translate(unitUtils.convertValue(model[varName], varName, unitType))
+            x: !pathLineConfig || !model ? NaN : timeScale.translate(model.from)
+            y: !pathLineConfig || !model ? NaN :
+                    pathLineConfig.scale.translate(
+                        unitUtils.convertValue(model[pathLineConfig.varName],
+                                               pathLineConfig.varName,
+                                               pathLineConfig.unitType ? pathLineConfig.unitType : -1))
 
             property int i
-            property var xData
-
-            property var model
-            property var scale
-            property string varName
-            property int unitType
+            property var pathLineConfig
+            property var model: meteogramModel.get(i)
         }
     }
 
@@ -171,9 +192,16 @@ Canvas {
     Component {
         id: cloudPathLine
         PathLine {
-            x: !xData || i < 0 || i >= xData.length ? NaN : xData[i]
+            x: !model ? NaN : timeScale.translate(model.from)
+
+            y: !model ? NaN :
+                isCloudTop ? cloudAreaScale.translate(50 + (model.cloudArea / 2)) :
+                             cloudAreaScale.translate(50 - ((model.cloudArea) / 4))
+
             property int i
-            property var xData
+            property bool isCloudTop: true
+
+            property var model: meteogramModel.get(i)
         }
     }
 
@@ -611,20 +639,11 @@ Canvas {
         }
     }
 
-    function updatePathElement(index, path, pathList, xData, model, scale, varName, unitType) {
-        if (unitType === undefined) {
-            unitType = -1
-        }
-
+    function updatePathElement(index, chartName, pathList) {
         if (index >= pathList.length) {
-            let obj = pathLine.createObject(path, {
+            let obj = pathLine.createObject(root, {
                 i: index,
-                xData: xData,
-
-                model: model,
-                scale: scale,
-                varName: varName,
-                unitType: unitType
+                pathLineConfig: Qt.binding(function() { return pathLineConfigs[chartName] }),
             })
             if (obj != null) {
                 pathList.push(obj)
@@ -635,10 +654,6 @@ Canvas {
             let item = pathList[index]
             let tmp = item.i
             item.i = index
-            item.model = model
-            item.scale = scale
-            item.varName = varName
-            item.unitType = unitType
             if (tmp === index) {
                 item.iChanged()
             }
@@ -647,6 +662,10 @@ Canvas {
 
     function buildCurves() {
         if (meteogramModel.count <= 0) {
+            temperaturePath.pathElements = []
+            humidityPath.pathElements = []
+            y1Path.pathElements = []
+            y2Path.pathElements = []
             return
         }
 
@@ -654,30 +673,18 @@ Canvas {
         let y2Count = 0
         let hasY1Chart = y1VarName && y1VarName !== ""
         let hasY2Chart = y2VarName && y2VarName !== ""
+
         for (var i = 0; i < meteogramModel.count; i++) {
-            var dataObj = meteogramModel.get(i)
-
-            var x = timeScale.translate(dataObj.from)
-            if (i < xArr.length) {
-                xArr[i] = x
-            } else {
-                xArr.push(x)
-            }
-
-            updatePathElement(i, temperaturePath, temperaturePathItems, xArr, dataObj,
-                              temperatureScale, "temperature", main.temperatureType)
-            updatePathElement(i, humidityPath, humidityPathItems, xArr, dataObj,humidityScale,
-                              "humidity")
+            updatePathElement(i, "temperature", temperaturePathItems)
+            updatePathElement(i, "humidity", humidityPathItems)
 
             if (hasY1Chart) {
-                updatePathElement(i, y1Path, y1PathItems, xArr, dataObj, temperatureScale,
-                                  y1VarName, main.temperatureType)
+                updatePathElement(i, "y1Chart", y1PathItems)
                 y1Count++
             }
 
             if (hasY2Chart) {
-                updatePathElement(i, y2Path, y2PathItems, xArr, dataObj, rightAxisScale, y2VarName,
-                                  unitUtils.getUnitType(y2VarName))
+                updatePathElement(i, "y2Chart", y2PathItems)
                 y2Count++
             }
         }
@@ -702,51 +709,42 @@ Canvas {
     function buildCloudPath() {
         let count = 0
         for (var i = 0; i < meteogramModel.count; i++) {
-            var dataObj = meteogramModel.get(i)
-
-            let y = cloudAreaScale.translate(50 + (dataObj.cloudArea / 2))
-
             if (i >= cloudPathItems.length) {
                 cloudPathItems.push(cloudPathLine.createObject(humidityPath, {
                     i: i,
-                    xData: xArr,
-                    y: y,
+                    isCloudTop: false
                 }))
             } else {
-                cloudPathItems[i].i = i
-                cloudPathItems[i].y = y
-                cloudPathItems[i].iChanged()
+                cloudPathItems[count].i = i
+                cloudPathItems[count].isCloudTop = false
+                cloudPathItems[count].iChanged()
+                cloudPathItems[count].isCloudTopChanged()
             }
 
             count++
         }
 
-        for (var i = meteogramModel.count - 1, j = 0; i > -1; i--, j++) {
-            var dataObj = meteogramModel.get(i)
-
-            let pathElementsIdx = meteogramModel.count + j
-            let y = cloudAreaScale.translate(50 - ((dataObj.cloudArea) / 4))
-
-            if (pathElementsIdx >= cloudPathItems.length) {
+        for (var i = meteogramModel.count - 1; i > -1; i--) {
+            if (count >= cloudPathItems.length) {
                 cloudPathItems.push(cloudPathLine.createObject(humidityPath, {
                     i: i,
-                    xData: xArr,
-                    y: y,
+                    isCloudTop: true
                 }))
             } else {
-                cloudPathItems[pathElementsIdx].i = i
-                cloudPathItems[pathElementsIdx].y = y
-                cloudPathItems[pathElementsIdx].iChanged()
+                cloudPathItems[count].i = i
+                cloudPathItems[count].isCloudTop = true
+                cloudPathItems[count].iChanged()
+                cloudPathItems[count].isCloudTopChanged()
             }
 
             count++
         }
 
-        if (count > 0) {
-            cloudAreaPath.startY = cloudPathItems[(2 * meteogramModel.count) - 1].y
-        }
 
         cloudAreaPath.pathElements = cloudPathItems.slice(0, count)
+        if (count > 0) {
+            cloudAreaPath.startY = cloudAreaPath.pathElements[count - 1].y
+        }
     }
 
     function processMeteogramData() {
