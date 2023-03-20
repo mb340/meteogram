@@ -153,7 +153,9 @@ Item {
                                                         reloadDataFailureCallback, args)
         loadingXhrs[cacheKey] = xhrs
 
-        startAbortTimer(cacheKey, () => reloadDataFailureCallback(cacheKey))
+        startAbortTimer(cacheKey, () => {
+            reloadDataFailureCallback(cacheKey)
+        })
         return true
     }
 
@@ -180,6 +182,7 @@ Item {
     function stopAbortTimer(key) {
         if (abortTimers[key]) {
             abortTimers[key].stop()
+            abortTimers[key].destroy()
             abortTimers[key] = null
         }
     }
