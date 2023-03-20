@@ -130,8 +130,12 @@ QtObject {
             try {
                 var statement = 'SELECT flag FROM UpdateSemaphore WHERE key = ?'
                 var rs = tx.executeSql(statement, [cacheKey]);
-                if (!rs || rs.rows.length !== 1) {
+                if (!rs) {
                     return
+                }
+
+                if (rs.rows.length < 1) {
+                    return sem = true
                 }
 
                 var f = Number(rs.rows.item(0).flag)

@@ -61,11 +61,13 @@ TestCase {
         verify(sem)
     }
 
-    function test_checkUpdateSemaphore() {
+    function test_checkUpdateSemaphore_initialize() {
         var sem = cacheDb.checkUpdateSemaphore("123")
-        verify(sem === false)
+        verify(sem === true)
+    }
 
-        sem = cacheDb.obtainUpdateSemaphore("123")
+    function test_checkUpdateSemaphore() {
+        var sem = cacheDb.obtainUpdateSemaphore("123")
         verify(sem === true)
 
         sem = cacheDb.checkUpdateSemaphore("123")
@@ -73,7 +75,7 @@ TestCase {
     }
 
     function test_checkUpdateSemaphore_already_locked() {
-        let flag = 20
+        let flag = "20"
         verify(flag !== plasmoid.id)
 
         sem = cacheDb.obtainUpdateSemaphore("123", flag)
