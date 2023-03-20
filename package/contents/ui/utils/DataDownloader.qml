@@ -33,7 +33,7 @@ Item {
     required property var currentCacheKey
     required property var currentProvider
 
-    signal loadFromCache()
+    signal loadFromCache(string key)
 
     function hasXhrs(cacheKey) {
         let res = loadingXhrs[cacheKey] && loadingXhrs[cacheKey].length &&
@@ -58,7 +58,7 @@ Item {
     }
 
     function reloadDataSuccessCallback(contentToCache, cacheKey) {
-        dbgprint("Data Loaded From Internet successfully.")
+        dbgprint("Data Loaded From Internet successfully for cacheKey:", cacheKey)
 
         stopAbortTimer(cacheKey)
 
