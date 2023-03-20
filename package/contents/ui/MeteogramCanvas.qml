@@ -919,7 +919,10 @@ Canvas {
         computeHourStrWidth()
 
         buildCurves()
-        buildCloudPath()
+
+        if (plasmoid.configuration.renderCloudCover) {
+            buildCloudPath()
+        }
 
         initialized = true
         requestPaint()
