@@ -29,6 +29,9 @@ Item {
 
     property bool mainInTray: main.inTray
 
+    property var now: undefined
+
+
     Label {
         id: dayTitleText
         text: date.toLocaleDateString(Qt.locale(), 'ddd d MMM')
@@ -103,7 +106,7 @@ Item {
                 temperature_max: model.temperatureHigh
                 iconName: model.iconName
                 hidden: !isFinite(model.temperature)
-                // past: isPast0
+                past: (now === undefined) ? false : (model.date < now)
                 partOfDay: (index == 0 || index == 3) ? 1 : 0
                 pixelFontSize: periodFontSize
             }

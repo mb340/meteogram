@@ -353,12 +353,25 @@ Item {
         spacing: nextDayItemSpacing
         interactive: false
 
+        property var now: undefined
+
         delegate: NextDayItem {
             width: nextDayItemWidth
             height: nextDaysView.height
 
             titleHeight: nextDayTitleMetrics.height
             rowHeight: (nextDaysView.height - titleHeight) / 4
+
+            now: nextDaysView.now
+        }
+
+        Component.onCompleted: {
+            updateCurrentTime()
+            dailyWeatherModels.onDataChanged.connect(() => { Qt.callLater(updateCurrentTime) })
+        }
+
+        function updateCurrentTime() {
+            now = timeUtils.dateNow(timezoneType, main.timezoneOffset)
         }
     }
 
