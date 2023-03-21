@@ -139,7 +139,8 @@ Item {
         let uviMax = 0
 
         for (i = hourlyIdx; i < hourly.time.length; i++) {
-            let day = parseDate(hourly.time[i])
+            let date = parseDate(hourly.time[i])
+            let day = new Date(date)
             day.setHours(0, 0, 0, 0)
             let dayHour = parseDate(hourly.time[i])
             dayHour.setMinutes(0, 0, 0)
@@ -198,6 +199,9 @@ Item {
 
             let item = dailyModel.models[dailyPeriodIdx]
             if (isNearestHour) {
+                item.date = new Date(date)
+                timeUtils.setDailyPeriodHour(dailyPeriodIdx, item.date)
+
                 item.partOfDay = partOfDay
                 item.iconName = String(hourly.weathercode[i])
 
