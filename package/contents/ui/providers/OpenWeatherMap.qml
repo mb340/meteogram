@@ -547,6 +547,15 @@ Item {
             let day = dailyModel.models[2]
             let eve = dailyModel.models[3]
 
+            night.date = new Date(dateFrom)
+            timeUtils.setDailyPeriodHour(0, night.date)
+            morn.date = new Date(dateFrom)
+            timeUtils.setDailyPeriodHour(1, morn.date)
+            day.date = new Date(dateFrom)
+            timeUtils.setDailyPeriodHour(2, day.date)
+            eve.date = new Date(dateFrom)
+            timeUtils.setDailyPeriodHour(3, eve.date)
+
             night.temperature = item.temperatureNight
             morn.temperature = item.temperatureMorning
             day.temperature = item.temperatureDay
