@@ -285,7 +285,9 @@ Item {
 
             let item = dailyModel.models[dailyPeriodIdx]
             if (isNearestHour) {
-                item.date = date
+                item.date = new Date(date)
+                timeUtils.setDailyPeriodHour(dailyPeriodIdx, item.date)
+
                 item.partOfDay = partOfDay
                 item.temperature = temperature
                 item.iconName = iconNumber
