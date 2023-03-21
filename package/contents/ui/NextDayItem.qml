@@ -63,23 +63,6 @@ Item {
 
     }
 
-    property var periodModels: model.models
-
-    ManagedListModel {
-        id: _periodModels
-    }
-
-    onPeriodModelsChanged: {
-        if (!periodModels || !periodModels.count) {
-            return
-        }
-        _periodModels.beginList()
-        for (var i = 0; i < periodModels.count; i++) {
-            _periodModels.addItem(periodModels.get(i))
-        }
-        _periodModels.endList()
-    }
-
     Grid {
         id: itemGrid
         anchors.top: dayTitleText.bottom
@@ -95,7 +78,7 @@ Item {
 
 
         Repeater {
-            model: _periodModels.model
+            model: models ? models : []
 
             NextDayPeriodItem {
                 width: parent.width / parent.columns
