@@ -38,7 +38,7 @@ RowLayout {
     property int iconSetType: (plasmoid && plasmoid.configuration && plasmoid.configuration.iconSetType) ?
                                plasmoid.configuration.iconSetType : 0
 
-    opacity: past ? 0.5 : 1
+    opacity: past ? 0.25 : 1
 
     Item {
         /*spacer*/
