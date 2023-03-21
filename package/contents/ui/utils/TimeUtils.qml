@@ -179,5 +179,18 @@ QtObject {
 
         return i18n("a long time")
     }
+
+    function setDailyPeriodHour(dailyPeriodIdx, date) {
+        if (dailyPeriodIdx === 0) {
+            date.setHours(6, 0, 0, 0)
+        } else if (dailyPeriodIdx === 1) {
+            date.setHours(12, 0, 0, 0)
+        } else if (dailyPeriodIdx === 2) {
+            date.setHours(18, 0, 0, 0)
+        } else {
+            date.setDate(date.getDate() + 1)
+            date.setHours(0, 0, 0, 0)
+        }
+    }
 }
 
