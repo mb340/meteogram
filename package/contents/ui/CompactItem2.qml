@@ -346,8 +346,8 @@ Grid {
 
             PropertyChanges {
                 target: parent
-                Layout.fillWidth: isVertical
-                Layout.fillHeight: !isVertical
+                Layout.fillWidth: isPanelVertical
+                Layout.fillHeight: !isPanelVertical
             }
             PropertyChanges {
                 target: compactItem
