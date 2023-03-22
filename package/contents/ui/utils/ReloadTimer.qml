@@ -37,10 +37,6 @@ Item {
     property double nextLoadTime: -1
     property double expireTime: -1
 
-    property double minInterval: 1 * msPerMin
-    property var prevCacheKey: null
-    property double prevInterval: NaN
-
     property var localLastLoadTimes: ({})
 
     property string nextLoadText: ''
@@ -140,12 +136,6 @@ Item {
         nextLoadTime = getDateNow() + interval
 
         // dbgprint("fireTimer: nextLoadTime ", nextLoadTime, new Date(nextLoadTime))
-        if (prevCacheKey === key && prevInterval < minInterval && interval < minInterval) {
-            console.exception("ReloadTimer interval too low. interval = ", interval)
-            return
-        }
-        prevCacheKey = key
-        prevInterval = interval
 
         // Fuzz factor to avoid overlapping timers when multiple same plasmoids are running
         let fuzz = fuzzFactorEnabled ? 1000 + (Math.random() * 1 * 1000) : 0

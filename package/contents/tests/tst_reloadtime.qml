@@ -195,24 +195,4 @@ TestCase {
 
         compare(isloadFromCacheCalled, true)
     }
-
-    function test_reloadSpam() {
-        plasmoid.configuration.reloadIntervalMin = 1
-
-
-        reloadTimer.getDateNow = function(){
-            return 0
-        }
-
-        reloadTimer.forceState(mockMain.cacheKey, ReloadTimer.State.SCHEDULED_RELOAD)
-        reloadTimer.forceState(mockMain.cacheKey, ReloadTimer.State.SCHEDULED_RELOAD)
-        compare(reloadTimer.reloadTimer.running, false)
-
-        mockMain.cacheKey = "456"
-        reloadTimer.forceState(mockMain.cacheKey, ReloadTimer.State.SCHEDULED_RELOAD)
-        plasmoid.configuration.reloadIntervalMin = 60 * 60 * 1000
-        mockMain.cacheKey = "123"
-        reloadTimer.forceState(mockMain.cacheKey, ReloadTimer.State.SCHEDULED_RELOAD)
-        compare(reloadTimer.reloadTimer.running, true)
-    }
 }
