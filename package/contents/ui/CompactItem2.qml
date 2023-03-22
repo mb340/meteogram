@@ -274,6 +274,7 @@ Grid {
             PropertyChanges {
                 target: parent
                 Layout.fillWidth: true
+                Layout.maximumHeight: compactItem.height
             }
             PropertyChanges {
                 target: compactItem
