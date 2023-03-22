@@ -56,7 +56,6 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
 
-                font.pointSize: -1
                 font.pixelSize: 1024
                 minimumPixelSize: 1
                 fontSizeMode: Text.Fit
