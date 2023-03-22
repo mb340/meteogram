@@ -36,14 +36,6 @@ Item {
             width: iconModel.iconDim
             height: width
 
-            // Re-usable components use the same font and size accross all instances of the
-            // component. Work around this by forcing the font size.
-            onWidthChanged: {
-                if (textItem.font.pixelSize !== width) {
-                    textItem.font.pixelSize = width
-                }
-            }
-
             Label {
                 id: textItem
                 text: IconTools.getIconResource(iconModel.iconName, currentProvider,
