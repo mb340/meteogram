@@ -1,12 +1,13 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.1
+import org.kde.plasma.core 2.0 as PlasmaCore
 
-ColumnLayout {
+Column {
     id: root
 
-    // width: 320
-    // height: 240
+    width: 240 * units.devicePixelRatio
+    height: 128 * units.devicePixelRatio
 
     readonly property var defaultOrder: ["0", "1", "2"]
     readonly property var itemNames: [
@@ -26,62 +27,146 @@ ColumnLayout {
         id: enabledItemsModel
     }
 
-    Row {
-        Layout.fillWidth: true
+    RowLayout {
 
-        // Layout.minimumWidth: parent.width
-        Layout.minimumHeight: defaultOrder.length * 32
-        Layout.alignment: Qt.AlignVTop
+        width: parent.width
+        height: parent.height - itemOrderButtons.height
 
-        Column {
-            width: parent.width / 2
-            height: parent.height
+        Rectangle {
+            color: 'transparent'
 
-            HorizontalHeaderView {
+            Layout.fillWidth: true
+
+            Layout.preferredHeight: parent.height
+
+            ColumnLayout {
+                anchors.fill: parent
                 width: parent.width
 
-                syncView: disabledTableView
-                model: [i18n("Disabled Items"), ]
-            }
+                HorizontalHeaderView {
+                    id: disabledTableHeader
 
-            TableView {
-                id: disabledTableView
+                    Layout.preferredWidth: parent.width
+                    clip: true
 
-                width: parent.width
-                height: contentHeight
+                    syncView: disabledTableView
+                    model: [i18n("Disabled Items"), ]
+                }
 
-                property int currentRow: -1
+                TableView {
+                    id: disabledTableView
 
-                onWidthChanged: forceLayout()
+                    Layout.preferredWidth: parent.width
+                    Layout.preferredHeight: parent.height
 
-                model: disabledItemsModel
-                delegate: listItemComponent
+                    property int currentRow: -1
+
+                    onWidthChanged: forceLayout()
+                    onHeightChanged: forceLayout()
+
+                    model: disabledItemsModel
+                    delegate: listItemComponent
+                }
             }
         }
 
-        Column {
-            width: parent.width / 2
-            height: parent.height
+        ColumnLayout {
+            id: addRemoveButtons
 
-            HorizontalHeaderView {
-                width: parent.width
+            Layout.fillWidth: false
+            Layout.minimumWidth: childrenRect.width
+            Layout.preferredHeight: parent.height
 
-                syncView: disabledTableView
-                model: [i18n("Enabled Items"), ]
+            Item {
+                Layout.preferredWidth: parent.width
+                Layout.minimumHeight: Math.max(disabledTableHeader.height, enabledTableHeader.height)
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: 'transparent'
+                }
             }
 
-            TableView {
-                id: enabledTableView
+            Item {
+                Layout.preferredWidth: parent.width
+                Layout.fillHeight: true
+            }
 
-                width: parent.width / 2
-                height: parent.height
+            Button {
+                icon.name: 'go-next'
+                enabled: disabledTableView.currentRow !== -1 && disabledItemsModel.count > 0
 
-                property int currentRow: -1
+                // Layout.alignment: Qt.AlignVCenter
 
-                onWidthChanged: forceLayout()
+                onClicked: moveItemToTable(disabledTableView, enabledTableView)
+            }
 
-                model: enabledItemsModel
-                delegate: listItemComponent
+
+            Button {
+                icon.name: 'go-previous'
+                enabled: enabledTableView.currentRow !== -1 && enabledItemsModel.count > 1
+
+                // Layout.alignment: Qt.AlignVCenter
+
+                onClicked: {
+                    if (enabledItemsModel.count <= 1) {
+                        return
+                    }
+                    moveItemToTable(enabledTableView, disabledTableView)
+                }
+            }
+
+            Item {
+                Layout.preferredWidth: parent.width
+                Layout.fillHeight: true
+            }
+
+            Item {
+                Layout.preferredWidth: parent.width
+                Layout.minimumHeight: itemOrderButtons.height
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: 'transparent'
+                }
+            }
+        }
+
+        Rectangle {
+            color: 'transparent'
+
+            Layout.fillWidth: true
+            Layout.preferredHeight: parent.height
+
+            ColumnLayout {
+
+                anchors.fill: parent
+
+                HorizontalHeaderView {
+                    id:enabledTableHeader
+
+                    Layout.preferredWidth: enabledTableView.width
+                    Layout.fillWidth: true
+                    clip: true
+
+                    syncView: enabledTableView
+                    model: [i18n("Enabled Items"), ]
+                }
+
+                TableView {
+                    id: enabledTableView
+
+                    Layout.preferredWidth: parent.width
+                    Layout.preferredHeight: parent.height
+
+                    property int currentRow: -1
+
+                    onWidthChanged: forceLayout()
+                    onHeightChanged: forceLayout()
+
+                    model: enabledItemsModel
+                    delegate: listItemComponent
+                }
             }
         }
     }
@@ -92,19 +177,20 @@ ColumnLayout {
         Rectangle {
             id: tableViewItem
 
-            Layout.fillWidth: true
-            // implicitWidth: parentTable && parentTable.width > 0 ? parentTable.width : 1
-            implicitWidth: root.width / 2
+            implicitWidth: parentTable ? parentTable.width : childrenRect.width
             implicitHeight: childrenRect.height
 
             color: parentTable && parentTable.currentRow === row ?
                         highlightColor : viewBackgroundColor
 
-            property var viewBackgroundColor: theme.viewBackgroundColor ?
-                                                theme.viewBackgroundColor : 'white'
-            property var highlightColor: theme.highlightColor ? theme.highlightColor : 'green'
+            clip: true
 
-            Text {
+            property var viewBackgroundColor: PlasmaCore.Theme.viewBackgroundColor ?
+                                                PlasmaCore.Theme.viewBackgroundColor : 'white'
+            property var highlightColor: PlasmaCore.Theme.highlightColor ?
+                                                PlasmaCore.Theme.highlightColor : 'green'
+
+            Label {
                 id: itemText
                 text: model.text
             }
@@ -136,28 +222,14 @@ ColumnLayout {
     }
 
     RowLayout {
-        Layout.fillWidth: true
+        id: itemOrderButtons
 
-        Button {
-            icon.name: 'go-next'
-            enabled: disabledTableView.currentRow !== -1 && disabledItemsModel.count > 0
-            onClicked: moveItemToTable(disabledTableView, enabledTableView)
-        }
+        width: parent.width
+        height: childrenRect.height
 
         Item {
             Layout.preferredHeight: 1
             Layout.fillWidth: true
-        }
-
-        Button {
-            icon.name: 'go-previous'
-            enabled: enabledTableView.currentRow !== -1 && enabledItemsModel.count > 1
-            onClicked: {
-                if (enabledItemsModel.count <= 1) {
-                    return
-                }
-                moveItemToTable(enabledTableView, disabledTableView)
-            }
         }
 
         Button {
