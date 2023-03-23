@@ -97,21 +97,19 @@ Item {
         stopAbortTimer(cacheKey)
 
         let noConnection = false
-        let errorXhr = null
+        let errorStatus = null
         let xhrs = loadingXhrs[cacheKey]
         xhrs.forEach(function (xhr) {
-            noConnection |= (xhr.status === 0)
-            if (noConnection) {
-                errorXhr = !errorXhr ? xhr : errorXhr
-            } else if (xhr.status !== 200) {
-                errorXhr = !errorXhr ? xhr : errorXhr
+            noConnection |= (xhr.status === 0 || xhr.status === undefined)
+            if (noConnection || xhr.status !== 200) {
+                errorStatus = !errorStatus ? xhr.status : errorStatus
             }
         })
         clearLoadingXhrs(cacheKey, true)
 
-        if (errorXhr !== null) {
+        if (errorStatus !== null) {
             var ts = Date.now()
-            cacheDb.writeLoadingError(cacheKey, ts, errorXhr.status)
+            cacheDb.writeLoadingError(cacheKey, ts, errorStatus)
         }
 
         cacheDb.releaseUpdateSemaphore(cacheKey)

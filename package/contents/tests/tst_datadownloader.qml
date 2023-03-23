@@ -192,4 +192,20 @@ TestCase {
         compare(reloadTimer.state, ReloadTimer.State.LOADING)
     }
 
+    function test_downloadTimeout() {
+        dataDownloader.abortTimeInterval = 10
+
+        dataDownloader.reloadData(mockMain.cacheKey)
+
+        wait(1 * 1000)
+
+        let sem = mockCacheDb.checkUpdateSemaphore(mockMain.cacheKey)
+        compare(sem, true)
+
+        compare(reloadTimer.state, ReloadTimer.State.LOADING_ERROR)
+
+        verify(dataDownloader.loadingXhrs.hasOwnProperty(mockMain.cacheKey))
+        compare(dataDownloader.loadingXhrs[mockMain.cacheKey], null)
+    }
+
 }
