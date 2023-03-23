@@ -89,9 +89,9 @@ Item {
 
     property var currentProvider: null
 
-    property bool meteogramModelChanged: false
-
     property int maxMeteogramHours: plasmoid.configuration.maxMeteogramHours
+
+    signal reloadMeteogram()
 
     anchors.fill: parent
 
@@ -101,7 +101,7 @@ Item {
     property Component frInTray: FullRepresentationInTray { }
     property Component fr: FullRepresentation {
         Component.onCompleted: {
-            main.onMeteogramModelChangedChanged.connect(this.meteogram.fullRedraw)
+            main.reloadMeteogram.connect(this.meteogram.fullRedraw)
         }
     }
 
@@ -361,10 +361,6 @@ Item {
 
         loadFromCache(cacheKey)
         reloadTimer.resetState(cacheKey)
-    }
-
-    function reloadMeteogram() {
-        meteogramModelChanged = !meteogramModelChanged
     }
 
     function _loadFromCache(cacheKey) {
