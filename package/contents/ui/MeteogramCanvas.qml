@@ -538,7 +538,6 @@ Canvas {
     onPaint: {
         if (!root.initialized) {
             root.fullRedraw()
-            return
         }
 
         var context = getContext("2d")
