@@ -127,7 +127,6 @@ TestCase {
         let res = mockCacheDb.obtainUpdateSemaphore(mockMain.cacheKey, 1000)
         verify(res === true)
 
-        reloadTimer.minInterval = 0
         reloadTimer.semaphoreWaitTime = 100
         reloadTimer.reloadData.connect((key) => {
             mockCacheDb.obtainUpdateSemaphore(key)
