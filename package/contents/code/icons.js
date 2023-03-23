@@ -1,8 +1,18 @@
 .pragma library
 
 function getWindDirectionIconCode(angle) {
-    const iconCodes = ['\uf060', '\uf05e', '\uf061', '\uf05b', '\uf05c', '\uf05a', '\uf059', '\uf05d']
-    let n = Math.round((angle + 22.5) / 45) - 1
+    const iconCodes = [
+        '\uf060',   // S
+        '\uf05e',   // SW
+        '\uf061',   // W
+        '\uf05b',   // NW
+        '\uf05c',   // N
+        '\uf05a',   // NE
+        '\uf059',   // E
+        '\uf05d',   // SE
+        '\uf060',   // S
+    ]
+    let n = Math.round((angle) / 45)
     var iconCode = iconCodes[n]
     if (!iconCode) {
         iconCode = '\uf073'
