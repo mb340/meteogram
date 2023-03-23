@@ -407,12 +407,6 @@ Item {
         return text
     }
 
-    function windDirection(bearing) {
-        var Directions = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW','N']
-        var brg = Math.round((bearing + 11.25) / 22.5)
-        return(Directions[brg])
-    }
-
     function getIconIr(iconCode) {
         return iconCode
     }
