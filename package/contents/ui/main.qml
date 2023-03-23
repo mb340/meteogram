@@ -427,8 +427,10 @@ Item {
 
         var temperature = unitUtils.formatValue(currentWeatherModel.temperature, "temperature",
                                                 temperatureType)
-        var windDir = Math.round(currentWeatherModel.windDirection)
-        var windDirectionIcon = IconTools.getWindDirectionIconCode(windDir)
+        var windDir = unitUtils.getWindDirectionText(currentWeatherModel.windDirection,
+                                                     windDirectionType)
+        var windDirectionIcon = IconTools.getWindDirectionIconCode(
+                                    currentWeatherModel.windDirection)
         var windSpeed = unitUtils.getWindSpeedText(currentWeatherModel.windSpeedMps, windSpeedType)
         var pressure = unitUtils.getPressureText(currentWeatherModel.pressureHpa, pressureType)
         var iconDesc = currentProvider.getIconDescription(currentWeatherModel.iconName)
@@ -455,7 +457,7 @@ Item {
         subText += '<font size="4">' + temperature + '</font>'
         subText += '<br />'
         subText += '<font size="4" style="font-family: weathericons;">' + windDirectionIcon + '</font>'
-        subText += '<font size="4"> ' + windDir + '\u00B0&nbsp;@ ' + windSpeed + '</font>'
+        subText += '<font size="4"> ' + windDir + '&nbsp;@ ' + windSpeed + '</font>'
         subText += '<br />'
         subText += '<font size="4" style="font-family: weathericons;">\uf079 </font>'
         subText += '<font size="4">' + pressure + '</font>'
