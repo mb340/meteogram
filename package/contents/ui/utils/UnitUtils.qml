@@ -43,6 +43,11 @@ QtObject {
         KMH = 2
     }
 
+    enum WindDirectionType {
+        AZIMUTH = 0,
+        CARDINAL = 1
+    }
+
     /*
      * TEMPERATURE
      */
@@ -201,19 +206,47 @@ QtObject {
         return i18n("m/s")
     }
 
-    function formatWindDirectionStr(degrees, digits = undefined) {
+    function toCardinal(degrees) {
+        const Directions = [
+            i18n('N'), i18n('NNE'), i18n('NE'), i18n('ENE'),
+            i18n('E'), i18n('ESE'), i18n('SE'), i18n('SSE'),
+            i18n('S'), i18n('SSW'), i18n('SW'), i18n('WSW'),
+            i18n('W'), i18n('WNW'), i18n('NW'), i18n('NNW'), i18n('N')
+        ]
+        var brg = Math.round(degrees / 22.5)
+        return(Directions[brg])
+    }
+
+    function convertWindDirection(degrees) {
+        if (windDirectionType === UnitUtils.WindDirectionType.CARDINAL) {
+            return toCardinal(degrees)
+        }
+
+        return degrees
+    }
+
+    function formatWindDirectionStr(degrees, windDirectionType, digits = undefined) {
         if (digits === undefined) {
             digits = 0
         }
+
+        if (windDirectionType === UnitUtils.WindDirectionType.CARDINAL) {
+            return convertWindDirection(degrees)
+        }
+
         return degrees.toFixed(digits)
     }
 
     function getWindDirectionUnit() {
+        if (windDirectionType === UnitUtils.WindDirectionType.CARDINAL) {
+            return ""
+        }
         return "°"
     }
 
-    function getWindDirectionText(degrees, digits = undefined) {
-        return formatWindDirectionStr(degrees, digits) + getWindDirectionUnit()
+    function getWindDirectionText(degrees, windDirectionType, digits = undefined) {
+        return formatWindDirectionStr(degrees, windDirectionType, digits) +
+                getWindDirectionUnit(windDirectionType,)
     }
 
     /*
@@ -362,7 +395,7 @@ QtObject {
         } else if (varName === "windSpeed" || varName === "windGust") {
             return getWindSpeedText(value, unitType, digits)
         } else if (varName === "windDirection") {
-            return getWindDirectionText(value, digits)
+            return getWindDirectionText(value, unitType, digits)
         } else if (varName === "pressure") {
             return getPressureText(value, unitType, digits)
         } else if (varName === "humidity") {
@@ -380,6 +413,8 @@ QtObject {
             return plasmoid.configuration.pressureType
         } else if (varName === "windSpeed" || varName === "windGust") {
             return plasmoid.configuration.windSpeedType
+        } else if (varName === "windDirection") {
+            return plasmoid.configuration.windDirectionType
         } else if (varName === "precipitationAmount") {
             return plasmoid.configuration.precipitationType
         }

@@ -48,6 +48,7 @@ Item {
     property int temperatureType: plasmoid.configuration.temperatureType
     property int pressureType: plasmoid.configuration.pressureType
     property int windSpeedType: plasmoid.configuration.windSpeedType
+    property int windDirectionType: plasmoid.configuration.windDirectionType
     property int timezoneType: plasmoid.configuration.timezoneType
     property int precipitationType: plasmoid.configuration.precipitationType
     property string widgetFontName: plasmoid.configuration.widgetFontName

@@ -170,6 +170,13 @@
             </choices>
             <default>0</default>
         </entry>
+        <entry name="windDirectionType" type="Enum">
+            <choices>
+                <choice name="azimuth"/>
+                <choice name="cardinal"/>
+            </choices>
+            <default>0</default>
+        </entry>
         <entry name="timezoneType" type="Enum">
             <choices>
                 <choice name="userLocalTime"/>

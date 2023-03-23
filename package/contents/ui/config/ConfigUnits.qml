@@ -7,6 +7,7 @@ Item {
     property int cfg_temperatureType
     property int cfg_pressureType
     property int cfg_windSpeedType
+    property int cfg_windDirectionType
     property int cfg_timezoneType
     property int cfg_precipitationType
 
@@ -55,6 +56,18 @@ Item {
         }
     }
 
+    onCfg_windDirectionTypeChanged: {
+        switch (cfg_windDirectionType) {
+        case 0:
+            windDirectionTypeAzimuth.checked = true;
+            break;
+        case 1:
+            windDirectionTypeCardinal.checked = true;
+            break;
+        default:
+        }
+    }
+
     onCfg_timezoneTypeChanged: {
         switch (cfg_timezoneType) {
         case 0:
@@ -92,6 +105,7 @@ Item {
         cfg_temperatureTypeChanged()
         cfg_pressureTypeChanged()
         cfg_windSpeedTypeChanged()
+        cfg_windDirectionTypeChanged()
         cfg_timezoneTypeChanged()
         cfg_precipitationTypeChanged()
     }
@@ -106,6 +120,10 @@ Item {
 
     ButtonGroup {
         id: windSpeedTypeGroup
+    }
+
+    ButtonGroup {
+        id: windDirectionTypeGroup
     }
 
     ButtonGroup {
@@ -218,6 +236,34 @@ Item {
             ButtonGroup.group: windSpeedTypeGroup
             text: i18n("km/h")
             onCheckedChanged: if (checked) cfg_windSpeedType = 2
+        }
+
+        Item {
+            width: 2
+            height: 10
+            Layout.columnSpan: 2
+        }
+
+        Label {
+            text: i18n("Wind direction") + ":"
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+        }
+        RadioButton {
+            id: windDirectionTypeAzimuth
+            ButtonGroup.group: windDirectionTypeGroup
+            text: i18n("Azimuth")
+            onCheckedChanged: if (checked) cfg_windDirectionType = 0
+        }
+        Item {
+            width: 2
+            height: 2
+            Layout.rowSpan: 2
+        }
+        RadioButton {
+            id: windDirectionTypeCardinal
+            ButtonGroup.group: windDirectionTypeGroup
+            text: i18n("Cardinal")
+            onCheckedChanged: if (checked) cfg_windDirectionType = 1
         }
 
         Item {
