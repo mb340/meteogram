@@ -130,7 +130,7 @@ QtObject {
         }
 
         var hourFrom = t.getHours()
-        if (!hasSunriseSunsetData()) {
+        if (!sunRise || !sunSet) {
             return 6 <= hourFrom && hourFrom <= 18
         }
 
