@@ -19,6 +19,8 @@ Item {
     property string weatherDataJson: ""
     property string sunRiseDataJson: ""
 
+    property var sunRiseDataTimestamp: null
+
     function getCreditLabel(placeIdentifier) {
         return i18n("Weather forecast data provided by The Norwegian Meteorological Institute.")
     }
@@ -56,6 +58,10 @@ Item {
         updateCurrentWeather(weatherData)
         updateNextDaysModel(weatherData)
         buildMetogramData(weatherData)
+
+        if (cacheContent.hasOwnProperty("sunRiseDataTimestamp")) {
+            sunRiseDataTimestamp = new Date(cacheContent["sunRiseDataTimestamp"])
+        }
 
         var sunRise = undefined
         var sunSet = undefined
@@ -327,6 +333,31 @@ Item {
       return(isDSTflag)
     }
 
+    function getTzUrl(locationObject) {
+        let tzUrl = null
+        if (locationObject.timezoneID === -1) {
+            dbgprint("[weatherWidget] Timezone Data not available - using sunrise-sunset.org API")
+            tzUrl = "https://api.sunrise-sunset.org/json?formatted=0&" + placeIdentifier
+        } else {
+            dbgprint("[weatherWidget] Timezone Data is available - using met.no API")
+            if (isDST(TZ.TZData[locationObject.timezoneID].DSTData)) {
+                timezoneShortName = TZ.TZData[locationObject.timezoneID].DSTName
+            } else {
+                timezoneShortName = TZ.TZData[locationObject.timezoneID].TZName
+            }
+            tzUrl = 'https://api.met.no/weatherapi/sunrise/2.0/.json?' +
+                        placeIdentifier.replace("altitude","height") + "&date=" +
+                        formatDate(new Date().toISOString())
+            if (isDST(TZ.TZData[locationObject.timezoneID].DSTData)) {
+                tzUrl += "&offset=" + calculateOffset(TZ.TZData[locationObject.timezoneID].DSTOffset)
+            } else {
+                tzUrl += "&offset=" + calculateOffset(TZ.TZData[locationObject.timezoneID].Offset)
+            }
+        }
+        dbgprint(tzUrl)
+        return tzUrl
+    }
+
     function loadDataFromInternet(successCallback, failureCallback, locationObject) {
         var placeIdentifier = locationObject.placeIdentifier
         var cacheKey = locationObject.cacheKey
@@ -335,6 +366,9 @@ Item {
             var cacheContent = {}
             cacheContent["weatherData"] = JSON.parse(weatherDataJson)
             cacheContent["sunRiseData"] = JSON.parse(sunRiseDataJson)
+            if (sunRiseDataTimestamp !== null) {
+                cacheContent["sunRiseDataTimestamp"] = sunRiseDataTimestamp.getTime()
+            }
             weatherDataJson = ""
             sunRiseDataJson = ""
             successCallback(JSON.stringify(cacheContent), cacheKey)
@@ -351,6 +385,8 @@ Item {
         function successSRAS(jsonString) {
             sunRiseDataJson = jsonString
             sunRiseSetFlag = true
+            sunRiseDataTimestamp = new Date()
+            sunRiseDataTimestamp.setHours(0, 0, 0, 0)
             if ((weatherDataFlag) && (sunRiseSetFlag)) {
                 loadCompleted()
             }
@@ -369,33 +405,24 @@ Item {
         weatherDataFlag = false
         sunRiseSetFlag = false
         weatherDataFailFlag = false
-        var TZURL = ""
 
-        if (locationObject.timezoneID === -1) {
-          console.log("[weatherWidget] Timezone Data not available - using sunrise-sunset.org API")
-          TZURL = "https://api.sunrise-sunset.org/json?formatted=0&" + placeIdentifier
-        } else {
-          console.log("[weatherWidget] Timezone Data is available - using met.no API")
-          if (isDST(TZ.TZData[locationObject.timezoneID].DSTData)) {
-            timezoneShortName = TZ.TZData[locationObject.timezoneID].DSTName
-          } else {
-            timezoneShortName = TZ.TZData[locationObject.timezoneID].TZName
-          }
-          TZURL = 'https://api.met.no/weatherapi/sunrise/2.0/.json?' + placeIdentifier.replace("altitude","height") + "&date=" + formatDate(new Date().toISOString())
-          if (isDST(TZ.TZData[locationObject.timezoneID].DSTData)) {
-            TZURL += "&offset=" + calculateOffset(TZ.TZData[locationObject.timezoneID].DSTOffset)
-          } else {
-            TZURL += "&offset=" + calculateOffset(TZ.TZData[locationObject.timezoneID].Offset)
-          }
-        }
-        console.log(TZURL)
-
+        let tzUrl = getTzUrl(locationObject)
         let url = urlPrefix + placeIdentifier
+
+        var xhrs = []
         var xhr1 = DataLoader.fetchJsonFromInternet(url, successWeather, failureCb, cacheKey)
-        var xhr2 = DataLoader.fetchJsonFromInternet(TZURL, successSRAS, failureCb, cacheKey)
-//         var xhr1 = DataLoader.fetchJsonFromInternet('http://localhost/weather.json', successWeather, failureCallback)
-//         var xhr2 = DataLoader.fetchJsonFromInternet('http://localhost/sunrisesunset.json?' + TZURL, successSRAS, failureCallback)
-        return [xhr1, xhr2]
+        xhrs.push(xhr1)
+
+        var today = new Date()
+        today.setHours(0, 0, 0, 0)
+        if (sunRiseDataTimestamp === null || sunRiseDataTimestamp.getTime() !== today.getTime()) {
+            var xhr2 = DataLoader.fetchJsonFromInternet(tzUrl, successSRAS, failureCb, cacheKey)
+            xhrs.push(xhr2)
+        } else {
+            sunRiseSetFlag = true
+        }
+
+        return xhrs
     }
 
     function geticonNumber(text) {
