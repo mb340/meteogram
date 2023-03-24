@@ -311,20 +311,6 @@ Item {
       return(sign + hrs + ":" + mins)
     }
 
-    function isDST(DSTPeriods) {
-      if(DSTPeriods === undefined)
-        return (false)
-
-      let now = timeUtils.dateNow(timezoneType, main.timezoneOffset).getTime() / 1000
-      let isDSTflag = false
-      for (let f = 0; f < DSTPeriods.length; f++) {
-        if ((now >= DSTPeriods[f].DSTStart) && (now <= DSTPeriods[f].DSTEnd)) {
-          isDSTflag = true
-        }
-      }
-      return(isDSTflag)
-    }
-
     function getTzUrl(locationObject) {
         let tzUrl = null
         if (locationObject.timezoneID === -1) {
@@ -332,7 +318,7 @@ Item {
             tzUrl = "https://api.sunrise-sunset.org/json?formatted=0&" + placeIdentifier
         } else {
             dbgprint("[weatherWidget] Timezone Data is available - using met.no API")
-            if (isDST(TZ.TZData[locationObject.timezoneID].DSTData)) {
+            if (timeUtils.isDST(TZ.TZData[locationObject.timezoneID].DSTData)) {
                 timezoneShortName = TZ.TZData[locationObject.timezoneID].DSTName
             } else {
                 timezoneShortName = TZ.TZData[locationObject.timezoneID].TZName
@@ -340,7 +326,7 @@ Item {
             tzUrl = 'https://api.met.no/weatherapi/sunrise/2.0/.json?' +
                         placeIdentifier.replace("altitude","height") + "&date=" +
                         formatDate(new Date().toISOString())
-            if (isDST(TZ.TZData[locationObject.timezoneID].DSTData)) {
+            if (timeUtils.isDST(TZ.TZData[locationObject.timezoneID].DSTData)) {
                 tzUrl += "&offset=" + calculateOffset(TZ.TZData[locationObject.timezoneID].DSTOffset)
             } else {
                 tzUrl += "&offset=" + calculateOffset(TZ.TZData[locationObject.timezoneID].Offset)
