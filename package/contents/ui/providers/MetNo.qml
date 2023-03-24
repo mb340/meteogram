@@ -55,35 +55,43 @@ Item {
         var sunRiseData = cacheContent.sunRiseData
 
         if (sunRiseData === undefined) {
+            print("metno: error updateSunriseData: sunRiseData undefined")
             return
         }
-        if (sunRiseData.location === undefined || sunRiseData.location.time === undefined) {
-            return
-        }
 
-        if (cacheContent.hasOwnProperty("sunRiseDataTimestamp")) {
-            sunRiseDataTimestamp = new Date(cacheContent["sunRiseDataTimestamp"])
-        }
-
-        if (sunRiseData.location.time.length > 0 && sunRiseData.location.time[0].sunrise) {
-            sunRise = sunRiseData.location.time[0].sunrise.time
-        }
-        if (sunRiseData.location.time.length > 0 && sunRiseData.location.time[0].sunset) {
-            sunSet = sunRiseData.location.time[0].sunset.time
-        }
-
-        if ((sunRiseData.results !== undefined)) {
-            if (sunRiseData.results.sunrise !== undefined) {
-                sunRise = sunRiseData.results.sunrise
+        // Parse data from met.no
+        if (sunRiseData.location && sunRiseData.location.time) {
+            let data = sunRiseData.location.time
+            if (data.length > 0 && data[0].sunrise) {
+                sunRise = data[0].sunrise.time
+                sunRise = timeUtils.convertDate(sunRise, timezoneType, main.timezoneOffset)
             }
-            if (sunRiseData.results.sunset !== undefined) {
-                sunSet = sunRiseData.results.sunset
+            if (data.length > 0 && data[0].sunset) {
+                sunSet = data[0].sunset.time
+                sunSet = timeUtils.convertDate(sunSet, timezoneType, main.timezoneOffset)
             }
         }
+
+        // Parse data from sunrise-sunset.org
+        if (!sunRise || !sunSet) {
+            let data = sunRiseData.results
+            if (data !== undefined) {
+                if (data.sunrise !== undefined) {
+                    sunRise = timeUtils.convertDate(data.sunrise, timezoneType, main.timezoneOffset)
+                }
+                if (data.sunset !== undefined) {
+                    sunSet = timeUtils.convertDate(data.sunset, timezoneType, main.timezoneOffset)
+                }
+            }
+        }
+
 
         if (sunRise && sunSet) {
-            currentWeatherModel.sunRise = timeUtils.convertDate(sunRise, timezoneType, main.timezoneOffset)
-            currentWeatherModel.sunSet = timeUtils.convertDate(sunSet, timezoneType, main.timezoneOffset)
+            currentWeatherModel.sunRise = sunRise
+            currentWeatherModel.sunSet = sunSet
+            if (cacheContent.hasOwnProperty("sunRiseDataTimestamp")) {
+                sunRiseDataTimestamp = new Date(cacheContent["sunRiseDataTimestamp"])
+            }
         }
     }
 
