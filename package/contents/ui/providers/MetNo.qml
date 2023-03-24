@@ -348,9 +348,16 @@ Item {
         function loadCompleted() {
             var cacheContent = {}
             cacheContent["weatherData"] = JSON.parse(weatherDataJson)
-            cacheContent["sunRiseData"] = JSON.parse(sunRiseDataJson)
-            if (sunRiseDataTimestamp !== null) {
-                cacheContent["sunRiseDataTimestamp"] = sunRiseDataTimestamp.getTime()
+            try {
+                cacheContent["sunRiseData"] = JSON.parse(sunRiseDataJson)
+                if (sunRiseDataTimestamp !== null) {
+                    cacheContent["sunRiseDataTimestamp"] = sunRiseDataTimestamp.getTime()
+                }
+            } catch (e) {
+                sunRiseDataTimestamp = null
+                print("metno: error parsing sunrise JSON data:", e)
+                print("metno: sunRiseDataJson:", sunRiseDataJson)
+                console.trace()
             }
             weatherDataJson = ""
             sunRiseDataJson = ""
