@@ -87,6 +87,9 @@ QtObject {
         if (digits === undefined) {
             digits = 2
         }
+        if (temperature === 0.0) {
+            digits = 0
+        }
         return convertTemperature(temperature, temperatureType).toFixed(digits)
     }
 
