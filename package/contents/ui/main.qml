@@ -62,10 +62,6 @@ Item {
     property string creditLink
     property string creditLabel
 
-    property bool loadingData: false              // Download Attempt in progress Flag.
-    property var loadingXhrs: []                  // Array of Download Attempt Objects
-
-    property string lastReloadedText: '⬇ 0m ago'
     property string tooltipSubText: ''
 
     property bool inTray: false
