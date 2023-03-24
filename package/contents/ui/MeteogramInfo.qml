@@ -189,8 +189,8 @@ Item {
         var hourFrom = dateFrom.getHours()
         var dateStr = dateFrom.toLocaleDateString(Qt.locale(), 'ddd d MMM') +
                             " " + i18n("at") + " " +
-                            timeUtils.getHourText(hourFrom, twelveHourClockEnabled) + " " +
-                            (twelveHourClockEnabled ? timeUtils.getAmOrPm(hourFrom) : '00')
+                            timeUtils.getHourText(hourFrom) + " " +
+                            (timeUtils.twelveHourClockEnabled ? timeUtils.getAmOrPm(hourFrom) : '00')
         dateLabel.text = dateStr
 
         var iconNameStr = ""

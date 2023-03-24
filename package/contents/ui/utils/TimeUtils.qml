@@ -26,6 +26,10 @@ QtObject {
         LOCATION_LOCAL_TIME = 2
     }
 
+    property bool twelveHourClockEnabled: Qt.locale().timeFormat(Locale.ShortFormat)
+                                                     .toString()
+                                                     .indexOf('AP') > -1
+
     function convertDateToUTC(date) {
         return date.setTime(date.getTime() + (date.getTimezoneOffset() * 60 * 1000))
     }
@@ -138,7 +142,7 @@ QtObject {
         return res
     }
 
-    function getHourText(hourNumber, twelveHourClockEnabled) {
+    function getHourText(hourNumber) {
         var result = hourNumber
         if (twelveHourClockEnabled) {
             if (hourNumber === 0) {

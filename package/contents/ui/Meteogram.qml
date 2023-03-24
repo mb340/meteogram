@@ -226,8 +226,9 @@ Item {
             property var date: new Date(Number(hourGrid.startTime) + (model.index * onHourMs))
 
             property int hourFrom: date.getHours()
-            property string hourFromStr: timeUtils.getHourText(hourFrom, twelveHourClockEnabled)
-            property string hourFromEnding: twelveHourClockEnabled ? timeUtils.getAmOrPm(hourFrom) : '00'
+            property string hourFromStr: timeUtils.getHourText(hourFrom)
+            property string hourFromEnding: timeUtils.twelveHourClockEnabled ?
+                                                timeUtils.getAmOrPm(hourFrom) : '00'
             property bool dayBegins: hourFrom === 0
             property bool hourVisible: (hourFrom + 0) % meteogramCanvas.hourStep === 0
             property bool textVisible: hourVisible && model.index < root.nHours - 1

@@ -54,7 +54,6 @@ Item {
     property string widgetFontName: plasmoid.configuration.widgetFontName
     property int widgetFontSize: plasmoid.configuration.widgetFontSize
 
-    property bool twelveHourClockEnabled: Qt.locale().timeFormat(Locale.ShortFormat).toString().indexOf('AP') > -1
     property bool onlyOnePlace: true
 
     property alias currentWeatherModel: currentWeatherModel
@@ -525,10 +524,6 @@ Item {
         reloadMeteogram()
     }
 
-    onTwelveHourClockEnabledChanged: {
-        refreshTooltipSubText()
-        reloadMeteogram()
-    }
 
     onTimezoneTypeChanged: {
         if (!initialized) {
