@@ -1,8 +1,6 @@
 import QtQuick 2.2
 import "../../code/data-loader.js" as DataLoader
 import "../../code/icons.js" as IconTools
-import "../../code/db/timezoneData.js" as TZ
-
 
 
 Item {
@@ -318,11 +316,6 @@ Item {
             tzUrl = "https://api.sunrise-sunset.org/json?formatted=0&" + placeIdentifier
         } else {
             dbgprint("[weatherWidget] Timezone Data is available - using met.no API")
-            if (timeUtils.isDST(TZ.TZData[locationObject.timezoneID].DSTData)) {
-                timezoneShortName = TZ.TZData[locationObject.timezoneID].DSTName
-            } else {
-                timezoneShortName = TZ.TZData[locationObject.timezoneID].TZName
-            }
             tzUrl = 'https://api.met.no/weatherapi/sunrise/2.0/.json?' +
                         placeIdentifier.replace("altitude","height") + "&date=" +
                         formatDate(new Date().toISOString())
