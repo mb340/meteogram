@@ -64,14 +64,13 @@ Item {
 
     WeatherIcon {
         iconSetType: compactItem.iconSetType
-        iconName: currentWeatherModel.valid ? currentWeatherModel.iconName : ""
+        iconName: ""
         iconX: 0
         iconY: 0
         iconDim: Math.min(temperatureIcon.width,
                           temperatureIcon.height +
                             (isVerticalState ? temperatureIconMetrics.descent : 0))
-        partOfDay: timeUtils.isSunRisen(currentWeatherModel.date, currentWeatherModel.sunRise,
-                                        currentWeatherModel.sunSet) ? 0 : 1
+        partOfDay: 0
 
         width: temperatureIcon.width
         height: temperatureIcon.height
@@ -81,6 +80,23 @@ Item {
 
         // anchors.centerIn: parent
         centerInParent: true
+
+        Component.onCompleted: {
+            updateModel()
+            currentWeatherModel.onValidChanged.connect(updateModel)
+        }
+
+        function updateModel() {
+            iconName = currentWeatherModel.iconName
+
+            if (!timeUtils.hasSunriseSunsetData(currentWeatherModel)) {
+                partOfDay = 0
+                return
+            }
+            partOfDay = timeUtils.isSunRisen(currentWeatherModel.date,
+                                             currentWeatherModel.sunRise,
+                                             currentWeatherModel.sunSet) ? 0 : 1
+        }
     }
 
     states: [
