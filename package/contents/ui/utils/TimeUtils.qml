@@ -65,6 +65,17 @@ QtObject {
         return parseInt(offset) * 1000
     }
 
+    /*
+     * Format offset in minutes to +/- hours
+     * e.g Eastern Standard Time: +05
+     */
+    function formatTimeZoneOffsetString(offset) {
+        let sign = offset < 0 ? "+" : "-"
+        offset = offset / 60
+        offset = String(Math.abs(offset)).padStart(2, "0")
+        return sign + offset
+    }
+
     function getTimezoneData(timezoneId) {
         let tzData = TZ.TZData.find((el) => { return el.id === timezoneId })
         return tzData
