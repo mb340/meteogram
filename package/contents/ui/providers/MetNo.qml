@@ -91,10 +91,10 @@ Item {
         cacheContent = JSON.parse(cacheContent)
 
         var weatherData = cacheContent.weatherData
+        updateSunriseData(cacheContent)
         updateCurrentWeather(weatherData)
         updateNextDaysModel(weatherData)
         buildMetogramData(weatherData)
-        updateSunriseData(cacheContent)
 
         return true
     }
