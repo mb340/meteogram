@@ -304,7 +304,7 @@ Item {
         dailyWeatherModels.endList()
     }
 
-    function calculateOffset(seconds) {
+    function formatOffsetString(seconds) {
       let hrs = String("0" + Math.floor(Math.abs(seconds) / 3600)).slice(-2)
       let mins = String("0" + (seconds % 3600)).slice(-2)
       let sign = (seconds >= 0) ? "+" : "-"
@@ -327,9 +327,9 @@ Item {
                         placeIdentifier.replace("altitude","height") + "&date=" +
                         formatDate(new Date().toISOString())
             if (timeUtils.isDST(TZ.TZData[locationObject.timezoneID].DSTData)) {
-                tzUrl += "&offset=" + calculateOffset(TZ.TZData[locationObject.timezoneID].DSTOffset)
+                tzUrl += "&offset=" + formatOffsetString(TZ.TZData[locationObject.timezoneID].DSTOffset)
             } else {
-                tzUrl += "&offset=" + calculateOffset(TZ.TZData[locationObject.timezoneID].Offset)
+                tzUrl += "&offset=" + formatOffsetString(TZ.TZData[locationObject.timezoneID].Offset)
             }
         }
         dbgprint(tzUrl)
