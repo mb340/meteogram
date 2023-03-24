@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import "../../code/data-loader.js" as DataLoader
 import "../../code/icons.js" as IconTools
-import "../../code/db/timezoneData.js" as TZ
+
 
 Item {
 
