@@ -57,12 +57,17 @@ QtObject {
             print("error: timezoneId undefined")
             console.trace()
         }
-        if (timezoneId < 0 || timezoneId >= TZ.TZData.length) {
+        let tz = getTimezoneData(timezoneId)
+        if (tz === undefined) {
             return 0
         }
-        let tz = TZ.TZData[timezoneId]
         let offset = isDST(tz.DSTData, timezoneId) ? tz.DSTOffset : tz.Offset
         return parseInt(offset) * 1000
+    }
+
+    function getTimezoneData(timezoneId) {
+        let tzData = TZ.TZData.find((el) => { return el.id === timezoneId })
+        return tzData
     }
 
     /*
