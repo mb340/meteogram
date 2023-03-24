@@ -13,8 +13,8 @@ QtObject {
     property double humidity: NaN
     property double cloudArea: NaN
 
-    property date sunRise: new Date(0)
-    property date sunSet: new Date(0)
+    property var sunRise: null
+    property var sunSet: null
 
     property var nearFuture: ({
         iconName: null,
@@ -34,8 +34,8 @@ QtObject {
         humidity = NaN
         cloudArea = NaN
 
-        sunRise = new Date(0)
-        sunSet = new Date(0)
+        sunRise = null
+        sunSet = null
 
         nearFuture = {
             iconName: null,
