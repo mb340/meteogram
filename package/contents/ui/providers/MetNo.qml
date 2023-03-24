@@ -174,16 +174,8 @@ Item {
         meteogramModel.endList()
     }
 
-    function formatTime(ISOdate) {
-        return ISOdate.substr(11,5)
-    }
-
     function formatDate(ISOdate) {
         return ISOdate.substr(0,10)
-    }
-
-    function isObjectFilled(obj) {
-        return !obj.isPast0 || !obj.isPast1 || !obj.isPast2 || !obj.isPast3
     }
 
     function updateNextDaysModel(readingsArray) {
