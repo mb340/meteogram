@@ -82,7 +82,7 @@ Item {
 
     property int maxMeteogramHours: plasmoid.configuration.maxMeteogramHours
 
-    signal reloadMeteogram()
+    signal fullRedraw()
 
     anchors.fill: parent
 
@@ -92,8 +92,10 @@ Item {
     property Component frInTray: FullRepresentationInTray { }
     property Component fr: FullRepresentation {
         Component.onCompleted: {
-            main.reloadMeteogram.connect(this.meteogram.fullRedraw)
+            main.fullRedraw.connect(this.meteogram.fullRedraw)
         }
+
+
     }
 
     Plasmoid.preferredRepresentation: Plasmoid.compactRepresentation
@@ -402,9 +404,6 @@ Item {
         creditLink = currentProvider.getCreditLink(placeIdentifier, placeAlias)
         creditLabel = currentProvider.getCreditLabel(placeIdentifier)
 
-        setTimezoneName()
-        refreshTooltipSubText()
-
         if (currentProvider.providerId !== "owm") {
             reloadMeteogram()
         }
@@ -412,6 +411,12 @@ Item {
 
     function loadFromCache(key) {
         Qt.callLater(_loadFromCache, key)
+    }
+
+    function reloadMeteogram() {
+        setTimezoneName()
+        refreshTooltipSubText()
+        fullRedraw()
     }
 
     function getPlasmoidStatus(lastReloaded, inTrayActiveTimeoutSec) {
