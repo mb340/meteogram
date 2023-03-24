@@ -302,6 +302,25 @@ Item {
         return index
     }
 
+    function setTimezoneName() {
+        timezoneShortName = ""
+        if (timezoneType === TimeUtils.TimezoneType.USER_LOCAL_TIME) {
+            let offset = new Date().getTimezoneOffset()
+            let offsetStr = timeUtils.formatTimeZoneOffsetString(offset)
+            timezoneShortName = i18n("UTC") + offsetStr
+        } else if (timezoneType === TimeUtils.TimezoneType.UTC) {
+            timezoneShortName = i18n("UTC")
+        } else if (timezoneType === TimeUtils.TimezoneType.LOCATION_LOCAL_TIME) {
+            let tzData = timeUtils.getTimezoneData(timezoneID)
+            if (tzData !== undefined) {
+                timezoneShortName = timeUtils.isDST(tzData.DSTData) ? tzData.DSTName : tzData.TZName
+            } else {
+                let offsetStr = timeUtils.formatTimeZoneOffsetString(-timezoneOffset / (60 * 1000))
+                timezoneShortName = i18n("UTC")+ offsetStr
+            }
+        }
+    }
+
     function setNextPlace(previous, initialize) {
         currentWeatherModel.clear()
         meteogramModel.hourInterval = 1
@@ -383,7 +402,7 @@ Item {
         creditLink = currentProvider.getCreditLink(placeIdentifier, placeAlias)
         creditLabel = currentProvider.getCreditLabel(placeIdentifier)
 
-
+        setTimezoneName()
         refreshTooltipSubText()
 
         if (currentProvider.providerId !== "owm") {
