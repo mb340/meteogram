@@ -69,14 +69,10 @@ Item {
     property string lastReloadedText: '⬇ 0m ago'
     property string tooltipSubText: ''
 
-    property bool vertical: (plasmoid.formFactor == PlasmaCore.Types.Vertical)
-    property bool onDesktop: (plasmoid.location == PlasmaCore.Types.Desktop || plasmoid.location == PlasmaCore.Types.Floating)
     property bool inTray: false
     property string plasmoidCacheId: plasmoid.id
 
     property int inTrayActiveTimeoutSec: plasmoid.configuration.inTrayActiveTimeoutSec
-
-    property int nextDaysCount: dailyWeatherModels.count
 
     property bool textColorLight: ((theme.textColor.r + theme.textColor.g + theme.textColor.b) / 3) > 0.5
 
