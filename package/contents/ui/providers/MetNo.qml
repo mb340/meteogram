@@ -49,29 +49,29 @@ Item {
         return -1
     }
 
-    function setWeatherContents(cacheContent) {
-        cacheContent = JSON.parse(cacheContent)
+    function updateSunriseData(cacheContent) {
+        var sunRise = undefined
+        var sunSet = undefined
+        var sunRiseData = cacheContent.sunRiseData
 
-        var weatherData = cacheContent.weatherData
-        updateCurrentWeather(weatherData)
-        updateNextDaysModel(weatherData)
-        buildMetogramData(weatherData)
+        if (sunRiseData === undefined) {
+            return
+        }
+        if (sunRiseData.location === undefined || sunRiseData.location.time === undefined) {
+            return
+        }
 
         if (cacheContent.hasOwnProperty("sunRiseDataTimestamp")) {
             sunRiseDataTimestamp = new Date(cacheContent["sunRiseDataTimestamp"])
         }
 
-        var sunRise = undefined
-        var sunSet = undefined
-        var sunRiseData = cacheContent.sunRiseData
-        if (sunRiseData.location !== undefined && sunRiseData.location.time !== undefined) {
-            if (sunRiseData.location.time.length > 0 && sunRiseData.location.time[0].sunrise) {
-                sunRise = sunRiseData.location.time[0].sunrise.time
-            }
-            if (sunRiseData.location.time.length > 0 && sunRiseData.location.time[0].sunset) {
-                sunSet = sunRiseData.location.time[0].sunset.time
-            }
+        if (sunRiseData.location.time.length > 0 && sunRiseData.location.time[0].sunrise) {
+            sunRise = sunRiseData.location.time[0].sunrise.time
         }
+        if (sunRiseData.location.time.length > 0 && sunRiseData.location.time[0].sunset) {
+            sunSet = sunRiseData.location.time[0].sunset.time
+        }
+
         if ((sunRiseData.results !== undefined)) {
             if (sunRiseData.results.sunrise !== undefined) {
                 sunRise = sunRiseData.results.sunrise
@@ -85,6 +85,16 @@ Item {
             currentWeatherModel.sunRise = timeUtils.convertDate(sunRise, timezoneType, main.timezoneOffset)
             currentWeatherModel.sunSet = timeUtils.convertDate(sunSet, timezoneType, main.timezoneOffset)
         }
+    }
+
+    function setWeatherContents(cacheContent) {
+        cacheContent = JSON.parse(cacheContent)
+
+        var weatherData = cacheContent.weatherData
+        updateCurrentWeather(weatherData)
+        updateNextDaysModel(weatherData)
+        buildMetogramData(weatherData)
+        updateSunriseData(cacheContent)
 
         return true
     }
