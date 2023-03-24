@@ -328,7 +328,7 @@ Item {
 
     function createTodayTimeObj() {
         var currentTimeObj = xmlModelCurrent.count > 0 ? xmlModelCurrent.get(0) : null
-        if (currentTimeObj !== null) {
+        if (currentTimeObj === null) {
             return
         }
         currentWeatherModel.date = parseDate(currentTimeObj.updated)
