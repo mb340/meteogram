@@ -544,13 +544,6 @@ Item {
         loadFromCache(cacheKey)
     }
 
-    function dbgprint(msg) {
-        if (!debugLogging) {
-            return
-        }
-        print('[weatherWidget] ' + msg)
-    }
-
     /* Update the view models every hour */
     Timer {
         id: updateViewsTimer
