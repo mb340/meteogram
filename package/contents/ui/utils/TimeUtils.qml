@@ -43,7 +43,7 @@ QtObject {
         if(DSTPeriods === undefined) {
             return false
         }
-        let now = (new Date).getTime() / 1000
+        let now = dateNow(main.timezoneType, main.timezoneOffset).getTime() / 1000
         for (let f = 0; f < DSTPeriods.length; f++) {
             if ((now >= DSTPeriods[f].DSTStart) && (now <= DSTPeriods[f].DSTEnd)) {
                return true
