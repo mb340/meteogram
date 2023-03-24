@@ -326,10 +326,12 @@ Item {
             tzUrl = 'https://api.met.no/weatherapi/sunrise/2.0/.json?' +
                         placeIdentifier.replace("altitude","height") + "&date=" +
                         formatDate(new Date().toISOString())
-            if (timeUtils.isDST(TZ.TZData[locationObject.timezoneID].DSTData)) {
-                tzUrl += "&offset=" + formatOffsetString(TZ.TZData[locationObject.timezoneID].DSTOffset)
+
+            let tzData = timeUtils.getTimezoneData(locationObject.timezoneID)
+            if (timeUtils.isDST(tzData.DSTData)) {
+                tzUrl += "&offset=" + formatOffsetString(tzData.DSTOffset)
             } else {
-                tzUrl += "&offset=" + formatOffsetString(TZ.TZData[locationObject.timezoneID].Offset)
+                tzUrl += "&offset=" + formatOffsetString(tzData.Offset)
             }
         }
         dbgprint(tzUrl)
