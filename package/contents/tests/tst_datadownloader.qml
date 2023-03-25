@@ -10,12 +10,16 @@ TestCase {
 
     property var mockCacheDb: null
     property var mockProvider: null
+    property var placeObject: {
+        placeAlias: root.placeAlias
+    }
+
     property var reloadTimer: null
     property var dataDownloader: null
 
     property alias timeUtils: timeUtils
 
-    property alias placeIdentifier: mockMain.placeIdentifier
+    property alias placeAlias: mockMain.placeAlias
     property alias timezoneID: mockMain.timezoneID
 
     property string plasmoidCacheId: mockMain.plasmoidCacheId

@@ -619,9 +619,8 @@ Item {
      * successCallback(contentToCache)
      * failureCallback()
      */
-    function loadDataFromInternet(successCallback, failureCallback, locationObject) {
-        var placeIdentifier = locationObject.placeIdentifier
-        var cacheKey = locationObject.cacheKey
+    function loadDataFromInternet(successCallback, failureCallback, cacheKey, placeObject) {
+        var placeIdentifier = placeObject.placeIdentifier
 
         var loadedCounter = 0
 

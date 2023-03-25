@@ -11,6 +11,10 @@ TestCase {
     property var plasmoid
     property alias timeUtils: timeUtils
 
+    property var placeObject: {
+        placeAlias: mockMain.placeAlias
+    }
+
     property var mockCacheDb: null
     property var reloadTimer: null
 

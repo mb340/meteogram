@@ -1,4 +1,5 @@
 .pragma library
+.import "config-utils.js" as ConfigUtils
 
 var debugLogging = false
 
@@ -22,7 +23,9 @@ function getReloadedAgoMs(lastReloaded) {
     return new Date().getTime() - lastReloaded
 }
 
-function generateCacheKey(placeIdentifier) {
+function generateCacheKey(placeObject) {
+    let placeIdentifier = placeObject.providerId + "&" +
+                            ConfigUtils.formatPlaceIdentifier(placeObject)
     return 'cache_' + Qt.md5(placeIdentifier)
 }
 

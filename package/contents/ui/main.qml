@@ -36,8 +36,8 @@ Item {
     property var dbgprint: debugLogging ? PrintUtil.init(this, plasmoidCacheId) : ((...args) => {})
 
     property int placeIndex: -1
-    property string placeIdentifier
     property string placeAlias
+    property var placeObject: null
     property string cacheKey
     property int timezoneID
     property int timezoneOffset
@@ -351,13 +351,12 @@ Item {
 
         plasmoid.configuration.placeIndex = placeIndex
 
-        var placeObject = places[placeIndex]
+        placeObject = places[placeIndex]
         if (!placeObject) {
             print("warning: No place object")
             return
         }
 
-        placeIdentifier = placeObject.placeIdentifier
         placeAlias = placeObject.placeAlias
         if (placeObject.timezoneID  === undefined || placeObject.providerId === 'owm') {
           placeObject.timezoneID = -1
@@ -365,8 +364,8 @@ Item {
         timezoneID = parseInt(placeObject.timezoneID)
         timezoneOffset = timeUtils.getTimeZoneOffset(timezoneID)
 
-        dbgprint('next placeIdentifier is: ' + placeIdentifier)
-        cacheKey = DataLoader.generateCacheKey(placeIdentifier)
+        dbgprint('next place is: ' + placeObject.placeAlias)
+        cacheKey = DataLoader.generateCacheKey(placeObject)
         dbgprint('next cacheKey is: ' + cacheKey)
 
         setCurrentProviderAccordingId(placeObject.providerId)
@@ -401,8 +400,8 @@ Item {
             return
         }
 
-        creditLink = currentProvider.getCreditLink(placeIdentifier, placeAlias)
-        creditLabel = currentProvider.getCreditLabel(placeIdentifier)
+        creditLink = currentProvider.getCreditLink(placeObject)
+        creditLabel = currentProvider.getCreditLabel(placeObject)
 
         if (currentProvider.providerId !== "owm") {
             reloadMeteogram()

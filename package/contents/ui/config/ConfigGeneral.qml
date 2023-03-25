@@ -24,9 +24,13 @@ ColumnLayout {
         ConfigUtils.getPlacesArray().forEach(function (placeObj) {
             placesModel.append({
                                    providerId: placeObj.providerId,
-                                   placeIdentifier: placeObj.placeIdentifier,
+                                   placeIdentifier: ConfigUtils.formatPlaceIdentifier(placeObj),
                                    placeAlias: placeObj.placeAlias,
-                                   timezoneID: (placeObj.timezoneID !== undefined) ? placeObj.timezoneID : -1,
+                                   latitude: parseFloat(placeObj.latitude),
+                                   longitude: parseFloat(placeObj.longitude),
+                                   altitude: parseInt(placeObj.altitude),
+                                   timezoneID: (placeObj.timezoneID !== undefined) ?
+                                                parseInt(placeObj.timezoneID) : -1,
                                    selected: false
                                })
         })
@@ -36,13 +40,11 @@ ColumnLayout {
         var newPlacesArray = []
         for (var i = 0; i < placesModel.count; i++) {
             var placeObj = placesModel.get(i)
-            newPlacesArray.push({
-                                    providerId: placeObj.providerId,
-                                    placeIdentifier: placeObj.placeIdentifier,
-                                    placeAlias: placeObj.placeAlias,
-                                    timezoneID: (placeObj.timezoneID !== undefined) ? placeObj.timezoneID : -1
-
-                                })
+            placeObj = JSON.stringify(placeObj)
+            placeObj = JSON.parse(placeObj)
+            placeObj.selected = undefined
+            delete placeObj["selected"]
+            newPlacesArray.push(placeObj)
         }
         cfg_places = JSON.stringify(newPlacesArray)
         print('[weatherWidget] places: ' + cfg_places)
@@ -59,7 +61,6 @@ ColumnLayout {
     property alias newMetnoCityLatitudeField: addMetnoCityIdDialog.newMetnoCityLatitudeField
     property alias newMetnoCityLongitudeField: addMetnoCityIdDialog.newMetnoCityLongitudeField
     property alias newMetnoCityAltitudeField: addMetnoCityIdDialog.newMetnoCityAltitudeField
-    property alias newMetnoUrl: addMetnoCityIdDialog.newMetnoUrl
 
     MetNoDialog {
         id: addMetnoCityIdDialog

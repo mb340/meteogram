@@ -49,7 +49,7 @@ Item {
     property alias reloadTimer: reloadTimer
 
     signal loadFromCache(string key);
-    signal reloadData(string key);
+    signal reloadData(string key, variant placeObject);
 
     enum State {
         INITIAL = 0,
@@ -78,6 +78,11 @@ Item {
                 return
             }
 
+            if (!placeObject) {
+                dbgprint("error: placeObject is null")
+                return
+            }
+
             switch (state) {
                 case ReloadTimer.State.WAIT_SEMAPHORE:
                     loadFromCache(cacheKey)
@@ -100,7 +105,7 @@ Item {
                     }
 
                     state = ReloadTimer.State.LOADING
-                    reloadData(cacheKey)
+                    reloadData(cacheKey, placeObject)
                     break
 
                 default:

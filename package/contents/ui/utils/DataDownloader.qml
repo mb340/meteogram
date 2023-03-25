@@ -118,7 +118,7 @@ Item {
         reloadTimer.resetState(cacheKey)
     }
 
-    function reloadData(cacheKey) {
+    function reloadData(cacheKey, placeObject) {
         dbgprint("reloadData")
 
         if (loadingData) {
@@ -142,13 +142,10 @@ Item {
 
         loadingData = true
 
-        var args = {
-            placeIdentifier: placeIdentifier,
-            timezoneID: timezoneID,
-            cacheKey, cacheKey
-        }
         let xhrs = currentProvider.loadDataFromInternet(reloadDataSuccessCallback,
-                                                        reloadDataFailureCallback, args)
+                                                        reloadDataFailureCallback,
+                                                        cacheKey,
+                                                        placeObject)
         loadingXhrs[cacheKey] = xhrs
 
         startAbortTimer(cacheKey, () => {

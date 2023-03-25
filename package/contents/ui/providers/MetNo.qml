@@ -327,9 +327,9 @@ Item {
       return(sign + hrs + ":" + mins)
     }
 
-    function getTzUrl(locationObject) {
+    function getTzUrl(timezoneID) {
         let tzUrl = null
-        if (locationObject.timezoneID === -1) {
+        if (timezoneID === -1) {
             dbgprint("[weatherWidget] Timezone Data not available - using sunrise-sunset.org API")
             tzUrl = "https://api.sunrise-sunset.org/json?formatted=0&" + placeIdentifier
         } else {
@@ -338,7 +338,7 @@ Item {
                         placeIdentifier.replace("altitude","height") + "&date=" +
                         formatDate(new Date().toISOString())
 
-            let tzData = timeUtils.getTimezoneData(locationObject.timezoneID)
+            let tzData = timeUtils.getTimezoneData(timezoneID)
             if (timeUtils.isDST(tzData.DSTData)) {
                 tzUrl += "&offset=" + formatOffsetString(tzData.DSTOffset)
             } else {
@@ -349,9 +349,16 @@ Item {
         return tzUrl
     }
 
-    function loadDataFromInternet(successCallback, failureCallback, locationObject) {
-        var placeIdentifier = locationObject.placeIdentifier
-        var cacheKey = locationObject.cacheKey
+    function formatUrlArgs(placeObject) {
+        let lat = parseFloat(placeObject.latitude).toFixed(4)
+        let lon = parseFloat(placeObject.longitude).toFixed(4)
+        let alt = parseInt(placeObject.altitude)
+        let url = "lat=" + lat + "&lon=" + lon + "&altitude=" + alt
+        return url
+    }
+
+    function loadDataFromInternet(successCallback, failureCallback, cacheKey, placeObject) {
+        var placeIdentifier = placeObject.placeIdentifier
 
         function loadCompleted() {
             var cacheContent = {}
@@ -404,8 +411,8 @@ Item {
         sunRiseSetFlag = false
         weatherDataFailFlag = false
 
-        let tzUrl = getTzUrl(locationObject)
-        let url = urlPrefix + placeIdentifier
+        let tzUrl = getTzUrl(placeObject.timezoneID)
+        let url = urlPrefix + formatUrlArgs(placeObject)
 
         var xhrs = []
         var xhr1 = DataLoader.fetchJsonFromInternet(url, successWeather, failureCb, cacheKey)

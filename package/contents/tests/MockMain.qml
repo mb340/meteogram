@@ -9,7 +9,7 @@ QtObject {
 
     property var currentProvider: null
 
-    property string placeIdentifier: "Mock Place"
+    property string placeAlias: "Mock Place"
     property int timezoneID: 88
 
     function loadFromCache() {

@@ -308,18 +308,21 @@ Item {
         meteogramModel.hourInterval = 1
     }
 
-    function loadDataFromInternet(successCallback, failureCallback, locationObject) {
-        print('locationObject = ' + JSON.stringify(locationObject))
-        var placeIdentifier = locationObject.placeIdentifier
-        var cacheKey = locationObject.cacheKey
+    function formatUrlArgs(placeObject) {
+        let lat = parseFloat(placeObject.latitude).toFixed(4)
+        let lon = parseFloat(placeObject.longitude).toFixed(4)
+        let url = "latitude=" + lat + "&longitude=" + lon
+        return url
+    }
 
+    function loadDataFromInternet(successCallback, failureCallback, cacheKey, placeObject) {
         function successCurrent(jsonString) {
             // print("successCurrent")
             // print(jsonString)
             successCallback(jsonString, cacheKey)
         }
 
-        var getUrl = url + placeIdentifier + args
+        var getUrl = url + formatUrlArgs(placeObject) + args
         var xhr1 = DataLoader.fetchJsonFromInternet(getUrl, successCurrent, failureCallback,
                                                     cacheKey)
 

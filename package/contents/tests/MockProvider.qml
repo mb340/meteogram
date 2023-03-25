@@ -42,10 +42,7 @@ Item {
         }
     }
 
-    function loadDataFromInternet(successCallback, failureCallback, locationObject) {
-        var placeIdentifier = locationObject.placeIdentifier
-        var cacheKey = locationObject.cacheKey
-
+    function loadDataFromInternet(successCallback, failureCallback, cacheKey, placeObject) {
         mockXhrResponse.cacheKey = cacheKey
         mockXhrResponse.successCallback = successCallback
         mockXhrResponse.failureCallback = failureCallback
@@ -164,11 +161,11 @@ Item {
         return true
     }
 
-    function getCreditLabel(placeIdentifier) {
+    function getCreditLabel() {
         return 'Mock Provider'
     }
 
-    function getCreditLink(placeIdentifier, placeAlias) {
+    function getCreditLink() {
         return 'https://127.0.0.1'
     }
 
