@@ -340,11 +340,11 @@ Item {
         return true
     }
 
-    function getCreditLabel(placeIdentifier) {
+    function getCreditLabel() {
         return 'Weather data by Open-Meteo.com'
     }
 
-    function getCreditLink(placeIdentifier) {
+    function getCreditLink() {
         return "https://open-meteo.com/"
     }
 
