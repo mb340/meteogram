@@ -6,18 +6,10 @@ import "../../code/icons.js" as IconTools
 Item {
     id: metno
 
-    property var locale: Qt.locale()
     property string providerId: 'metno'
     property string urlPrefix: 'https://api.met.no/weatherapi/locationforecast/2.0/complete?'
     property string forecastPrefix: 'https://www.yr.no/en/forecast/daily-table/'
 
-    property bool weatherDataFlag: false
-    property bool sunRiseSetFlag: false
-    property bool weatherDataFailFlag: false
-    property string weatherDataJson: ""
-    property string sunRiseDataJson: ""
-
-    property var sunRiseDataTimestamp: null
 
     function getCreditLabel() {
         return i18n("Weather forecast data provided by The Norwegian Meteorological Institute.")
@@ -86,9 +78,6 @@ Item {
         if (sunRise && sunSet) {
             currentWeatherModel.sunRise = sunRise
             currentWeatherModel.sunSet = sunSet
-            if (cacheContent.hasOwnProperty("sunRiseDataTimestamp")) {
-                sunRiseDataTimestamp = new Date(cacheContent["sunRiseDataTimestamp"])
-            }
         }
     }
 
@@ -360,29 +349,18 @@ Item {
     }
 
     function loadDataFromInternet(successCallback, failureCallback, cacheKey, placeObject) {
-        var placeIdentifier = placeObject.placeIdentifier
+        var weatherDataFlag = false
+        var sunRiseSetFlag = false
+        var weatherDataFailFlag = false
+        var cacheContent = {}
+        var sunRiseData = null
 
         function loadCompleted() {
-            var cacheContent = {}
-            cacheContent["weatherData"] = JSON.parse(weatherDataJson)
-            try {
-                cacheContent["sunRiseData"] = JSON.parse(sunRiseDataJson)
-                if (sunRiseDataTimestamp !== null) {
-                    cacheContent["sunRiseDataTimestamp"] = sunRiseDataTimestamp.getTime()
-                }
-            } catch (e) {
-                sunRiseDataTimestamp = null
-                print("metno: error parsing sunrise JSON data:", e)
-                print("metno: sunRiseDataJson:", sunRiseDataJson)
-                console.trace()
-            }
-            weatherDataJson = ""
-            sunRiseDataJson = ""
             successCallback(JSON.stringify(cacheContent), cacheKey)
         }
 
         function successWeather(jsonString) {
-            weatherDataJson = jsonString
+            cacheContent["weatherData"] = JSON.parse(jsonString)
             weatherDataFlag = true
             if ((weatherDataFlag) && (sunRiseSetFlag)) {
                 loadCompleted()
@@ -390,10 +368,18 @@ Item {
         }
 
         function successSRAS(jsonString) {
-            sunRiseDataJson = jsonString
+            try {
+                let obj = JSON.parse(jsonString)
+                cacheContent["sunRiseData"] = obj
+                let ts = new Date()
+                ts.setHours(0, 0, 0, 0)
+                cacheContent["sunRiseDataTimestamp"] = ts
+            } catch (e) {
+                print("metno: error parsing sunrise JSON data:", e)
+                print("metno: sunrise jsonString:", jsonString)
+                console.trace()
+            }
             sunRiseSetFlag = true
-            sunRiseDataTimestamp = new Date()
-            sunRiseDataTimestamp.setHours(0, 0, 0, 0)
             if ((weatherDataFlag) && (sunRiseSetFlag)) {
                 loadCompleted()
             }
@@ -401,17 +387,11 @@ Item {
 
         function failureCb() {
             dbgprint("DOH!")
-            weatherDataJson = ""
-            sunRiseDataJson = ""
             if (!weatherDataFailFlag) {
                 weatherDataFailFlag = true
                 failureCallback(cacheKey)
             }
         }
-
-        weatherDataFlag = false
-        sunRiseSetFlag = false
-        weatherDataFailFlag = false
 
         let tzUrl = getTzUrl(placeObject)
         let url = urlPrefix + formatUrlArgs(placeObject)
@@ -420,12 +400,27 @@ Item {
         var xhr1 = DataLoader.fetchJsonFromInternet(url, successWeather, failureCb, cacheKey)
         xhrs.push(xhr1)
 
+        let jsonStr = cacheDb.getContent(cacheKey)
+        let sunRiseDataTimestamp = null
+        if (jsonStr) {
+            let content = JSON.parse(jsonStr)
+            sunRiseDataTimestamp = content.sunRiseDataTimestamp
+            if (sunRiseDataTimestamp) {
+                sunRiseDataTimestamp = new Date(sunRiseDataTimestamp)
+            }
+            sunRiseData = content.sunRiseData
+        }
+
         var today = new Date()
         today.setHours(0, 0, 0, 0)
-        if (sunRiseDataTimestamp === null || sunRiseDataTimestamp.getTime() !== today.getTime()) {
+        if (!sunRiseData || !sunRiseDataTimestamp ||
+            sunRiseDataTimestamp.getTime() !== today.getTime())
+        {
             var xhr2 = DataLoader.fetchJsonFromInternet(tzUrl, successSRAS, failureCb, cacheKey)
             xhrs.push(xhr2)
         } else {
+            cacheContent.sunRiseData = sunRiseData
+            cacheContent.sunRiseDataTimestamp = sunRiseDataTimestamp
             sunRiseSetFlag = true
         }
 
