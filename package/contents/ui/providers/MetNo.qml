@@ -19,17 +19,14 @@ Item {
 
     property var sunRiseDataTimestamp: null
 
-    function getCreditLabel(placeIdentifier) {
+    function getCreditLabel() {
         return i18n("Weather forecast data provided by The Norwegian Meteorological Institute.")
     }
 
-   function extLongLat(placeIdentifier) {
-        return placeIdentifier.substr(placeIdentifier.indexOf("lat=" )+4,placeIdentifier.indexOf("&lon=")-4) +","+
-               placeIdentifier.substr(placeIdentifier.indexOf("&lon=")+5,placeIdentifier.indexOf("&altitude=")-placeIdentifier.indexOf("&lon=")-5)
-    }
-
-    function getCreditLink(placeIdentifier, placeAlias) {
-         return forecastPrefix + extLongLat(placeIdentifier)
+    function getCreditLink(placeObject) {
+        let args = parseFloat(placeObject.latitude).toFixed(4) + "," +
+                    parseFloat(placeObject.longitude).toFixed(4)
+        return forecastPrefix + args
     }
 
     function getIndexOfCurrentHour(weatherData) {
@@ -327,16 +324,21 @@ Item {
       return(sign + hrs + ":" + mins)
     }
 
-    function getTzUrl(timezoneID) {
+    function getTzUrl(placeObject) {
+        let timezoneID = parseInt(placeObject.timezoneID)
         let tzUrl = null
         if (timezoneID === -1) {
             dbgprint("[weatherWidget] Timezone Data not available - using sunrise-sunset.org API")
-            tzUrl = "https://api.sunrise-sunset.org/json?formatted=0&" + placeIdentifier
+            let lat = parseFloat(placeObject.latitude).toFixed(4)
+            let lon = parseFloat(placeObject.longitude).toFixed(4)
+            let args = "lat=" + lat + "&lng=" + lon
+            tzUrl = "https://api.sunrise-sunset.org/json?formatted=0&" + args
         } else {
             dbgprint("[weatherWidget] Timezone Data is available - using met.no API")
-            tzUrl = 'https://api.met.no/weatherapi/sunrise/2.0/.json?' +
-                        placeIdentifier.replace("altitude","height") + "&date=" +
-                        formatDate(new Date().toISOString())
+            let args = formatUrlArgs(placeObject)
+            args = args.replace("altitude", "height")
+            tzUrl = 'https://api.met.no/weatherapi/sunrise/2.0/.json?' + args +
+                        "&date=" + formatDate(new Date().toISOString())
 
             let tzData = timeUtils.getTimezoneData(timezoneID)
             if (timeUtils.isDST(tzData.DSTData)) {
@@ -411,7 +413,7 @@ Item {
         sunRiseSetFlag = false
         weatherDataFailFlag = false
 
-        let tzUrl = getTzUrl(placeObject.timezoneID)
+        let tzUrl = getTzUrl(placeObject)
         let url = urlPrefix + formatUrlArgs(placeObject)
 
         var xhrs = []
