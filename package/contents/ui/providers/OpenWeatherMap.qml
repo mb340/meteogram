@@ -682,12 +682,12 @@ Item {
         return true
     }
 
-    function getCreditLabel(placeIdentifier) {
+    function getCreditLabel() {
         return 'Weather forecast data provided by OpenWeather.'
     }
 
-    function getCreditLink(placeIdentifier) {
-        return 'http://openweathermap.org/city/' + placeIdentifier
+    function getCreditLink(placeObject) {
+        return 'http://openweathermap.org/city/' + placeObject.placeIdentifier
     }
 
     function getIconIr(iconCode) {
