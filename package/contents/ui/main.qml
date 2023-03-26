@@ -386,6 +386,9 @@ Item {
 
         dbgprint('loading from cache, config key: ' + cacheKey)
 
+        currentWeatherModel.clear()
+        meteogramModel.hourInterval = 1
+
         weatherAlertsModel.clear()
 
         var content = cacheDb.getContent(cacheKey)
