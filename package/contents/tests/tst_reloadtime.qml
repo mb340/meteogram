@@ -186,9 +186,9 @@ TestCase {
             return now
         }
 
-        let isloadFromCacheCalled = false
+        let isloadFromCacheCalled = 0
         reloadTimer.loadFromCache.connect(() => {
-            isloadFromCacheCalled = true
+            isloadFromCacheCalled++
         })
 
         reloadTimer.updateState(mockMain.cacheKey)
@@ -196,6 +196,32 @@ TestCase {
         compare(reloadTimer.nextLoadTime, mockCacheDb._content[mockMain.cacheKey].timestamp +  + now + (reloadInterval / 2))
         compare(reloadTimer.reloadTimer.interval, mockCacheDb._content[mockMain.cacheKey].timestamp +  + (reloadInterval / 2))
 
-        compare(isloadFromCacheCalled, true)
+        compare(isloadFromCacheCalled, 1)
+    }
+
+    function test_nextReloadTriggeredAndRecheckLastLoadTime() {
+        reloadTimer.reloadInterval = 0.01
+        mockCacheDb._content[mockMain.cacheKey].timestamp = 2000
+        reloadTimer.setLocalLoadTime(mockMain.cacheKey, 2000)
+
+        reloadTimer.getDateNow = function(){
+            return 4000
+        }
+
+        let isloadFromCacheCalled = 0
+        reloadTimer.loadFromCache.connect(() => {
+            isloadFromCacheCalled++
+        })
+
+        reloadTimer.updateState(mockMain.cacheKey)
+
+        // Simulate another plasmoid updating the cache
+        mockCacheDb._content[mockMain.cacheKey].timestamp = 10000
+        wait(1000)
+
+        compare(reloadTimer.state, ReloadTimer.State.SCHEDULED_RELOAD)
+        compare(isloadFromCacheCalled, 2)
+
+        reloadTimer.lastLoadTime = reloadTimer.getDateNow()
     }
 }

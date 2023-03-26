@@ -28,7 +28,7 @@ Item {
     property double semaphoreWaitTime: 1 * msPerMin
     property bool fuzzFactorEnabled: true
 
-    property int reloadInterval: plasmoid.configuration.reloadIntervalMin
+    property double reloadInterval: plasmoid.configuration.reloadIntervalMin
 
     property int state: ReloadTimer.State.INITIAL
 
@@ -93,12 +93,10 @@ Item {
                 case ReloadTimer.State.EXPIRE_TIME:
                 case ReloadTimer.State.SCHEDULED_RELOAD:
 
-                    lastLoadTime = cacheDb.readPlaceCacheTimestamp(cacheKey)
-                    let localLastLoadTime = localLastLoadTimes[cacheKey]
-                    if (localLastLoadTimes.hasOwnProperty(cacheKey) &&
-                        lastLoadTime > localLastLoadTime)
-                    {
-                        dbgprint("onTriggered: lastLoadTime > localLastLoadTime")
+                    // Cache was updated by another plasmoid while the timer was waiting
+                    let lastLoadTime = cacheDb.readPlaceCacheTimestamp(cacheKey)
+                    let nextLoadTime = lastLoadTime + (reloadInterval * msPerMin)
+                    if (nextLoadTime > getDateNow()) {
                         loadFromCache(cacheKey)
                         updateState(cacheKey)
                         break
@@ -311,24 +309,22 @@ Item {
         expireTime = cacheDb.readPlaceCacheExpireTime(key)
         lastLoadTime = cacheDb.readPlaceCacheTimestamp(key)
 
-        let localLastLoadTime = localLastLoadTimes[key]
 
         dbgprint("updateState: lastLoadTime:", lastLoadTime,  new Date(lastLoadTime))
         dbgprint("updateState: expireTime:", expireTime,
               (expireTime >= 0 ? new Date(expireTime) : "never"))
-        dbgprint("updateState: localLastLoadTime:", localLastLoadTime,
-              (localLastLoadTime !== undefined ? new Date(localLastLoadTime) : "never"))
 
         if (lastLoadTime === -1) {
             lastLoadTime = 0
         }
 
-        if (localLastLoadTimes.hasOwnProperty(key) &&  lastLoadTime > localLastLoadTime) {
-            loadFromCache(key)
-        }
-
-        if (!localLastLoadTimes.hasOwnProperty(key)) {
-            localLastLoadTimes[key] = lastLoadTime
+        if (localLastLoadTimes.hasOwnProperty(key)) {
+            let localLastLoadTime = localLastLoadTimes[key]
+            dbgprint("updateState: localLastLoadTime:", localLastLoadTime,
+                  (localLastLoadTime !== undefined ? new Date(localLastLoadTime) : "never"))
+            if (lastLoadTime > localLastLoadTime) {
+                loadFromCache(key)
+            }
         }
 
         let nextLoadTime = lastLoadTime + (reloadInterval * msPerMin)        
