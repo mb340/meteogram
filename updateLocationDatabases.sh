@@ -41,15 +41,25 @@ done
 echo "Done!"
 echo "Splitting Locations Databases..."
 # Finally, split the pass1.txt file into individual Country Code data files.
+sed -i 's#\"#\\"#g' "$WORKDIR/pass1.txt"
 for C in "${countrycodes[@]}"
 do
-#   echo "Creating Database \"$C.csv\""
-  FILENAME="$DATADIR/$C.csv"
-  $(grep "^$C" "$WORKDIR/pass1.txt" | cut -f 2- | sort > $FILENAME)
-  if [ ! -s $FILENAME ]; then
-    rm -f $FILENAME
-    echo "Database $C.csv has zero size - removing."
+#   echo "Creating Database \"$C.js\""
+  FILENAME="$DATADIR/$C.js"
+
+  IFS=$'\n'
+  sortedlist=($(grep "^$C" "$WORKDIR/pass1.txt" | cut -f 2- | sort))
+
+  if [ "${#sortedlist[@]}" -eq "0" ]; then
+    continue
   fi
+
+  echo "const CITIES = [" > $FILENAME
+  for A in "${sortedlist[@]}"
+  do
+    echo -e "\t\"${A}\"," >> $FILENAME
+  done
+  echo "];" >> $FILENAME
 done
 echo "Done"
 
