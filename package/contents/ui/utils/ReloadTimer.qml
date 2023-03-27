@@ -57,7 +57,8 @@ Item {
         LOADING_ERROR = 2,
         EXPIRE_TIME = 3,
         SCHEDULED_RELOAD = 4,
-        LOADING = 5
+        LOADING = 5,
+        FORCE_LOAD = 6
     }
 
 
@@ -102,6 +103,7 @@ Item {
                         break
                     }
 
+                case ReloadTimer.FORCE_LOAD:
                     state = ReloadTimer.State.LOADING
                     reloadData(cacheKey, placeObject)
                     break
@@ -266,7 +268,7 @@ Item {
         }
 
         reloadTimer.stop()
-        state = ReloadTimer.State.SCHEDULED_RELOAD
+        state = ReloadTimer.State.FORCE_LOAD
         reloadTimer.interval = 0
         reloadTimer.cacheKey = key
         reloadTimer.start()
