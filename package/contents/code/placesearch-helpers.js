@@ -312,7 +312,15 @@ function parseCSVLine(csvLine) {
 
     var items = csvLine.split(/\t/)
     var timezoneId = parseInt(items[5])
+    if (isNaN(timezoneId)) {
+        print("error: Invalid timezoneId", items[5])
+        return null
+    }
     var timezone = TZData.TZData.find((el) => { return el.id === timezoneId })
+    if (!timezone) {
+        print("error: timezoneId", timezoneId, "not found")
+        return null
+    }
     return ({
                 region: stripquotes((items[0])),
                 locationName: stripquotes(items[1]),
