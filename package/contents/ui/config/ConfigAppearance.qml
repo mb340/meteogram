@@ -7,6 +7,7 @@ Item {
 
     id: appearancePage
     property int cfg_layoutType
+    property bool cfg_iconDropShadow
     property alias cfg_inTrayActiveTimeoutSec: inTrayActiveTimeoutSec.value
     property string cfg_widgetFontName: plasmoid.configuration.widgetFontName
     property string cfg_widgetFontSize: plasmoid.configuration.widgetFontSize
@@ -155,6 +156,35 @@ Item {
             ButtonGroup.group: iconSetTypeGroup
             text: i18n("System icon theme")
             onCheckedChanged: if (checked) cfg_iconSetType = 3
+            Layout.rowSpan: 1
+        }
+
+        Item {
+            width: 2
+            height: 2
+            Layout.rowSpan: 3
+        }
+
+        Item {
+            width: 2
+            height: 2
+            Layout.rowSpan: 1
+        }
+        Label {
+            text: i18n("Drop Shadow")
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            Layout.columnSpan: 1
+        }
+        CheckBox {
+            id: iconDropShadow
+            checked: cfg_iconDropShadow
+            Layout.alignment: Qt.AlignLeft
+            Layout.rowSpan: 1
+            onCheckedChanged: cfg_iconDropShadow = checked
+        }
+        Item {
+            width: 2
+            height: 2
             Layout.rowSpan: 1
         }
 

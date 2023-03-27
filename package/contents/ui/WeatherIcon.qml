@@ -82,6 +82,7 @@ Item {
                 samples: 17
                 color: !textColorLight ? "#80000000" : "#80ffffff"
                 source: image
+                visible: plasmoid.configuration.iconDropShadow
             }
         }
     }
@@ -114,6 +115,7 @@ Item {
                 samples: 17
                 color: !textColorLight ? "#80000000" : "#80ffffff"
                 source: image
+                visible: plasmoid.configuration.iconDropShadow
             }
         }
     }

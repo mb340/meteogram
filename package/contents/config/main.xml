@@ -55,6 +55,9 @@
         <entry name="iconSetType" type="Int">
             <default>0</default>
         </entry>
+        <entry name="iconDropShadow" type="Bool">
+            <default>true</default>
+        </entry>
 
         <entry name="backgroundColor" type="String">
             <default>#FFFFFFFF</default>
