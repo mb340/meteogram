@@ -579,15 +579,15 @@ Item {
         }
 
         function init() {
-            const ONE_HOUR = (60 * 60 * 1000)
-            var dt = ONE_HOUR - (Date.now() % ONE_HOUR)
-            if (dt < 10 * 1000) {
-                dt = ONE_HOUR + dt
-            }
-            updateViewsTimer.interval = dt + (10 * 1000)
+            var now = Date.now()
+            var dt = new Date(now)
+            dt.setMinutes(1, 0, 0)
+            dt.setHours(dt.getHours() + 1)
+            var interval = dt - now
+            updateViewsTimer.interval = interval
             updateViewsTimer.restart()
 
-            dbgprint('updateViewsTimer: ' + (new Date(Date.now() + dt)))
+            dbgprint('updateViewsTimer: ' + dt)
         }
     }
 }
