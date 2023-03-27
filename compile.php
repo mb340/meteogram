@@ -20,7 +20,7 @@ $zoneData=read("$WORKDIR/zone.csv",",");
 
 $databaseObjects=array();
 
-$fromDate=mktime(0,0,0,1,1,2021);
+$fromDate=mktime(0,0,0,1,1,2023);
 $toDate=mktime(0,0,0,31,12,2032);
 
 $f=0;
