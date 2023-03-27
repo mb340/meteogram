@@ -251,7 +251,7 @@ Dialog {
             editable: false
             onCurrentIndexChanged: {
                 tableView.clearSelection()
-                if (countryList.currentIndex > 0) {
+                if (countryList.currentIndex >= 0) {
                     Helper.loadCSVDatabase(countryList.textAt(countryList.currentIndex), this)
                     tableView.contentY = 0
                 }
