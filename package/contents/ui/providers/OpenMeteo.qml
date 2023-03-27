@@ -45,7 +45,7 @@ Item {
                                   "windspeed_unit=ms&" +
                                   // "timeformat=unixtime&" +
 
-                                  "timezone=Europe%2FLondon"
+                                  "timezone=UTC"
                                   // "timezone=auto"
 
 
