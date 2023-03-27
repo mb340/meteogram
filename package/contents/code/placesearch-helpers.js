@@ -285,25 +285,40 @@ function updateListView(filter) {
         }
     }
 }
-function loadCSVDatabase(countryName) {
+function loadCSVDatabase(countryName, parent) {
     if (countryName.length === 0) {
         return
     }
     myCSVData = []
-    let filename = Qt.resolvedUrl("./db/" + getshortCode(countryName) + ".csv")
-    var xhr = new XMLHttpRequest
-    xhr.open("GET", filename)
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            var response = xhr.responseText
-            var tmpDB = response.split(/\r?\n/)
-            for (var i = 0; i < tmpDB.length - 1; i++) {
-                myCSVData.push(parseCSVLine(tmpDB[i]))
+
+    let shortCode = getshortCode(countryName)
+    try {
+        let item = Qt.createQmlObject(
+            ' \
+            import QtQuick 2.0; \
+            import "./db/' + shortCode + '.js" as Data; \
+            QtObject { \
+                property var cities: Data.CITIES; \
+            } \
+            ',
+            parent, shortCode)
+
+        for (var i = 0; i < item.cities.length; i++) {
+            let placeData = parseCSVLine(item.cities[i])
+            if (placeData) {
+                myCSVData.push(placeData)
+            } else {
+                print("error: Can't parse " + item.cities[i])
             }
-            updateListView(locationEdit.text)
         }
+
+        updateListView(locationEdit.text)
+
+        item.destroy()
+        item = null
+    } catch (e) {
+        print(e)
     }
-    xhr.send()
 }
 function parseCSVLine(csvLine) {
     function stripquotes(str) {
