@@ -14,6 +14,7 @@ fi
 unzip -u "$WORKDIR/cities500.zip"  -d "$WORKDIR"
 # wget -P "$WORKDIR" "https://timezonedb.com/files/timezonedb.csv.zip"
 unzip -u "$WORKDIR/timezonedb.csv.zip" -d "$WORKDIR" *.csv
+sed -i 's#Kiev#Kyiv#g' "$WORKDIR/zone.csv"
 
 # Extract CountryCode, Area, PlaceName, Latitude, Longtitude, Altitude, TimeZone from cities500.txt into temporary file pass1.txt
 echo "Processing Locations Database..."
