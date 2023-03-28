@@ -34,24 +34,6 @@ Item {
         }
     }
 
-    onCfg_iconSetTypeChanged: {
-        switch (cfg_iconSetType) {
-            default:
-            case 0:
-                iconSetErikFlowers.checked = true
-                break;
-            case 1:
-                iconSetMetNo.checked = true
-                break;
-            case 2:
-                iconSetBasmilius.checked = true
-                break;
-            case 3:
-                iconSetBreeze.checked = true
-                break;
-        }
-    }
-
     ListModel {
         id: fontsModel
         Component.onCompleted: {
@@ -82,10 +64,6 @@ Item {
         id: layoutTypeGroup
     }
 
-    ButtonGroup {
-        id: iconSetTypeGroup
-    }
-
     GridLayout {
         anchors.left: parent.left
         anchors.right: parent.right
@@ -98,65 +76,29 @@ Item {
             Layout.columnSpan: 3
         }
 
-        /* Icon Set - Erik Flowers */
         Label {
-            text: i18n("Icon Set")
+            text: i18n("Icon Set") + ":"
             Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
             Layout.rowSpan: 1
         }
-        RadioButton {
-            id: iconSetErikFlowers
-            ButtonGroup.group: iconSetTypeGroup
-            text: i18n("Erik Flowers Weather Icons")
-            onCheckedChanged: if (checked) cfg_iconSetType = 0
-            Layout.rowSpan: 1
-        }
-        Item {
-            width: 2
-            height: 2
-            Layout.rowSpan: 1
-        }
 
-        /* Icon Set - Yr.no */
-        Item {
-            width: 2
-            height: 2
-            Layout.rowSpan: 2
-        }
-        RadioButton {
-            id: iconSetMetNo
-            ButtonGroup.group: iconSetTypeGroup
-            text: i18n("Yr.no Weather Symbols")
-            onCheckedChanged: if (checked) cfg_iconSetType = 1
+        ComboBox {
             Layout.rowSpan: 1
-        }
+            Layout.minimumWidth: units.gridUnit * 10
+            currentIndex: cfg_iconSetType
+            model: [
+                i18n("Erik Flowers Weather Icons"),
+                i18n("Yr.no Weather Symbols"),
+                i18n("Basmilius Meteocons"),
+                i18n("System icon theme")
+            ]
 
-        /* Icon Set - Basmilius */
-        Item {
-            width: 2
-            height: 2
-            Layout.rowSpan: 2
-        }
-        RadioButton {
-            id: iconSetBasmilius
-            ButtonGroup.group: iconSetTypeGroup
-            text: i18n("Basmilius Meteocons")
-            onCheckedChanged: if (checked) cfg_iconSetType = 2
-            Layout.rowSpan: 1
-        }
-
-        /* Icon Set - Breeze */
-        Item {
-            width: 2
-            height: 2
-            Layout.rowSpan: 2
-        }
-        RadioButton {
-            id: iconSetBreeze
-            ButtonGroup.group: iconSetTypeGroup
-            text: i18n("System icon theme")
-            onCheckedChanged: if (checked) cfg_iconSetType = 3
-            Layout.rowSpan: 1
+            onCurrentIndexChanged: {
+                if (currentIndex < 0 || currentIndex >= model.length) {
+                    return
+                }
+                cfg_iconSetType = currentIndex
+            }
         }
 
         Item {
@@ -165,11 +107,6 @@ Item {
             Layout.rowSpan: 3
         }
 
-        Item {
-            width: 2
-            height: 2
-            Layout.rowSpan: 1
-        }
         Label {
             text: i18n("Drop Shadow")
             Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
