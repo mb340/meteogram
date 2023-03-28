@@ -50,10 +50,10 @@ Item {
         anchors.right: parent.right
         columns: 3
 
-        /* spacer */
-        Item {
-            width: 2
-            height: 10
+        Label {
+            text: i18n("Icons")
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            font.bold: true
             Layout.columnSpan: 3
         }
 
