@@ -20,9 +20,31 @@ Dialog {
 
     property var myCSVData: ([])
 
-    ListModel {
-        id: countryCodesModel
+    property bool isCountryCodesModelLoading: false
+    property var countryCodesModel: null
+
+    Component {
+        id: countryCodesModelComponent
+        ListModel {
+            id: countryCodesModel
+
+            Component.onCompleted: {
+                let locale=Qt.locale().name.substr(3,2)
+                let userCountry=Helper.getDisplayName(locale)
+                let tmpDB=Helper.getDisplayNames()
+                let currentIndex = -1
+                for (var i=0; i < tmpDB.length; i++) {
+                    this.append({ id: tmpDB[i] })
+                    if (tmpDB[i] === userCountry) {
+                        currentIndex = i
+                    }
+                }
+                searchWindow.countryCodesModel = this
+                countryList.currentIndex = currentIndex
+            }
+        }
     }
+
     ListModel {
         id: filteredCSVData
     }
@@ -33,26 +55,10 @@ Dialog {
         }
     }
 
-    Component.onCompleted: {
-        let locale=Qt.locale().name.substr(3,2)
-        let userCountry=Helper.getDisplayName(locale)
-        let tmpDB=Helper.getDisplayNames()
-        for (var i=0; i < tmpDB.length; i++) {
-            countryCodesModel.append({ id: tmpDB[i] })
-        }
-    }
-
     onVisibleChanged: {
-        if (!visible || countryList.currentIndex !== -1) {
-            return
-        }
-        let locale=Qt.locale().name.substr(3,2)
-        let userCountry=Helper.getDisplayName(locale)
-        let tmpDB=Helper.getDisplayNames()
-        for (var i=0; i < tmpDB.length; i++) {
-            if (tmpDB[i] === userCountry) {
-                countryList.currentIndex = i
-            }
+        if (visible && !isCountryCodesModelLoading) {
+            isCountryCodesModelLoading = true
+            countryCodesModelComponent.incubateObject(searchWindow);
         }
     }
 
