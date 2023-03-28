@@ -8,6 +8,7 @@ import "../../code/placesearch-helpers.js" as Helper
 
 
 ColumnLayout {
+    id: configGeneral
 
     property alias cfg_reloadIntervalMin: reloadIntervalMin.value
     property string cfg_places
@@ -15,28 +16,42 @@ ColumnLayout {
 
     property var editEntryNumber: -1
 
-    ListModel {
-        id: placesModel
+    property bool isPlacesModelLoading: false
+    property var placesModel: null
+
+    Component {
+        id: placesModelComponent
+        ListModel {
+            id: placesModel
+            Component.onCompleted: {
+                var places = ConfigUtils.getPlacesArray()
+                places.forEach(function (placeObj) {
+                    placesModel.append({
+                           providerId: placeObj.providerId,
+                           placeIdentifier: ConfigUtils.formatPlaceIdentifier(placeObj),
+                           placeAlias: placeObj.placeAlias,
+                           latitude: parseFloat(placeObj.latitude),
+                           longitude: parseFloat(placeObj.longitude),
+                           altitude: parseInt(placeObj.altitude),
+                           timezoneID: (placeObj.timezoneID !== undefined) ?
+                                        parseInt(placeObj.timezoneID) : -1,
+                           selected: false
+                       })
+                })
+                configGeneral.placesModel = placesModel
+            }
+        }
     }
 
     Component.onCompleted: {
-        var places = ConfigUtils.getPlacesArray()
-        ConfigUtils.getPlacesArray().forEach(function (placeObj) {
-            placesModel.append({
-                                   providerId: placeObj.providerId,
-                                   placeIdentifier: ConfigUtils.formatPlaceIdentifier(placeObj),
-                                   placeAlias: placeObj.placeAlias,
-                                   latitude: parseFloat(placeObj.latitude),
-                                   longitude: parseFloat(placeObj.longitude),
-                                   altitude: parseInt(placeObj.altitude),
-                                   timezoneID: (placeObj.timezoneID !== undefined) ?
-                                                parseInt(placeObj.timezoneID) : -1,
-                                   selected: false
-                               })
-        })
+        if (!isPlacesModelLoading) {
+            isPlacesModelLoading = true
+            const incubator = placesModelComponent.incubateObject(this);
+        }
     }
 
-    function placesModelChanged() {
+
+    function _placesModelChanged() {
         var newPlacesArray = []
         for (var i = 0; i < placesModel.count; i++) {
             var placeObj = placesModel.get(i)
@@ -238,7 +253,7 @@ ColumnLayout {
                     onClicked: {
                         var row = tableView.currentRow
                         placesModel.move(row, row - 1, 1)
-                        placesModelChanged()
+                        _placesModelChanged()
                         tableView.currentRow = tableView.currentRow - 1
                     }
                     enabled: tableView.currentRow > 0
@@ -250,7 +265,7 @@ ColumnLayout {
                     onClicked: {
                         var row = tableView.currentRow
                         placesModel.move(row, row + 1, 1)
-                        placesModelChanged()
+                        _placesModelChanged()
                         tableView.currentRow = tableView.currentRow + 1
                     }
                     enabled: (tableView.currentRow > -1 &&
@@ -265,7 +280,7 @@ ColumnLayout {
                             return
                         }
                         placesModel.remove(tableView.currentRow)
-                        placesModelChanged()
+                        _placesModelChanged()
 
                         tableView.currentRow = -1
                     }

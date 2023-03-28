@@ -38,7 +38,7 @@ Dialog {
                                 placeAlias: newOwmCityAlias.text
                             })
         }
-        placesModelChanged()
+        _placesModelChanged()
         close()
     }
 

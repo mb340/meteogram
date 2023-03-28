@@ -124,7 +124,7 @@ Dialog {
         } else {
             placesModel.set(editEntryNumber, data)
         }
-        placesModelChanged()
+        _placesModelChanged()
         close()
     }
 
