@@ -429,12 +429,14 @@ Item {
 
             onPressed: {
                 meteogramInfo.visible = true
+                cursorShape = Qt.CrossCursor
                 update(mouse)
                 meteogramInfoCanvas.requestPaint()
             }
 
             onReleased: {
                 meteogramInfo.visible = false
+                cursorShape = Qt.PointingHandCursor
                 meteogramInfoCanvas.requestPaint()
             }
 
