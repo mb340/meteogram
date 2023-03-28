@@ -37,7 +37,7 @@ Dialog {
         let locale=Qt.locale().name.substr(3,2)
         let userCountry=Helper.getDisplayName(locale)
         let tmpDB=Helper.getDisplayNames()
-        for (var i=0; i < tmpDB.length - 1 ; i++) {
+        for (var i=0; i < tmpDB.length; i++) {
             countryCodesModel.append({ id: tmpDB[i] })
         }
     }
@@ -49,7 +49,7 @@ Dialog {
         let locale=Qt.locale().name.substr(3,2)
         let userCountry=Helper.getDisplayName(locale)
         let tmpDB=Helper.getDisplayNames()
-        for (var i=0; i < tmpDB.length - 1 ; i++) {
+        for (var i=0; i < tmpDB.length; i++) {
             if (tmpDB[i] === userCountry) {
                 countryList.currentIndex = i
             }
