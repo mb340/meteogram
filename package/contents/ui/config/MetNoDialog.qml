@@ -52,6 +52,12 @@ Dialog {
             timezoneLoaderComponent.incubateObject(addMetnoCityIdDialog);
         }
 
+        if (visible && timezoneDataModel) {
+            addMetnoCityIdDialog.setTimezone(addMetnoCityIdDialog.timezoneID)
+        }
+        if (!visible) {
+            tzComboBox.currentIndex = -1
+            addMetnoCityIdDialog.timezoneID = -1
         }
     }
 
@@ -111,7 +117,7 @@ Dialog {
             longitude: Number.fromLocaleString(newMetnoCityLongitudeField.text),
             latitude: Number.fromLocaleString(newMetnoCityLatitudeField.text),
             altitude: Number.fromLocaleString(newMetnoCityAltitudeField.text),
-            timezoneID: addMetnoCityIdDialog.timezoneID
+            timezoneID: timezoneDataModel.get(tzComboBox.currentIndex).id
         }
         if (editEntryNumber === -1) {
             placesModel.append(data)
@@ -221,10 +227,8 @@ Dialog {
             textRole: "displayName"
             Layout.columnSpan: 2
             Layout.fillWidth: true
-            onCurrentIndexChanged: {
-                if (timezoneDataModel && tzComboBox.currentIndex >= 0) {
-                    addMetnoCityIdDialog.timezoneID = timezoneDataModel.get(tzComboBox.currentIndex).id
-                }
+            onModelChanged: {
+                currentIndex = -1
             }
         }
         Item {
@@ -274,7 +278,6 @@ Dialog {
         for (var i = 0; i < timezoneDataModel.count; i++) {
             if (parseInt(timezoneDataModel.get(i).id) === parseInt(timezoneID)) {
                 tzComboBox.currentIndex = i
-                addMetnoCityIdDialog.timezoneID = timezoneID
                 break
             }
         }
@@ -296,7 +299,7 @@ Dialog {
         newMetnoCityAltitudeField.text = (placeObject.altitude === undefined) ?
                                             0 : placeObject.altitude
         addMetnoCityIdDialog.timezoneID = parseInt(placeObject.timezoneID)
-        setTimezone(timezoneID)
+        setTimezone(addMetnoCityIdDialog.timezoneID)
         newMetnoCityAlias.text = placeObject.placeAlias
         addMetnoCityIdDialog.providerId = placeObject.providerId
     }
