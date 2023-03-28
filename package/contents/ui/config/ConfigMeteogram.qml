@@ -230,6 +230,39 @@ ColumnLayout {
         }
     }
 
+    GridLayout {
+        Layout.fillWidth: true
+        columns: 2
+
+        Label {
+            text: i18n("Color Palette") + ":"
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+
+            Layout.preferredWidth: maxColWidth
+            onWidthChanged: updateMaxColWidth(width)
+        }
+
+        ComboBox {
+            Layout.rowSpan: 1
+            Layout.minimumWidth: units.gridUnit * 10
+            currentIndex: cfg_colorPaletteType
+            model: [
+                i18n("Default"),
+                i18n("Protanopia"),
+                i18n("Deuteranopia"),
+                i18n("Tritanopia"),
+                i18n("Custom")
+            ]
+
+            onCurrentIndexChanged: {
+                if (currentIndex < 0 || currentIndex >= model.length) {
+                    return
+                }
+                cfg_colorPaletteType = currentIndex
+            }
+        }
+    }
+
     Label {
         text: i18n("Color Palette")
         Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
