@@ -219,6 +219,7 @@ ColumnLayout {
                 text: 'metno'
                 width: 100
                 onClicked: {
+                    addMetnoCityIdDialog.hasAltitude = true
                     addMetnoCityIdDialog.clearFields()
                     addMetnoCityIdDialog.providerId = 'metno'
                     addMetnoCityIdDialog.open()
@@ -231,6 +232,7 @@ ColumnLayout {
                 width: 100
                 onClicked: {
                     editEntryNumber = -1
+                    addMetnoCityIdDialog.hasAltitude = false
                     addMetnoCityIdDialog.clearFields()
                     addMetnoCityIdDialog.providerId = 'openMeteo'
                     addMetnoCityIdDialog.open()
@@ -296,9 +298,11 @@ ColumnLayout {
                     onClicked: {
                         editEntryNumber = tableView.currentRow
                         let entry = placesModel.get(editEntryNumber)
+                        let hasAltitude = (entry.providerId === "metno")
                         if (entry.providerId === "metno" ||
                             entry.providerId === "openMeteo")
                         {
+                            addMetnoCityIdDialog.hasAltitude = hasAltitude
                             addMetnoCityIdDialog.populateFields(entry)
                             addMetnoCityIdDialog.open()
                         }

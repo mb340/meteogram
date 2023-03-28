@@ -8,7 +8,7 @@ import "../../code/db/timezoneData.js" as TZData
 
 Dialog {
     id: addMetnoCityIdDialog
-    title: i18n("Add Met.no Map Place")
+    title: i18n("Add Place")
 
     property int timezoneID: -1
     property string providerId: ''
@@ -25,6 +25,8 @@ Dialog {
 
     property bool isLoadingTimeZoneModel: false
     property var timezoneDataModel: null
+
+    property bool hasAltitude: true
 
     Component {
         id: timezoneLoaderComponent
@@ -62,11 +64,6 @@ Dialog {
     }
 
     onActionChosen: {
-
-        function between(x, min, max) {
-            return x >= min && x <= max;
-        }
-
         if (action.button === Dialog.Ok) {
             var reason=""
             var reasoncount=0;
@@ -88,7 +85,7 @@ Dialog {
                 reasoncount++
             }
 
-            if (! altValid) {
+            if (hasAltitude && !altValid) {
                 reason+=i18n("The Altitude is not valid.")+"\n"
                 reason+=i18n("The Altitude is not between -999 and 5000.")+"\n"
                 reasoncount++
@@ -116,9 +113,13 @@ Dialog {
             placeAlias: newMetnoCityAlias.text,
             longitude: Number.fromLocaleString(newMetnoCityLongitudeField.text),
             latitude: Number.fromLocaleString(newMetnoCityLatitudeField.text),
-            altitude: Number.fromLocaleString(newMetnoCityAltitudeField.text),
             timezoneID: timezoneDataModel.get(tzComboBox.currentIndex).id
         }
+
+        if (hasAltitude) {
+            data["altitude"] = Number.fromLocaleString(newMetnoCityAltitudeField.text)
+        }
+
         if (editEntryNumber === -1) {
             placesModel.append(data)
         } else {
@@ -149,7 +150,9 @@ Dialog {
             let data=filteredCSVData.get(searchWindow.tableView.currentRow)
             newMetnoCityLatitudeField.text=data["latitude"]
             newMetnoCityLongitudeField.text=data["longitude"]
-            newMetnoCityAltitudeField.text=data["altitude"]
+            if (hasAltitude) {
+                newMetnoCityAltitudeField.text=data["altitude"]
+            }
             print("saveSearchedData: providerId = " +  addMetnoCityIdDialog.providerId)
             let loc=data["locationName"]+", "+Helper.getshortCode(countryList.textAt(countryList.currentIndex))
             newMetnoCityAlias.text=loc
@@ -208,6 +211,7 @@ Dialog {
         Label {
             id: newMetnoCityAltitudeLabel
             text: i18n("Altitude")+":"
+            enabled: hasAltitude
         }
 
         TextField {
@@ -215,6 +219,7 @@ Dialog {
             Layout.fillWidth: true
             validator: IntValidator { bottom: -999; top: 5000 }
             color: acceptableInput ? newMetnoCityAltitudeLabel.color : "red"
+            enabled: hasAltitude
         }
 
         Label {
@@ -296,8 +301,11 @@ Dialog {
                                             .toLocaleString(Qt.locale(),"f",5)
         newMetnoCityLongitudeField.text = Number(placeObject.longitude)
                                             .toLocaleString(Qt.locale(),"f",5)
-        newMetnoCityAltitudeField.text = (placeObject.altitude === undefined) ?
-                                            0 : placeObject.altitude
+
+        if (hasAltitude) {
+            newMetnoCityAltitudeField.text = (placeObject.altitude === undefined) ?
+                                                0 : placeObject.altitude
+        }
         addMetnoCityIdDialog.timezoneID = parseInt(placeObject.timezoneID)
         setTimezone(addMetnoCityIdDialog.timezoneID)
         newMetnoCityAlias.text = placeObject.placeAlias

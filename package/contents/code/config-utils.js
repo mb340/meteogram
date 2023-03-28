@@ -7,14 +7,17 @@ function getPlacesArray() {
 function formatPlaceIdentifier(placeObject) {
     let placeIdentifier = null
 
-    if (placeObject.providerId === "metno" ||
-        placeObject.providerId === "openMeteo" ||
-        placeObject.providerId === "owm2")
-    {
+    if (placeObject.providerId === "metno") {
         let lat = parseFloat(placeObject.latitude).toFixed(4)
         let lon = parseFloat(placeObject.longitude).toFixed(4)
         let alt = parseInt(placeObject.altitude)
         placeIdentifier = "latitude=" + lat + "&longitude=" + lon + "&altitude=" + alt
+    }
+
+    if (placeObject.providerId === "openMeteo") {
+        let lat = parseFloat(placeObject.latitude).toFixed(4)
+        let lon = parseFloat(placeObject.longitude).toFixed(4)
+        placeIdentifier = "latitude=" + lat + "&longitude=" + lon
     }
 
     if (placeObject.providerId === "owm") {
