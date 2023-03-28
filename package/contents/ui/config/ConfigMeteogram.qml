@@ -67,10 +67,6 @@ ColumnLayout {
     property var maxColWidth: 0
 
     ButtonGroup {
-        id: colorPaletteTypeGroup
-    }
-
-    ButtonGroup {
         id: lightDarkModeGroup
     }
 
@@ -262,57 +258,6 @@ ColumnLayout {
             }
         }
     }
-
-    Label {
-        text: i18n("Color Palette")
-        Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-    }
-
-    GridLayout {
-        Layout.fillWidth: true
-        columns: 2
-
-        property var labels: [
-            i18n("Default"),
-            i18n("Protanopia"),
-            i18n("Deuteranopia"),
-            i18n("Tritanopia"),
-            i18n("Custom"),
-        ]
-
-        Repeater {
-            model: parent.labels
-
-            Item {
-                width: 2
-                height: 2
-                Layout.rowSpan: 1
-                Layout.row: index
-                Layout.column: 0
-
-                Layout.preferredWidth: maxColWidth
-                onWidthChanged: updateMaxColWidth(width)
-            }
-        }
-
-        Repeater {
-            model: parent.labels
-
-            RadioButton {
-                id: colorPaletteTypeDefault
-                ButtonGroup.group: colorPaletteTypeGroup
-                text: modelData
-
-                checked: cfg_colorPaletteType == index
-                onCheckedChanged: if (checked) cfg_colorPaletteType = index
-
-                Layout.rowSpan: 1
-                Layout.row: index
-                Layout.column: 1
-            }
-        }
-    }
-
 
     Label {
         text: i18n("Custom Palette")
