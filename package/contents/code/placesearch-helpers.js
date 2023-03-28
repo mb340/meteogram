@@ -1,11 +1,6 @@
 .pragma library
 .import "./db/timezoneData.js" as TZData
 
-var initialized = false
-var myCSVData = null
-var locationEdit = null
-var filteredCSVData = null
-
 var countries = Array(
             {shortCode: "AD" , displayName: "Andorra"},
             {shortCode: "AE" , displayName: "United Arab Emirates"},
@@ -275,7 +270,7 @@ function getDisplayName(shortCode) {
     })
     return __FOUND["displayName"]
 }
-function updateListView(filter) {
+function updateListView(myCSVData, filter, filteredCSVData) {
     filteredCSVData.clear()
     filter = filter.toLowerCase()
     for (var f = 0; f < myCSVData.length; f++) {
@@ -285,11 +280,11 @@ function updateListView(filter) {
         }
     }
 }
-function loadCSVDatabase(countryName, parent) {
+function loadCSVDatabase(myCSVData, countryName, parent) {
     if (countryName.length === 0) {
         return
     }
-    myCSVData = []
+    myCSVData.length = 0
 
     let shortCode = getshortCode(countryName)
     try {
@@ -311,8 +306,6 @@ function loadCSVDatabase(countryName, parent) {
                 print("error: Can't parse " + item.cities[i])
             }
         }
-
-        updateListView(locationEdit.text)
 
         item.destroy()
         item = null

@@ -33,16 +33,7 @@ Dialog {
         }
     }
 
-    function initPlaceSearchHelper() {
-        Helper.myCSVData = searchWindow.myCSVData
-        Helper.locationEdit = locationEdit
-        Helper.filteredCSVData = searchWindow.filteredCSVData
-        Helper.initialized = true
-    }
-
     Component.onCompleted: {
-        initPlaceSearchHelper()
-
         let locale=Qt.locale().name.substr(3,2)
         let userCountry=Helper.getDisplayName(locale)
         let tmpDB=Helper.getDisplayNames()
@@ -252,7 +243,9 @@ Dialog {
             onCurrentIndexChanged: {
                 tableView.clearSelection()
                 if (countryList.currentIndex >= 0) {
-                    Helper.loadCSVDatabase(countryList.textAt(countryList.currentIndex), this)
+                    let countryName = countryList.textAt(countryList.currentIndex)
+                    Helper.loadCSVDatabase(myCSVData, countryName , this)
+                    Helper.updateListView(myCSVData, locationEdit.text, filteredCSVData)
                     tableView.contentY = 0
                 }
             }
@@ -281,7 +274,7 @@ Dialog {
             }
             onTextChanged: {
                 tableView.clearSelection()
-                Helper.updateListView(locationEdit.text)
+                Helper.updateListView(myCSVData, locationEdit.text, filteredCSVData)
                 tableView.contentY = 0
             }
         }
