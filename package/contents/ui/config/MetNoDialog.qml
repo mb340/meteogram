@@ -23,17 +23,35 @@ Dialog {
     property alias newMetnoCityAltitudeField: newMetnoCityAltitudeField
     property alias tzComboBox: tzComboBox
 
-    ListModel {
-        id: timezoneDataModel
+    property bool isLoadingTimeZoneModel: false
+    property var timezoneDataModel: null
+
+    Component {
+        id: timezoneLoaderComponent
+
+        ListModel {
+            id: timezoneDataModel
+            Component.onCompleted: {
+                let timezoneArray = TZData.TZData.sort(dynamicSort("displayName"))
+                timezoneArray.forEach(function (tz) {
+                    timezoneDataModel.append({
+                        displayName: tz.displayName.replace(/_/gi, " "),
+                        id: tz.id
+                    });
+                })
+                addMetnoCityIdDialog.timezoneDataModel = timezoneDataModel
+                addMetnoCityIdDialog.setTimezone(addMetnoCityIdDialog.timezoneID)
+            }
+        }
     }
 
     onVisibleChanged: {
-        if (visible === true && timezoneDataModel.count === 0) {
-            let timezoneArray = TZData.TZData.sort(dynamicSort("displayName"))
-            timezoneArray.forEach(function (tz) {
-                timezoneDataModel.append({displayName: tz.displayName.replace(/_/gi, " "), id: tz.id});
-            })
-            setTimezone(parseInt(timezoneID))
+        // Initialize list model the first time the dialog is opened
+        if (!isLoadingTimeZoneModel && visible === true && timezoneDataModel === null) {
+            isLoadingTimeZoneModel = true
+            timezoneLoaderComponent.incubateObject(addMetnoCityIdDialog);
+        }
+
         }
     }
 
@@ -204,7 +222,7 @@ Dialog {
             Layout.columnSpan: 2
             Layout.fillWidth: true
             onCurrentIndexChanged: {
-                if (tzComboBox.currentIndex > 0) {
+                if (timezoneDataModel && tzComboBox.currentIndex >= 0) {
                     addMetnoCityIdDialog.timezoneID = timezoneDataModel.get(tzComboBox.currentIndex).id
                 }
             }
@@ -250,6 +268,9 @@ Dialog {
     }
 
     function setTimezone(timezoneID) {
+        if (!timezoneDataModel) {
+            return
+        }
         for (var i = 0; i < timezoneDataModel.count; i++) {
             if (parseInt(timezoneDataModel.get(i).id) === parseInt(timezoneID)) {
                 tzComboBox.currentIndex = i
