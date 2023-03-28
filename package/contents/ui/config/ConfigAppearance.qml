@@ -19,21 +19,6 @@ Item {
         print(JSON.stringify(cfg_compactItemOrder))
     }
 
-    onCfg_layoutTypeChanged: {
-        switch (cfg_layoutType) {
-        case 0:
-            layoutTypeRadioHorizontal.checked = true;
-            break;
-        case 1:
-            layoutTypeRadioVertical.checked = true;
-            break;
-        case 2:
-            layoutTypeRadioCompact.checked = true;
-            break;
-        default:
-        }
-    }
-
     ListModel {
         id: fontsModel
         Component.onCompleted: {
@@ -58,10 +43,6 @@ Item {
     Component.onCompleted: {
         cfg_layoutTypeChanged()
         cfg_iconSetTypeChanged()
-    }
-
-    ButtonGroup {
-        id: layoutTypeGroup
     }
 
     GridLayout {
@@ -135,34 +116,30 @@ Item {
             text: i18n("Layout type") + ":"
             Layout.alignment: Qt.AlignVCenter|Qt.AlignRight
         }
-        RadioButton {
-            id: layoutTypeRadioHorizontal
-            ButtonGroup.group: layoutTypeGroup
-            text: i18n("Horizontal")
-            onCheckedChanged: if (checked) cfg_layoutType = 0;
+
+        ComboBox {
+            Layout.rowSpan: 1
+            Layout.minimumWidth: units.gridUnit * 10
+            currentIndex: cfg_layoutType
+            model: [
+                i18n("Horizontal"),
+                i18n("Vertical"),
+                i18n("Compact")
+            ]
+
+            onCurrentIndexChanged: {
+                if (currentIndex < 0 || currentIndex >= model.length) {
+                    return
+                }
+                cfg_layoutType = currentIndex
+            }
         }
+
         Label {
             text: i18n("NOTE: Setting layout type for in-tray plasmoid has no effect.")
-            Layout.rowSpan: 3
+            Layout.rowSpan: 1
             Layout.preferredWidth: 250
             wrapMode: Text.WordWrap
-        }
-        Item {
-            width: 2
-            height: 2
-            Layout.rowSpan: 2
-        }
-        RadioButton {
-            id: layoutTypeRadioVertical
-            ButtonGroup.group: layoutTypeGroup
-            text: i18n("Vertical")
-            onCheckedChanged: if (checked) cfg_layoutType = 1;
-        }
-        RadioButton {
-            id: layoutTypeRadioCompact
-            ButtonGroup.group: layoutTypeGroup
-            text: i18n("Compact")
-            onCheckedChanged: if (checked) cfg_layoutType = 2;
         }
 
         Item {
@@ -182,6 +159,7 @@ Item {
             Layout.fillWidth: true
             Layout.minimumHeight: childrenRect.height
             Layout.columnSpan: 2
+            enabled: cfg_layoutType === 0 || cfg_layoutType === 1
         }
 
         Item {
