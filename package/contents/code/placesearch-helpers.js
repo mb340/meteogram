@@ -298,8 +298,9 @@ function loadCSVDatabase(myCSVData, countryName, parent) {
             ',
             parent, shortCode)
 
+        let tzCache = {}
         for (var i = 0; i < item.cities.length; i++) {
-            let placeData = parseCSVLine(item.cities[i])
+            let placeData = parseCSVLine(item.cities[i], tzCache)
             if (placeData) {
                 myCSVData.push(placeData)
             } else {
@@ -313,7 +314,7 @@ function loadCSVDatabase(myCSVData, countryName, parent) {
         print(e)
     }
 }
-function parseCSVLine(csvLine) {
+function parseCSVLine(csvLine, tzCache) {
     function stripquotes(str) {
         return str.replace(/['"]+/g, '')
     }
@@ -324,7 +325,13 @@ function parseCSVLine(csvLine) {
         print("error: Invalid timezoneId", items[5])
         return null
     }
-    var timezone = TZData.TZData.find((el) => { return el.id === timezoneId })
+    var timezone = null
+    if (tzCache && tzCache.hasOwnProperty(timezoneId)) {
+        timezone = tzCache[timezoneId]
+    } else {
+        timezone = TZData.TZData.find((el) => { return el.id === timezoneId })
+        tzCache[timezoneId] = timezone
+    }
     if (!timezone) {
         print("error: timezoneId", timezoneId, "not found")
         return null
