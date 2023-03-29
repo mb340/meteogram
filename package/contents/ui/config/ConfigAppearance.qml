@@ -8,6 +8,8 @@ Item {
     id: appearancePage
     property int cfg_layoutType
     property bool cfg_iconDropShadow
+    property bool cfg_constrainCityAliasLabel
+    property bool cfg_constrainTemperatureLabel
     property alias cfg_inTrayActiveTimeoutSec: inTrayActiveTimeoutSec.value
     property string cfg_widgetFontName: plasmoid.configuration.widgetFontName
     property string cfg_widgetFontSize: plasmoid.configuration.widgetFontSize
@@ -42,6 +44,8 @@ Item {
 
     Component.onCompleted: {
         cfg_layoutTypeChanged()
+        cfg_constrainCityAliasLabelChanged()
+        cfg_constrainTemperatureLabelChanged()
         cfg_iconSetTypeChanged()
     }
 
@@ -142,10 +146,53 @@ Item {
             wrapMode: Text.WordWrap
         }
 
+        Label {
+            text: i18n("Constrain city alias label") + ":"
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            Layout.columnSpan: 1
+        }
+        CheckBox {
+            id: constrainCityAliasLabel
+            checkState: (cfg_layoutType !== 0) ? Qt.PartiallyChecked :
+                            (cfg_constrainCityAliasLabel ? Qt.Checked : Qt.Unchecked)
+            enabled: cfg_layoutType === 0
+            Layout.alignment: Qt.AlignLeft
+            Layout.rowSpan: 1
+            onCheckedChanged: {
+                if (cfg_layoutType === 0) {
+                    cfg_constrainCityAliasLabel = checked
+                }
+            }
+        }
         Item {
             width: 2
-            height: 20
-            Layout.columnSpan: 3
+            height: 2
+            Layout.rowSpan: 1
+        }
+
+        Label {
+            text: i18n("Constrain temperature label") + ":"
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            Layout.columnSpan: 1
+        }
+        CheckBox {
+            id: constrainTemperatureLabel
+            checkState: (cfg_layoutType !== 0) ? Qt.PartiallyChecked :
+                            (cfg_constrainTemperatureLabel ? Qt.Checked : Qt.Unchecked)
+            enabled: cfg_layoutType === 0
+            Layout.alignment: Qt.AlignLeft
+            Layout.rowSpan: 1
+            onCheckedChanged: {
+                if (cfg_layoutType === 0) {
+                    cfg_constrainTemperatureLabel = checked
+                }
+            }
+        }
+
+        Item {
+            width: 2
+            height: 2
+            Layout.rowSpan: 1
         }
 
         Item {

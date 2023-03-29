@@ -138,7 +138,7 @@ Item {
             PropertyChanges {
                 target: innerLabel
 
-                fontSizeMode: isConstrainedToSizerText ? Text.VerticalFit : Text.VerticalFit
+                fontSizeMode: isConstrainedToSizerText ? Text.HorizontalFit : Text.VerticalFit
             }
         },
         State {

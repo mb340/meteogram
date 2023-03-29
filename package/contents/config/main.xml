@@ -39,6 +39,12 @@
             <!-- <default>0, 1, 2</default> -->
             <default>0,1,2</default>
         </entry>
+        <entry name="constrainCityAliasLabel" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="constrainTemperatureLabel" type="Bool">
+            <default>true</default>
+        </entry>
         <entry name="inTrayActiveTimeoutSec" type="Int">
             <default>3600</default>
         </entry>

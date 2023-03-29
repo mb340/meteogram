@@ -32,6 +32,9 @@ Grid {
 
     property string places: plasmoid.configuration.places
 
+    property bool constrainCityAliasLabel: plasmoid.configuration.constrainCityAliasLabel
+    property bool constrainTemperatureLabel: plasmoid.configuration.constrainTemperatureLabel
+
     property string iconNameStr: !currentWeatherModel.valid ? '\uf07b' :
                                     IconTools.getIconCode(currentWeatherModel.iconName,
                                                           currentProvider, getPartOfDayIndex())
@@ -86,7 +89,7 @@ Grid {
         sizerWidth: compactItem.sizerWidth
         sizerHeight: compactItem.sizerHeight
 
-        isConstrainedToSizerText: !isHorizontal && !isPanelHorizontal
+        isConstrainedToSizerText: constrainCityAliasLabel
 
         state: compactItem.state
         onStateChanged: visible = order.includes(CompactItem2.ItemType.PlaceAlias)
@@ -110,6 +113,8 @@ Grid {
 
         isHeightSizer: true
         isWidthSizer: true
+
+        isConstrainedToSizerText: constrainTemperatureLabel
 
         state: compactItem.state
         onStateChanged: visible = order.includes(CompactItem2.ItemType.TemperatureText)
