@@ -66,6 +66,10 @@ Grid {
     property double sizerWidth
     property double sizerHeight
 
+
+    rowSpacing: plasmoid.configuration.layoutSpacing
+    columnSpacing: plasmoid.configuration.layoutSpacing
+
     anchors.centerIn: parent
 
     Item {
@@ -207,6 +211,12 @@ Grid {
         }
     }
 
+    function getNumVisible() {
+        return (placeAliasContainer.visible ? 1 : 0) +
+                (temperatureTextContainer.visible ? 1 : 0) +
+                (temperatureIcon.visible ? 1 : 0)
+    }
+
     states: [
         State {
             id: "void"
@@ -266,7 +276,8 @@ Grid {
 
                 width:  (placeAliasContainer.visible ? placeAliasContainer.width : 0) +
                         (temperatureTextContainer.visible ? temperatureTextContainer.width : 0) +
-                        (temperatureIcon.visible ? temperatureIcon.width : 0)
+                        (temperatureIcon.visible ? temperatureIcon.width : 0) +
+                        (rowSpacing * (getNumVisible() - 1))
 
                 height: parent.height
             }
@@ -319,7 +330,8 @@ Grid {
                 height: (placeAliasContainer.visible ? placeAliasContainer.contentHeight : 0) +
                         (temperatureTextContainer.visible ?
                             temperatureTextContainer.contentHeight : 0) +
-                        (temperatureIcon.visible ? temperatureIcon.contentHeight : 0)
+                        (temperatureIcon.visible ? temperatureIcon.contentHeight : 0) +
+                        (columnSpacing * (getNumVisible() - 1))
             }
         },
         State {
