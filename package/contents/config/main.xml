@@ -15,7 +15,6 @@
         <entry name="places" type="String">
           <default>
           [
-            { "providerId": "openMeteo", "placeAlias": "Some Place", "latitude":64.8000, "longitude":-147.5333", "timezoneID": 399 }
           ]
         </default>
         </entry>
