@@ -76,7 +76,7 @@ Dialog {
             i18n("Latitude"),
             i18n("Longitude"),
             i18n("Altitude"),
-            i18n("Timezone")
+            i18n("Time zone")
         ]
     }
 
