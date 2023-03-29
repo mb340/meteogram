@@ -69,8 +69,8 @@ Item {
                 labels: [
                     i18n("Millimeter"),
                     i18n("Centimeter"),
-                    i18n("Inch"),
-                    i18n("Mil")
+                    i18n("Mil"),
+                    i18n("Inch")
                 ],
             },
             {

@@ -27,8 +27,8 @@ QtObject {
     enum PrecipitationType {
         MM = 0,
         CM = 1,
-        INCH = 2,
-        MIL = 3
+        MIL = 2,
+        INCH = 3
     }
 
     enum PressureType {
