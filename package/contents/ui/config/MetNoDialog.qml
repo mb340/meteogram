@@ -2,6 +2,7 @@ import QtQuick 2.2
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
+import "../../code/config-utils.js" as ConfigUtils
 import "../../code/placesearch-helpers.js" as Helper
 import "../../code/db/timezoneData.js" as TZData
 
@@ -113,12 +114,15 @@ Dialog {
             placeAlias: newMetnoCityAlias.text,
             longitude: Number.fromLocaleString(newMetnoCityLongitudeField.text),
             latitude: Number.fromLocaleString(newMetnoCityLatitudeField.text),
-            timezoneID: timezoneDataModel.get(tzComboBox.currentIndex).id
+            timezoneID: timezoneDataModel.get(tzComboBox.currentIndex).id,
+            selected: false
         }
 
         if (hasAltitude) {
             data["altitude"] = Number.fromLocaleString(newMetnoCityAltitudeField.text)
         }
+
+        data["placeIdentifier"] = ConfigUtils.formatPlaceIdentifier(data)
 
         if (editEntryNumber === -1) {
             placesModel.append(data)
