@@ -246,11 +246,10 @@ Dialog {
             Layout.preferredHeight: tzComboBox.height
         }
         Label {
-            text: i18n("Place Identifier")+":"
+            text: i18n("City Alias")+":"
         }
         TextField {
             id: newMetnoCityAlias
-            placeholderText: i18n("City alias")
             Layout.columnSpan: 6
             Layout.fillWidth: true
         }

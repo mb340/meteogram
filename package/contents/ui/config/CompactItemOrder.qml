@@ -11,7 +11,7 @@ Column {
 
     readonly property var defaultOrder: ["0", "1", "2"]
     readonly property var itemNames: [
-                    i18n("Place Identifier"),
+                    i18n("City Alias"),
                     i18n("Temperature"),
                     i18n("Icon")
                 ]
