@@ -132,13 +132,13 @@ Item {
                 width: isConstrainedToSizerText ? contentWidth : innerLabel.contentWidth
                 height: parentHeight
 
-                fontSizeMode: isConstrainedToSizerText ? Text.VerticalFit : Text.VerticalFit
+                fontSizeMode: Text.VerticalFit
                 font.pixelSize: 1024
             }
             PropertyChanges {
                 target: innerLabel
 
-                fontSizeMode: isConstrainedToSizerText ? Text.HorizontalFit : Text.VerticalFit
+                fontSizeMode: isConstrainedToSizerText ? Text.Fit : Text.VerticalFit
             }
         },
         State {
