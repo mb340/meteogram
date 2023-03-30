@@ -46,7 +46,6 @@ Item {
         text: "\uf008"
 
         font.family: 'weathericons'
-        font.pointSize: -1
         font.pixelSize: 1024
         minimumPixelSize: 1
 

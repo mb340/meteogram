@@ -64,7 +64,6 @@ Item {
         opacity: 0
 
         font.family: theme.defaultFont
-        font.pointSize: -1
         font.pixelSize: 1024
         minimumPixelSize: 1
 
@@ -81,7 +80,6 @@ Item {
         text: actualText
 
         font.family: sizerLabel.font.family
-        font.pointSize: -1
         font.pixelSize: 1024
         minimumPixelSize: 1
 
