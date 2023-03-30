@@ -23,13 +23,14 @@ Item {
     property var dbgprint: function(...args) {}
 
     readonly property double msPerMin: 60 * 1000
+    readonly property double msPerHour: 60 * msPerMin
 
     readonly property double noConnectionRetryTime: 1 * msPerMin
     readonly property double httpErrorRetryTime: 60 * msPerMin
     property double semaphoreWaitTime: 1 * msPerMin
     property bool fuzzFactorEnabled: true
 
-    property double reloadInterval: plasmoid.configuration.reloadIntervalMin
+    property double reloadInterval: plasmoid.configuration.reloadIntervalHours
 
     property int state: ReloadTimer.State.INITIAL
 
@@ -65,7 +66,7 @@ Item {
 
     Timer {
         id: reloadTimer
-        interval: 60 * msPerMin
+        interval: msPerHour
         running: false
         repeat: false
         triggeredOnStart: false
@@ -97,7 +98,7 @@ Item {
 
                     // Cache was updated by another plasmoid while the timer was waiting
                     let lastLoadTime = cacheDb.readPlaceCacheTimestamp(cacheKey)
-                    let nextLoadTime = lastLoadTime + (reloadInterval * msPerMin)
+                    let nextLoadTime = lastLoadTime + (reloadInterval * msPerHour)
                     if (nextLoadTime > getDateNow()) {
                         loadFromCache(cacheKey)
                         updateState(cacheKey)
@@ -178,7 +179,7 @@ Item {
         if (lastLoadTime === -1) {
             timerInterval = 0
         } else {
-            let nextLoadTime = lastLoadTime + (reloadInterval * msPerMin)
+            let nextLoadTime = lastLoadTime + (reloadInterval * msPerHour)
             timerInterval = getTimerInterval(nextLoadTime)
         }
 
@@ -330,7 +331,7 @@ Item {
             }
         }
 
-        let nextLoadTime = lastLoadTime + (reloadInterval * msPerMin)        
+        let nextLoadTime = lastLoadTime + (reloadInterval * msPerHour)
         if (expireTime > nextLoadTime) {
             state = ReloadTimer.State.EXPIRE_TIME
         } else {

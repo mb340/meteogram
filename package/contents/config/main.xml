@@ -18,8 +18,8 @@
           ]
         </default>
         </entry>
-        <entry name="reloadIntervalMin" type="Int">
-            <default>240</default>
+        <entry name="reloadIntervalHours" type="Int">
+            <default>4</default>
         </entry>
         <entry name="debugLogging" type="Bool">
             <default>false</default>

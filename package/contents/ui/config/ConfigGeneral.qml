@@ -10,7 +10,7 @@ import "../../code/placesearch-helpers.js" as Helper
 ColumnLayout {
     id: configGeneral
 
-    property alias cfg_reloadIntervalMin: reloadIntervalMin.value
+    property alias cfg_reloadIntervalHours: reloadIntervalHours.value
     property string cfg_places
     property alias cfg_debugLogging: debugLogging.checked
 
@@ -331,20 +331,20 @@ ColumnLayout {
                 rightPadding: 6
             }
             SpinBox {
-                id: reloadIntervalMin
+                id: reloadIntervalHours
                 property int decimals: 0
-                stepSize: 10
-                from: 60
-                to: 1440
+                stepSize: 1
+                from: 1
+                to: 24
                 textFromValue: function(value, locale) {
-                    var num = Number(value).toLocaleString(locale, 'f', reloadIntervalMin.decimals)
-                    var suffix = i18nc("Abbreviation for minutes", "min")
+                    var num = Number(value).toLocaleString(locale, 'f', reloadIntervalHours.decimals)
+                    var suffix = i18nc("Abbreviation for hours", "hrs")
                     return qsTr("%1 %2").arg(num).arg(suffix)
                 }
                 valueFromText: function(text) {
                     let data = text.split(" ")
                     if (data.length < 1) {
-                        return 60
+                        return 4
                     }
                     return Number.fromLocaleString(data[0])
                 }

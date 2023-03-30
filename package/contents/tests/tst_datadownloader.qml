@@ -102,7 +102,7 @@ TestCase {
 
 
     function init() {
-        plasmoid.configuration.reloadIntervalMin = 60 * 60 * 1000
+        plasmoid.configuration.reloadIntervalHours = 60 * 1000
 
         reloadTimer = createTemporaryObject(reloadTimerComponent, root)
 

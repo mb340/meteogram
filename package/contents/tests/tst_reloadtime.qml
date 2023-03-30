@@ -100,7 +100,7 @@ TestCase {
     }
 
     function test_reloadTime_immediate() {
-        let reloadInterval = plasmoid.configuration.reloadIntervalMin * reloadTimer.msPerMin
+        let reloadInterval = plasmoid.configuration.reloadIntervalHours * reloadTimer.msPerHour
 
         let now = reloadInterval + 1000
         reloadTimer.getDateNow = function(){
@@ -114,7 +114,7 @@ TestCase {
     }
 
     function test_reloadTime() {
-        let reloadInterval = plasmoid.configuration.reloadIntervalMin * reloadTimer.msPerMin
+        let reloadInterval = plasmoid.configuration.reloadIntervalHours * reloadTimer.msPerHour
 
         let now = reloadInterval / 2
         reloadTimer.getDateNow = function(){
@@ -159,7 +159,7 @@ TestCase {
     }
 
     function test_reloadTime_expire() {
-        let reloadInterval = plasmoid.configuration.reloadIntervalMin * reloadTimer.msPerMin
+        let reloadInterval = plasmoid.configuration.reloadIntervalHours * reloadTimer.msPerHour
         let now = 10000 + reloadInterval
         let expireTime = 20000 + reloadInterval
 
@@ -176,7 +176,7 @@ TestCase {
     }
 
     function test_scheduleAndLoadFromCache() {
-        let reloadInterval = plasmoid.configuration.reloadIntervalMin * reloadTimer.msPerMin
+        let reloadInterval = plasmoid.configuration.reloadIntervalHours * reloadTimer.msPerHour
         mockCacheDb._content[mockMain.cacheKey].timestamp = 2000
 
         reloadTimer.setLocalLoadTime(mockMain.cacheKey, 1000)
@@ -200,7 +200,7 @@ TestCase {
     }
 
     function test_nextReloadTriggeredAndRecheckLastLoadTime() {
-        reloadTimer.reloadInterval = 0.01
+        reloadTimer.reloadInterval = 0.0001
         mockCacheDb._content[mockMain.cacheKey].timestamp = 2000
         reloadTimer.setLocalLoadTime(mockMain.cacheKey, 2000)
 

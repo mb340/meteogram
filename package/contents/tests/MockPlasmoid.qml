@@ -6,6 +6,6 @@ QtObject {
     property int id: 10
 
     property var configuration: ({
-        reloadIntervalMin: 1
+        reloadIntervalHours: 1
     })
 }
