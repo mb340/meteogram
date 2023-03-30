@@ -2,10 +2,16 @@ import QtQuick 2.2
 import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.0
 import QtQuick.Layouts 1.1
+import "../../code/print.js" as PrintUtil
 
 Item {
 
     id: appearancePage
+
+    objectName: "ConfigApearance"
+    // property var dbgprint: PrintUtil.init(this)
+    property var dbgprint: function(...args) {}
+
     property int cfg_layoutType
     property bool cfg_iconDropShadow
     property bool cfg_constrainCityAliasLabel
@@ -19,7 +25,7 @@ Item {
     property alias cfg_compactItemOrder: compactItemOrder.order
 
     onCfg_compactItemOrderChanged: {
-        print(JSON.stringify(cfg_compactItemOrder))
+        dbgprint(JSON.stringify(cfg_compactItemOrder))
     }
 
     ListModel {

@@ -17,10 +17,15 @@ import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "../code/icons.js" as IconTools
+import "../code/print.js" as PrintUtil
 import "utils"
 
 Grid {
     id: compactItem
+
+    objectName: "CompactItem2"
+    // property var dbgprint: PrintUtil.init(this, plasmoidCacheId)
+    property var dbgprint: function(...args) {}
 
     property int temperatureType: plasmoid.configuration.temperatureType
 
@@ -140,11 +145,11 @@ Grid {
     }
 
     Component.onCompleted: {
-        print("CompactItem: onCompleted: formFactor " + plasmoid.formFactor)
+        dbgprint("CompactItem: onCompleted: formFactor " + plasmoid.formFactor)
     }
 
     onStateChanged: {
-        print("onStateChanged", state)
+        dbgprint("onStateChanged", state)
     }
 
     onItemOrderChanged: {
@@ -175,7 +180,7 @@ Grid {
     }
 
     function updateOrder() {
-        print('itemOrder', JSON.stringify(itemOrder))
+        dbgprint('itemOrder', JSON.stringify(itemOrder))
 
         order = []
         for (var i = 0; i < itemOrder.length; i++) {
@@ -199,7 +204,7 @@ Grid {
     }
 
     function reparentChildren(order) {
-        print("reparentChildren", JSON.stringify(order))
+        dbgprint("reparentChildren", JSON.stringify(order))
         for (var i = 0; i < order.length; i++) {
             if (order[i] === CompactItem2.ItemType.PlaceAlias) {
                 placeAliasContainer.parent = compactItem
@@ -225,7 +230,7 @@ Grid {
             name: "removeAllChildren"
             StateChangeScript {
                 script: {
-                    print("removeAllChildren StateChangeScript")
+                    dbgprint("removeAllChildren StateChangeScript")
                     deparentChildren()
                 }
             }
@@ -244,7 +249,7 @@ Grid {
             extend: "changeOrientation"
             StateChangeScript {
                 script: {
-                    print("addChildren StateChangeScript")
+                    dbgprint("addChildren StateChangeScript")
                     reparentChildren(compactItem.order)
                 }
             }

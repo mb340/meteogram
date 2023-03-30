@@ -53,7 +53,7 @@ Item {
     property alias contentHeight: sizerLabel.contentHeight
 
     onStateChanged: {
-        print(debugName, " onStateChanged", state)
+        dbgprint(debugName, " onStateChanged", state)
     }
 
     Label {

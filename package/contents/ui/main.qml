@@ -217,7 +217,7 @@ Item {
     }
 
     Component.onCompleted: {
-        print("main: onCompleted: plasmoid.id", plasmoid.id, plasmoid.parent.id)
+        dbgprint("main: onCompleted: plasmoid.id", plasmoid.id, plasmoid.parent.id)
 
         if (plasmoid.configuration.firstRun === true) {
             plasmoid.configuration.widgetFontSize = theme.defaultFont.pixelSize
@@ -262,7 +262,7 @@ Item {
         if (db === null) {
             print('error initializing cache database')
         } else {
-            print('cache database initialized')
+            dbgprint('cache database initialized')
         }
 
         initialized = true

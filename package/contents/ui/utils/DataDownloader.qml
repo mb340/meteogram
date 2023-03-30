@@ -19,7 +19,8 @@ Item {
     id: dataDownloader
 
     objectName: "DataDownloader "
-    property var dbgprint: PrintUtil.init(this, plasmoidCacheId)
+    // property var dbgprint: PrintUtil.init(this, plasmoidCacheId)
+    property var dbgprint: function(...args) {}
 
     property int abortTimeInterval: 60 * 1000
 

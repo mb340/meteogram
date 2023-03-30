@@ -19,7 +19,8 @@ Item {
     id: root
 
     objectName: "ReloadTimer"
-    property var dbgprint: PrintUtil.init(this, plasmoidCacheId)
+    // property var dbgprint: PrintUtil.init(this, plasmoidCacheId)
+    property var dbgprint: function(...args) {}
 
     readonly property double msPerMin: 60 * 1000
 
