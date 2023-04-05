@@ -291,13 +291,13 @@ QtObject {
     function getPrecipitationUnit(precipitationType) {
         switch (precipitationType) {
         default:
-        case 0:
+        case UnitUtils.PrecipitationType.MM:
             return i18n("mm")
-        case 1:
+        case UnitUtils.PrecipitationType.CM:
             return i18n("cm")
-        case 2:
+        case UnitUtils.PrecipitationType.INCH:
             return i18n("in")
-        case 3:
+        case UnitUtils.PrecipitationType.MIL:
             return i18n("mil")
         }
     }
