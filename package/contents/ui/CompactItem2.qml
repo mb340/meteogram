@@ -24,8 +24,8 @@ Grid {
     id: compactItem
 
     objectName: "CompactItem2"
-    // property var dbgprint: PrintUtil.init(this, plasmoidCacheId)
-    property var dbgprint: function(...args) {}
+    property var dbgprint: PrintUtil.init(this, plasmoidCacheId)
+    // property var dbgprint: function(...args) {}
 
     property int temperatureType: plasmoid.configuration.temperatureType
 
@@ -39,6 +39,19 @@ Grid {
 
     property bool constrainCityAliasLabel: plasmoid.configuration.constrainCityAliasLabel
     property bool constrainTemperatureLabel: plasmoid.configuration.constrainTemperatureLabel
+
+    property int cityAliasSizeMode: plasmoid.configuration.cityAliasSizeMode
+    property string cityAliasFontName: plasmoid.configuration.cityAliasFontName
+    property int cityAliasFontSize: plasmoid.configuration.cityAliasFontSize
+    property double cityAliasFixedSize: plasmoid.configuration.cityAliasFixedSize
+
+    property int temperatureSizeMode: plasmoid.configuration.temperatureSizeMode
+    property string temperatureFontName: plasmoid.configuration.temperatureFontName
+    property int temperatureFontSize: plasmoid.configuration.temperatureFontSize
+    property double temperatureFixedSize: plasmoid.configuration.temperatureFixedSize
+
+    property int temperatureIconSizeMode: plasmoid.configuration.temperatureIconSizeMode
+    property double temperatureIconFixedSize: plasmoid.configuration.temperatureIconFixedSize
 
     property string iconNameStr: !currentWeatherModel.valid ? '\uf07b' :
                                     IconTools.getIconCode(currentWeatherModel.iconName,
@@ -75,6 +88,9 @@ Grid {
     rowSpacing: plasmoid.configuration.layoutSpacing
     columnSpacing: plasmoid.configuration.layoutSpacing
 
+    horizontalItemAlignment: Grid.AlignHCenter
+    verticalItemAlignment: Grid.AlignVCenter
+
     anchors.centerIn: parent
 
     Item {
@@ -89,14 +105,21 @@ Grid {
 
         debugName: "placeAliasContainer"
 
+        sizeMode: cityAliasSizeMode
+
+        font.family: cityAliasFontName
+        font.pointSize: cityAliasFontSize
+
         parentWidth: compactItem.parentWidth
         parentHeight: compactItem.parentHeight
 
         sizerText: "London, UK"
         actualText: main.placeAlias 
 
-        sizerWidth: compactItem.sizerWidth
-        sizerHeight: compactItem.sizerHeight
+        sizerWidth: (sizeMode === CompactItem2.SizeMode.FixedSize && isHorizontalState) ?
+                        cityAliasFixedSize : compactItem.sizerWidth
+        sizerHeight:  (sizeMode === CompactItem2.SizeMode.FixedSize && isVerticalState) ?
+                        cityAliasFixedSize : compactItem.sizerHeight
 
         isConstrainedToSizerText: constrainCityAliasLabel
 
@@ -109,6 +132,11 @@ Grid {
 
         debugName: "temperatureTextContainer"
 
+        sizeMode: temperatureSizeMode
+
+        font.family: temperatureFontName
+        font.pointSize: temperatureFontSize
+
         parentWidth: compactItem.parentWidth
         parentHeight: compactItem.parentHeight
 
@@ -117,8 +145,10 @@ Grid {
             unitUtils.getTemperatureText(-100.8, UnitUtils.TemperatureType.CELSIUS, 1)
         actualText: temperatureStr
 
-        sizerWidth: compactItem.sizerWidth
-        sizerHeight: compactItem.sizerHeight
+        sizerWidth: (sizeMode === CompactItem2.SizeMode.FixedSize && isHorizontalState) ?
+                        temperatureFixedSize : compactItem.sizerWidth
+        sizerHeight:  (sizeMode === CompactItem2.SizeMode.FixedSize && isVerticalState) ?
+                        temperatureFixedSize : compactItem.sizerHeight
 
         isHeightSizer: true
         isWidthSizer: true
@@ -132,11 +162,15 @@ Grid {
     CompactTemperatureIcon {
         id: temperatureIcon
 
+        sizeMode: temperatureIconSizeMode
+
         parentWidth: compactItem.parentWidth
         parentHeight: compactItem.parentHeight
 
-        sizerWidth: compactItem.sizerWidth
-        sizerHeight: compactItem.sizerHeight
+        sizerWidth: (sizeMode === CompactItem2.SizeMode.FixedSize) ?
+                        temperatureIconFixedSize : compactItem.sizerWidth
+        sizerHeight: (sizeMode === CompactItem2.SizeMode.FixedSize && isVerticalState) ?
+                        temperatureIconFixedSize : compactItem.sizerHeight
 
         isVerticalState: compactItem.isVerticalState
 
@@ -169,6 +203,12 @@ Grid {
         TemperatureText,
         TemperatureIcon,
         NumTypes
+    }
+
+    enum SizeMode {
+        Fill,
+        FixedSize,
+        FontSize
     }
 
     property var order: []
@@ -262,7 +302,8 @@ Grid {
                 target: compactItem
 
                 sizerWidth: (compactItem.width / order.length)
-                sizerHeight: temperatureTextContainer.innerLabel.height
+                sizerHeight: isPanelHorizontal ? compactItem.height / order.length :
+                                                 temperatureTextContainer.innerLabel.height
             }
         },
         State {
@@ -332,9 +373,9 @@ Grid {
                 target: compactItem
 
                 width: parent.width
-                height: (placeAliasContainer.visible ? placeAliasContainer.contentHeight : 0) +
+                height: (placeAliasContainer.visible ? placeAliasContainer.height : 0) +
                         (temperatureTextContainer.visible ?
-                            temperatureTextContainer.contentHeight : 0) +
+                            temperatureTextContainer.height : 0) +
                         (temperatureIcon.visible ? temperatureIcon.contentHeight : 0) +
                         (columnSpacing * (getNumVisible() - 1))
             }
@@ -355,10 +396,10 @@ Grid {
 
                 width:  Math.max(
                             Math.max((placeAliasContainer.visible ?
-                                        placeAliasContainer.contentWidth : 0),
+                                        placeAliasContainer.width : 0),
                                      (temperatureTextContainer.visible ?
-                                        temperatureTextContainer.contentWidth : 0)),
-                            (temperatureIcon.visible ? temperatureIcon.contentWidth : 0)
+                                        temperatureTextContainer.width : 0)),
+                            (temperatureIcon.visible ? temperatureIcon.width : 0)
                         )
                 height: parent.height
             }

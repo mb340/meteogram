@@ -57,6 +57,51 @@
         <entry name="widgetFontSize" type="Int">
             <default>32</default>
         </entry>
+        <entry name="cityAliasFixedSize" type="Double">
+            <default>32</default>
+        </entry>
+        <entry name="cityAliasFontName" type="String">
+            <default></default>
+        </entry>
+        <entry name="cityAliasFontSize" type="Int">
+            <default></default>
+        </entry>
+        <entry name="cityAliasSizeMode" type="Enum">
+            <choices>
+                <choice name="Fill"/>
+                <choice name="FixedSize"/>
+                <choice name="FontSize"/>
+            </choices>
+            <default>0</default>
+        </entry>
+        <entry name="temperatureFixedSize" type="Double">
+            <default>32</default>
+        </entry>
+        <entry name="temperatureFontName" type="String">
+            <default></default>
+        </entry>
+        <entry name="temperatureFontSize" type="Int">
+            <default></default>
+        </entry>
+        <entry name="temperatureSizeMode" type="Enum">
+            <choices>
+                <choice name="Fill"/>
+                <choice name="FixedSize"/>
+                <choice name="FontSize"/>
+            </choices>
+            <default>0</default>
+        </entry>
+        <entry name="temperatureIconFixedSize" type="Double">
+            <default>32</default>
+        </entry>
+        <entry name="temperatureIconSizeMode" type="Enum">
+            <choices>
+                <choice name="Fill"/>
+                <choice name="FixedSize"/>
+            </choices>
+            <default>0</default>
+        </entry>
+
         <entry name="colorPaletteType" type="Int">
             <default>0</default>
         </entry>

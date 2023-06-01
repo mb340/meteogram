@@ -26,6 +26,8 @@ Item {
 
     property string debugName: "CompactItemText"
 
+    property int sizeMode: CompactItem2.SizeMode.Fill
+
     property string sizerText: ""
     property string actualText: ""
 
@@ -41,9 +43,14 @@ Item {
     property bool isConstrainedToSizerText: true
     property bool showDropShadow
 
+    property font font: Qt.font({
+        family: theme.defaultFont.family,
+        pointSize: 1024,
+    })
+
     property alias innerLabel: innerLabel
 
-    property alias font: sizerLabel.font
+    // property alias font: sizerLabel.font
     property alias fontSizeMode: sizerLabel.fontSizeMode
     property alias horizontalAlignment: sizerLabel.horizontalAlignment
     property alias verticalAlignment: sizerLabel.verticalAlignment
@@ -63,9 +70,12 @@ Item {
         color: Qt.rgba(0, 1, 0, 1)
         opacity: 0
 
-        font.family: theme.defaultFont
-        font.pixelSize: 1024
+        // font.family: theme.defaultFont
+        // font.pointSize: fontPointSize
+        font.family: textContainer.font.family
+        font.pointSize: textContainer.font.pointSize
         minimumPixelSize: 1
+        minimumPointSize: 1
 
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
@@ -80,11 +90,14 @@ Item {
         text: actualText
 
         font.family: sizerLabel.font.family
-        font.pixelSize: 1024
+        font.pointSize: sizerLabel.font.pointSize
         minimumPixelSize: 1
+        minimumPointSize: 1
 
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
+
+        anchors.centerIn: parent
 
         Rectangle {
             anchors.fill: parent
@@ -107,7 +120,9 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: "blue"
+        // color: "blue"
+        border.color: Qt.rgba(0, 0, 0, 0.5)
+        border.width: 2
         z: -1
         visible: false
     }
@@ -127,16 +142,26 @@ Item {
             PropertyChanges {
                 target: sizerLabel
 
-                width: isConstrainedToSizerText ? contentWidth : innerLabel.contentWidth
+                width: (sizeMode === CompactItem2.SizeMode.Fill) ? innerLabel.contentWidth :
+                        (sizeMode === CompactItem2.SizeMode.FixedSize) ? sizerWidth :
+                        /*(sizeMode === CompactItem2.SizeMode.FontSize)*/ innerLabel.contentWidth
                 height: parentHeight
 
-                fontSizeMode: Text.VerticalFit
-                font.pixelSize: 1024
+                fontSizeMode: (sizeMode === CompactItem2.SizeMode.Fill) ? Text.VerticalFit :
+                                (sizeMode === CompactItem2.SizeMode.FixedSize) ? Text.Fit :
+                                /*(sizeMode === CompactItem2.SizeMode.FontSize)*/ Text.FixedSize
+
+                font.pointSize: (sizeMode === CompactItem2.SizeMode.Fill) ? 1024 :
+                                 (sizeMode === CompactItem2.SizeMode.FixedSize) ? 1024 :
+                                /*(sizeMode === CompactItem2.SizeMode.FontSize) ? */ textContainer.font.pointSize
             }
             PropertyChanges {
                 target: innerLabel
 
-                fontSizeMode: isConstrainedToSizerText ? Text.Fit : Text.VerticalFit
+                fontSizeMode: (sizeMode === CompactItem2.SizeMode.Fill) ? Text.VerticalFit :
+                                (sizeMode === CompactItem2.SizeMode.FixedSize) ? Text.Fit :
+                                /*(sizeMode === CompactItem2.SizeMode.FontSize)*/ Text.FixedSize
+
             }
         },
         State {
@@ -149,7 +174,7 @@ Item {
                 height: isHeightSizer ? contentHeight : sizerHeight
 
                 fontSizeMode: Text.HorizontalFit
-                font.pixelSize: 1024
+                font.pointSize: 1024
             }
             PropertyChanges {
                 target: innerLabel
@@ -163,18 +188,36 @@ Item {
             PropertyChanges {
                 target: sizerLabel
 
-                width: parentWidth
-                height: contentHeight
+                // width: parentWidth
+                // height: contentHeight
 
-                fontSizeMode: Text.HorizontalFit
+                // fontSizeMode: Text.HorizontalFit
+                // font.pointSize: 1024
+
+                width: parentWidth
+                height: (sizeMode === CompactItem2.SizeMode.Fill) ? innerLabel.contentHeight :
+                          (sizeMode === CompactItem2.SizeMode.FixedSize) ? sizerHeight :
+                            /*(sizeMode === CompactItem2.SizeMode.FontSize)*/ innerLabel.contentHeight
+
+                fontSizeMode: (sizeMode === CompactItem2.SizeMode.Fill) ? Text.HorizontalFit :
+                                (sizeMode === CompactItem2.SizeMode.FixedSize) ? Text.Fit :
+                                /*(sizeMode === CompactItem2.SizeMode.FontSize)*/ Text.FixedSize
+
+                font.pointSize: (sizeMode === CompactItem2.SizeMode.Fill) ? 1024 :
+                                 (sizeMode === CompactItem2.SizeMode.FixedSize) ? 1024 :
+                                /*(sizeMode === CompactItem2.SizeMode.FontSize) ? */ textContainer.font.pointSize
             }
             PropertyChanges {
                 target: innerLabel
 
                 anchors.centerIn: parent
 
-                fontSizeMode: Text.Fit
-                font.pixelSize:  textContainer.contentHeight
+                // fontSizeMode: Text.Fit
+                // font.pointSize:  textContainer.contentHeight
+
+                fontSizeMode: (sizeMode === CompactItem2.SizeMode.Fill) ? Text.HorizontalFit :
+                                (sizeMode === CompactItem2.SizeMode.FixedSize) ? Text.Fit :
+                                /*(sizeMode === CompactItem2.SizeMode.FontSize)*/ Text.FixedSize
             }
         },
         State {
@@ -183,18 +226,27 @@ Item {
             PropertyChanges {
                 target: sizerLabel
 
-                width: isWidthSizer ? contentWidth : sizerWidth
+                width: (sizeMode === CompactItem2.SizeMode.Fill) ? innerLabel.contentWidth :
+                        (sizeMode === CompactItem2.SizeMode.FixedSize) ? contentWidth :
+                        /*(sizeMode === CompactItem2.SizeMode.FontSize)*/ innerLabel.contentWidth
                 height: sizerHeight
 
-                fontSizeMode: isWidthSizer ? Text.VerticalFit : Text.HorizontalFit
+                fontSizeMode: (sizeMode === CompactItem2.SizeMode.Fill) ? Text.VerticalFit :
+                                (sizeMode === CompactItem2.SizeMode.FixedSize) ? Text.VerticalFit :
+                                /*(sizeMode === CompactItem2.SizeMode.FontSize)*/ Text.FixedSize
+
+                font.pointSize: (sizeMode === CompactItem2.SizeMode.Fill) ? 1024 :
+                                 (sizeMode === CompactItem2.SizeMode.FixedSize) ? 1024 :
+                                /*(sizeMode === CompactItem2.SizeMode.FontSize) ? */ textContainer.font.pointSize
             }
             PropertyChanges {
                 target: innerLabel
 
                 anchors.centerIn: parent
 
-                fontSizeMode: Text.Fit
-                font.pixelSize:  textContainer.contentHeight
+                fontSizeMode: (sizeMode === CompactItem2.SizeMode.Fill) ? Text.VerticalFit :
+                                (sizeMode === CompactItem2.SizeMode.FixedSize) ? Text.Fit :
+                                /*(sizeMode === CompactItem2.SizeMode.FontSize)*/ Text.FixedSize
             }
         },
         State {

@@ -22,6 +22,8 @@ Item {
     width: sizerLabel.width
     height: sizerLabel.height
 
+    property int sizeMode: CompactItem2.SizeMode.Fill
+
     property double parentWidth
     property double parentHeight
 
@@ -105,7 +107,9 @@ Item {
                 target: sizerLabel
 
                 // width: temperatureIconMetrics.maximumCharacterWidth
-                width: (temperatureIconMetrics.averageCharacterWidth * 1.25)
+                width: Math.min((temperatureIconMetrics.averageCharacterWidth * 1.25),
+                                (sizeMode === CompactItem2.SizeMode.Fill) ? 1024 : sizerWidth)
+
                 height: parentHeight
 
                 fontSizeMode: Text.VerticalFit
@@ -121,8 +125,8 @@ Item {
                 width: sizerWidth
                 height: sizerHeight
 
-                fontSizeMode: Text.Fit
-                font.pixelSize: sizerHeight
+                fontSizeMode: Text.HorizontalFit
+                font.pixelSize: 1024
             }
         },
         State {
@@ -130,7 +134,9 @@ Item {
             PropertyChanges {
                 target: sizerLabel
 
-                width: parentWidth
+                // width: parentWidth
+                width: Math.min((parentWidth),
+                                (sizeMode === CompactItem2.SizeMode.Fill) ? 1024 : sizerWidth)
                 height: contentHeight
 
                 fontSizeMode: Text.HorizontalFit
