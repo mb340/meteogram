@@ -26,7 +26,7 @@ Item {
     Plasmoid.backgroundHints: PlasmaCore.Types.DefaultBackground
                                 | PlasmaCore.Types.ConfigurableBackground
 
-    CompactItem2 {
+    CompactItem {
         id: compactItem
     }
 

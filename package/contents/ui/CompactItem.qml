@@ -23,7 +23,7 @@ import "utils"
 Grid {
     id: compactItem
 
-    objectName: "CompactItem2"
+    objectName: "CompactItem"
     property var dbgprint: PrintUtil.init(this, plasmoidCacheId)
     // property var dbgprint: function(...args) {}
 
@@ -116,15 +116,15 @@ Grid {
         sizerText: "London, UK"
         actualText: main.placeAlias 
 
-        sizerWidth: (sizeMode === CompactItem2.SizeMode.FixedSize && isHorizontalState) ?
+        sizerWidth: (sizeMode === CompactItem.SizeMode.FixedSize && isHorizontalState) ?
                         cityAliasFixedSize : compactItem.sizerWidth
-        sizerHeight:  (sizeMode === CompactItem2.SizeMode.FixedSize && isVerticalState) ?
+        sizerHeight:  (sizeMode === CompactItem.SizeMode.FixedSize && isVerticalState) ?
                         cityAliasFixedSize : compactItem.sizerHeight
 
         isConstrainedToSizerText: constrainCityAliasLabel
 
         state: compactItem.state
-        onStateChanged: visible = order.includes(CompactItem2.ItemType.PlaceAlias)
+        onStateChanged: visible = order.includes(CompactItem.ItemType.PlaceAlias)
     }
 
     CompactItemText {
@@ -145,9 +145,9 @@ Grid {
             unitUtils.getTemperatureText(-100.8, UnitUtils.TemperatureType.CELSIUS, 1)
         actualText: temperatureStr
 
-        sizerWidth: (sizeMode === CompactItem2.SizeMode.FixedSize && isHorizontalState) ?
+        sizerWidth: (sizeMode === CompactItem.SizeMode.FixedSize && isHorizontalState) ?
                         temperatureFixedSize : compactItem.sizerWidth
-        sizerHeight:  (sizeMode === CompactItem2.SizeMode.FixedSize && isVerticalState) ?
+        sizerHeight:  (sizeMode === CompactItem.SizeMode.FixedSize && isVerticalState) ?
                         temperatureFixedSize : compactItem.sizerHeight
 
         isHeightSizer: true
@@ -156,7 +156,7 @@ Grid {
         isConstrainedToSizerText: constrainTemperatureLabel
 
         state: compactItem.state
-        onStateChanged: visible = order.includes(CompactItem2.ItemType.TemperatureText)
+        onStateChanged: visible = order.includes(CompactItem.ItemType.TemperatureText)
     }
 
     CompactTemperatureIcon {
@@ -167,15 +167,15 @@ Grid {
         parentWidth: compactItem.parentWidth
         parentHeight: compactItem.parentHeight
 
-        sizerWidth: (sizeMode === CompactItem2.SizeMode.FixedSize) ?
+        sizerWidth: (sizeMode === CompactItem.SizeMode.FixedSize) ?
                         temperatureIconFixedSize : compactItem.sizerWidth
-        sizerHeight: (sizeMode === CompactItem2.SizeMode.FixedSize && isVerticalState) ?
+        sizerHeight: (sizeMode === CompactItem.SizeMode.FixedSize && isVerticalState) ?
                         temperatureIconFixedSize : compactItem.sizerHeight
 
         isVerticalState: compactItem.isVerticalState
 
         state: compactItem.state
-        onStateChanged: visible = order.includes(CompactItem2.ItemType.TemperatureIcon)
+        onStateChanged: visible = order.includes(CompactItem.ItemType.TemperatureIcon)
     }
 
     Component.onCompleted: {
@@ -232,12 +232,12 @@ Grid {
     }
 
     function deparentChildren() {
-        for (var i = 0; i < CompactItem2.ItemType.NumTypes; i++) {
-            if (order[i] === CompactItem2.ItemType.PlaceAlias) {
+        for (var i = 0; i < CompactItem.ItemType.NumTypes; i++) {
+            if (order[i] === CompactItem.ItemType.PlaceAlias) {
                 placeAliasContainer.parent = placeholder
-            } else if (order[i] === CompactItem2.ItemType.TemperatureText) {
+            } else if (order[i] === CompactItem.ItemType.TemperatureText) {
                 temperatureTextContainer.parent = placeholder
-            } else if (order[i] === CompactItem2.ItemType.TemperatureIcon) {
+            } else if (order[i] === CompactItem.ItemType.TemperatureIcon) {
                 temperatureIcon.parent = placeholder
             }
         }
@@ -246,11 +246,11 @@ Grid {
     function reparentChildren(order) {
         dbgprint("reparentChildren", JSON.stringify(order))
         for (var i = 0; i < order.length; i++) {
-            if (order[i] === CompactItem2.ItemType.PlaceAlias) {
+            if (order[i] === CompactItem.ItemType.PlaceAlias) {
                 placeAliasContainer.parent = compactItem
-            } else if (order[i] === CompactItem2.ItemType.TemperatureText) {
+            } else if (order[i] === CompactItem.ItemType.TemperatureText) {
                 temperatureTextContainer.parent = compactItem
-            } else if (order[i] === CompactItem2.ItemType.TemperatureIcon) {
+            } else if (order[i] === CompactItem.ItemType.TemperatureIcon) {
                 temperatureIcon.parent = compactItem
             }
         }

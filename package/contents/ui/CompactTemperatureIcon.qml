@@ -22,7 +22,7 @@ Item {
     width: sizerLabel.width
     height: sizerLabel.height
 
-    property int sizeMode: CompactItem2.SizeMode.Fill
+    property int sizeMode: CompactItem.SizeMode.Fill
 
     property double parentWidth
     property double parentHeight
@@ -108,7 +108,7 @@ Item {
 
                 // width: temperatureIconMetrics.maximumCharacterWidth
                 width: Math.min((temperatureIconMetrics.averageCharacterWidth * 1.25),
-                                (sizeMode === CompactItem2.SizeMode.Fill) ? 1024 : sizerWidth)
+                                (sizeMode === CompactItem.SizeMode.Fill) ? 1024 : sizerWidth)
 
                 height: parentHeight
 
@@ -136,7 +136,7 @@ Item {
 
                 // width: parentWidth
                 width: Math.min((parentWidth),
-                                (sizeMode === CompactItem2.SizeMode.Fill) ? 1024 : sizerWidth)
+                                (sizeMode === CompactItem.SizeMode.Fill) ? 1024 : sizerWidth)
                 height: contentHeight
 
                 fontSizeMode: Text.HorizontalFit

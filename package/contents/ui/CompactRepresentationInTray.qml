@@ -22,7 +22,7 @@ Item {
     
     anchors.fill: parent
     
-    CompactItem2 {
+    CompactItem {
         id: compactItem
     }
     
