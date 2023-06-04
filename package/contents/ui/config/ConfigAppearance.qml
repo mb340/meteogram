@@ -195,6 +195,42 @@ Item {
             Layout.columnSpan: 3
         }
 
+        Label {
+            text: i18n("Layout spacing") + ":"
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+        }
+
+        SpinBox {
+            id: layoutSpacing
+            property int decimals: 0
+            stepSize: 1
+            from: 0
+            to: 1024
+            textFromValue: function(value, locale) {
+                var suffix = i18nc("Abbreviation for pixels", "px")
+                return qsTr("%1 %2").arg(value).arg(suffix)
+            }
+            valueFromText: function(text) {
+                let data = text.split(" ")
+                if (data.length < 1) {
+                    return 0
+                }
+                return data[0]
+            }
+        }
+
+        Item {
+            width: 2
+            height: 2
+            Layout.rowSpan: 1
+        }
+
+        Item {
+            width: 2
+            height: 2
+            Layout.columnSpan: 3
+        }
+
         RowLayout {
             spacing: 0
             Layout.alignment: Qt.AlignTop | Qt.AlignRight
@@ -525,42 +561,6 @@ Item {
             id: fontDialog
             title: i18n("Choose a font")
             visible: false
-        }
-
-        Item {
-            width: 2
-            height: 2
-            Layout.columnSpan: 3
-        }
-
-        Label {
-            text: i18n("Layout spacing") + ":"
-            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-        }
-
-        SpinBox {
-            id: layoutSpacing
-            property int decimals: 0
-            stepSize: 1
-            from: 0
-            to: 1024
-            textFromValue: function(value, locale) {
-                var suffix = i18nc("Abbreviation for pixels", "px")
-                return qsTr("%1 %2").arg(value).arg(suffix)
-            }
-            valueFromText: function(text) {
-                let data = text.split(" ")
-                if (data.length < 1) {
-                    return 0
-                }
-                return data[0]
-            }
-        }
-
-        Item {
-            width: 2
-            height: 2
-            Layout.rowSpan: 1
         }
 
         Item {
