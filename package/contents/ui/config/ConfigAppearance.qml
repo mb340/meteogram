@@ -32,8 +32,6 @@ Item {
 
     property alias cfg_layoutSpacing: layoutSpacing.value
     property alias cfg_inTrayActiveTimeoutSec: inTrayActiveTimeoutSec.value
-    property string cfg_widgetFontName: plasmoid.configuration.widgetFontName
-    property string cfg_widgetFontSize: plasmoid.configuration.widgetFontSize
     property int cfg_iconSetType: plasmoid.configuration.iconSetType
 
     property alias cfg_compactItemOrder: compactItemOrder.order
@@ -44,27 +42,6 @@ Item {
 
     onCfg_compactItemOrderChanged: {
         dbgprint(JSON.stringify(cfg_compactItemOrder))
-    }
-
-    ListModel {
-        id: fontsModel
-        Component.onCompleted: {
-            var arr = []
-            arr.push({text: i18nc("Use default font", "Default"), value: ""})
-
-            var fonts = Qt.fontFamilies()
-            var foundIndex = 0
-            for (var i = 0, j = fonts.length; i < j; ++i) {
-                if (fonts[i] === cfg_widgetFontName) {
-                  foundIndex = i
-                }
-                arr.push({text: fonts[i], value: fonts[i]})
-            }
-            append(arr)
-            if (foundIndex > 0) {
-                fontFamilyComboBox.currentIndex = foundIndex + 1
-            }
-        }
     }
 
     Component.onCompleted: {
@@ -633,60 +610,6 @@ Item {
             width: 2
             height: 20
             Layout.columnSpan: 3
-        }
-
-        Label {
-            text: i18n("Widget font style") + ":"
-        }
-        ComboBox {
-            id: fontFamilyComboBox
-            Layout.fillWidth: true
-            currentIndex: 0
-            Layout.minimumWidth: units.gridUnit * 10
-            model: fontsModel
-            textRole: "text"
-
-            onCurrentIndexChanged: {
-                if (model.count === undefined || model.count === 0) {
-                    return
-                }
-                var current = model.get(currentIndex)
-                if (current) {
-                    cfg_widgetFontName = currentIndex === 0 ? "" : current.value
-                }
-            }
-        }
-        Item {
-            width: 2
-            height: 20
-            Layout.columnSpan: 3
-        }
-
-        Label {
-            text: i18n("Widget font size") + ":"
-        }
-        SpinBox {
-            id: widgetFontSize
-            property int decimals: 0
-            stepSize: 1
-            from: 4
-            to: 48
-            value: cfg_widgetFontSize
-            onValueChanged: {
-                cfg_widgetFontSize = widgetFontSize.value
-            }
-            textFromValue: function(value, locale) {
-                var num = Number(value).toLocaleString(locale, 'f', widgetFontSize.decimals)
-                var suffix = i18nc("pixels", "px")
-                return qsTr("%1 %2").arg(num).arg(suffix)
-            }
-            valueFromText: function(text) {
-                let data = text.split(" ")
-                if (data.length < 1) {
-                    return 32
-                }
-                return Number.fromLocaleString(data[0])
-            }
         }
     }
 }

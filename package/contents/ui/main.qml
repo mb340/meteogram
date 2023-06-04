@@ -51,8 +51,6 @@ Item {
     property int windDirectionType: plasmoid.configuration.windDirectionType
     property int timezoneType: plasmoid.configuration.timezoneType
     property int precipitationType: plasmoid.configuration.precipitationType
-    property string widgetFontName: plasmoid.configuration.widgetFontName
-    property int widgetFontSize: plasmoid.configuration.widgetFontSize
 
     property bool onlyOnePlace: true
 
@@ -216,7 +214,6 @@ Item {
         dbgprint("main: onCompleted: plasmoid.id", plasmoid.id, plasmoid.parent.id)
 
         if (plasmoid.configuration.firstRun === true) {
-            plasmoid.configuration.widgetFontSize = theme.defaultFont.pixelSize
             switch (Qt.locale().measurementSystem) {
                 case (Locale.MetricSystem):
                     plasmoid.configuration.temperatureType = UnitUtils.TemperatureType.CELSIUS
