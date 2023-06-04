@@ -36,6 +36,8 @@ Item {
 
     property alias cfg_compactItemOrder: compactItemOrder.order
 
+    property bool compactItemsEnabled: cfg_layoutType === 0 || cfg_layoutType === 1
+
     property bool cityAliasEnabled: cfg_compactItemOrder.includes("0")
     property bool temperatureEnabled: cfg_compactItemOrder.includes("1")
     property bool temperatureIconEnabled: cfg_compactItemOrder.includes("2")
@@ -210,7 +212,7 @@ Item {
             Layout.fillWidth: true
             Layout.minimumHeight: childrenRect.height
             Layout.columnSpan: 2
-            enabled: cfg_layoutType === 0 || cfg_layoutType === 1
+            enabled: compactItemsEnabled
         }
 
         Item {
@@ -221,13 +223,13 @@ Item {
 
         Label {
             text: i18n("City alias")
-            enabled: cityAliasEnabled
+            enabled: compactItemsEnabled && cityAliasEnabled
             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
             Layout.columnSpan: 1
         }
 
         Item {
-            enabled: cityAliasEnabled
+            enabled: compactItemsEnabled && cityAliasEnabled
             width: 2
             height: 2
             Layout.columnSpan: 2
@@ -235,13 +237,13 @@ Item {
 
         Label {
             text: i18n("Size mode") + ":"
-            enabled: cityAliasEnabled
+            enabled: compactItemsEnabled && cityAliasEnabled
             Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
             Layout.columnSpan: 1
         }
 
         SizeModeComboBox {
-            enabled: cityAliasEnabled
+            enabled: compactItemsEnabled && cityAliasEnabled
             Layout.columnSpan: 2
 
             currentIndex: cfg_cityAliasSizeMode
@@ -255,14 +257,14 @@ Item {
 
         Label {
             text: i18n("Font") + ":"
-            enabled: cityAliasEnabled
+            enabled: compactItemsEnabled && cityAliasEnabled
             Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
             Layout.columnSpan: 1
         }
 
         Button {
             icon.name: 'configure'
-            enabled: cityAliasEnabled
+            enabled: compactItemsEnabled && cityAliasEnabled
 
             Layout.columnSpan: 1
 
@@ -287,14 +289,14 @@ Item {
         Item {
             width: 2
             height: 2
-            enabled: cityAliasEnabled
+            enabled: compactItemsEnabled && cityAliasEnabled
             visible: cfg_cityAliasSizeMode === 1
             Layout.columnSpan: 1
         }
 
         Label {
             text: i18n("Fixed size") + ":"
-            enabled: cityAliasEnabled
+            enabled: compactItemsEnabled && cityAliasEnabled
             visible: cfg_cityAliasSizeMode === 1
             Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
             Layout.columnSpan: 1
@@ -302,7 +304,7 @@ Item {
 
         SpinBox {
             id: cityAliasFixedSize
-            enabled: cityAliasEnabled
+            enabled: compactItemsEnabled && cityAliasEnabled
             visible: cfg_cityAliasSizeMode === 1
 
             Layout.columnSpan: 1
@@ -331,13 +333,13 @@ Item {
 
         Label {
             text: i18n("Temperature")
-            enabled: temperatureEnabled
+            enabled: compactItemsEnabled && temperatureEnabled
             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
             Layout.columnSpan: 1
         }
 
         Item {
-            enabled: temperatureEnabled
+            enabled: compactItemsEnabled && temperatureEnabled
             width: 2
             height: 2
             Layout.columnSpan: 2
@@ -345,13 +347,13 @@ Item {
 
         Label {
             text: i18n("Size mode") + ":"
-            enabled: temperatureEnabled
+            enabled: compactItemsEnabled && temperatureEnabled
             Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
             Layout.columnSpan: 1
         }
 
         SizeModeComboBox {
-            enabled: temperatureEnabled
+            enabled: compactItemsEnabled && temperatureEnabled
             Layout.columnSpan: 2
 
             currentIndex: cfg_temperatureSizeMode
@@ -365,14 +367,14 @@ Item {
 
         Label {
             text: i18n("Font") + ":"
-            enabled: temperatureEnabled
+            enabled: compactItemsEnabled && temperatureEnabled
             Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
             Layout.columnSpan: 1
         }
 
         Button {
             icon.name: 'configure'
-            enabled: temperatureEnabled
+            enabled: compactItemsEnabled && temperatureEnabled
             Layout.columnSpan: 1
             onClicked: {
                 fontDialog.font = Qt.font({
@@ -395,14 +397,14 @@ Item {
         Item {
             width: 2
             height: 2
-            enabled: temperatureEnabled
+            enabled: compactItemsEnabled && temperatureEnabled
             visible: cfg_temperatureSizeMode === 1
             Layout.columnSpan: 1
         }
 
         Label {
             text: i18n("Fixed size") + ":"
-            enabled: temperatureEnabled
+            enabled: compactItemsEnabled && temperatureEnabled
             visible: cfg_temperatureSizeMode === 1
             Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
             Layout.columnSpan: 1
@@ -410,7 +412,7 @@ Item {
 
         SpinBox {
             id: temperatureFixedSize
-            enabled: temperatureEnabled
+            enabled: compactItemsEnabled && temperatureEnabled
             visible: cfg_temperatureSizeMode === 1
 
             Layout.columnSpan: 1
@@ -432,7 +434,7 @@ Item {
         }
 
         Item {
-            enabled: temperatureIconEnabled
+            enabled: compactItemsEnabled && temperatureIconEnabled
             width: 2
             height: 2
             Layout.columnSpan: 3
@@ -440,13 +442,13 @@ Item {
 
         Label {
             text: i18n("Temperature icon")
-            enabled: temperatureIconEnabled
+            enabled: compactItemsEnabled && temperatureIconEnabled
             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
             Layout.columnSpan: 1
         }
 
         Item {
-            enabled: temperatureIconEnabled
+            enabled: compactItemsEnabled && temperatureIconEnabled
             width: 2
             height: 2
             Layout.columnSpan: 2
@@ -454,13 +456,13 @@ Item {
 
         Label {
             text: i18n("Size mode") + ":"
-            enabled: temperatureIconEnabled
+            enabled: compactItemsEnabled && temperatureIconEnabled
             Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
             Layout.columnSpan: 1
         }
 
         SizeModeComboBox {
-            enabled: temperatureIconEnabled
+            enabled: compactItemsEnabled && temperatureIconEnabled
             currentIndex: cfg_temperatureIconSizeMode
             model: [
                 i18n("Fill"),
@@ -476,7 +478,7 @@ Item {
         }
 
         Item {
-            enabled: temperatureIconEnabled
+            enabled: compactItemsEnabled && temperatureIconEnabled
             width: 2
             height: 2
             Layout.columnSpan: 1
@@ -484,7 +486,7 @@ Item {
 
         Label {
             text: i18n("Fixed size") + ":"
-            enabled: temperatureIconEnabled
+            enabled: compactItemsEnabled && temperatureIconEnabled
             visible: cfg_temperatureIconSizeMode === 1
             Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
             Layout.columnSpan: 1
@@ -492,7 +494,7 @@ Item {
 
         SpinBox {
             id: temperatureIconFixedSize
-            enabled: temperatureIconEnabled
+            enabled: compactItemsEnabled && temperatureIconEnabled
             visible: cfg_temperatureIconSizeMode === 1
 
             Layout.columnSpan: 1
