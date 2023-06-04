@@ -1,5 +1,18 @@
-An updated version of the "plasma-applet-weather-widget" by Kotelnik, using the Met.No API instead of the Yr.No API which is no longer operational.
+# Weather Meteogram
 
-Check out the FAQ and Documentation in the Discussions area: https://github.com/blackadderkate/weather-widget-2/discussions
+KDE Plasmoid showing weather forecast charts.
 
-I am just a hobbyist / enthusiastic amateur - I'm sure a professional Javascript / QML programmer will be horrified with my code! So bug reports, suggestions, code polishes and bugfixes are welcome - as are translations (as Google Translate may not have been entirely accurate)!
+Forked from `blackadderkate/weather-widget-2` which was forked from `kotelnik/plasma-applet-weather-widget`.
+
+
+### Requirements
+
+ - KDE Plasma 5
+
+
+### Data sources
+
+ - The Norwegian Meteorological Institute
+ - OpenWeather
+ - Open-Meteo
+ - sunrise-sunset.org
