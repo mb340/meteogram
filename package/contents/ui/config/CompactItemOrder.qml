@@ -193,6 +193,8 @@ Column {
             Label {
                 id: itemText
                 text: model.text
+
+                color: enabled ? PlasmaCore.Theme.textColor : PlasmaCore.Theme.disabledTextColor
             }
 
             MouseArea {
