@@ -24,8 +24,8 @@ Grid {
     id: compactItem
 
     objectName: "CompactItem"
-    property var dbgprint: PrintUtil.init(this, plasmoidCacheId)
-    // property var dbgprint: function(...args) {}
+    // property var dbgprint: PrintUtil.init(this, plasmoidCacheId)
+    property var dbgprint: function(...args) {}
 
     property int temperatureType: plasmoid.configuration.temperatureType
 
