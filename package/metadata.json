@@ -12,7 +12,7 @@
         "Description": "Weather meteogram",
         "EnabledByDefault": false,
         "Icon": "weather-clouds",
-        "Id": "com.mb340.meteogram",
+        "Id": "com.github.mb340.meteogram",
         "License": "GPL2",
         "Name": "Weather Meteogram",
         "ServiceTypes": [

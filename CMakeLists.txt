@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
-project(com.mb340.meteogram)
+project(com.github.mb340.meteogram)
 
 set(QT_MIN_VERSION "5.4.0")
 set(KF5_MIN_VERSION "5.0.0")
@@ -16,4 +16,4 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS Plasma)
 
 add_subdirectory(translations)
 
-plasma_install_package(package com.mb340.meteogram)
+plasma_install_package(package com.github.mb340.meteogram)
