@@ -178,7 +178,7 @@ Item {
             model: [
                 i18n("Fill"),
                 i18n("Fixed Size"),
-                i18n("FontSize"),
+                i18n("Font Size"),
             ]
 
             // onCurrentIndexChanged: {
