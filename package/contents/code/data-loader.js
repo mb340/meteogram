@@ -41,7 +41,8 @@ function fetchXmlFromInternet(getUrl, successCallback, failureCallback, cacheKey
             return
         }
 
-        if (xhr.status !== 200) {
+        if (xhr.status !== 200 && xhr.status !== 203) {
+            print('ERROR - url: ' + getUrl)
             print('ERROR - status: ' + xhr.status)
             print('ERROR - responseText: ' + xhr.responseText)
             failureCallback(cacheKey)
@@ -78,7 +79,8 @@ function fetchJsonFromInternet(getUrl, successCallback, failureCallback, cacheKe
             return
         }
 
-        if (xhr.status !== 200) {
+        if (xhr.status !== 200 && xhr.status !== 203) {
+            print('ERROR - url: ' + getUrl)
             print('ERROR - status: ' + xhr.status)
             print('ERROR - responseText: ' + xhr.responseText)
             failureCallback(cacheKey)
