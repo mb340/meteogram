@@ -313,6 +313,13 @@ Item {
       return(sign + hrs + ":" + mins)
     }
 
+    function formatSunriseUrlArgs(placeObject) {
+        let lat = parseFloat(placeObject.latitude).toFixed(4)
+        let lon = parseFloat(placeObject.longitude).toFixed(4)
+        let url = "lat=" + lat + "&lon=" + lon
+        return url
+    }
+
     function getTzUrl(placeObject) {
         let timezoneID = parseInt(placeObject.timezoneID)
         let tzUrl = null
@@ -324,7 +331,7 @@ Item {
             tzUrl = "https://api.sunrise-sunset.org/json?formatted=0&" + args
         } else {
             dbgprint("[weatherWidget] Timezone Data is available - using met.no API")
-            let args = formatUrlArgs(placeObject)
+            let args = formatSunriseUrlArgs(placeObject)
             args = args.replace("altitude", "height")
             tzUrl = 'https://api.met.no/weatherapi/sunrise/2.0/.json?' + args +
                         "&date=" + formatDate(new Date().toISOString())
