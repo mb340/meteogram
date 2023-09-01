@@ -49,15 +49,15 @@ Item {
         }
 
         // Parse data from met.no
-        if (sunRiseData.location && sunRiseData.location.time) {
-            let data = sunRiseData.location.time
-            if (data.length > 0 && data[0].sunrise) {
-                sunRise = data[0].sunrise.time
-                sunRise = timeUtils.convertDate(sunRise, timezoneType, main.timezoneOffset)
+        if (sunRiseData.properties.sunrise && sunRiseData.properties.sunset) {
+            let sunriseData = sunRiseData.properties.sunrise
+            if (sunriseData.time) {
+                sunRise = timeUtils.convertDate(sunriseData.time, timezoneType, main.timezoneOffset)
             }
-            if (data.length > 0 && data[0].sunset) {
-                sunSet = data[0].sunset.time
-                sunSet = timeUtils.convertDate(sunSet, timezoneType, main.timezoneOffset)
+
+            let sunsetData = sunRiseData.properties.sunset
+            if (sunsetData.time) {
+                sunSet = timeUtils.convertDate(sunsetData.time, timezoneType, main.timezoneOffset)
             }
         }
 
@@ -332,8 +332,7 @@ Item {
         } else {
             dbgprint("[weatherWidget] Timezone Data is available - using met.no API")
             let args = formatSunriseUrlArgs(placeObject)
-            args = args.replace("altitude", "height")
-            tzUrl = 'https://api.met.no/weatherapi/sunrise/2.0/.json?' + args +
+            tzUrl = 'https://api.met.no/weatherapi/sunrise/3.0/sun?' + args +
                         "&date=" + formatDate(new Date().toISOString())
 
             let tzData = timeUtils.getTimezoneData(timezoneID)
