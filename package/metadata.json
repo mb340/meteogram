@@ -9,7 +9,7 @@
         "Category": "Environment and Weather",
         "Dependencies": [
         ],
-        "Description": "Weather meteogram",
+        "Description": "Shows weather forecast chart",
         "EnabledByDefault": false,
         "Icon": "weather-clouds",
         "Id": "com.github.mb340.meteogram",
