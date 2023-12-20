@@ -16,7 +16,8 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
-import QtGraphicalEffects 1.0
+// import QtGraphicalEffects 1.0
+import Qt5Compat.GraphicalEffects
 import org.kde.plasma.core as PlasmaCore
 import "../code/icons.js" as IconTools
 import org.kde.kirigami as Kirigami
