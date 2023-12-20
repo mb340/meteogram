@@ -19,6 +19,8 @@ import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
 import org.kde.plasma.core as PlasmaCore
 import "../code/icons.js" as IconTools
+import org.kde.kirigami as Kirigami
+
 
 ColumnLayout {
     id: root
@@ -126,7 +128,7 @@ ColumnLayout {
                 Layout.preferredWidth: width
                 Label {
                     text: modelData
-                    color: PlasmaCore.Theme.disabledTextColor
+                    color: Kirigami.Theme.disabledTextColor
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
             }
@@ -135,7 +137,7 @@ ColumnLayout {
         /* row headings */
         Label {
             text: "Temperature"
-            color: PlasmaCore.Theme.disabledTextColor
+            color: Kirigami.Theme.disabledTextColor
             Layout.row: 1
             Layout.rowSpan: 2
             Layout.column: 1
@@ -144,7 +146,7 @@ ColumnLayout {
 
         Label {
             text: "Feels Like"
-            color: PlasmaCore.Theme.disabledTextColor
+            color: Kirigami.Theme.disabledTextColor
             Layout.row: 3
             Layout.rowSpan: 2
             Layout.column: 1
@@ -274,7 +276,7 @@ ColumnLayout {
 
                 Label {
                     text: tileTitle
-                    color: PlasmaCore.Theme.disabledTextColor
+                    color: Kirigami.Theme.disabledTextColor
                     anchors.centerIn: parent
                 }
             }
@@ -293,7 +295,7 @@ ColumnLayout {
                         Label {
                             text: modelData.titleStr ? modelData.titleStr : ""
                             font.italic: true
-                            color: PlasmaCore.Theme.disabledTextColor
+                            color: Kirigami.Theme.disabledTextColor
                             anchors.topMargin: 10
                             anchors.horizontalCenter: parent.horizontalCenter
                             visible: !!modelData.titleStr

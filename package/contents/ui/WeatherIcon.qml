@@ -97,7 +97,7 @@ Item {
             width: isFinite(iconDim) ? iconDim : parent.width
             height: width
 
-            PlasmaCore.IconItem {
+            Kirigami.Icon {
                 id: image
                 source: IconTools.getIconResource(iconName,
                                                   currentProvider,

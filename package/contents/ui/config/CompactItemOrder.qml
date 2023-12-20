@@ -2,6 +2,8 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.1
 import org.kde.plasma.core as PlasmaCore
+import org.kde.kirigami as Kirigami
+
 
 Column {
     id: root
@@ -185,16 +187,16 @@ Column {
 
             clip: true
 
-            property var viewBackgroundColor: PlasmaCore.Theme.viewBackgroundColor ?
-                                                PlasmaCore.Theme.viewBackgroundColor : 'white'
-            property var highlightColor: PlasmaCore.Theme.highlightColor ?
-                                                PlasmaCore.Theme.highlightColor : 'green'
+            property var viewBackgroundColor: Kirigami.Theme.viewBackgroundColor ?
+                                                Kirigami.Theme.viewBackgroundColor : 'white'
+            property var highlightColor: Kirigami.Theme.highlightColor ?
+                                                Kirigami.Theme.highlightColor : 'green'
 
             Label {
                 id: itemText
                 text: model.text
 
-                color: enabled ? PlasmaCore.Theme.textColor : PlasmaCore.Theme.disabledTextColor
+                color: enabled ? Kirigami.Theme.textColor : Kirigami.Theme.disabledTextColor
             }
 
             MouseArea {

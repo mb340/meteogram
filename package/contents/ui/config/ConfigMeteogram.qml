@@ -3,6 +3,8 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs
 import QtQuick.Layouts 1.1
 import org.kde.plasma.core as PlasmaCore
+import org.kde.kirigami as Kirigami
+
 
 import "../../code/color.js" as ColorTools
 
@@ -328,7 +330,7 @@ ColumnLayout {
             Layout.fillWidth: true
             implicitHeight: colLabel.height
 
-            color: selected ? PlasmaCore.Theme.highlightColor : 'transparent'
+            color: selected ? Kirigami.Theme.highlightColor : 'transparent'
 
             MouseArea {
                 width:  parent.width

@@ -19,6 +19,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.1
 import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
+import org.kde.kirigami as Kirigami
 
 Item {
     id: fullRepresentation
@@ -122,7 +123,7 @@ Item {
 
         Label {
             text: "\uFF5C"
-            color: PlasmaCore.Theme.disabledTextColor
+            color: Kirigami.Theme.disabledTextColor
             Layout.leftMargin: 0
             Layout.rightMargin: 0
         }
@@ -166,7 +167,7 @@ Item {
 
         Label {
             text: "\uFF5C"
-            color: PlasmaCore.Theme.disabledTextColor
+            color: Kirigami.Theme.disabledTextColor
             Layout.leftMargin: 0
             Layout.rightMargin: 0
         }

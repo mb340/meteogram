@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
 import org.kde.plasma.core as PlasmaCore
+import org.kde.kirigami as Kirigami
 import "../../code/config-utils.js" as ConfigUtils
 import "../../code/placesearch-helpers.js" as Helper
 
@@ -138,9 +139,9 @@ ColumnLayout {
 
                 background: Rectangle {
                     anchors.fill: parent
-                    color: selected ? PlasmaCore.Theme.highlightColor :
-                                     ((row % 2 === 0) ? PlasmaCore.Theme.viewBackgroundColor :
-                                        Qt.darker(PlasmaCore.Theme.viewBackgroundColor, 1.05))
+                    color: selected ? Kirigami.Theme.highlightColor :
+                                     ((row % 2 === 0) ? Kirigami.Theme.viewBackgroundColor :
+                                        Qt.darker(Kirigami.Theme.viewBackgroundColor, 1.05))
                 }
 
                 MouseArea {

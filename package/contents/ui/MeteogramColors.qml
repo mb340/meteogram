@@ -12,14 +12,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
- import QtQuick 2.0
+import QtQuick 2.0
+import org.kde.kirigami as Kirigami
 
 
 Item {
 
     property int colorPaletteType: plasmoid.configuration.colorPaletteType
 
-    property bool textColorLight: ((theme.textColor.r + theme.textColor.g + theme.textColor.b) / 3) > 0.5
+    property bool textColorLight: ((Kirigami.Theme.textColor.r + Kirigami.Theme.textColor.g + Kirigami.Theme.textColor.b) / 3) > 0.5
     property var palette: defaultPalette
     property var paletteDark: defaultPaletteDark
 

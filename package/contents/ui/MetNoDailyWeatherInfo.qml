@@ -19,6 +19,8 @@ import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
 import org.kde.plasma.core as PlasmaCore
 import "../code/icons.js" as IconTools
+import org.kde.kirigami as Kirigami
+
 
 Item {
 
@@ -215,7 +217,7 @@ Item {
             id: weatherIconComponent
 
             Item {
-                height: 3 * PlasmaCore.Theme.defaultFont.pixelSize
+                height: 3 * Kirigami.Theme.defaultFont.pixelSize
                 anchors.left: parent.left
                 anchors.right: parent.right
 

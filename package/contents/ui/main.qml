@@ -16,6 +16,7 @@
  */
 import QtQuick
 import QtQuick.Layouts
+import org.kde.kirigami as Kirigami
 import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
 import QtQuick.Controls
@@ -67,7 +68,7 @@ PlasmoidItem {
 
     property int inTrayActiveTimeoutSec: plasmoid.configuration.inTrayActiveTimeoutSec
 
-    property bool textColorLight: ((theme.textColor.r + theme.textColor.g + theme.textColor.b) / 3) > 0.5
+    property bool textColorLight: ((Kirigami.Theme.textColor.r + Kirigami.Theme.textColor.g + Kirigami.Theme.textColor.b) / 3) > 0.5
 
     // 0 - standard
     // 1 - vertical

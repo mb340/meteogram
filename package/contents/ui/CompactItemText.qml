@@ -16,6 +16,7 @@ import QtQuick 2.5
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
+import org.kde.kirigami as Kirigami
 
 
 Item {
@@ -113,7 +114,7 @@ Item {
         samples: 16
         spread: 0.9
         fast: true
-        color: theme.backgroundColor
+        color: Kirigami.Theme.backgroundColor
         source: innerLabel
         visible: showDropShadow
     }

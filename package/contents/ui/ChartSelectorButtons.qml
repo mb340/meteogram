@@ -3,6 +3,8 @@ import QtQuick.Controls 2.5
 import QtGraphicalEffects 1.12
 import QtQuick.Layouts 1.1
 import org.kde.plasma.core as PlasmaCore
+import org.kde.kirigami as Kirigami
+
 
 RowLayout {
     id: root
@@ -48,7 +50,7 @@ RowLayout {
 
                 property var textColor: isHighlighted ? theme.highlightColor :
                                         ((isVarSelected && hasVariable) ? theme.textColor :
-                                                         PlasmaCore.Theme.disabledTextColor)
+                                                         Kirigami.Theme.disabledTextColor)
 
                 Image {
                     id: notAvailable
@@ -68,7 +70,7 @@ RowLayout {
                     anchors.fill: notAvailable
                     source: notAvailable
                     color: (visible && varNameLabel.isVarSelected) ?
-                                theme.textColor : PlasmaCore.Theme.disabledTextColor
+                                theme.textColor : Kirigami.Theme.disabledTextColor
                     antialiasing: true
                     visible: !varNameLabel.hasVariable
                 }
