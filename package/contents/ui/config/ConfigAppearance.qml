@@ -1,8 +1,7 @@
 import QtQuick 2.2
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.1
+import QtQuick.Dialogs
 import QtQuick.Layouts 1.1
-import "../../code/print.js" as PrintUtil
 
 Item {
 

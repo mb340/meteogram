@@ -12,10 +12,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
-import QtQuick 2.5
-import QtQuick.Layouts 1.1
-import QtGraphicalEffects 1.0
-import org.kde.plasma.core 2.0 as PlasmaCore
+import QtQuick
+import QtQuick.Layouts
+import QtGraphicalEffects
+import org.kde.plasma.core as PlasmaCore
 import "../code/icons.js" as IconTools
 import "../code/print.js" as PrintUtil
 import "utils"
