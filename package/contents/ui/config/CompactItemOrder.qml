@@ -1,6 +1,6 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.1
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 import org.kde.plasma.core as PlasmaCore
 import org.kde.kirigami as Kirigami
 
@@ -61,7 +61,9 @@ Column {
                     Layout.preferredWidth: parent.width
                     Layout.preferredHeight: parent.height
 
-                    property int currentRow: -1
+                    selectionModel: ItemSelectionModel {
+                        model: disabledTableView.model
+                    }
 
                     onWidthChanged: forceLayout()
                     onHeightChanged: forceLayout()
@@ -96,7 +98,7 @@ Column {
 
             Button {
                 icon.name: 'go-next'
-                enabled: disabledTableView.currentRow !== -1 && disabledItemsModel.count > 0
+                enabled: disabledTableView.selectionModel.hasSelection && disabledItemsModel.count > 0
 
                 // Layout.alignment: Qt.AlignVCenter
 
@@ -106,7 +108,7 @@ Column {
 
             Button {
                 icon.name: 'go-previous'
-                enabled: enabledTableView.currentRow !== -1 && enabledItemsModel.count > 1
+                enabled: enabledTableView.selectionModel.hasSelection && enabledItemsModel.count > 1
 
                 // Layout.alignment: Qt.AlignVCenter
 
@@ -161,7 +163,9 @@ Column {
                     Layout.preferredWidth: parent.width
                     Layout.preferredHeight: parent.height
 
-                    property int currentRow: -1
+                    selectionModel: ItemSelectionModel {
+                        model: enabledTableView.model
+                    }
 
                     onWidthChanged: forceLayout()
                     onHeightChanged: forceLayout()
@@ -179,11 +183,13 @@ Column {
         Rectangle {
             id: tableViewItem
 
+            required property bool selected
+            // required property bool current
+
             implicitWidth: parentTable ? parentTable.width : childrenRect.width
             implicitHeight: childrenRect.height
 
-            color: parentTable && parentTable.currentRow === row ?
-                        highlightColor : viewBackgroundColor
+            color: selected ? highlightColor : viewBackgroundColor
 
             clip: true
 
@@ -204,14 +210,17 @@ Column {
 
                 onClicked: {
                     if (parentTable != enabledTableView) {
-                        enabledTableView.currentRow = -1
+                        enabledTableView.selectionModel.clear()
                     } else if (parentTable != disabledTableView) {
-                        disabledTableView.currentRow = -1
+                        disabledTableView.selectionModel.clear()
                     }
-                    if (row !== parentTable.currentRow) {
-                        parentTable.currentRow = row
+
+                    let index = parentTable.model.index(row, 0)
+                    if (!parentTable.selectionModel.isSelected(index)) {
+                        parentTable.selectionModel.select(index, ItemSelectionModel.SelectCurrent)
+
                     } else {
-                        parentTable.currentRow = -1
+                        parentTable.selectionModel.select(index, ItemSelectionModel.Deselect)
                     }
                 }
 
@@ -238,13 +247,18 @@ Column {
 
         Button {
             icon.name: 'go-up'
-            enabled: enabledTableView.currentRow !== -1 && enabledTableView.currentRow > 0
+            enabled: (enabledTableView.selectionModel.hasSelection &&
+                        enabledTableView.selectionModel.selectedIndexes.length > 0 &&
+                        enabledTableView.selectionModel.selectedIndexes[0].row > 0)
             onClicked: moveItemUp()
         }
         Button {
             icon.name: 'go-down'
-            enabled: enabledTableView.currentRow !== -1 &&
-                        enabledTableView.currentRow < enabledItemsModel.count - 1
+            enabled: (enabledTableView.selectionModel.hasSelection &&
+                        enabledTableView.selectionModel.selectedIndexes.length > 0 &&
+                        (enabledTableView.selectionModel.selectedIndexes[0].row <
+                            (enabledItemsModel.count - 1))
+                        )
             onClicked: moveItemDown()
         }
     }
@@ -291,23 +305,23 @@ Column {
     }
 
     function moveItemUp() {
-        let row = enabledTableView.currentRow
+        let row = enabledTableView.selectionModel.selectedIndexes.length === 0 ? -1 :
+                    enabledTableView.selectionModel.selectedIndexes[0].row
         if (row <= 0 || row > enabledItemsModel.count) {
             return
         }
         enabledItemsModel.move(row, row - 1, 1)
-        enabledTableView.currentRow--
 
         updateOrder(true)
     }
 
     function moveItemDown() {
-        let row = enabledTableView.currentRow
+        let row = enabledTableView.selectionModel.selectedIndexes.length === 0 ? -1 :
+                    enabledTableView.selectionModel.selectedIndexes[0].row
         if (row < 0 || row >= enabledItemsModel.count - 1) {
             return
         }
         enabledItemsModel.move(row, row + 1, 1)
-        enabledTableView.currentRow++
 
         updateOrder(true)
     }
@@ -326,7 +340,7 @@ Column {
     }
 
     function moveItemToTable(src, dst) {
-        if (src.currentRow === -1) {
+        if (!src.selectionModel.hasSelection) {
             return
         }
 
@@ -334,14 +348,12 @@ Column {
             return
         }
 
-        var idx = src.currentRow
+        let idx = src.selectionModel.selectedIndexes[0].row
         var item = src.model.get(idx)
 
         item.parentTable = dst
         dst.model.append(item)
         src.model.remove(idx, 1)
-
-        src.currentRow = Math.max(0, src.currentRow - 1)
 
         updateOrder(true)
     }
