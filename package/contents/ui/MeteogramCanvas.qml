@@ -25,7 +25,7 @@ Canvas {
 
     property bool initialized: false
 
-    property double fontSize: 14 * units.devicePixelRatio
+    property double fontSize: 14 * 1
     property var precLabelPositions: ({})
 
     property int nHours: 0
@@ -250,21 +250,21 @@ Canvas {
                 continue
             }
 
-            var x = timeScale.translate(item.from) + (0.5 * units.devicePixelRatio)
+            var x = timeScale.translate(item.from) + (0.5 * 1)
             var prec = Math.min(precipitationMaxGraphY, item.precipitationAmount)
             var y = precipitationScale.translate(prec)
 
             let barWidth = rectWidth
             if (i < meteogramModel.count - 1) {
                 var nexItem = meteogramModel.get(i + 1)
-                var x1 = timeScale.translate(nexItem.from) + (0.5 * units.devicePixelRatio)
+                var x1 = timeScale.translate(nexItem.from) + (0.5 * 1)
                 barWidth = x1 - x
             } else {
                 barWidth = width - x
             }
 
             var h = (precipitationScale.range[0]) - y
-            var w = barWidth - (0.5 * units.devicePixelRatio)
+            var w = barWidth - (0.5 * 1)
             context.fillRect(x, y, w, h)
 
             var fontSize = Math.round(rectWidth / 2) + 1
@@ -570,18 +570,18 @@ Canvas {
             drawCloudArea(context)
         }
         if (plasmoid.configuration.renderHumidity) {
-            drawPath(context, humidityPath, colorPalette.humidityColor(), 1 * units.devicePixelRatio)
+            drawPath(context, humidityPath, colorPalette.humidityColor(), 1 * 1)
         }
         if (plasmoid.configuration.renderPressure && y2VarName && y2VarName !== "") {
-            drawPath(context, y2Path, colorPalette.pressureColor(), 1 * units.devicePixelRatio)
+            drawPath(context, y2Path, colorPalette.pressureColor(), 1 * 1)
         }
         if (plasmoid.configuration.renderTemperature) {
-            drawWarmTemp(context, temperaturePath, colorPalette.temperatureWarmColor(), 2 * units.devicePixelRatio)
-            drawColdTemp(context, temperaturePath, colorPalette.temperatureColdColor(), 2 * units.devicePixelRatio)
+            drawWarmTemp(context, temperaturePath, colorPalette.temperatureWarmColor(), 2 * 1)
+            drawColdTemp(context, temperaturePath, colorPalette.temperatureColdColor(), 2 * 1)
 
             if (y1VarName && y1VarName !== "") {
                 let color = !textColorLight ? 'black' : 'white'
-                drawPath(context, y1Path, color, 1 * units.devicePixelRatio)
+                drawPath(context, y1Path, color, 1 * 1)
             }
         }
 
@@ -878,12 +878,12 @@ Canvas {
     function computeHourStrWidth() {
         var context = root.context ? root.context : getContext("2d")
         hourStrWidth = 0
-        let fontSize = 11 * units.devicePixelRatio
+        let fontSize = 11 * 1
         context.font = fontSize + 'px "' + theme.defaultFont.family + '"'
         let metrics = context.measureText("00")
         hourStrWidth += metrics.width
 
-        fontSize = 7 * units.devicePixelRatio
+        fontSize = 7 * 1
         context.font = fontSize + 'px "' + theme.defaultFont.family + '"'
         metrics = context.measureText("00")
         hourStrWidth += metrics.width

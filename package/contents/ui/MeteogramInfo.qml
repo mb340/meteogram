@@ -31,7 +31,7 @@ Item {
     property double idx: -1
     property var hourModel: undefined
 
-    readonly property double textPad: 32 * units.devicePixelRatio
+    readonly property double textPad: 32 * 1
 
     property alias boxWidth: hoverItem.width
     property alias boxHeight: hoverItem.height
@@ -106,7 +106,7 @@ Item {
                 Label {
                     id: nameLabel
                     text: nameStr
-                    font.pixelSize: 11 * units.devicePixelRatio
+                    font.pixelSize: 11 * 1
                     font.pointSize: -1
                     verticalAlignment: Text.AlignTop
 
@@ -116,7 +116,7 @@ Item {
                     id: valueLabel
                     text: valueStr
                     color: valueColor ? valueColor : theme.textColor
-                    font.pixelSize: 11 * units.devicePixelRatio
+                    font.pixelSize: 11 * 1
                     font.pointSize: -1
                     wrapMode: Text.WordWrap
 

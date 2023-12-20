@@ -6,8 +6,8 @@ import org.kde.plasma.core as PlasmaCore
 Column {
     id: root
 
-    width: 240 * units.devicePixelRatio
-    height: 128 * units.devicePixelRatio
+    width: 240 * 1
+    height: 128 * 1
 
     readonly property var defaultOrder: ["0", "1", "2"]
     readonly property var itemNames: [

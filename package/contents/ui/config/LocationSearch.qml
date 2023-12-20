@@ -135,7 +135,7 @@ Dialog {
 
         delegate: Rectangle {
             id: rowRoot
-            implicitHeight: providerIdLabel.contentHeight + (11 * units.devicePixelRatio)
+            implicitHeight: providerIdLabel.contentHeight + (11 * 1)
             implicitWidth: tableView.width
 
             RowLayout {

@@ -28,7 +28,7 @@ Item {
 
     property int temperatureType: plasmoid.configuration.temperatureType
 
-    property double nextDayRowFontPixelSize: 24 * units.devicePixelRatio
+    property double nextDayRowFontPixelSize: 24 * 1
 
     property double defaultFontPixelSize: theme.defaultFont.pixelSize
     property double footerHeight: defaultFontPixelSize * 3.5

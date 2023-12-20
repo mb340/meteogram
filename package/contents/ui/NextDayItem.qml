@@ -45,7 +45,7 @@ Item {
     Item {
         id: dayTitleLine
         width: parent.width
-        height: 1 * units.devicePixelRatio
+        height: 1 * 1
         anchors.top: mainInTray ? dayTitleText.top : dayTitleText.bottom
         anchors.topMargin: 0
         anchors.bottomMargin: 0

@@ -103,7 +103,7 @@ Item {
 
                     Item {
                         id: dayTitleLine
-                        height: 1 * units.devicePixelRatio
+                        height: 1 * 1
 
                         Layout.fillWidth: true
 

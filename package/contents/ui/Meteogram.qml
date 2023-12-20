@@ -29,7 +29,7 @@ Item {
     property int labelHeight: textMetrics.height
 
     property int cloudarea: 0
-    property int windarea: 20 * units.devicePixelRatio
+    property int windarea: 20 * 1
 
     readonly property int minTemperatureYGridCount: 20
 
@@ -76,7 +76,7 @@ Item {
     TextMetrics {
         id: textMetrics
         font.family: theme.defaultFont.family
-        font.pixelSize: 11 * units.devicePixelRatio
+        font.pixelSize: 11 * 1
         text: "999999"
     }
 
@@ -136,7 +136,7 @@ Item {
             Rectangle {
                 id: gridLine
                 width: parent.width
-                height: 1 * units.devicePixelRatio
+                height: 1 * 1
                 color: gridColor
             }
             Label {
@@ -148,7 +148,7 @@ Item {
                 anchors.top: gridLine.top
                 anchors.leftMargin: -labelWidth - 2
                 anchors.topMargin: -labelHeight / 2
-                font.pixelSize: 11 * units.devicePixelRatio
+                font.pixelSize: 11 * 1
                 font.pointSize: -1
             }
             Label {
@@ -160,7 +160,7 @@ Item {
                 anchors.left: gridLine.right
                 anchors.leftMargin: 2
                 horizontalAlignment: Text.AlignLeft
-                font.pixelSize: 11 * units.devicePixelRatio
+                font.pixelSize: 11 * 1
                 font.pointSize: -1
                 color: colorPalette.pressureColor()
 
@@ -175,7 +175,7 @@ Item {
         horizontalAlignment: (text.length > 4) ? Text.AlignRight : Text.AlignLeft
         anchors.right: (graphArea.right)
         anchors.rightMargin: -labelWidth
-        font.pixelSize: 11 * units.devicePixelRatio
+        font.pixelSize: 11 * 1
         font.pointSize: -1
         color: colorPalette.pressureColor()
         anchors.bottom: graphArea.top
@@ -188,7 +188,7 @@ Item {
         width: labelWidth
         horizontalAlignment: Text.AlignHCenter
         anchors.right: (graphArea.left)
-        font.pixelSize: 11 * units.devicePixelRatio
+        font.pixelSize: 11 * 1
         font.pointSize: -1
         anchors.bottom: graphArea.top
         anchors.bottomMargin: 6
@@ -254,8 +254,8 @@ Item {
                 anchors.topMargin: 2
                 //                anchors.horizontalCenter: verticalLine.left
                 anchors.horizontalCenter: verticalLine.horizontalCenter
-                anchors.rightMargin: 1 * units.devicePixelRatio
-                font.pixelSize: 11 * units.devicePixelRatio
+                anchors.rightMargin: 1 * 1
+                font.pixelSize: 11 * 1
                 font.pointSize: -1
                 visible: textVisible
             }
@@ -265,7 +265,7 @@ Item {
                 horizontalAlignment: Text.AlignLeft
                 anchors.top: hourText.top
                 anchors.left: hourText.right
-                font.pixelSize: 7 * units.devicePixelRatio
+                font.pixelSize: 7 * 1
                 font.pointSize: -1
                 visible: textVisible
             }
@@ -277,7 +277,7 @@ Item {
                 anchors.topMargin: -labelHeight
                 anchors.left: parent.left
                 anchors.leftMargin: parent.width / 2
-                font.pixelSize: 11 * units.devicePixelRatio
+                font.pixelSize: 11 * 1
                 font.pointSize: -1
                 visible: date.getHours() === 0 && (itemEndX < hourGrid.width)
 
@@ -345,7 +345,7 @@ Item {
                         rotation: windFrom(windDirection)
                         fillMode: Image.PreserveAspectFit
 
-                        width: Math.min(16 * units.devicePixelRatio, windSpeedRepeater.rectWidth)
+                        width: Math.min(16 * 1, windSpeedRepeater.rectWidth)
                         height: width
                         anchors.centerIn: parent
                     }

@@ -23,8 +23,8 @@ import org.kde.plasma.core as PlasmaCore
 Item {
     id: fullRepresentation
 
-    property int preferredImageWidth: 800 * units.devicePixelRatio // Makes yr.no images grainy,
-    property int preferredImageHeight: 320 * units.devicePixelRatio + defaultFontPixelSize// prefer rendering meteograms
+    property int preferredImageWidth: 800 * 1 // Makes yr.no images grainy,
+    property int preferredImageHeight: 320 * 1 + defaultFontPixelSize// prefer rendering meteograms
 
     Layout.preferredWidth: preferredImageWidth
     Layout.preferredHeight: headingHeight + preferredImageHeight + footerHeight + nextDaysHeight + 14
@@ -64,7 +64,7 @@ Item {
         id: weatherAlertNotifierText
 
         anchors.left: currentLocationText.right
-        anchors.leftMargin: 5 * units.devicePixelRatio
+        anchors.leftMargin: 5 * 1
         verticalAlignment: Text.AlignTop
 
         text: "\u26A0"

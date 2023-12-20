@@ -25,7 +25,7 @@ GridLayout {
         Text {
             text: i18n("Source") + ":"
             color: theme.textColor
-            font.pixelSize: theme.smallFont ? theme.smallFont.pixelSize : 11 * units.devicePixelRatio
+            font.pixelSize: theme.smallFont ? theme.smallFont.pixelSize : 11 * 1
             font.pointSize: -1
         }
         Text {
@@ -38,7 +38,7 @@ GridLayout {
         Text {
             text: i18n("Event") + ":"
             color: theme.textColor
-            font.pixelSize: theme.smallFont ? theme.smallFont.pixelSize : 11 * units.devicePixelRatio
+            font.pixelSize: theme.smallFont ? theme.smallFont.pixelSize : 11 * 1
             font.pointSize: -1
         }
         Text {
@@ -51,7 +51,7 @@ GridLayout {
         Text {
             text: i18n("Start") + ":"
             color: theme.textColor
-            font.pixelSize: theme.smallFont ? theme.smallFont.pixelSize : 11 * units.devicePixelRatio
+            font.pixelSize: theme.smallFont ? theme.smallFont.pixelSize : 11 * 1
             font.pointSize: -1
         }
         Text {
@@ -64,7 +64,7 @@ GridLayout {
         Text {
             text: i18n("End") + ":"
             color: theme.textColor
-            font.pixelSize: theme.smallFont ? theme.smallFont.pixelSize : 11 * units.devicePixelRatio
+            font.pixelSize: theme.smallFont ? theme.smallFont.pixelSize : 11 * 1
             font.pointSize: -1
         }
         Text {
@@ -80,14 +80,14 @@ GridLayout {
         Text {
             text: i18n("Description") + ":"
             color: theme.textColor
-            font.pixelSize: theme.smallFont ? theme.smallFont.pixelSize : 11 * units.devicePixelRatio
+            font.pixelSize: theme.smallFont ? theme.smallFont.pixelSize : 11 * 1
         }
 
         Rectangle {
             property bool textColorLight: ((theme.textColor.r + theme.textColor.g + theme.textColor.b) / 3) > 0.5
             color: textColorLight ? 'black' : 'white'
 
-            property double descMargin: 5 * units.devicePixelRatio
+            property double descMargin: 5 * 1
 
             Layout.preferredWidth: alertItem.width - (2 * descMargin)
             Layout.preferredHeight: childrenRect.height
