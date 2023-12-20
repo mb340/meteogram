@@ -27,7 +27,7 @@ import "../code/print.js" as PrintUtil
 import "providers"
 import "utils"
 
-Item {
+PlasmoidItem {
     id: main
 
     property bool initialized: false
@@ -96,9 +96,9 @@ Item {
 
     }
 
-    Plasmoid.preferredRepresentation: Plasmoid.compactRepresentation
-    Plasmoid.compactRepresentation: cr
-    Plasmoid.fullRepresentation: fr
+    preferredRepresentation: Plasmoid.compactRepresentation
+    compactRepresentation: cr
+    fullRepresentation: fr
 
     property bool debugLogging: plasmoid.configuration.debugLogging
 
