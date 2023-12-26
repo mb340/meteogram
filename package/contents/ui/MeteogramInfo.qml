@@ -16,6 +16,7 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
+import org.kde.kirigami as Kirigami
 import "../code/icons.js" as IconTools
 
 
@@ -48,12 +49,12 @@ Item {
      * Background
      */
     Rectangle {
-        color: Qt.rgba(theme.backgroundColor.r,
-                       theme.backgroundColor.g,
-                       theme.backgroundColor.b,
+        color: Qt.rgba(Kirigami.Theme.backgroundColor.r,
+                       Kirigami.Theme.backgroundColor.g,
+                       Kirigami.Theme.backgroundColor.b,
                        1.00)
         radius: 2
-        border.color: theme.textColor
+        border.color: Kirigami.Theme.textColor
         border.width: 1
 
         anchors.fill: hoverItem
@@ -115,7 +116,7 @@ Item {
                 Label {
                     id: valueLabel
                     text: valueStr
-                    color: valueColor ? valueColor : theme.textColor
+                    color: valueColor ? valueColor : Kirigami.Theme.textColor
                     font.pixelSize: 11 * 1
                     font.pointSize: -1
                     wrapMode: Text.WordWrap

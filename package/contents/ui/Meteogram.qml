@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
-import QtQuick 2.5
-import QtQuick.Controls 2.5
+import QtQuick
+import QtQuick.Controls
 import org.kde.plasma.plasmoid
+import org.kde.kirigami as Kirigami
 import "../code/icons.js" as IconTools
 
 Item {
@@ -41,9 +42,9 @@ Item {
 
     property double precipitationMaxGraphY: 10
 
-    property bool textColorLight: ((theme.textColor.r + theme.textColor.g + theme.textColor.b) / 3) > 0.5
-    property color gridColor: textColorLight ? Qt.tint(theme.textColor, '#80000000') : Qt.tint(theme.textColor, '#80FFFFFF')
-    property color gridColorHighlight: textColorLight ? Qt.tint(theme.textColor, '#50000000') : Qt.tint(theme.textColor, '#50FFFFFF')
+    property bool textColorLight: ((Kirigami.Theme.textColor.r + Kirigami.Theme.textColor.g + Kirigami.Theme.textColor.b) / 3) > 0.5
+    property color gridColor: textColorLight ? Qt.tint(Kirigami.Theme.textColor, '#80000000') : Qt.tint(Kirigami.Theme.textColor, '#80FFFFFF')
+    property color gridColorHighlight: textColorLight ? Qt.tint(Kirigami.Theme.textColor, '#50000000') : Qt.tint(Kirigami.Theme.textColor, '#50FFFFFF')
 
     property string y2VarName: plasmoid.configuration.y2VarName
     property bool y2AxisVisble: meteogramModel.hasVariable(y2VarName)
@@ -75,7 +76,7 @@ Item {
 
     TextMetrics {
         id: textMetrics
-        font.family: theme.defaultFont.family
+        font.family: Kirigami.Theme.defaultFont.family
         font.pixelSize: 11 * 1
         text: "999999"
     }
@@ -412,9 +413,9 @@ Item {
                     return
                 }
 
-                context.fillStyle = Qt.rgba(theme.highlightColor.r,
-                                            theme.highlightColor.g,
-                                            theme.highlightColor.b,
+                context.fillStyle = Qt.rgba(Kirigami.Theme.highlightColor.r,
+                                            Kirigami.Theme.highlightColor.g,
+                                            Kirigami.Theme.highlightColor.b,
                                             0.25)
 
 

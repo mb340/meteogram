@@ -35,7 +35,7 @@ Item {
     width: Layout.preferredWidth
     height: Layout.preferredHeight
 
-    property double defaultFontPixelSize: theme.defaultFont.pixelSize
+    property double defaultFontPixelSize: Kirigami.Theme.defaultFont.pixelSize
     property double footerHeight: defaultFontPixelSize
 
     property int nextDayItemSpacing: defaultFontPixelSize * 0.5
@@ -216,8 +216,8 @@ Item {
                         hoverEnabled: true
                         anchors.fill: parent
                         onClicked: main.setNextPlace(modelData.previous)
-                        onEntered: parent.color = theme.highlightColor
-                        onExited: parent.color = theme.textColor
+                        onEntered: parent.color = Kirigami.Theme.highlightColor
+                        onExited: parent.color = Kirigami.Theme.textColor
                     }
                 }
             }
@@ -259,8 +259,8 @@ Item {
         anchors.bottom: nextDaysView.top
         anchors.bottomMargin: meteogram.windarea /* wind area */
 
-        anchors.leftMargin: units.largeSpacing
-        anchors.rightMargin: units.largeSpacing
+        anchors.leftMargin: Kirigami.Units.largeSpacing
+        anchors.rightMargin: Kirigami.Units.largeSpacing
 
         model: null
         visible: model != null
@@ -276,8 +276,8 @@ Item {
         anchors.bottom: nextDaysView.top
         anchors.bottomMargin: meteogram.windarea /* wind area */
 
-        anchors.leftMargin: units.largeSpacing
-        anchors.rightMargin: units.largeSpacing
+        anchors.leftMargin: Kirigami.Units.largeSpacing
+        anchors.rightMargin: Kirigami.Units.largeSpacing
 
         model: null
         visible: model != null
@@ -290,7 +290,7 @@ Item {
         anchors.bottom: weatherAlertsView.bottom
 
         color: 'transparent'
-        border.color: theme.borderColor ? theme.borderColor : "black"
+        border.color: Kirigami.Theme.borderColor ? Kirigami.Theme.borderColor : "black"
         border.width: 1
 
         visible: isShowAlert
@@ -320,7 +320,7 @@ Item {
 
                 Text {
                     text: i18n("Weather Alerts")
-                    color: theme.textColor
+                    color: Kirigami.Theme.textColor
                     horizontalAlignment: Text.AlignHCenter
                     anchors.centerIn: parent
                 }
@@ -378,8 +378,8 @@ Item {
 
     TextMetrics {
         id: nextDayTitleMetrics
-        font.family: theme.defaultFont.family
-        font.pixelSize: theme.defaultFont.pixelSize
+        font.family: Kirigami.Theme.defaultFont.family
+        font.pixelSize: Kirigami.Theme.defaultFont.pixelSize
         text: "MMMMMM"
     }
 

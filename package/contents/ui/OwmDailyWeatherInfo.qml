@@ -13,9 +13,9 @@
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.5
-import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.1
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 // import QtGraphicalEffects 1.0
 import Qt5Compat.GraphicalEffects
 import org.kde.plasma.core as PlasmaCore
@@ -32,33 +32,33 @@ ColumnLayout {
     Label {
         id: dateLabel
         text: !model ? "" : model.date.toLocaleDateString(Qt.locale(), 'dddd, dd MMMM')
-        font.pointSize: units.iconSizes.small + (units.iconSizes.smallMedium - units.iconSizes.small) / 2
+        font.pointSize: Kirigami.Units.iconSizes.small + (Kirigami.Units.iconSizes.smallMedium - Kirigami.Units.iconSizes.small) / 2
 
         Layout.fillWidth: true
         Layout.fillHeight: false
         Layout.alignment: Qt.AlignVTop | Qt.AlignHLeft
 
-        Layout.bottomMargin: units.smallSpacing
+        Layout.bottomMargin: Kirigami.Units.smallSpacing
     }
 
     RowLayout {
 
         Layout.preferredWidth: Layout.preferredHeight
-        Layout.preferredHeight: units.iconSizes.medium
+        Layout.preferredHeight: Kirigami.Units.iconSizes.medium
 
         Layout.fillWidth: true
         Layout.fillHeight: false
 
         Layout.alignment: Qt.AlignVTop | Qt.AlignHLeft
 
-        Layout.leftMargin: 2 * units.smallSpacing
+        Layout.leftMargin: 2 * Kirigami.Units.smallSpacing
 
         Item {
             Layout.preferredWidth: parent.height
             Layout.fillHeight: true
 
             WeatherIcon {
-                iconDim: units.iconSizes.large
+                iconDim: Kirigami.Units.iconSizes.large
                 width: iconDim
                 height: iconDim
 
@@ -72,14 +72,14 @@ ColumnLayout {
 
         Label {
             text: model ? currentProvider.getIconDescription(model.iconName) : ""
-            font.pixelSize: units.iconSizes.small
-            Layout.leftMargin: units.smallSpacing
+            font.pixelSize: Kirigami.Units.iconSizes.small
+            Layout.leftMargin: Kirigami.Units.smallSpacing
         }
     }
 
     Item {
         Layout.fillWidth: true
-        Layout.preferredHeight: units.smallSpacing
+        Layout.preferredHeight: Kirigami.Units.smallSpacing
     }
 
     GridLayout {
@@ -104,7 +104,7 @@ ColumnLayout {
                 id: temperatureIcon
                 text: "\uf055"
                 font.family: 'weathericons'
-                font.pixelSize: units.iconSizes.medium
+                font.pixelSize: Kirigami.Units.iconSizes.medium
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -195,7 +195,7 @@ ColumnLayout {
 
     Item {
         Layout.fillWidth: true
-        Layout.preferredHeight: units.smallSpacing
+        Layout.preferredHeight: Kirigami.Units.smallSpacing
     }
 
     RowLayout {
@@ -219,7 +219,7 @@ ColumnLayout {
             delegate: Loader {
                 Layout.fillWidth: true
                 Layout.fillHeight: false
-                Layout.preferredHeight: 2 * units.iconSizes.huge
+                Layout.preferredHeight: 2 * Kirigami.Units.iconSizes.huge
 
                 sourceComponent: tileComponent
 
@@ -262,11 +262,11 @@ ColumnLayout {
 
             Item {
                 Layout.fillWidth: true
-                height: units.iconSizes.medium
+                height: Kirigami.Units.iconSizes.medium
                 Label {
                     text: tileSymbol
                     font.family: 'weathericons'
-                    font.pixelSize: units.iconSizes.medium
+                    font.pixelSize: Kirigami.Units.iconSizes.medium
                     anchors.centerIn: parent
                 }
             }

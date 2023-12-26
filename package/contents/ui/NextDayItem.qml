@@ -19,12 +19,13 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 //import QtGraphicalEffects 1.0
 import Qt5Compat.GraphicalEffects
+import org.kde.kirigami as Kirigami
 
 
 Item {
 
-    property double periodFontSize: theme.defaultFont.pixelSize
-    property color lineColor: theme.textColor
+    property double periodFontSize: Kirigami.Theme.defaultFont.pixelSize
+    property color lineColor: Kirigami.Theme.textColor
 
     property double titleHeight: NaN
     property double rowHeight: NaN

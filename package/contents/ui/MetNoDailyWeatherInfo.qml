@@ -26,7 +26,7 @@ import org.kde.kirigami as Kirigami
 Item {
 
     property int nColumns: 5
-    property color lineColor: theme.textColor
+    property color lineColor: Kirigami.Theme.textColor
 
     property var model: null
     property var dayParts: model ? model.models : null
@@ -74,13 +74,13 @@ Item {
         Label {
             id: dateLabel
             text: !model ? "" : model.date.toLocaleDateString(Qt.locale(), 'dddd, dd MMMM')
-            font.pointSize: units.iconSizes.small + (units.iconSizes.smallMedium - units.iconSizes.small) / 2
+            font.pointSize: Kirigami.Units.iconSizes.small + (Kirigami.Units.iconSizes.smallMedium - Kirigami.Units.iconSizes.small) / 2
 
             Layout.fillWidth: false
             Layout.fillHeight: false
             Layout.alignment: Qt.AlignVTop | Qt.AlignHRight
 
-            Layout.bottomMargin: units.smallSpacing
+            Layout.bottomMargin: Kirigami.Units.smallSpacing
         }
 
         Row {
@@ -101,7 +101,7 @@ Item {
                         id: headerLabel
                         text: index === 0 ? "" : dayPartHeaders[index - 1]
                         Layout.alignment: Qt.AlignHLeft | Qt.AlignVCenter
-                        Layout.leftMargin: units.smallSpacing
+                        Layout.leftMargin: Kirigami.Units.smallSpacing
                     }
 
                     Item {
@@ -131,7 +131,7 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            spacing: units.smallSpacing
+            spacing: Kirigami.Units.smallSpacing
 
             model: dayPartVars
 
@@ -223,7 +223,7 @@ Item {
                 anchors.right: parent.right
 
                 WeatherIcon {
-                    iconDim: units.iconSizes.large
+                    iconDim: Kirigami.Units.iconSizes.large
                     width: iconDim
                     height: iconDim
 

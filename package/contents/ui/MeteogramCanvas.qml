@@ -12,7 +12,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick
+import org.kde.kirigami as Kirigami
 import "../code/icons.js" as IconTools
 import "../code/chart-utils.js" as ChartUtils
 
@@ -230,7 +231,7 @@ Canvas {
 
         let size = 1
         while (true) {
-            ctx.font = 'bold ' + size + 'px "' + theme.defaultFont.family + '"'
+            ctx.font = 'bold ' + size + 'px "' + Kirigami.Theme.defaultFont.family + '"'
             let lineHeight = context.measureText('M').width;
             if (lineHeight >= rectWidth) {
                 break
@@ -273,7 +274,7 @@ Canvas {
     }
 
     function drawShadowText(context, str, x, y) {
-        context.strokeStyle = theme.textColor
+        context.strokeStyle = Kirigami.Theme.textColor
         context.shadowColor = textColorLight ? 'black' : 'white';
         context.shadowBlur = 0.5;
         context.lineWidth = 0.5;
@@ -285,7 +286,7 @@ Canvas {
         context.save()
         var counter = 0
 
-        context.font = (fontSize * 0.75) + 'px "' + theme.defaultFont.family + '"'
+        context.font = (fontSize * 0.75) + 'px "' + Kirigami.Theme.defaultFont.family + '"'
         let lineHeight = context.measureText('M').width;
 
         var prevPrecStr = undefined
@@ -329,7 +330,7 @@ Canvas {
                 var metrics = context.measureText(precExcessStr)
                 var x0 = x - (metrics.width / 2) + (rectWidth / 2)
                 drawShadowText(context, precExcessStr, x0, y0)
-                context.fillStyle = theme.textColor
+                context.fillStyle = Kirigami.Theme.textColor
                 context.fillText(precExcessStr, x0, y0)
                 y0 -= lineHeight
             }
@@ -341,7 +342,7 @@ Canvas {
             context.translate(x, y0)
             context.rotate((-90 * Math.PI) / 180);
             drawShadowText(context, precStr, xOffs, yOffs)
-            context.fillStyle = theme.textColor
+            context.fillStyle = Kirigami.Theme.textColor
             context.fillText(precStr, xOffs, yOffs)
             context.restore()
         }
@@ -419,7 +420,7 @@ Canvas {
         if (plasmoid.configuration.renderPrecipitationLabels) {
             let pType = unitUtils.getSmallestPrecipitationType(precipitationType)
             var precStr = unitUtils.getPrecipitationText(0.1, pType, 1)
-            context.font = (fontSize * 0.75) + 'px "' + theme.defaultFont.family + '"'
+            context.font = (fontSize * 0.75) + 'px "' + Kirigami.Theme.defaultFont.family + '"'
             var metrics = context.measureText(precStr)
             labelHeight = metrics.width
         }
@@ -481,7 +482,7 @@ Canvas {
                 var metrics = context.measureText(str)
                 var textWidth = metrics.width
                 x0 = x - (textWidth / 2.0)
-                context.fillStyle = theme.textColor
+                context.fillStyle = Kirigami.Theme.textColor
                 context.fillText(str, x0, y0)
             } else if (iconSetType === 1 || iconSetType === 2 || iconSetType === 3) {
                 x0 = x - rectWidth
@@ -879,12 +880,12 @@ Canvas {
         var context = root.context ? root.context : getContext("2d")
         hourStrWidth = 0
         let fontSize = 11 * 1
-        context.font = fontSize + 'px "' + theme.defaultFont.family + '"'
+        context.font = fontSize + 'px "' + Kirigami.Theme.defaultFont.family + '"'
         let metrics = context.measureText("00")
         hourStrWidth += metrics.width
 
         fontSize = 7 * 1
-        context.font = fontSize + 'px "' + theme.defaultFont.family + '"'
+        context.font = fontSize + 'px "' + Kirigami.Theme.defaultFont.family + '"'
         metrics = context.measureText("00")
         hourStrWidth += metrics.width
 

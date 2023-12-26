@@ -429,8 +429,7 @@ Kirigami.FormLayout {
             delegate: Label {
                 id: attribution
                 anchors.bottomMargin: 2
-                // font.pointSize: units.iconSizes.tiny
-                font.pointSize: 6
+                font.pointSize: Kirigami.Theme.smallFont.pointSize
                 text: modelData.text
 
                 MouseArea {

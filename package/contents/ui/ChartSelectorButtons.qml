@@ -49,8 +49,8 @@ RowLayout {
                 property bool hasVariable: modelData.hasVariable !== undefined ? modelData.hasVariable :
                                             meteogramModel.hasVariable(modelData.varName)
 
-                property var textColor: isHighlighted ? theme.highlightColor :
-                                        ((isVarSelected && hasVariable) ? theme.textColor :
+                property var textColor: isHighlighted ? Kirigami.Theme.highlightColor :
+                                        ((isVarSelected && hasVariable) ? Kirigami.Theme.textColor :
                                                          Kirigami.Theme.disabledTextColor)
 
                 Image {
@@ -71,7 +71,7 @@ RowLayout {
                     anchors.fill: notAvailable
                     source: notAvailable
                     color: (visible && varNameLabel.isVarSelected) ?
-                                theme.textColor : Kirigami.Theme.disabledTextColor
+                                Kirigami.Theme.textColor : Kirigami.Theme.disabledTextColor
                     antialiasing: true
                     visible: !varNameLabel.hasVariable
                 }
