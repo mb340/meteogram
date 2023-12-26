@@ -193,7 +193,7 @@ Canvas {
     }
 
     Connections {
-        target: plasmoid
+        target: main
         function onExpandedChanged() {
             root.markDirty(Qt.rect(0, 0, width, height))
         }

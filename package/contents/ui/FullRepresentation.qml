@@ -471,7 +471,7 @@ Item {
             text: reloadTimer.lastLoadText
 
             Connections {
-                target: plasmoid
+                target: main
                 function onExpandedChanged() {
                     isShowAlertClicked = false
                 }

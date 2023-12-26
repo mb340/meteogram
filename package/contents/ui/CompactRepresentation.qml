@@ -47,12 +47,12 @@ Item {
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton
-        onClicked: plasmoid.expanded = !plasmoid.expanded
+        onClicked: main.expanded = !main.expanded
 
         PlasmaCore.ToolTipArea {
             id: toolTipArea
             anchors.fill: parent
-            active: !plasmoid.expanded
+            active: !main.expanded
             interactive: true
             mainText: placeAlias
             subText: tooltipSubText
