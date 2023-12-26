@@ -1,7 +1,10 @@
-import QtQuick 2.2
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 import QtQuick.Dialogs
-import QtQuick.Layouts 1.1
+import QtQuick.Layouts
+import org.kde.plasma.core as PlasmaCore
+import org.kde.kirigami as Kirigami
+import "../../code/print.js" as PrintUtil
 
 Item {
 
@@ -52,22 +55,22 @@ Item {
         cfg_iconSetTypeChanged()
 
         if (!cfg_cityAliasFontSize) {
-            cfg_cityAliasFontSize = theme.defaultFont.pointSize
+            cfg_cityAliasFontSize = PlasmaCore.Theme.defaultFont.pointSize
         }
         cfg_cityAliasFontSizeChanged()
 
         if (!cfg_cityAliasFontName) {
-            cfg_cityAliasFontName = theme.defaultFont.family
+            cfg_cityAliasFontName = PlasmaCore.Theme.defaultFont.family
         }
         cfg_cityAliasFontNameChanged()
 
         if (!cfg_temperatureFontSize) {
-            cfg_temperatureFontSize = theme.defaultFont.pointSize
+            cfg_temperatureFontSize = PlasmaCore.Theme.defaultFont.pointSize
         }
         cfg_temperatureFontSizeChanged()
 
         if (!cfg_temperatureFontName) {
-            cfg_temperatureFontName = theme.defaultFont.family
+            cfg_temperatureFontName = PlasmaCore.Theme.defaultFont.family
         }
         cfg_temperatureFontNameChanged()
     }
@@ -92,7 +95,7 @@ Item {
 
         ComboBox {
             Layout.rowSpan: 1
-            Layout.minimumWidth: units.gridUnit * 10
+            Layout.minimumWidth: Kirigami.Units.gridUnit * 10
             currentIndex: cfg_iconSetType
             model: [
                 i18n("Erik Flowers Weather Icons"),
@@ -146,7 +149,7 @@ Item {
 
         ComboBox {
             Layout.rowSpan: 1
-            Layout.minimumWidth: units.gridUnit * 10
+            Layout.minimumWidth: Kirigami.Units.gridUnit * 10
             currentIndex: cfg_layoutType
             model: [
                 i18n("Horizontal"),
@@ -164,7 +167,7 @@ Item {
 
         Label {
             text: i18n("NOTE: Setting layout type for in-tray plasmoid has no effect.")
-            font.pixelSize: theme.defaultFont.pixelSize - 2
+            font.pixelSize: PlasmaCore.Theme.defaultFont.pixelSize - 2
             Layout.rowSpan: 1
             Layout.preferredWidth: 250
             wrapMode: Text.WordWrap
@@ -172,7 +175,7 @@ Item {
 
         component SizeModeComboBox: ComboBox {
             Layout.rowSpan: 1
-            Layout.minimumWidth: units.gridUnit * 10
+            Layout.minimumWidth: Kirigami.Units.gridUnit * 10
             // currentIndex: cfg_cityAliasSizeMode
             model: [
                 i18n("Fill"),
@@ -304,7 +307,7 @@ Item {
             Layout.columnSpan: 1
 
             onClicked: {
-                fontDialog.font = Qt.font({
+                fontDialog.selectedFont = Qt.font({
                     family: cfg_cityAliasFontName,
                     pointSize: cfg_cityAliasFontSize
                 })
@@ -313,8 +316,8 @@ Item {
             }
 
             function onAccepted() {
-                cfg_cityAliasFontName = fontDialog.font.family
-                cfg_cityAliasFontSize = fontDialog.font.pointSize
+                cfg_cityAliasFontName = fontDialog.selectedFont.family
+                cfg_cityAliasFontSize = fontDialog.selectedFont.pointSize
                 print('cfg_cityAliasFontSize', cfg_cityAliasFontSize)
                 fontDialog.visible = false
                 fontDialog.onAccepted.disconnect(onAccepted)
@@ -412,7 +415,7 @@ Item {
             enabled: compactItemsEnabled && temperatureEnabled
             Layout.columnSpan: 1
             onClicked: {
-                fontDialog.font = Qt.font({
+                fontDialog.selectedFont = Qt.font({
                     family: cfg_temperatureFontName,
                     pointSize: cfg_temperatureFontSize
                 })
@@ -421,8 +424,8 @@ Item {
             }
 
             function onAccepted() {
-                cfg_temperatureFontName = fontDialog.font.family
-                cfg_temperatureFontSize = fontDialog.font.pointSize
+                cfg_temperatureFontName = fontDialog.selectedFont.family
+                cfg_temperatureFontSize = fontDialog.selectedFont.pointSize
                 print('cfg_temperatureFontSize', cfg_temperatureFontSize)
                 fontDialog.visible = false
                 fontDialog.onAccepted.disconnect(onAccepted)
@@ -602,7 +605,7 @@ Item {
 
         Label {
             text: i18n("NOTE: After this timeout widget will be hidden in system tray until refreshed. You can always set the widget to be always \"Shown\" in system tray \"Entries\" settings.")
-            font.pixelSize: theme.defaultFont.pixelSize - 2
+            font.pixelSize: PlasmaCore.Theme.defaultFont.pixelSize - 2
             Layout.rowSpan: 3
             Layout.preferredWidth: 250
             wrapMode: Text.WordWrap
