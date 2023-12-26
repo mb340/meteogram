@@ -102,6 +102,7 @@ Item {
         id: horizontalLines1
         model: horizontalLinesModel.model
         anchors.left: graphArea.left
+        anchors.right: graphArea.right
         anchors.top: graphArea.top
 //         anchors.bottom: graphArea.bottom + labelHeight
 //         anchors.fill: graphArea
