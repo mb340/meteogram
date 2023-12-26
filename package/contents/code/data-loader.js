@@ -3,6 +3,8 @@
 
 var debugLogging = false
 
+const USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:101.0) Gecko/20100101 Firefox/101.0"
+
 function dbgprint(msg) {
     if (!debugLogging) {
         return
@@ -65,6 +67,9 @@ function fetchXmlFromInternet(getUrl, successCallback, failureCallback, cacheKey
     }
     dbgprint('GET url opening: ' + getUrl)
     xhr.open('GET', getUrl)
+
+    xhr.setRequestHeader("User-Agent", USER_AGENT)
+
     dbgprint('GET url sending: ' + getUrl)
     xhr.send()
 
@@ -103,6 +108,9 @@ function fetchJsonFromInternet(getUrl, successCallback, failureCallback, cacheKe
     }
     dbgprint('GET url opening: ' + getUrl)
     xhr.open('GET', getUrl)
+
+    xhr.setRequestHeader("User-Agent", USER_AGENT)
+
     dbgprint('GET url sending: ' + getUrl)
     xhr.send()
 
