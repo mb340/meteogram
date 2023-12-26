@@ -1,7 +1,7 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 import QtQuick.Dialogs
-import QtQuick.Layouts 1.1
+import QtQuick.Layouts
 import org.kde.plasma.core as PlasmaCore
 import org.kde.kirigami as Kirigami
 
@@ -80,7 +80,8 @@ ColumnLayout {
         id: colorDialog
         title: qsTr("Choose a %1 color").arg(colorLabel)
         visible: false
-        showAlphaChannel: true
+        // showAlphaChannel: true
+        options: ColorDialog.ShowAlphaChannel
         property string colorVar: ""
         property string colorLabel: ""
         onAccepted: {
@@ -242,7 +243,7 @@ ColumnLayout {
 
         ComboBox {
             Layout.rowSpan: 1
-            Layout.minimumWidth: units.gridUnit * 10
+            Layout.minimumWidth: Kirigami.Units.gridUnit * 10
             currentIndex: cfg_colorPaletteType
             model: [
                 i18n("Default"),
@@ -311,7 +312,11 @@ ColumnLayout {
         clip: true
         visible: isCustomColor
 
-        property int currentRow: -1
+        selectionBehavior: TableView.SelectRows
+        selectionModel: ItemSelectionModel {
+            id: itemSelectionModel
+            model: tableView.model
+        }
 
         ScrollBar.vertical: ScrollBar {
             policy: ScrollBar.AsNeeded 
@@ -330,7 +335,16 @@ ColumnLayout {
             Layout.fillWidth: true
             implicitHeight: colLabel.height
 
-            color: selected ? Kirigami.Theme.highlightColor : 'transparent'
+            color: selected ? highlightColor : viewBackgroundColor
+
+            clip: true
+
+            property var viewBackgroundColor: Kirigami.Theme.viewBackgroundColor ?
+                                                Kirigami.Theme.viewBackgroundColor : 'white'
+            property var highlightColor: Kirigami.Theme.highlightColor ?
+                                                Kirigami.Theme.highlightColor : 'green'
+
+            required property bool selected
 
             MouseArea {
                 width:  parent.width
@@ -378,29 +392,20 @@ ColumnLayout {
                 }
             
                 onClicked: {
-                    var prevRow = tableView.currentRow
-                    tableView.clearSelection()
-                    if (prevRow !== row) {
-                        selected = true
-                        tableView.currentRow = row
+                    let index = tableView.model.index(row, 0)
+                    if (!itemSelectionModel.isSelected(index)) {
+                        itemSelectionModel.clear()
+                        itemSelectionModel.select(index, ItemSelectionModel.SelectCurrent | ItemSelectionModel.Row)
+                    } else {
+                        itemSelectionModel.select(index, ItemSelectionModel.Deselect)
                     }
+
+
                 }
                 onDoubleClicked: {
                     showColorDialog(colorVar, colorLabel)
                 }
             }
-        }
-
-        function clearSelection() {
-            if (tableView.currentRow < 0) {
-                return;
-            }
-            let data = colorsModel.get(tableView.currentRow)
-            if (!data) {
-                return
-            }
-            data.selected = false
-            tableView.currentRow = -1
         }
     }
 
@@ -409,7 +414,7 @@ ColumnLayout {
 
         Button {
             icon.name: "edit-entry"
-            enabled: tableView.currentRow !== -1
+            enabled: itemSelectionModel.hasSelection
             hoverEnabled: true
 
             ToolTip.delay: 100
@@ -417,11 +422,11 @@ ColumnLayout {
             ToolTip.text: qsTr("Edit color.")
 
             onClicked: {
-                if (tableView.currentRow === -1) {
+                if (!itemSelectionModel.hasSelection) {
                     return
                 }
 
-                let idx = tableView.currentRow
+                let idx = itemSelectionModel.selectedIndexes[0].row
                 let item = colorsModel.get(idx)
                 showColorDialog(item.colorVar, item.colorLabel)
             }
@@ -429,7 +434,7 @@ ColumnLayout {
 
         Button {
             icon.name: "go-previous"
-            enabled: tableView.currentRow !== -1
+            enabled: itemSelectionModel.hasSelection
             hoverEnabled: true
 
             ToolTip.delay: 100
@@ -437,11 +442,11 @@ ColumnLayout {
             ToolTip.text: qsTr("Use suggested color.")
 
             onClicked: {
-                if (tableView.currentRow === -1) {
+                if (!itemSelectionModel.hasSelection) {
                     return
                 }
 
-                let idx = tableView.currentRow
+                let idx = itemSelectionModel.selectedIndexes[0].row
                 let item = colorsModel.get(idx)
 
                 if (item.suggestedColor == "") {
@@ -455,7 +460,7 @@ ColumnLayout {
 
         Button {
             icon.name: "go-previous-skip"
-            enabled: tableView.currentRow !== -1
+            enabled: itemSelectionModel.hasSelection
             hoverEnabled: true
 
             ToolTip.delay: 100
@@ -516,15 +521,15 @@ ColumnLayout {
         colorsModel.clear()
         modelSrc.forEach(function (colorObj) {
             colorObj['suggestedColor'] = ""
-            colorObj['selected'] = false
             colorsModel.append(colorObj)
         })
     }
 
     function showColorDialog(colorVar, colorLabel) {
+        print("showColorDialog")
         colorDialog.colorVar = colorVar
         colorDialog.colorLabel = colorLabel
-        colorDialog.color = plasmoid.configuration[colorDialog.colorVar]
+        colorDialog.selectedColor = plasmoid.configuration[colorDialog.colorVar]
         colorDialog.visible = true
     }
 
