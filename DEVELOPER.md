@@ -1,11 +1,11 @@
 
 ### Install from local source
 
-	plasmapkg2 -i package/
+	kpackagetool6 -i package/ -t Plasma/Applet
 
 ### Update from local source
 
-	plasmapkg2 -u package/
+	kpackagetool6 -u package/ -t Plasma/Applet
 
 ### Create plasmoid package
 
