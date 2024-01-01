@@ -95,6 +95,7 @@ Item {
             spacing: 0
 
             implicitHeight: contentItem.childrenRect.height
+            implicitWidth: contentItem.childrenRect.width
 
             model: model.model
 
