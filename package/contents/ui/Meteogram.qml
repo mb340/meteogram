@@ -428,7 +428,7 @@ Item {
             cursorShape: Qt.PointingHandCursor
             anchors.fill: parent
 
-            onPressed: {
+            onPressed: function (mouse) {
                 meteogramInfo.visible = true
                 cursorShape = Qt.CrossCursor
                 update(mouse)
@@ -449,7 +449,7 @@ Item {
                 }
             }
 
-            onPositionChanged: {
+            onPositionChanged: function(mouse) {
                 update(mouse)
                 if (meteogramInfo.visible) {
                     meteogramInfoCanvas.requestPaint()
