@@ -1,14 +1,14 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.1
-import QtQuick.Dialogs 1.2
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Dialogs
 import org.kde.plasma.core as PlasmaCore
 import org.kde.kirigami as Kirigami
 import "../../code/config-utils.js" as ConfigUtils
 import "../../code/placesearch-helpers.js" as Helper
 
 
-ColumnLayout {
+Kirigami.FormLayout {
     id: configGeneral
 
     property alias cfg_reloadIntervalHours: reloadIntervalHours.value
@@ -36,7 +36,6 @@ ColumnLayout {
                            altitude: parseInt(placeObj.altitude),
                            timezoneID: (placeObj.timezoneID !== undefined) ?
                                         parseInt(placeObj.timezoneID) : -1,
-                           selected: false
                        })
                 })
                 configGeneral.placesModel = placesModel
@@ -58,8 +57,6 @@ ColumnLayout {
             var placeObj = placesModel.get(i)
             placeObj = JSON.stringify(placeObj)
             placeObj = JSON.parse(placeObj)
-            placeObj.selected = undefined
-            delete placeObj["selected"]
             newPlacesArray.push(placeObj)
         }
         cfg_places = JSON.stringify(newPlacesArray)
@@ -82,8 +79,18 @@ ColumnLayout {
         id: addMetnoCityIdDialog
     }
 
+    Dialog {
+        id: testDialog
+        title: i18n("Add Place")
 
-    ColumnLayout{
+        modal: true
+
+        standardButtons: Dialog.Ok | Dialog.Cancel
+
+    }
+
+
+    ColumnLayout {
         id: rhsColumn
         Layout.fillWidth: true
         Layout.fillHeight: false
@@ -114,7 +121,10 @@ ColumnLayout {
             Layout.fillWidth: true
             clip: true
 
-            property int currentRow: -1
+            selectionBehavior: TableView.SelectRows
+            selectionModel: ItemSelectionModel {
+                model: tableView.model
+            }
 
             ScrollBar.vertical: ScrollBar {
                 policy: ScrollBar.AsNeeded 
@@ -140,18 +150,19 @@ ColumnLayout {
                 background: Rectangle {
                     anchors.fill: parent
                     color: selected ? Kirigami.Theme.highlightColor :
-                                     ((row % 2 === 0) ? Kirigami.Theme.viewBackgroundColor :
-                                        Qt.darker(Kirigami.Theme.viewBackgroundColor, 1.05))
+                                     ((row % 2 === 0) ? Kirigami.Theme.backgroundColor :
+                                        Qt.darker(Kirigami.Theme.backgroundColor, 1.05))
                 }
 
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        var prevRow = tableView.currentRow
-                        tableView.clearSelection()
-                        if (prevRow !== row) {
-                            selected = true
-                            tableView.currentRow = row
+                        let index = tableView.model.index(row, 0)
+                        if (!tableView.selectionModel.isSelected(index)) {
+                            tableView.selectionModel.clear()
+                            tableView.selectionModel.select(index, ItemSelectionModel.SelectCurrent | ItemSelectionModel.Row)
+                        } else {
+                            tableView.selectionModel.select(index, ItemSelectionModel.Deselect)
                         }
                     }
                     onDoubleClicked: {
@@ -163,6 +174,9 @@ ColumnLayout {
                 id: rowRoot
                 implicitHeight: providerIdLabel.contentHeight + (11 * 1)
                 implicitWidth: tableView.width
+
+                required property bool selected
+                required property bool current
 
                 RowLayout {
                     id: tableRow
@@ -186,19 +200,6 @@ ColumnLayout {
                     }
                 }
             }
-
-            function clearSelection() {
-                if (tableView.currentRow < 0) {
-                    return;
-                }
-                let data = placesModel.get(tableView.currentRow)
-                if (!data) {
-                    return
-                }
-                data.selected = false
-                tableView.currentRow = -1
-            }
-
         }
 
         RowLayout {
@@ -224,6 +225,9 @@ ColumnLayout {
                     addMetnoCityIdDialog.clearFields()
                     addMetnoCityIdDialog.providerId = 'metno'
                     addMetnoCityIdDialog.open()
+                    // print("click")
+                    // testDialog.visible = true
+                    // print(testDialog.visible)
                 }
             }
 
@@ -254,50 +258,68 @@ ColumnLayout {
                     icon.name: 'go-up'
                     Layout.fillHeight: true
                     onClicked: {
-                        var row = tableView.currentRow
+                        let row = tableView.selectionModel.selectedIndexes.length === 0 ? -1 :
+                                    tableView.selectionModel.selectedIndexes[0].row
+                        if (row <= 0 || row > placesModel.count) {
+                            return
+                        }
                         placesModel.move(row, row - 1, 1)
+
                         _placesModelChanged()
-                        tableView.currentRow = tableView.currentRow - 1
                     }
-                    enabled: tableView.currentRow > 0
+                    enabled: (tableView.selectionModel.hasSelection &&
+                                tableView.selectionModel.selectedIndexes.length > 0 &&
+                                tableView.selectionModel.selectedIndexes[0].row > 0)
                 }
 
                 Button {
                     icon.name: 'go-down'
                     Layout.fillHeight: true
                     onClicked: {
-                        var row = tableView.currentRow
+                        let row = tableView.selectionModel.selectedIndexes.length === 0 ? -1 :
+                                    tableView.selectionModel.selectedIndexes[0].row
+                        if (row < 0 || row >= placesModel.count - 1) {
+                            return
+                        }
                         placesModel.move(row, row + 1, 1)
+
                         _placesModelChanged()
-                        tableView.currentRow = tableView.currentRow + 1
                     }
-                    enabled: (tableView.currentRow > -1 &&
-                                tableView.currentRow < placesModel.count - 1)
+                    enabled: (tableView.selectionModel.hasSelection &&
+                                tableView.selectionModel.selectedIndexes.length > 0 &&
+                                (tableView.selectionModel.selectedIndexes[0].row <
+                                    (placesModel.count - 1))
+                                )
                 }
 
                 Button {
                     icon.name: 'list-remove'
                     Layout.fillHeight: true
                     onClicked: {
-                        if (tableView.currentRow < 0) {
+                        if (!tableView.selectionModel.hasSelection) {
                             return
                         }
-                        placesModel.remove(tableView.currentRow)
+                        let index = tableView.selectionModel.selectedIndexes[0].row
+                        placesModel.remove(index)
                         _placesModelChanged()
 
-                        tableView.currentRow = -1
+                        tableView.selectionModel.clear()
                     }
-                    enabled: (tableView.currentRow > -1 &&
-                                tableView.currentRow < placesModel.count)
+                    enabled: (tableView.selectionModel.hasSelection &&
+                                tableView.selectionModel.selectedIndexes.length > 0 &&
+                                (tableView.selectionModel.selectedIndexes[0].row < placesModel.count)
+                                )
                 }
 
                 Button {
                     icon.name: 'entry-edit'
                     Layout.fillHeight: true
-                    enabled: (tableView.currentRow > -1 &&
-                                tableView.currentRow < placesModel.count)
+                    enabled: tableView.selectionModel.hasSelection
                     onClicked: {
-                        editEntryNumber = tableView.currentRow
+                        if (!tableView.selectionModel.hasSelection) {
+                            return
+                        }
+                        editEntryNumber = tableView.selectionModel.selectedIndexes[0].row
                         let entry = placesModel.get(editEntryNumber)
                         let hasAltitude = (entry.providerId === "metno")
                         if (entry.providerId === "metno" ||
@@ -407,7 +429,8 @@ ColumnLayout {
             delegate: Label {
                 id: attribution
                 anchors.bottomMargin: 2
-                font.pointSize: units.iconSizes.tiny
+                // font.pointSize: units.iconSizes.tiny
+                font.pointSize: 6
                 text: modelData.text
 
                 MouseArea {
