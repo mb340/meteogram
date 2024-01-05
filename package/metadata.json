@@ -1,4 +1,5 @@
 {
+    "KPackageStructure": "Plasma/Applet",
     "KPlugin": {
         "Authors": [
             {
@@ -7,8 +8,6 @@
             }
         ],
         "Category": "Environment and Weather",
-        "Dependencies": [
-        ],
         "Description": "Shows weather forecast chart",
         "EnabledByDefault": false,
         "Icon": "weather-clouds",
@@ -21,8 +20,5 @@
         "Version": "0.1.2",
         "Website": ""
     },
-    "X-KDE-ParentApp": "",
-    "X-Plasma-API": "declarativeappletscript",
-    "X-Plasma-MainScript": "ui/main.qml",
-    "X-Plasma-NotificationArea": "true"
+    "X-Plasma-API-Minimum-Version": "6.0"
 }
