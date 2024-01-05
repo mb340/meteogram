@@ -85,10 +85,10 @@ PlasmoidItem {
 
     anchors.fill: parent
 
-    property Component crInTray: CompactRepresentationInTray { }
+    // property Component crInTray: CompactRepresentationInTray { }
     property Component cr: CompactRepresentation { }
 
-    property Component frInTray: FullRepresentationInTray { }
+    // property Component frInTray: FullRepresentationInTray { }
     property Component fr: FullRepresentation {
         Component.onCompleted: {
             main.fullRedraw.connect(this.meteogram.fullRedraw)
@@ -97,11 +97,14 @@ PlasmoidItem {
 
     }
 
-    preferredRepresentation: Plasmoid.compactRepresentation
+    preferredRepresentation: compactRepresentation
     compactRepresentation: cr
     fullRepresentation: fr
 
     property bool debugLogging: plasmoid.configuration.debugLogging
+    // compactRepresentation: CompactRepresentation { }
+    // fullRepresentation: FullRepresentation {}
+
 
     FontLoader {
         id: weatherIconFont
