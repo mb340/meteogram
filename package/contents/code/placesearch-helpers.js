@@ -344,6 +344,5 @@ function parseCSVLine(csvLine, tzCache) {
                 altitude: parseInt(items[4]),
                 timezoneId: timezone.id,
                 timezoneName: timezone.displayName,
-                selected: false
             })
 }

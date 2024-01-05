@@ -1,7 +1,7 @@
-import QtQuick 2.2
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.1
-import QtQuick.Dialogs 1.2
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Dialogs
 import "../../code/config-utils.js" as ConfigUtils
 import "../../code/placesearch-helpers.js" as Helper
 import "../../code/db/timezoneData.js" as TZData
@@ -14,9 +14,10 @@ Dialog {
     property int timezoneID: -1
     property string providerId: ''
 
-    width: 500
+    // width: 500
 
-    standardButtons: StandardButton.Ok | StandardButton.Cancel
+    standardButtons: Dialog.Ok | Dialog.Cancel
+    modal: true
 
     property alias newMetnoCityAlias: newMetnoCityAlias
     property alias newMetnoCityLatitudeField: newMetnoCityLatitudeField
@@ -64,49 +65,49 @@ Dialog {
         }
     }
 
-    onActionChosen: {
-        if (action.button === Dialog.Ok) {
-            var reason=""
-            var reasoncount=0;
-            var latValid = newMetnoCityLatitudeField.acceptableInput
-            var longValid = newMetnoCityLongitudeField.acceptableInput
-            var altValid = newMetnoCityAltitudeField.acceptableInput
+    // onActionChosen: {
+    //     if (action.button === Dialog.Ok) {
+    //         var reason=""
+    //         var reasoncount=0;
+    //         var latValid = newMetnoCityLatitudeField.acceptableInput
+    //         var longValid = newMetnoCityLongitudeField.acceptableInput
+    //         var altValid = newMetnoCityAltitudeField.acceptableInput
 
-            action.accepted = false
+    //         action.accepted = false
 
-            if (!(latValid)) {
-                reason+=i18n("The Latitude is not valid.")+"\n"
-                reason+=i18n("The Latitude is not between -90 and 90.")+"\n"
-                reasoncount++
-            }
+    //         if (!(latValid)) {
+    //             reason+=i18n("The Latitude is not valid.")+"\n"
+    //             reason+=i18n("The Latitude is not between -90 and 90.")+"\n"
+    //             reasoncount++
+    //         }
 
-            if (!(longValid)) {
-                reason+=i18n("The Longitude is not valid.")+"\n"
-                reason+=i18n("The Longitude is not between -180 and 180.")+"\n"
-                reasoncount++
-            }
+    //         if (!(longValid)) {
+    //             reason+=i18n("The Longitude is not valid.")+"\n"
+    //             reason+=i18n("The Longitude is not between -180 and 180.")+"\n"
+    //             reasoncount++
+    //         }
 
-            if (hasAltitude && !altValid) {
-                reason+=i18n("The Altitude is not valid.")+"\n"
-                reason+=i18n("The Altitude is not between -999 and 5000.")+"\n"
-                reasoncount++
-            }
+    //         if (hasAltitude && !altValid) {
+    //             reason+=i18n("The Altitude is not valid.")+"\n"
+    //             reason+=i18n("The Altitude is not between -999 and 5000.")+"\n"
+    //             reasoncount++
+    //         }
 
-            if (newMetnoCityAlias.text.length === 0) {
-                reason+=i18n("The Place Name is empty.")+"\n"
-                reasoncount++
-            }
+    //         if (newMetnoCityAlias.text.length === 0) {
+    //             reason+=i18n("The Place Name is empty.")+"\n"
+    //             reasoncount++
+    //         }
 
-            if (reasoncount === 0 ) {
-                action.accepted = true
-            } else {
-                action.accepted = false
-                invalidData.text=i18np("There is an error!", "There are %1 errors!",reasoncount)
-                invalidData.informativeText=reason
-                invalidData.open()
-            }
-        }
-    }
+    //         if (reasoncount === 0 ) {
+    //             action.accepted = true
+    //         } else {
+    //             action.accepted = false
+    //             invalidData.text=i18np("There is an error!", "There are %1 errors!",reasoncount)
+    //             invalidData.informativeText=reason
+    //             invalidData.open()
+    //         }
+    //     }
+    // }
 
     onAccepted: {
         var data = {
@@ -133,25 +134,31 @@ Dialog {
         close()
     }
 
-    MessageDialog {
+    Dialog {
         id: invalidData
         title: i18n("Error!")
-        text: ""
-        icon: StandardIcon.Critical
-        informativeText: ""
+        // text: ""
+        // icon: StandardIcon.Critical
+        // informativeText: ""
         visible: false
     }
 
-    MessageDialog {
+    Dialog {
         id: saveSearchedData
         title: i18n("Confirmation")
-        text: i18n("Do you want to select this place?")
-        icon: StandardIcon.Question
-        standardButtons: StandardButton.Yes | StandardButton.No
-        informativeText: ""
+        standardButtons: MessageDialog.Ok | MessageDialog.Cancel
         visible: false
-        onYes: {
-            let data=filteredCSVData.get(searchWindow.tableView.currentRow)
+        Label {
+            text: i18n("Do you want to select this place?")
+            anchors.fill: parent
+        }
+
+        onAccepted: {
+            // let data = filteredCSVData.get(searchWindow.tableView.currentRow)
+            let index = searchWindow.getSelectedRowIndex()
+            print("onAccepted index = " + index)
+            let data = filteredCSVData.get(index)
+            
             newMetnoCityLatitudeField.text=data["latitude"]
             newMetnoCityLongitudeField.text=data["longitude"]
             if (hasAltitude) {
@@ -163,7 +170,7 @@ Dialog {
             setTimezone(data["timezoneId"])
             searchWindow.close()
         }
-        onNo: {
+        onRejected: {
             searchWindow.close()
         }
     }
