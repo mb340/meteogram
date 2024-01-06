@@ -183,21 +183,23 @@ PlasmoidItem {
         id: colorPalette
     }
 
-    function initPausedAction() {
-        plasmoid.setAction('toggleUpdatingPaused',
-                           updatingPaused ? i18n("Resume Updating") : i18n("Pause Updating"),
-                           updatingPaused ? 'media-playback-start' : 'media-playback-pause');
-    }
-
-    function action_toggleUpdatingPaused() {
+    function toggleUpdatingPaused() {
         updatingPaused = !updatingPaused
-        initPausedAction()
         if (updatingPaused) {
             reloadTimer.stop()
         } else {
             reloadTimer.updateState(cacheKey)
         }
     }
+
+    Plasmoid.contextualActions: [
+        PlasmaCore.Action {
+            text: updatingPaused ? i18n("Resume Updating") : i18n("Pause Updating")
+            icon.name: updatingPaused ? 'media-playback-start' : 'media-playback-pause'
+            onTriggered: toggleUpdatingPaused()
+        }
+    ]
+
 
     Connections {
         target: plasmoid
@@ -246,9 +248,6 @@ PlasmoidItem {
             Plasmoid.compactRepresentation = crInTray
             Plasmoid.fullRepresentation = frInTray
         }
-
-        // init contextMenu
-        initPausedAction()
 
         var db = cacheDb.open()
         cacheDb.initialize()
