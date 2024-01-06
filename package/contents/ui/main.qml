@@ -20,6 +20,7 @@ import org.kde.kirigami as Kirigami
 import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
 import QtQuick.Controls
+import QtQml
 import "../code/data-loader.js" as DataLoader
 import "../code/config-utils.js" as ConfigUtils
 import "../code/icons.js" as IconTools
