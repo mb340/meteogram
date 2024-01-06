@@ -205,11 +205,10 @@ PlasmoidItem {
         }
     ]
 
-
     Connections {
-        target: plasmoid
+        target: main
         function onExpandedChanged() {
-            if (plasmoid.expanded === true) {
+            if (main.expanded === true) {
                 reloadTimer.updateNextLoadText()
                 reloadTimer.updateLastLoadText()
                 reloadTimer.checkNextLoadElapsed(cacheKey)
