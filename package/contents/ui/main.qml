@@ -218,7 +218,7 @@ PlasmoidItem {
     }
 
     Component.onCompleted: {
-        dbgprint("main: onCompleted: Plasmoid.id", Plasmoid.id, Plasmoid.parent.id)
+        dbgprint("main: onCompleted: Plasmoid.id", Plasmoid.id, Plasmoid.containment.id)
 
         if (plasmoid.configuration.firstRun === true) {
             switch (Qt.locale().measurementSystem) {
@@ -244,8 +244,10 @@ PlasmoidItem {
             }
             plasmoid.configuration.firstRun = false
         }
-        inTray = (plasmoid.parent !== null && (plasmoid.parent.pluginName === 'org.kde.plasma.private.systemtray' || plasmoid.parent.objectName === 'taskItemContainer'))
-        plasmoidCacheId = inTray ? Plasmoid.parent.id : Plasmoid.id
+        inTray = (Plasmoid.containment !== null &&
+                    (Plasmoid.containment.pluginName === 'org.kde.plasma.private.systemtray' ||
+                     Plasmoid.containment.objectName === 'taskItemContainer'))
+        plasmoidCacheId = inTray ? Plasmoid.containment.id : Plasmoid.id
         dbgprint('inTray=' + inTray + ', plasmoidCacheId=' + plasmoidCacheId)
 
         // systray settings
