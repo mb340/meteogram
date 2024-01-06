@@ -2,13 +2,14 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Dialogs
 import QtQuick.Layouts
+import org.kde.kcmutils as KCM
 import org.kde.plasma.core as PlasmaCore
 import org.kde.kirigami as Kirigami
 
 
 import "../../code/color.js" as ColorTools
 
-ColumnLayout {
+KCM.SimpleKCM {
     id: root
 
     property alias cfg_maxMeteogramHours: maxMeteogramHours.value
@@ -129,366 +130,373 @@ ColumnLayout {
         setModel()
     }
 
-    Component.onCompleted: {
-        cfg_renderTemperatureChanged()
-        cfg_renderPressureChanged()
-        cfg_renderHumidityChanged()
-        cfg_renderPrecipitationChanged()
-        cfg_renderCloudCoverChanged()
-        cfg_renderIconsChanged()
-        cfg_renderAlertsChanged()
 
-        cfg_colorPaletteTypeChanged()
-        lightDarkModeChanged()
-        setModel()
-    }
-
-    GridLayout {
-        Layout.fillWidth: true
-        columns: 3
-
-        Label {
-            text: i18n("Maximum Hours")
-            Layout.alignment: Qt.AlignVCenter|Qt.AlignRight
-
-            Layout.preferredWidth: maxColWidth
-            onWidthChanged: updateMaxColWidth(width)
-        }
-
-        SpinBox {
-            id: maxMeteogramHours
-            property int decimals: 0
-            stepSize: 1
-            from: 24
-            to: 72
-            textFromValue: function(value, locale) {
-                return qsTr("%1").arg(value)
-            }
-        }
-    }
-
-    Label {
-        text: i18n("Visible Parameters")
-        Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-    }
-
-    GridLayout {
-        Layout.fillWidth: true
-        columns: 2
-
-        property var labels: [
-            i18n("Temperature"),
-            i18n("Pressure"),
-            i18n("Relative Humidity"),
-            i18n("Precipitation"),
-            i18n("Cloud Cover"),
-            i18n("Icons"),
-            i18n("Alerts"),
-        ]
-
-        property var values: [
-            "renderTemperature",
-            "renderPressure",
-            "renderHumidity",
-            "renderPrecipitation",
-            "renderCloudCover",
-            "renderIcons",
-            "renderAlerts"
-        ]
-
-        Repeater {
-            model: parent.labels
-            Item {
-                width: 2
-                height: 2
-                Layout.row: index
-                Layout.column: 0
-
-                Layout.preferredWidth: maxColWidth
-                onWidthChanged: updateMaxColWidth(width)
-            }
-        }
-
-        Repeater {
-            model: parent.values
-
-            delegate: CheckBox {
-                id: renderParameterCheckbox
-                text: parent.labels[index]
-                checked: plasmoid.configuration[modelData]
-                Layout.row: index
-                Layout.column: 1
-
-                Binding {
-                    target: root
-                    property: "cfg_" + modelData
-                    value: renderParameterCheckbox.checked
-                }
-            }
-
-        }
-    }
-
-    GridLayout {
-        Layout.fillWidth: true
-        columns: 2
-
-        Label {
-            text: i18n("Color Palette") + ":"
-            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-
-            Layout.preferredWidth: maxColWidth
-            onWidthChanged: updateMaxColWidth(width)
-        }
-
-        ComboBox {
-            Layout.rowSpan: 1
-            Layout.minimumWidth: Kirigami.Units.gridUnit * 10
-            currentIndex: cfg_colorPaletteType
-            model: [
-                i18n("Default"),
-                i18n("Protanopia"),
-                i18n("Deuteranopia"),
-                i18n("Tritanopia"),
-                i18n("Custom")
-            ]
-
-            onCurrentIndexChanged: {
-                if (currentIndex < 0 || currentIndex >= model.length) {
-                    return
-                }
-                cfg_colorPaletteType = currentIndex
-            }
-        }
-    }
-
-    Label {
-        text: i18n("Custom Palette")
-        font.bold: true
-        visible: isCustomColor
-        Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-    }
-
-    RowLayout {
-        visible: isCustomColor
-
-        Label {
-            text: i18n("Mode:")
-            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-        }
-        RadioButton {
-            id: lightModeRadioButton
-            ButtonGroup.group: lightDarkModeGroup
-            text: i18n("Light")
-            onCheckedChanged: if (checked) lightDarkMode = 0
-        }
-        RadioButton {
-            id: darkModeRadioButton
-            ButtonGroup.group: lightDarkModeGroup
-            text: i18n("Dark")
-            onCheckedChanged: if (checked) lightDarkMode = 1
-        }
-    }
-
-    HorizontalHeaderView {
-        id: horizontalHeader
-        syncView: tableView
-        visible: isCustomColor
-        Layout.preferredHeight: contentHeight
-        Layout.preferredWidth: parent.width
-        Layout.fillWidth: true
-
-        model: [
-            i18n("Color"),
-            i18n("Suggested Color"),
-            // i18n("Place Identifier"),
-        ]
-    }
-
-    TableView {
-        id: tableView
-        Layout.minimumHeight: 150
-        Layout.fillWidth: true
-        clip: true
-        visible: isCustomColor
-
-        selectionBehavior: TableView.SelectRows
-        selectionModel: ItemSelectionModel {
-            id: itemSelectionModel
-            model: tableView.model
-        }
-
-        ScrollBar.vertical: ScrollBar {
-            policy: ScrollBar.AsNeeded 
-        }
-
-        model: colorsModel
-
-        property var columnWidths: [0.5, 0.5]
-        columnWidthProvider: function (column) {
-            return tableView.width * columnWidths[column]
-        }
-
-        onWidthChanged: tableView.forceLayout()
-
-        delegate: Rectangle {
+    Kirigami.FormLayout {
+        ColumnLayout {
             Layout.fillWidth: true
-            implicitHeight: colLabel.height
 
-            color: selected ? highlightColor : viewBackgroundColor
 
-            clip: true
+            Component.onCompleted: {
+                cfg_renderTemperatureChanged()
+                cfg_renderPressureChanged()
+                cfg_renderHumidityChanged()
+                cfg_renderPrecipitationChanged()
+                cfg_renderCloudCoverChanged()
+                cfg_renderIconsChanged()
+                cfg_renderAlertsChanged()
 
-            property var viewBackgroundColor: Kirigami.Theme.viewBackgroundColor ?
-                                                Kirigami.Theme.viewBackgroundColor : 'white'
-            property var highlightColor: Kirigami.Theme.highlightColor ?
-                                                Kirigami.Theme.highlightColor : 'green'
+                cfg_colorPaletteTypeChanged()
+                lightDarkModeChanged()
+                setModel()
+            }
 
-            required property bool selected
+            GridLayout {
+                Layout.fillWidth: true
+                columns: 3
 
-            MouseArea {
-                width:  parent.width
-                height: colLabel.height
+                Label {
+                    text: i18n("Maximum Hours")
+                    Layout.alignment: Qt.AlignVCenter|Qt.AlignRight
 
-                RowLayout {
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    height: colLabel.height
+                    Layout.preferredWidth: maxColWidth
+                    onWidthChanged: updateMaxColWidth(width)
+                }
 
-                    Row {
-                        Layout.preferredWidth: tableView.width * tableView.columnWidths[0]
-                        Layout.preferredHeight: colLabel.height
+                SpinBox {
+                    id: maxMeteogramHours
+                    property int decimals: 0
+                    stepSize: 1
+                    from: 24
+                    to: 72
+                    textFromValue: function(value, locale) {
+                        return qsTr("%1").arg(value)
+                    }
+                }
+            }
 
-                        Rectangle {
-                            color: colorVal
+            Label {
+                text: i18n("Visible Parameters")
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            }
+
+            GridLayout {
+                Layout.fillWidth: true
+                columns: 2
+
+                property var labels: [
+                    i18n("Temperature"),
+                    i18n("Pressure"),
+                    i18n("Relative Humidity"),
+                    i18n("Precipitation"),
+                    i18n("Cloud Cover"),
+                    i18n("Icons"),
+                    i18n("Alerts"),
+                ]
+
+                property var values: [
+                    "renderTemperature",
+                    "renderPressure",
+                    "renderHumidity",
+                    "renderPrecipitation",
+                    "renderCloudCover",
+                    "renderIcons",
+                    "renderAlerts"
+                ]
+
+                Repeater {
+                    model: parent.labels
+                    Item {
+                        width: 2
+                        height: 2
+                        Layout.row: index
+                        Layout.column: 0
+
+                        Layout.preferredWidth: maxColWidth
+                        onWidthChanged: updateMaxColWidth(width)
+                    }
+                }
+
+                Repeater {
+                    model: parent.values
+
+                    delegate: CheckBox {
+                        id: renderParameterCheckbox
+                        text: parent.labels[index]
+                        checked: plasmoid.configuration[modelData]
+                        Layout.row: index
+                        Layout.column: 1
+
+                        Binding {
+                            target: root
+                            property: "cfg_" + modelData
+                            value: renderParameterCheckbox.checked
+                        }
+                    }
+
+                }
+            }
+
+            GridLayout {
+                Layout.fillWidth: true
+                columns: 2
+
+                Label {
+                    text: i18n("Color Palette") + ":"
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+
+                    Layout.preferredWidth: maxColWidth
+                    onWidthChanged: updateMaxColWidth(width)
+                }
+
+                ComboBox {
+                    Layout.rowSpan: 1
+                    Layout.minimumWidth: Kirigami.Units.gridUnit * 10
+                    currentIndex: cfg_colorPaletteType
+                    model: [
+                        i18n("Default"),
+                        i18n("Protanopia"),
+                        i18n("Deuteranopia"),
+                        i18n("Tritanopia"),
+                        i18n("Custom")
+                    ]
+
+                    onCurrentIndexChanged: {
+                        if (currentIndex < 0 || currentIndex >= model.length) {
+                            return
+                        }
+                        cfg_colorPaletteType = currentIndex
+                    }
+                }
+            }
+
+            Label {
+                text: i18n("Custom Palette")
+                font.bold: true
+                visible: isCustomColor
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            }
+
+            RowLayout {
+                visible: isCustomColor
+
+                Label {
+                    text: i18n("Mode:")
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+                }
+                RadioButton {
+                    id: lightModeRadioButton
+                    ButtonGroup.group: lightDarkModeGroup
+                    text: i18n("Light")
+                    onCheckedChanged: if (checked) lightDarkMode = 0
+                }
+                RadioButton {
+                    id: darkModeRadioButton
+                    ButtonGroup.group: lightDarkModeGroup
+                    text: i18n("Dark")
+                    onCheckedChanged: if (checked) lightDarkMode = 1
+                }
+            }
+
+            HorizontalHeaderView {
+                id: horizontalHeader
+                syncView: tableView
+                visible: isCustomColor
+                Layout.preferredHeight: contentHeight
+                Layout.preferredWidth: parent.width
+                Layout.fillWidth: true
+
+                model: [
+                    i18n("Color"),
+                    i18n("Suggested Color"),
+                    // i18n("Place Identifier"),
+                ]
+            }
+
+            TableView {
+                id: tableView
+                Layout.minimumHeight: 150
+                Layout.fillWidth: true
+                clip: true
+                visible: isCustomColor
+
+                selectionBehavior: TableView.SelectRows
+                selectionModel: ItemSelectionModel {
+                    id: itemSelectionModel
+                    model: tableView.model
+                }
+
+                ScrollBar.vertical: ScrollBar {
+                    policy: ScrollBar.AsNeeded 
+                }
+
+                model: colorsModel
+
+                property var columnWidths: [0.5, 0.5]
+                columnWidthProvider: function (column) {
+                    return tableView.width * columnWidths[column]
+                }
+
+                onWidthChanged: tableView.forceLayout()
+
+                delegate: Rectangle {
+                    Layout.fillWidth: true
+                    implicitHeight: colLabel.height
+
+                    color: selected ? highlightColor : viewBackgroundColor
+
+                    clip: true
+
+                    property var viewBackgroundColor: Kirigami.Theme.viewBackgroundColor ?
+                                                        Kirigami.Theme.viewBackgroundColor : 'white'
+                    property var highlightColor: Kirigami.Theme.highlightColor ?
+                                                        Kirigami.Theme.highlightColor : 'green'
+
+                    required property bool selected
+
+                    MouseArea {
+                        width:  parent.width
+                        height: colLabel.height
+
+                        RowLayout {
+                            anchors.left: parent.left
+                            anchors.right: parent.right
                             height: colLabel.height
-                            width: height
-                        }
 
-                        Label {
-                            id: colLabel
-                            text: colorLabel
+                            Row {
+                                Layout.preferredWidth: tableView.width * tableView.columnWidths[0]
+                                Layout.preferredHeight: colLabel.height
+
+                                Rectangle {
+                                    color: colorVal
+                                    height: colLabel.height
+                                    width: height
+                                }
+
+                                Label {
+                                    id: colLabel
+                                    text: colorLabel
+                                }
+                            }
+
+                            Row {
+                                Layout.preferredWidth: tableView.width * tableView.columnWidths[1]
+                                Layout.preferredHeight: sugColLabel.height
+
+                                Rectangle {
+                                    color: suggestedColor == "" ? 'transparent' : suggestedColor
+                                    height: sugColLabel.height
+                                    width: height
+                                }
+
+                                Label {
+                                    id: sugColLabel
+                                    text: String(suggestedColor)
+                                    font.family: "Monospace"
+                                }
+
+                                // visible: suggestedColor.length === 0
+                            }                    
+                        }
+                    
+                        onClicked: {
+                            let index = tableView.model.index(row, 0)
+                            if (!itemSelectionModel.isSelected(index)) {
+                                itemSelectionModel.clear()
+                                itemSelectionModel.select(index, ItemSelectionModel.SelectCurrent | ItemSelectionModel.Row)
+                            } else {
+                                itemSelectionModel.select(index, ItemSelectionModel.Deselect)
+                            }
+
+
+                        }
+                        onDoubleClicked: {
+                            showColorDialog(colorVar, colorLabel)
                         }
                     }
-
-                    Row {
-                        Layout.preferredWidth: tableView.width * tableView.columnWidths[1]
-                        Layout.preferredHeight: sugColLabel.height
-
-                        Rectangle {
-                            color: suggestedColor == "" ? 'transparent' : suggestedColor
-                            height: sugColLabel.height
-                            width: height
-                        }
-
-                        Label {
-                            id: sugColLabel
-                            text: String(suggestedColor)
-                            font.family: "Monospace"
-                        }
-
-                        // visible: suggestedColor.length === 0
-                    }                    
                 }
-            
-                onClicked: {
-                    let index = tableView.model.index(row, 0)
-                    if (!itemSelectionModel.isSelected(index)) {
-                        itemSelectionModel.clear()
-                        itemSelectionModel.select(index, ItemSelectionModel.SelectCurrent | ItemSelectionModel.Row)
-                    } else {
-                        itemSelectionModel.select(index, ItemSelectionModel.Deselect)
+            }
+
+            RowLayout {
+                visible: isCustomColor
+
+                Button {
+                    icon.name: "edit-entry"
+                    enabled: itemSelectionModel.hasSelection
+                    hoverEnabled: true
+
+                    ToolTip.delay: 100
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Edit color.")
+
+                    onClicked: {
+                        if (!itemSelectionModel.hasSelection) {
+                            return
+                        }
+
+                        let idx = itemSelectionModel.selectedIndexes[0].row
+                        let item = colorsModel.get(idx)
+                        showColorDialog(item.colorVar, item.colorLabel)
                     }
-
-
                 }
-                onDoubleClicked: {
-                    showColorDialog(colorVar, colorLabel)
+
+                Button {
+                    icon.name: "go-previous"
+                    enabled: itemSelectionModel.hasSelection
+                    hoverEnabled: true
+
+                    ToolTip.delay: 100
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Use suggested color.")
+
+                    onClicked: {
+                        if (!itemSelectionModel.hasSelection) {
+                            return
+                        }
+
+                        let idx = itemSelectionModel.selectedIndexes[0].row
+                        let item = colorsModel.get(idx)
+
+                        if (item.suggestedColor == "") {
+                            return
+                        }
+
+                        eval("cfg_" + item.colorVar + " = \"" + item.suggestedColor + "\"")
+                        setModelColor(item.colorVar, item.suggestedColor, "")
+                    }
                 }
+
+                Button {
+                    icon.name: "go-previous-skip"
+                    enabled: itemSelectionModel.hasSelection
+                    hoverEnabled: true
+
+                    ToolTip.delay: 100
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Use all suggested colors.")
+
+                    onClicked: {
+                        for (var i = 0; i < colorsModel.count; i++) {
+                            let item = colorsModel.get(i)
+                            if (item.suggestedColor == "") {
+                                continue
+                            }
+
+                            eval("cfg_" + item.colorVar + " = \"" + item.suggestedColor + "\"")
+                            setModelColor(item.colorVar, item.suggestedColor, "")
+                        }
+                    }
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                }
+            }
+
+            Item {
+                Layout.fillHeight: true
             }
         }
     }
-
-    RowLayout {
-        visible: isCustomColor
-
-        Button {
-            icon.name: "edit-entry"
-            enabled: itemSelectionModel.hasSelection
-            hoverEnabled: true
-
-            ToolTip.delay: 100
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Edit color.")
-
-            onClicked: {
-                if (!itemSelectionModel.hasSelection) {
-                    return
-                }
-
-                let idx = itemSelectionModel.selectedIndexes[0].row
-                let item = colorsModel.get(idx)
-                showColorDialog(item.colorVar, item.colorLabel)
-            }
-        }
-
-        Button {
-            icon.name: "go-previous"
-            enabled: itemSelectionModel.hasSelection
-            hoverEnabled: true
-
-            ToolTip.delay: 100
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Use suggested color.")
-
-            onClicked: {
-                if (!itemSelectionModel.hasSelection) {
-                    return
-                }
-
-                let idx = itemSelectionModel.selectedIndexes[0].row
-                let item = colorsModel.get(idx)
-
-                if (item.suggestedColor == "") {
-                    return
-                }
-
-                eval("cfg_" + item.colorVar + " = \"" + item.suggestedColor + "\"")
-                setModelColor(item.colorVar, item.suggestedColor, "")
-            }
-        }
-
-        Button {
-            icon.name: "go-previous-skip"
-            enabled: itemSelectionModel.hasSelection
-            hoverEnabled: true
-
-            ToolTip.delay: 100
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Use all suggested colors.")
-
-            onClicked: {
-                for (var i = 0; i < colorsModel.count; i++) {
-                    let item = colorsModel.get(i)
-                    if (item.suggestedColor == "") {
-                        continue
-                    }
-
-                    eval("cfg_" + item.colorVar + " = \"" + item.suggestedColor + "\"")
-                    setModelColor(item.colorVar, item.suggestedColor, "")
-                }
-            }
-        }
-
-        Item {
-            Layout.fillWidth: true
-        }
-    }
-
-    Item {
-        Layout.fillHeight: true
-    }
-
 
     function getModelItem(colorVar) {
         var idx = -1;
