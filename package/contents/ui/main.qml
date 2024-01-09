@@ -361,6 +361,9 @@ PlasmoidItem {
         reloadTimer.resetState(cacheKey)
     }
 
+    signal beginLoadFromCache()
+    signal endLoadFromCache()
+
     function _loadFromCache(cacheKey) {
         if (cacheKey !== main.cacheKey) {
             return
@@ -378,6 +381,8 @@ PlasmoidItem {
 
         weatherAlertsModel.clear()
 
+        beginLoadFromCache()
+
         var content = cacheDb.getContent(cacheKey)
         if (content === null) {
             return
@@ -389,6 +394,8 @@ PlasmoidItem {
             cacheKey = null
             return
         }
+
+        endLoadFromCache()
 
         creditLink = currentProvider.getCreditLink(placeObject)
         creditLabel = currentProvider.getCreditLabel(placeObject)
