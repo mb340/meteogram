@@ -253,12 +253,15 @@ Dialog {
             Layout.preferredHeight: tzComboBox.height
         }
         Label {
+            id: newMetnoCityAliasLabel
             text: i18n("City Alias")+":"
         }
         TextField {
             id: newMetnoCityAlias
             Layout.columnSpan: 6
             Layout.fillWidth: true
+            validator: RegularExpressionValidator { regularExpression: /\S.*/  }
+            color: acceptableInput ? newMetnoCityAliasLabel.color : "red"
         }
         Button {
             text: i18n("Search")
