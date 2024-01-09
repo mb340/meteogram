@@ -24,10 +24,6 @@ function formatPlaceIdentifier(placeObject) {
         placeIdentifier = placeObject.placeIdentifier
     }
 
-    if (placeObject.providerId === "phonyprovider") {
-        placeIdentifier = placeObject.placeIdentifier
-    }
-
     if (placeIdentifier === null) {
         console.exception("Invalid place identifier.")
         print("placeObject =", JSON.stringify(placeObject))
