@@ -356,6 +356,9 @@ Item {
         reloadTimer.resetState(cacheKey)
     }
 
+    signal beginLoadFromCache()
+    signal endLoadFromCache()
+
     function _loadFromCache(cacheKey) {
         if (cacheKey !== main.cacheKey) {
             return
@@ -373,6 +376,8 @@ Item {
 
         weatherAlertsModel.clear()
 
+        beginLoadFromCache()
+
         var content = cacheDb.getContent(cacheKey)
         if (content === null) {
             return
@@ -384,6 +389,8 @@ Item {
             cacheKey = null
             return
         }
+
+        endLoadFromCache()
 
         creditLink = currentProvider.getCreditLink(placeObject)
         creditLabel = currentProvider.getCreditLabel(placeObject)

@@ -366,12 +366,17 @@ Item {
         }
 
         Component.onCompleted: {
-            updateCurrentTime()
-            dailyWeatherModels.onDataChanged.connect(() => { Qt.callLater(updateCurrentTime) })
+            main.beginLoadFromCache.connect(beginLoadFromCache)
+            main.endLoadFromCache.connect(endLoadFromCache)
         }
 
-        function updateCurrentTime() {
+        function beginLoadFromCache() {
+            nextDaysView.model = null
+        }
+
+        function endLoadFromCache() {
             now = timeUtils.dateNow(timezoneType, main.timezoneOffset)
+            nextDaysView.model = dailyWeatherModels.model
         }
     }
 
