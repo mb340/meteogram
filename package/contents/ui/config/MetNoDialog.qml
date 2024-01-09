@@ -65,49 +65,43 @@ Dialog {
         }
     }
 
-    // onActionChosen: {
-    //     if (action.button === Dialog.Ok) {
-    //         var reason=""
-    //         var reasoncount=0;
-    //         var latValid = newMetnoCityLatitudeField.acceptableInput
-    //         var longValid = newMetnoCityLongitudeField.acceptableInput
-    //         var altValid = newMetnoCityAltitudeField.acceptableInput
+    function validateFields() {
+        var reason=""
+        var reasoncount=0;
+        var latValid = newMetnoCityLatitudeField.acceptableInput
+        var longValid = newMetnoCityLongitudeField.acceptableInput
+        var altValid = newMetnoCityAltitudeField.acceptableInput
 
-    //         action.accepted = false
 
-    //         if (!(latValid)) {
-    //             reason+=i18n("The Latitude is not valid.")+"\n"
-    //             reason+=i18n("The Latitude is not between -90 and 90.")+"\n"
-    //             reasoncount++
-    //         }
+        if (!(latValid)) {
+            reason+=i18n("The Latitude is not valid.")+"\n"
+            reason+=i18n("The Latitude is not between -90 and 90.")+"\n"
+            reasoncount++
+        }
 
-    //         if (!(longValid)) {
-    //             reason+=i18n("The Longitude is not valid.")+"\n"
-    //             reason+=i18n("The Longitude is not between -180 and 180.")+"\n"
-    //             reasoncount++
-    //         }
+        if (!(longValid)) {
+            reason+=i18n("The Longitude is not valid.")+"\n"
+            reason+=i18n("The Longitude is not between -180 and 180.")+"\n"
+            reasoncount++
+        }
 
-    //         if (hasAltitude && !altValid) {
-    //             reason+=i18n("The Altitude is not valid.")+"\n"
-    //             reason+=i18n("The Altitude is not between -999 and 5000.")+"\n"
-    //             reasoncount++
-    //         }
+        if (hasAltitude && !altValid) {
+            reason+=i18n("The Altitude is not valid.")+"\n"
+            reason+=i18n("The Altitude is not between -999 and 5000.")+"\n"
+            reasoncount++
+        }
 
-    //         if (newMetnoCityAlias.text.length === 0) {
-    //             reason+=i18n("The Place Name is empty.")+"\n"
-    //             reasoncount++
-    //         }
+        if (newMetnoCityAlias.text.length === 0) {
+            reason+=i18n("The Place Name is empty.")+"\n"
+            reasoncount++
+        }
 
-    //         if (reasoncount === 0 ) {
-    //             action.accepted = true
-    //         } else {
-    //             action.accepted = false
-    //             invalidData.text=i18np("There is an error!", "There are %1 errors!",reasoncount)
-    //             invalidData.informativeText=reason
-    //             invalidData.open()
-    //         }
-    //     }
-    // }
+        if (reasoncount > 0) {
+            standardButtons = Dialog.Cancel
+        } else {
+            standardButtons = Dialog.Ok | Dialog.Cancel
+        }
+    }
 
     onAccepted: {
         var data = {
@@ -131,16 +125,6 @@ Dialog {
             placesModel.set(editEntryNumber, data)
         }
         _placesModelChanged()
-        close()
-    }
-
-    Dialog {
-        id: invalidData
-        title: i18n("Error!")
-        // text: ""
-        // icon: StandardIcon.Critical
-        // informativeText: ""
-        visible: false
     }
 
     Dialog {
@@ -197,6 +181,7 @@ Dialog {
             Layout.fillWidth: true
             validator: DoubleValidator { bottom: -90; top: 90; decimals: 5 }
             color: acceptableInput ? newMetnoCityLatitudeLabel.color : "red"
+            onAcceptableInputChanged: validateFields()
         }
 
         Item {
@@ -213,6 +198,7 @@ Dialog {
             Layout.fillWidth: true
             validator: DoubleValidator { bottom: -180; top: 180; decimals: 5 }
             color: acceptableInput ? newMetnoCityLongitudeLabel.color : "red"
+            onAcceptableInputChanged: validateFields()
         }
 
         Item {
@@ -231,6 +217,7 @@ Dialog {
             validator: IntValidator { bottom: -999; top: 5000 }
             color: acceptableInput ? newMetnoCityAltitudeLabel.color : "red"
             enabled: hasAltitude
+            onAcceptableInputChanged: validateFields()
         }
 
         Label {
@@ -262,6 +249,7 @@ Dialog {
             Layout.fillWidth: true
             validator: RegularExpressionValidator { regularExpression: /\S.*/  }
             color: acceptableInput ? newMetnoCityAliasLabel.color : "red"
+            onAcceptableInputChanged: validateFields()
         }
         Button {
             text: i18n("Search")
