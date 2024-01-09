@@ -77,9 +77,9 @@ ManagedListModel {
     function createItem() {
         return {
             foobar: "foobar",
-            date: NaN,
+            date: new Date(0),
 
-            iconNam: "",
+            iconName: "",
 
             temperatureMin: NaN,
             temperatureMax: NaN,

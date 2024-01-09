@@ -22,7 +22,7 @@ ManagedListModel {
     function createItem() {
         let item = get(index)
         if (item) {
-            item.from = null
+            item.from = new Date(0)
             item.temperature = NaN
             item.feelsLike = NaN
             item.dewPoint = NaN
@@ -40,7 +40,7 @@ ManagedListModel {
         }
 
         return {
-            from: null,
+            from: new Date(0),
             temperature: NaN,
             feelsLike: NaN,
             dewPoint: NaN,
