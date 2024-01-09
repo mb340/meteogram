@@ -228,14 +228,14 @@ Dialog {
             model: timezoneDataModel
             currentIndex: -1
             textRole: "displayName"
-            Layout.columnSpan: 2
+            Layout.columnSpan: 4
             Layout.fillWidth: true
             onModelChanged: {
                 currentIndex = -1
             }
         }
         Item {
-            Layout.columnSpan: 5
+            Layout.columnSpan: 3
             Layout.fillWidth: true
             Layout.preferredHeight: tzComboBox.height
         }
