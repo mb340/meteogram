@@ -34,9 +34,7 @@ Item {
     property bool updateSemaphore: false
 
     property string cacheKey: ""
-    property var successCallback: function() {
-
-    }
+    property var successCallback: null
 
     property var modelLongTerm: xmlModelLongTerm
     property var modelHourByHour: xmlModelHourByHour
@@ -401,13 +399,15 @@ Item {
         xmlModelLongTerm.source = './owm/zero_daily.xml'
         xmlModelHourByHour.source = 'owm/zero_forecast.xml'
 
-        let data = {
-            modelCurrent: xmlModelCurrent.toArray(),
-            modelHourByHour: xmlModelHourByHour.toArray(),
-            modelLongTerm: xmlModelLongTerm.toArray()
+        if (owm.successCallback) {
+            let data = {
+                modelCurrent: xmlModelCurrent.toArray(),
+                modelHourByHour: xmlModelHourByHour.toArray(),
+                modelLongTerm: xmlModelLongTerm.toArray()
+            }
+            let jsonStr = JSON.stringify(data)
+            owm.successCallback(jsonStr, owm.cacheKey)
         }
-        let jsonStr = JSON.stringify(data)
-        owm.successCallback(jsonStr, owm.cacheKey)
     }
 
     function createTodayTimeObj() {
