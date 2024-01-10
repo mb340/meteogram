@@ -465,7 +465,7 @@ Item {
                 var [x0, x1] = meteogramCanvas.getItemIntervalX(idx)
                 var rectWidth = x1 - x0
 
-                var globalCoord = mapToItem(main, 0, 0)
+                var globalCoord = mapToItem(fullRepresentation, 0, 0)
                 meteogramInfo.x = globalCoord.x + mouse.x
                 meteogramInfo.y = globalCoord.y + mouse.y
 
