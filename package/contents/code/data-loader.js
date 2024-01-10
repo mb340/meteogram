@@ -31,52 +31,6 @@ function generateCacheKey(placeObject) {
     return 'cache_' + Qt.md5(placeIdentifier)
 }
 
-function isXmlStringValid(xmlString) {
-    return xmlString.indexOf('<?xml ') === 0 || xmlString.indexOf('<weatherdata>') === 0 || xmlString.indexOf('<current>') === 0
-}
-
-function fetchXmlFromInternet(getUrl, successCallback, failureCallback, cacheKey) {
-    var xhr = new XMLHttpRequest()
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState !== XMLHttpRequest.DONE) {
-            dbgprint(xhr.readyState)
-            return
-        }
-
-        if (xhr.status !== 200 && xhr.status !== 203) {
-            print('ERROR - url: ' + getUrl)
-            print('ERROR - status: ' + xhr.status)
-            print('ERROR - responseText: ' + xhr.responseText)
-            failureCallback(cacheKey)
-            return
-        }
-
-        // success
-        dbgprint('successfully loaded from the internet')
-        dbgprint('successfully of url-call: ' + getUrl)
-//        dbgprint('responseText: ' + xhr.responseText)
-
-        var xmlString = xhr.responseText
-        if (!isXmlStringValid(xmlString)) {
-            print('incoming xmlString is not valid: ' + xmlString)
-            return
-        }
-        dbgprint('incoming text seems to be valid')
-
-        successCallback(xmlString)
-    }
-    dbgprint('GET url opening: ' + getUrl)
-    xhr.open('GET', getUrl)
-
-    xhr.setRequestHeader("User-Agent", USER_AGENT)
-
-    dbgprint('GET url sending: ' + getUrl)
-    xhr.send()
-
-    dbgprint('GET called for url: ' + getUrl)
-    return xhr
-}
-
 function fetchJsonFromInternet(getUrl, successCallback, failureCallback, cacheKey) {
     var xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function () {
