@@ -256,27 +256,17 @@ Item {
         return timeUtils.convertDate(d, timezoneType, tzOffset)
     }
 
-    onXmlModelCurrentStatusChanged: {
-        if (xmlModelCurrent.status != XmlListModel.Ready) {
-            return
-        }
-        dbgprint('xmlModelCurrent ready')
-        xmlModelReady()
-    }
+    onXmlModelCurrentStatusChanged: handleStatusChanged(xmlModelCurrent)
+    onXmlModelHourByHourStatusChanged: handleStatusChanged(xmlModelHourByHour)
+    onXmlModelLongTermStatusChanged: handleStatusChanged(xmlModelLongTerm)
 
-    onXmlModelHourByHourStatusChanged: {
-        if (xmlModelHourByHour.status != XmlListModel.Ready) {
+    function handleStatusChanged(xmlModel) {
+        if (!updateSemaphore) {
             return
         }
-        dbgprint('xmlModelHourByHour ready')
-        xmlModelReady()
-    }
-
-    onXmlModelLongTermStatusChanged: {
-        if (xmlModelLongTerm.status != XmlListModel.Ready) {
+        if (xmlModel.status != XmlListModel.Ready) {
             return
         }
-        dbgprint('xmlModelLongTerm ready')
         xmlModelReady()
     }
 
