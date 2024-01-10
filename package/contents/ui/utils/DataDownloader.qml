@@ -92,7 +92,7 @@ Item {
         reloadTimer.resetState(cacheKey)
     }
 
-    function reloadDataFailureCallback(cacheKey) {
+    function reloadDataFailureCallback(cacheKey, err) {
         dbgprint("Failed to load data. cacheKey = " + cacheKey)
 
         stopAbortTimer(cacheKey)
@@ -107,6 +107,10 @@ Item {
             }
         })
         clearLoadingXhrs(cacheKey, true)
+
+        if (errorStatus === null && err != undefined) {
+            errorStatus = err
+        }
 
         if (errorStatus !== null) {
             var ts = Date.now()
