@@ -35,6 +35,7 @@ Item {
 
     property string cacheKey: ""
     property var successCallback: null
+    property var failureCallback: null
 
     property var modelLongTerm: xmlModelLongTerm
     property var modelHourByHour: xmlModelHourByHour
@@ -353,7 +354,12 @@ Item {
         if (!updateSemaphore) {
             return
         }
-        if (xmlModel.status != XmlListModel.Ready) {
+        if (xmlModel.status === XmlListModel.Error) {
+            print("XML model load error:", xmlModel.errorString())
+            updateSemaphore = false
+            if (owm.failureCallback) {
+                owm.failureCallback(owm.cacheKey, 400)
+            }
             return
         }
         xmlModelReady()
@@ -708,6 +714,7 @@ Item {
         var versionParam = '&v=' + new Date().getTime()
 
         owm.successCallback = successCallback
+        owm.failureCallback = failureCallback
         owm.cacheKey = cacheKey
 
         modelCurrent = xmlModelCurrent
