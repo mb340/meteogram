@@ -10,13 +10,12 @@ XmlListModel {
         return o
     }
 
-    function serialize() {
+    function toArray() {
         var arr = []
         for (var i = 0; i < count; i++) {
             let item = get(i)
             arr.push(item)
         }
-
-        return JSON.stringify(arr)
+        return arr
     }
 }

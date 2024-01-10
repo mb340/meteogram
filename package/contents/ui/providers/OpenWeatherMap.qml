@@ -412,9 +412,9 @@ Item {
         xmlModelHourByHour.source = 'owm/zero_forecast.xml'
 
         let data = {
-            modelCurrent: xmlModelCurrent.serialize(),
-            modelHourByHour: xmlModelHourByHour.serialize(),
-            modelLongTerm: xmlModelLongTerm.serialize()
+            modelCurrent: xmlModelCurrent.toArray(),
+            modelHourByHour: xmlModelHourByHour.toArray(),
+            modelLongTerm: xmlModelLongTerm.toArray()
         }
         let jsonStr = JSON.stringify(data)
         owm.successCallback(jsonStr, owm.cacheKey)
@@ -761,9 +761,9 @@ Item {
             return false
         }
 
-        cacheModelCurrent.data = JSON.parse(cacheContent.modelCurrent)
-        cacheModelLongTerm.data = JSON.parse(cacheContent.modelLongTerm)
-        cacheModelHourByHour.data = JSON.parse(cacheContent.modelHourByHour)
+        cacheModelCurrent.data = cacheContent.modelCurrent
+        cacheModelLongTerm.data = cacheContent.modelLongTerm
+        cacheModelHourByHour.data = cacheContent.modelHourByHour
 
         modelCurrent = cacheModelCurrent
         modelLongTerm = cacheModelLongTerm
