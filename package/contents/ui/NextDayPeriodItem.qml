@@ -24,17 +24,24 @@ import "../code/icons.js" as IconTools
 RowLayout {
     id: root
 
-    property double temperature
-    property double temperatureLow
-    property double temperatureHigh
-    property string iconName
-    property bool hidden
-    property bool past
-    property int partOfDay
-    property double pixelFontSize
+    required property int index
+
+    required property var date
+    required property double temperature
+    required property double temperatureLow
+    required property double temperatureHigh
+    required property string iconName
+
+    required property var now
+    property bool past: date < now
+
+    property int partOfDay: (index == 0 || index == 3) ? 1 : 0
 
     property bool hasMinMax: isFinite(temperatureLow) && isFinite(temperatureHigh)
 
+    property bool hidden: !isFinite(temperature)
+
+    property double pixelFontSize
     property int iconSetType: (plasmoid && plasmoid.configuration && plasmoid.configuration.iconSetType) ?
                                plasmoid.configuration.iconSetType : 0
 
