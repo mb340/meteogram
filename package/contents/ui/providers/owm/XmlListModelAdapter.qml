@@ -1,6 +1,9 @@
 import QtQml.XmlListModel
 
 XmlListModel {
+    id: xmlListModel
+
+    required property var handleStatusChanged
 
     function get(i) {
         var o = {}
@@ -17,5 +20,9 @@ XmlListModel {
             arr.push(item)
         }
         return arr
+    }
+
+    onStatusChanged: {
+        handleStatusChanged(xmlListModel)
     }
 }

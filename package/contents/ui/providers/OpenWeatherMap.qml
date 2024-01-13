@@ -37,9 +37,9 @@ Item {
     property var successCallback: null
     property var failureCallback: null
 
-    property var modelLongTerm: xmlModelLongTerm
-    property var modelHourByHour: xmlModelHourByHour
-    property var modelCurrent: xmlModelCurrent
+    property var modelLongTerm: null
+    property var modelHourByHour: null
+    property var modelCurrent: null
 
     CacheListModel {
         id: cacheModelLongTerm
@@ -54,301 +54,43 @@ Item {
     }
 
 
-    XmlListModelAdapter {
-        id: xmlModelLongTerm
-        query: '/weatherdata/forecast/time'
-
-        XmlListModelRole {
-            name: 'date'
-            attributeName: 'day'
-        }
-        XmlListModelRole {
-            name: 'temperatureMin'
-            // query: 'temperature/@min/number()'
-            elementName: 'temperature'
-            attributeName: 'min'
-        }
-        XmlListModelRole {
-            name: 'temperatureMax'
-            // query: 'temperature/@max/number()'
-            elementName: 'temperature'
-            attributeName: 'max'
-        }
-        XmlListModelRole {
-            name: 'temperatureMorning'
-            // query: 'temperature/@morn/number()'
-            elementName: 'temperature'
-            attributeName: 'morn'
-        }
-        XmlListModelRole {
-            name: 'temperatureDay'
-            // query: 'temperature/@day/number()'
-            elementName: 'temperature'
-            attributeName: 'day'
-        }
-        XmlListModelRole {
-            name: 'temperatureEvening'
-            // query: 'temperature/@eve/number()'
-            elementName: 'temperature'
-            attributeName: 'eve'
-        }
-        XmlListModelRole {
-            name: 'temperatureNight'
-            // query: 'temperature/@night/number()'
-            elementName: 'temperature'
-            attributeName: 'night'
-        }
-        XmlListModelRole {
-            name: 'feelsLikeDay'
-            // query: 'feels_like/@day/number()'
-            elementName: 'feels_like'
-            attributeName: 'day'
-        }
-        XmlListModelRole {
-            name: 'feelsLikeEvening'
-            // query: 'feels_like/@eve/number()'
-            elementName: 'feels_like'
-            attributeName: 'eve'
-        }
-        XmlListModelRole {
-            name: 'feelsLikeNight'
-            // query: 'feels_like/@night/number()'
-            elementName: 'feels_like'
-            attributeName: 'night'
-        }
-        XmlListModelRole {
-            name: 'feelsLikeMorn'
-            // query: 'feels_like/@morn/number()'
-            elementName: 'feels_like'
-            attributeName: 'morn'
-        }
-        XmlListModelRole {
-            name: 'iconName'
-            // query: 'symbol/@number/string()'
-            elementName: 'symbol'
-            attributeName: 'number'
-        }
-        XmlListModelRole {
-            name: 'windDirection'
-            // query: 'windDirection/@deg/number()'
-            elementName: 'windDirection'
-            attributeName: 'deg'
-        }
-        XmlListModelRole {
-            name: 'windSpeedMps'
-            // query: 'windSpeed/@mps/number()'
-            elementName: 'windSpeed'
-            attributeName: 'mps'
-        }
-        XmlListModelRole {
-            name: 'windGust'
-            // query: 'windGust/@gust/number()'
-            elementName: 'windGust'
-            attributeName: 'gust'
-        }
-        XmlListModelRole {
-            name: 'pressureHpa'
-            // query: 'pressure/@value/number()'
-            elementName: 'pressure'
-            attributeName: 'value'
-        }
-        XmlListModelRole {
-            name: 'humidity'
-            // query: 'humidity/@value/number()'
-            elementName: 'humidity'
-            attributeName: 'value'
-        }
-        XmlListModelRole {
-            name: 'clouds'
-            // query: 'clouds/@all/number()'
-            elementName: 'clouds'
-            attributeName: 'all'
-        }
-        XmlListModelRole {
-            name: 'precipitationProb'
-            // query: 'precipitation/@probability/number()'
-            elementName: 'precipitation'
-            attributeName: 'probability'
-        }
-        XmlListModelRole {
-            name: 'precipitationValue'
-            // query: 'precipitation/@value/number()'
-            elementName: 'precipitation'
-            attributeName: 'value'
-        }
-        XmlListModelRole {
-            name: 'precipitationType'
-            // query: 'precipitation/@type/string()'
-            elementName: 'precipitation'
-            attributeName: 'type'
+    Component {
+        id: xmlModelLongTermComponent
+        XmlModelLongTerm {
         }
     }
 
-    XmlListModelAdapter {
-        id: xmlModelHourByHour
-        query: '/weatherdata/forecast/time'
-
-        XmlListModelRole {
-            name: 'from'
-            // query: '@from/string()'
-            attributeName: 'from'
-        }
-        XmlListModelRole {
-            name: 'to'
-            // query: '@to/string()'
-            attributeName: 'to'
-        }
-        XmlListModelRole {
-            name: 'temperature'
-            // query: 'temperature/@value/number()'
-            elementName: 'temperature'
-            attributeName: 'value'
-        }
-        XmlListModelRole {
-            name: 'feelsLike'
-            // query: 'feels_like/@value/number()'
-            elementName: 'feels_like'
-            attributeName: 'value'
-        }
-        XmlListModelRole {
-            name: 'iconName'
-            // query: 'symbol/@number/string()'
-            elementName: 'symbol'
-            attributeName: 'number'
-        }
-        XmlListModelRole {
-            name: 'windDirection'
-            // query: 'windDirection/@deg/number()'
-            elementName: 'windDirection'
-            attributeName: 'deg'
-        }
-        XmlListModelRole {
-            name: 'windSpeedMps'
-            // query: 'windSpeed/@mps/number()'
-            elementName: 'windSpeed'
-            attributeName: 'mps'
-        }
-        XmlListModelRole {
-            name: 'windGust'
-            // query: 'windGust/@gust/number()'
-            elementName: 'windGust'
-            attributeName: 'gust'
-        }
-        XmlListModelRole {
-            name: 'pressureHpa'
-            // query: 'pressure/@value/number()'
-            elementName: 'pressure'
-            attributeName: 'value'
-        }
-        XmlListModelRole {
-            name: 'precipitationProb'
-            // query: 'precipitation/@probability/number()'
-            elementName: 'precipitation'
-            attributeName: 'probability'
-        }
-        XmlListModelRole {
-            name: 'precipitationValue'
-            // query: 'precipitation/@value/number()'
-            elementName: 'precipitation'
-            attributeName: 'value'
-        }
-        XmlListModelRole {
-            name: 'humidity'
-            // query: 'humidity/@value/number()'
-            elementName: 'humidity'
-            attributeName: 'value'
-        }
-        XmlListModelRole {
-            name: 'clouds'
-            // query: 'clouds/@all/number()'
-            elementName: 'clouds'
-            attributeName: 'all'
+    Component {
+        id: xmlModelHourByHourComponent
+        XmlModelHourByHour {
         }
     }
 
-    XmlListModelAdapter {
-        id: xmlModelCurrent
-        query: '/current'
-
-        XmlListModelRole {
-            name: 'timezone'
-            elementName: 'city/timezone'
-        }
-
-        XmlListModelRole {
-            name: 'temperature'
-            // query: 'temperature/@value/number()'
-            elementName: 'temperature'
-            attributeName: 'value'
-        }
-        XmlListModelRole {
-            name: 'iconName'
-            // query: 'weather/@number/string()'
-            elementName: 'weather'
-            attributeName: 'number'
-        }
-        XmlListModelRole {
-            name: 'humidity'
-            // query: 'humidity/@value/number()'
-            elementName: 'humidity'
-            attributeName: 'value'
-        }
-        XmlListModelRole {
-            name: 'pressureHpa'
-            // query: 'pressure/@value/number()'
-            elementName: 'pressure'
-            attributeName: 'value'
-        }
-        XmlListModelRole {
-            name: 'windSpeedMps'
-            // query: 'wind/speed/@value/number()'
-            elementName: 'wind/speed'
-            attributeName: 'value'
-        }
-        XmlListModelRole {
-            name: 'windDirection'
-            // query: 'wind/direction/@value/number()'
-            elementName: 'wind/direction'
-            attributeName: 'value'
-        }
-        XmlListModelRole {
-            name: 'cloudiness'
-            // query: 'clouds/@value/number()'
-            elementName: 'clouds'
-            attributeName: 'value'
-        }
-        XmlListModelRole {
-            name: 'updated'
-            // query: 'lastupdate/@value/string()'
-            elementName: 'lastupdate'
-            attributeName: 'value'
-        }
-        XmlListModelRole {
-            name: 'rise'
-            // query: 'city/sun/@rise/string()'
-            elementName: 'city/sun'
-            attributeName: 'rise'
-        }
-        XmlListModelRole {
-            name: 'set'
-            // query: 'city/sun/@set/string()'
-            elementName: 'city/sun'
-            attributeName: 'set'
+    Component {
+        id: xmlModelCurrentComponent
+        XmlModelCurrent {
         }
     }
-
-    property alias xmlModelLongTermStatus: xmlModelLongTerm.status
-    property alias xmlModelCurrentStatus: xmlModelCurrent.status
-    property alias xmlModelHourByHourStatus: xmlModelHourByHour.status
 
     function parseDate(dateString) {
         let d = new Date(dateString + '.000Z')
         return timeUtils.convertDate(d, timezoneType, tzOffset)
     }
 
-    onXmlModelCurrentStatusChanged: handleStatusChanged(xmlModelCurrent)
-    onXmlModelHourByHourStatusChanged: handleStatusChanged(xmlModelHourByHour)
-    onXmlModelLongTermStatusChanged: handleStatusChanged(xmlModelLongTerm)
+    function cleanUpXmlModels() {
+        if (modelCurrent && modelCurrent.destroy) {
+            modelCurrent.destroy()
+            modelCurrent = null
+        }
+        if (modelLongTerm && modelLongTerm.destroy) {
+            modelLongTerm.destroy()
+            modelLongTerm = null
+        }
+        if (modelHourByHour && modelHourByHour.destroy) {
+            modelHourByHour.destroy()
+            modelHourByHour = null
+        }
+    }
 
     function handleStatusChanged(xmlModel) {
         if (!updateSemaphore) {
@@ -360,6 +102,7 @@ Item {
             if (owm.failureCallback) {
                 owm.failureCallback(owm.cacheKey, 400)
             }
+            cleanUpXmlModels()
             return
         }
         xmlModelReady()
@@ -386,13 +129,13 @@ Item {
         if (!updateSemaphore) {
             return
         }
-        if (xmlModelCurrent.status != XmlListModel.Ready) {
+        if (modelCurrent.status != XmlListModel.Ready) {
             return
         }
-        if (xmlModelHourByHour.status != XmlListModel.Ready) {
+        if (modelHourByHour.status != XmlListModel.Ready) {
             return
         }
-        if (xmlModelLongTerm.status != XmlListModel.Ready) {
+        if (modelLongTerm.status != XmlListModel.Ready) {
             return
         }
         dbgprint('all xml models ready')
@@ -401,19 +144,18 @@ Item {
 
         applyModelData()
 
-        xmlModelCurrent.source = './owm/zero_weather.xml'
-        xmlModelLongTerm.source = './owm/zero_daily.xml'
-        xmlModelHourByHour.source = 'owm/zero_forecast.xml'
 
         if (owm.successCallback) {
             let data = {
-                modelCurrent: xmlModelCurrent.toArray(),
-                modelHourByHour: xmlModelHourByHour.toArray(),
-                modelLongTerm: xmlModelLongTerm.toArray()
+                modelCurrent: modelCurrent.toArray(),
+                modelHourByHour: modelHourByHour.toArray(),
+                modelLongTerm: modelLongTerm.toArray()
             }
             let jsonStr = JSON.stringify(data)
             owm.successCallback(jsonStr, owm.cacheKey)
         }
+
+        cleanUpXmlModels()
     }
 
     function createTodayTimeObj() {
@@ -717,9 +459,13 @@ Item {
         owm.failureCallback = failureCallback
         owm.cacheKey = cacheKey
 
-        modelCurrent = xmlModelCurrent
-        modelLongTerm = xmlModelLongTerm
-        modelHourByHour = xmlModelHourByHour
+
+        var props = {
+            handleStatusChanged: owm.handleStatusChanged
+        }
+        modelCurrent = xmlModelCurrentComponent.createObject(owm, props)
+        modelHourByHour = xmlModelHourByHourComponent.createObject(owm, props)
+        modelLongTerm = xmlModelLongTermComponent.createObject(owm, props)
 
         updateSemaphore = true
 
@@ -743,9 +489,9 @@ Item {
                             placeIdentifier +
                             appIdAndModeSuffix +
                             versionParam
-        xmlModelHourByHour.source = urlHourByHour
-        xmlModelLongTerm.source = urlLongTerm
-        xmlModelCurrent.source = urlCurrent
+        modelHourByHour.source = urlHourByHour
+        modelLongTerm.source = urlLongTerm
+        modelCurrent.source = urlCurrent
 
         return []
     }
