@@ -112,6 +112,7 @@ Item {
         if (modelCurrent.count > 0) {
             let item = modelCurrent.get(0)
             tzOffset = item.timezone * 1000
+            main.timezoneOffset = tzOffset
         } else {
             tzOffset = 0
             print("warning: OpenWeatherMap timezone offset data not available")
