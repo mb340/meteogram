@@ -23,6 +23,7 @@ import org.kde.kirigami as Kirigami
 
 
 Item {
+    id: root
 
     property double periodFontSize: Kirigami.Theme.defaultFont.pixelSize
     property color lineColor: Kirigami.Theme.textColor
@@ -32,7 +33,11 @@ Item {
 
     property bool mainInTray: main.inTray
 
-    property var now: undefined
+    required property var now
+
+    required property int index
+    required property var date
+    required property var models
 
 
     Label {
@@ -81,19 +86,14 @@ Item {
 
 
         Repeater {
-            model: models ? models : []
+            model: models
 
             NextDayPeriodItem {
                 width: parent.width / parent.columns
                 height: rowHeight
 
-                temperature: model.temperature
-                temperatureLow: model.temperatureLow
-                temperatureHigh: model.temperatureHigh
-                iconName: model.iconName
-                hidden: !isFinite(model.temperature)
-                past: (now === undefined) ? false : (model.date < now)
-                partOfDay: (index == 0 || index == 3) ? 1 : 0
+                now: root.now
+
                 pixelFontSize: periodFontSize
             }
         }
