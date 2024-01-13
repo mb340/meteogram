@@ -25,15 +25,15 @@ RowLayout {
     id: root
 
     property double temperature
-    property double temperature_min: NaN
-    property double temperature_max: NaN
+    property double temperatureLow
+    property double temperatureHigh
     property string iconName
     property bool hidden
     property bool past
     property int partOfDay
     property double pixelFontSize
 
-    property bool hasMinMax: isFinite(temperature_min) && isFinite(temperature_max)
+    property bool hasMinMax: isFinite(temperatureLow) && isFinite(temperatureHigh)
 
     property int iconSetType: (plasmoid && plasmoid.configuration && plasmoid.configuration.iconSetType) ?
                                plasmoid.configuration.iconSetType : 0
