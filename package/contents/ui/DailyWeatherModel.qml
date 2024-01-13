@@ -40,6 +40,9 @@ ManagedListModel {
 
     function createInstantItem() {
         return {
+
+            date: new Date(0),
+
             // 0: Day
             // 1: Night
             partOfDay: 0,
