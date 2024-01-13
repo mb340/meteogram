@@ -88,8 +88,8 @@ Item {
                 height: rowHeight
 
                 temperature: model.temperature
-                temperature_min: model.temperatureLow
-                temperature_max: model.temperatureHigh
+                temperatureLow: model.temperatureLow
+                temperatureHigh: model.temperatureHigh
                 iconName: model.iconName
                 hidden: !isFinite(model.temperature)
                 past: (now === undefined) ? false : (model.date < now)
