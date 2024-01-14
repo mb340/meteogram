@@ -160,8 +160,8 @@ Item {
             PropertyChanges {
                 target: sizerLabel
 
-                width: inTray ? temperatureIcon.parent.width : Math.min(temperatureIcon.parent.width, temperatureIcon.parent.height)
-                height: inTray ? temperatureIcon.parent.height : Math.min(temperatureIcon.parent.width, temperatureIcon.parent.height)
+                width: Math.min(temperatureIcon.parent.width, temperatureIcon.parent.height)
+                height: Math.min(temperatureIcon.parent.width, temperatureIcon.parent.height)
 
                 fontSizeMode: Text.Fit
                 font.pixelSize: 1024

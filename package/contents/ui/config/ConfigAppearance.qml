@@ -34,7 +34,6 @@ KCM.SimpleKCM {
     property alias cfg_temperatureIconFixedSize: temperatureIconFixedSize.value
 
     property alias cfg_layoutSpacing: layoutSpacing.value
-    property alias cfg_inTrayActiveTimeoutSec: inTrayActiveTimeoutSec.value
     property int cfg_iconSetType: plasmoid.configuration.iconSetType
 
     property alias cfg_compactItemOrder: compactItemOrder.order
@@ -166,14 +165,6 @@ KCM.SimpleKCM {
                     }
                     cfg_layoutType = currentIndex
                 }
-            }
-
-            Label {
-                text: i18n("NOTE: Setting layout type for in-tray plasmoid has no effect.")
-                font.pixelSize: PlasmaCore.Theme.defaultFont.pixelSize - 2
-                Layout.rowSpan: 1
-                Layout.preferredWidth: 250
-                wrapMode: Text.WordWrap
             }
 
             component SizeModeComboBox: ComboBox {
@@ -571,51 +562,6 @@ KCM.SimpleKCM {
             Item {
                 width: 2
                 height: 2
-                Layout.columnSpan: 3
-            }
-
-            Label {
-                text: i18n("In-Tray Settings")
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-                font.bold: true
-                Layout.columnSpan: 3
-            }
-
-            Label {
-                text: i18n("Active timeout") + ":"
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-            }
-
-            SpinBox {
-                id: inTrayActiveTimeoutSec
-                property int decimals: 0
-                stepSize: 10
-                from: 10
-                to: 8000
-                textFromValue: function(value, locale) {
-                    var num = Number(value).toLocaleString(locale, 'f', inTrayActiveTimeoutSec.decimals)
-                    var suffix = i18nc("Abbreviation for seconds", "sec")
-                    return qsTr("%1 %2").arg(num).arg(suffix)
-                }
-                valueFromText: function(text) {
-                    let data = text.split(" ")
-                    if (data.length < 1) {
-                        return 3600
-                    }
-                    return Number.fromLocaleString(data[0])
-                }
-            }
-
-            Label {
-                text: i18n("NOTE: After this timeout widget will be hidden in system tray until refreshed. You can always set the widget to be always \"Shown\" in system tray \"Entries\" settings.")
-                font.pixelSize: PlasmaCore.Theme.defaultFont.pixelSize - 2
-                Layout.rowSpan: 3
-                Layout.preferredWidth: 250
-                wrapMode: Text.WordWrap
-            }
-            Item {
-                width: 2
-                height: 20
                 Layout.columnSpan: 3
             }
         }

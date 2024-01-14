@@ -31,8 +31,6 @@ Item {
     property double titleHeight: NaN
     property double rowHeight: NaN
 
-    property bool mainInTray: main.inTray
-
     required property var now
 
     required property int index
@@ -44,7 +42,7 @@ Item {
         id: dayTitleText
         text: date.toLocaleDateString(Qt.locale(), 'ddd d MMM')
         anchors.top: parent.top
-        anchors.topMargin: mainInTray ? dayTitleLine.height : 0
+        anchors.topMargin: 0
         anchors.bottomMargin: 0
         height: !isNaN(titleHeight) ? titleHeight : null
         verticalAlignment: Text.AlignBottom
@@ -54,7 +52,7 @@ Item {
         id: dayTitleLine
         width: parent.width
         height: 1 * 1
-        anchors.top: mainInTray ? dayTitleText.top : dayTitleText.bottom
+        anchors.top: dayTitleText.bottom
         anchors.topMargin: 0
         anchors.bottomMargin: 0
 
@@ -80,7 +78,7 @@ Item {
 
         spacing: 0
 
-        columns: mainInTray ? 4 : 1
+        columns: 1
 
         height: parent.height - (dayTitleText.height + dayTitleLine.height)
 
@@ -102,12 +100,9 @@ Item {
     MouseArea {
         anchors.fill: parent
 
-        hoverEnabled: !mainInTray
+        hoverEnabled: true
 
         onEntered: {
-            if (mainInTray) {
-                return
-            }
             if (currentProvider.providerId === "metno" || currentProvider.providerId === "openMeteo") {
                 metnoDailyWeatherInfo.model = dailyWeatherModels.get(index)
             } else if (currentProvider.providerId === "owm") {
@@ -116,9 +111,6 @@ Item {
         }
 
         onExited: {
-            if (mainInTray) {
-                return
-            }
             metnoDailyWeatherInfo.model = null
             owmDailyWeatherInfo.model = null
         }

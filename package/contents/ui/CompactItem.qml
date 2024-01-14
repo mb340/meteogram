@@ -78,9 +78,9 @@ Grid {
     property bool isVertical: layoutType === 1
     property bool isHorizontal: layoutType === 0
 
-    property bool isHorizontalState: !inTray && !isCompact && isHorizontal
-    property bool isVerticalState: !inTray && !isCompact && isVertical
-    property bool isCompactState: (inTray || isCompact)
+    property bool isHorizontalState: !isCompact && isHorizontal
+    property bool isVerticalState: !isCompact && isVertical
+    property bool isCompactState: isCompact
 
     property double sizerWidth
     property double sizerHeight
@@ -451,7 +451,7 @@ Grid {
             PropertyChanges {
                 target: temperatureTextContainer
 
-                width: Math.min(parent.width, parent.height) * (main.inTray ? 0.75 : 0.50)
+                width: Math.min(parent.width, parent.height) * 0.50
                 height: Math.min(parent.width, parent.height)
 
                 horizontalAlignment: Text.AlignRight

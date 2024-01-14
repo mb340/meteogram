@@ -64,10 +64,7 @@ PlasmoidItem {
 
     property string tooltipSubText: ''
 
-    property bool inTray: false
     property string plasmoidCacheId: Plasmoid.id
-
-    property int inTrayActiveTimeoutSec: plasmoid.configuration.inTrayActiveTimeoutSec
 
     property bool textColorLight: ((Kirigami.Theme.textColor.r + Kirigami.Theme.textColor.g + Kirigami.Theme.textColor.b) / 3) > 0.5
 
@@ -86,10 +83,8 @@ PlasmoidItem {
 
     anchors.fill: parent
 
-    // property Component crInTray: CompactRepresentationInTray { }
     property Component cr: CompactRepresentation { }
 
-    // property Component frInTray: FullRepresentationInTray { }
     property Component fr: FullRepresentation {
         Component.onCompleted: {
             main.fullRedraw.connect(this.meteogram.fullRedraw)
@@ -103,8 +98,6 @@ PlasmoidItem {
     fullRepresentation: fr
 
     property bool debugLogging: plasmoid.configuration.debugLogging
-    // compactRepresentation: CompactRepresentation { }
-    // fullRepresentation: FullRepresentation {}
 
 
     FontLoader {
@@ -242,17 +235,6 @@ PlasmoidItem {
                 default:
             }
             plasmoid.configuration.firstRun = false
-        }
-        inTray = (Plasmoid.containment !== null &&
-                    (Plasmoid.containment.pluginName === 'org.kde.plasma.private.systemtray' ||
-                     Plasmoid.containment.objectName === 'taskItemContainer'))
-        plasmoidCacheId = inTray ? Plasmoid.containment.id : Plasmoid.id
-        dbgprint('inTray=' + inTray + ', plasmoidCacheId=' + plasmoidCacheId)
-
-        // systray settings
-        if (inTray) {
-            Plasmoid.compactRepresentation = crInTray
-            Plasmoid.fullRepresentation = frInTray
         }
 
         var db = cacheDb.open()
@@ -413,15 +395,6 @@ PlasmoidItem {
         setTimezoneName()
         refreshTooltipSubText()
         fullRedraw()
-    }
-
-    function getPlasmoidStatus(lastReloaded, inTrayActiveTimeoutSec) {
-        var reloadedAgoMs = DataLoader.getReloadedAgoMs(lastReloaded)
-        if (reloadedAgoMs < inTrayActiveTimeoutSec * 1000) {
-            return PlasmaCore.Types.ActiveStatus
-        } else {
-            return PlasmaCore.Types.PassiveStatus
-        }
     }
 
     function refreshTooltipSubText() {
