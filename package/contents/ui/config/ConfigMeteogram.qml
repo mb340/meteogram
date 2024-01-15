@@ -77,43 +77,63 @@ KCM.SimpleKCM {
         id: colorsModel
     }
 
-    ColorDialog {
-        id: colorDialog
-        title: qsTr("Choose a %1 color").arg(colorLabel)
-        visible: false
-        // showAlphaChannel: true
-        options: ColorDialog.ShowAlphaChannel
-        property string colorVar: ""
-        property string colorLabel: ""
-        onAccepted: {
-            var isLight = !colorVar.endsWith("Dark")
-            var color = colorDialog.color
+    // Work around broken ColorDialog with Qt 6
+    // https://invent.kde.org/plasma/kdeplasma-addons/-/commit/797cef06882acdf4257d8c90b8768a74fdef0955
+    // https://bugs.kde.org/show_bug.cgi?id=476509
+    // https://bugreports.qt.io/browse/QTBUG-119055
+    Component {
+        id: colorDialogWindowComponent
+
+        Window {
+            id: colorDialogWindow
+            width: Kirigami.Units.gridUnit * 19
+            height: Kirigami.Units.gridUnit * 23
+            visible: true
+            title: qsTr("Choose a %1 color").arg(colorLabel)
+
+            required property string colorVar
+            required property string colorLabel
+
+            ColorDialog {
+                id: colorDialog
+                title: colorDialogWindow.title
+                visible: false
+                options: ColorDialog.ShowAlphaChannel
+                selectedColor: plasmoid.configuration[colorDialogWindow.colorVar]
+
+                onAccepted: {
+                    var isLight = !colorVar.endsWith("Dark")
+                    var color = colorDialog.selectedColor
 
 
-            var targetContrast =  4.5
-            if (colorVar.startsWith("temperature")) {
-                targetContrast =  isLight ? 4.5 : 3.0
-            } else if (colorVar.startsWith("cloudAreaColor2")) {
-                targetContrast = isLight ? 4.0 : 1.5
-            } else if (colorVar.startsWith("cloudAreaColor")) {
-                targetContrast = isLight ? 1.5 : 4.0
-            } else {
-                targetContrast =  isLight ? 3.0 : 4.5
+                    var targetContrast =  4.5
+                    if (colorVar.startsWith("temperature")) {
+                        targetContrast =  isLight ? 4.5 : 3.0
+                    } else if (colorVar.startsWith("cloudAreaColor2")) {
+                        targetContrast = isLight ? 4.0 : 1.5
+                    } else if (colorVar.startsWith("cloudAreaColor")) {
+                        targetContrast = isLight ? 1.5 : 4.0
+                    } else {
+                        targetContrast =  isLight ? 3.0 : 4.5
+                    }
+
+                    var bgColor = isLight ? cfg_backgroundColor : cfg_backgroundColorDark
+                    bgColor = ColorTools.strToColor(bgColor)
+                    var targetColor = ColorTools.getContrastingColor(color, bgColor, targetContrast)
+
+                    eval("cfg_" + colorVar + " = \"" + color + "\"")
+                    if (!colorVar.startsWith("background") && !ColorTools.equals(color, targetColor)) {
+                        setModelColor(colorVar, String(color), String(targetColor))
+                    }
+
+                    colorDialogWindow.destroy()
+                }
+                onRejected: {
+                    colorDialogWindow.destroy()
+                }
             }
-
-            var bgColor = isLight ? cfg_backgroundColor : cfg_backgroundColorDark
-            bgColor = ColorTools.strToColor(bgColor)
-            var targetColor = ColorTools.getContrastingColor(color, bgColor, targetContrast)
-
-            eval("cfg_" + colorVar + " = \"" + color + "\"")
-            if (!colorVar.startsWith("background") && !ColorTools.equals(color, targetColor)) {
-                setModelColor(colorVar, String(color), String(targetColor))
-            }
-
-            Qt.quit()
-        }
-        onRejected: {
-            Qt.quit()
+            onClosing: destroy()
+            Component.onCompleted: colorDialog.open()
         }
     }
 
@@ -534,11 +554,11 @@ KCM.SimpleKCM {
     }
 
     function showColorDialog(colorVar, colorLabel) {
-        print("showColorDialog")
-        colorDialog.colorVar = colorVar
-        colorDialog.colorLabel = colorLabel
-        colorDialog.selectedColor = plasmoid.configuration[colorDialog.colorVar]
-        colorDialog.visible = true
+        let props = {
+            colorVar: colorVar,
+            colorLabel: colorLabel,
+        }
+        colorDialogWindowComponent.createObject(root, props)
     }
 
     function updateMaxColWidth(width) {
