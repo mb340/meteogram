@@ -157,7 +157,7 @@ Item {
             var cld = obj.data.instant.details["cloud_area_fraction"]
             var uvi = obj.data.instant.details["ultraviolet_index_clear_sky"]
 
-            var item = meteogramModel.createItem()
+            var item = meteogramModel.createItem(i)
             item.from = dateFrom
             item.temperature = airtmp
             item.dewPoint = dewPoint
@@ -200,7 +200,7 @@ Item {
         }
 
         dailyWeatherModels.beginList()
-        let dailyModel = dailyWeatherModels.createItem()
+        let dailyModel = dailyWeatherModels.createItem(0)
 
         let dailyPeriodIdx = -1
         let prevPeriodIdx = -1
@@ -224,7 +224,7 @@ Item {
                     break;
                 }
 
-                dailyModel = dailyWeatherModels.createItem()
+                dailyModel = dailyWeatherModels.createItem(i)
                 nearestHour = [NaN, NaN, NaN, NaN]
             }
             prevHour = hour
@@ -283,7 +283,9 @@ Item {
             // temperatureMax = Math.max(isFinite(temperatureMax) ? temperatureMax : temperature, temperature)
             temperatureCount++
 
-            let item = dailyModel.models[dailyPeriodIdx]
+            let item = dailyModel.models.get ?
+                        dailyModel.models.get(dailyPeriodIdx) :
+                        dailyModel.models[dailyPeriodIdx]
             if (isNearestHour) {
                 item.date = new Date(date)
                 timeUtils.setDailyPeriodHour(dailyPeriodIdx, item.date)
