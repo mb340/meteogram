@@ -287,8 +287,7 @@ Item {
                         dailyModel.models.get(dailyPeriodIdx) :
                         dailyModel.models[dailyPeriodIdx]
             if (isNearestHour) {
-                item.date = new Date(date)
-                timeUtils.setDailyPeriodHour(dailyPeriodIdx, item.date)
+                item.date = timeUtils.setDailyPeriodHour(dailyPeriodIdx, new Date(date))
 
                 item.partOfDay = partOfDay
                 item.temperature = temperature
