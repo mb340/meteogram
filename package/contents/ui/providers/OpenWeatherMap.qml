@@ -17,6 +17,7 @@
 import QtQuick 2.2
 import QtQuick.XmlListModel 2.0
 import "../../code/data-loader.js" as DataLoader
+import "./owm"
 
 Item {
     id: owm
@@ -37,228 +38,68 @@ Item {
 //     property string urlPrefix: 'http://localhost/forecast'
 //     property string appIdAndModeSuffix: ''
 
-    XmlListModel {
-        id: xmlModelLocation
-        query: '/weatherdata/location'
+    property var modelLongTerm: null
+    property var modelHourByHour: null
+    property var modelCurrent: null
+    property var modelLocation: null
 
-        XmlRole {
-            name: 'name'
-            query: 'name/string()'
-        }
-
-        XmlRole {
-            name: 'timezone'
-            query: 'timezone/number()'
+    Component {
+        id: xmlModelLongTermComponent
+        XmlModelLongTerm {
         }
     }
 
-    XmlListModel {
-        id: xmlModelLongTerm
-        query: '/weatherdata/forecast/time'
-
-        XmlRole {
-            name: 'date'
-            query: '@day/string()'
-        }
-        XmlRole {
-            name: 'temperatureMin'
-            query: 'temperature/@min/number()'
-        }
-        XmlRole {
-            name: 'temperatureMax'
-            query: 'temperature/@max/number()'
-        }
-        XmlRole {
-            name: 'temperatureMorning'
-            query: 'temperature/@morn/number()'
-        }
-        XmlRole {
-            name: 'temperatureDay'
-            query: 'temperature/@day/number()'
-        }
-        XmlRole {
-            name: 'temperatureEvening'
-            query: 'temperature/@eve/number()'
-        }
-        XmlRole {
-            name: 'temperatureNight'
-            query: 'temperature/@night/number()'
-        }
-        XmlRole {
-            name: 'feelsLikeDay'
-            query: 'feels_like/@day/number()'
-        }
-        XmlRole {
-            name: 'feelsLikeEvening'
-            query: 'feels_like/@eve/number()'
-        }
-        XmlRole {
-            name: 'feelsLikeNight'
-            query: 'feels_like/@night/number()'
-        }
-        XmlRole {
-            name: 'feelsLikeMorn'
-            query: 'feels_like/@morn/number()'
-        }
-        XmlRole {
-            name: 'iconName'
-            query: 'symbol/@number/string()'
-        }
-        XmlRole {
-            name: 'windDirection'
-            query: 'windDirection/@deg/number()'
-        }
-        XmlRole {
-            name: 'windSpeedMps'
-            query: 'windSpeed/@mps/number()'
-        }
-        XmlRole {
-            name: 'windGust'
-            query: 'windGust/@gust/number()'
-        }
-        XmlRole {
-            name: 'pressureHpa'
-            query: 'pressure/@value/number()'
-        }
-        XmlRole {
-            name: 'humidity'
-            query: 'humidity/@value/number()'
-        }
-        XmlRole {
-            name: 'clouds'
-            query: 'clouds/@all/number()'
-        }
-        XmlRole {
-            name: 'precipitationProb'
-            query: 'precipitation/@probability/number()'
-        }
-        XmlRole {
-            name: 'precipitationValue'
-            query: 'precipitation/@value/number()'
-        }
-        XmlRole {
-            name: 'precipitationType'
-            query: 'precipitation/@type/string()'
+    Component {
+        id: xmlModelHourByHourComponent
+        XmlModelHourByHour {
         }
     }
 
-    XmlListModel {
-        id: xmlModelHourByHour
-        query: '/weatherdata/forecast/time'
-
-        XmlRole {
-            name: 'from'
-            query: '@from/string()'
-        }
-        XmlRole {
-            name: 'to'
-            query: '@to/string()'
-        }
-        XmlRole {
-            name: 'temperature'
-            query: 'temperature/@value/number()'
-        }
-        XmlRole {
-            name: 'feelsLike'
-            query: 'feels_like/@value/number()'
-        }
-        XmlRole {
-            name: 'iconName'
-            query: 'symbol/@number/string()'
-        }
-        XmlRole {
-            name: 'windDirection'
-            query: 'windDirection/@deg/number()'
-        }
-        XmlRole {
-            name: 'windSpeedMps'
-            query: 'windSpeed/@mps/number()'
-        }
-        XmlRole {
-            name: 'windGust'
-            query: 'windGust/@gust/number()'
-        }
-        XmlRole {
-            name: 'pressureHpa'
-            query: 'pressure/@value/number()'
-        }
-        XmlRole {
-            name: 'precipitationProb'
-            query: 'precipitation/@probability/number()'
-        }
-        XmlRole {
-            name: 'precipitationValue'
-            query: 'precipitation/@value/number()'
-        }
-        XmlRole {
-            name: 'humidity'
-            query: 'humidity/@value/number()'
-        }
-        XmlRole {
-            name: 'clouds'
-            query: 'clouds/@all/number()'
+    Component {
+        id: xmlModelCurrentComponent
+        XmlModelCurrent {
         }
     }
 
-    XmlListModel {
-        id: xmlModelCurrent
-        query: '/current'
-
-        XmlRole {
-            name: 'temperature'
-            query: 'temperature/@value/number()'
-        }
-        XmlRole {
-            name: 'iconName'
-            query: 'weather/@number/string()'
-        }
-        XmlRole {
-            name: 'humidity'
-            query: 'humidity/@value/number()'
-        }
-        XmlRole {
-            name: 'pressureHpa'
-            query: 'pressure/@value/number()'
-        }
-        XmlRole {
-            name: 'windSpeedMps'
-            query: 'wind/speed/@value/number()'
-        }
-        XmlRole {
-            name: 'windDirection'
-            query: 'wind/direction/@value/number()'
-        }
-        XmlRole {
-            name: 'cloudiness'
-            query: 'clouds/@value/number()'
-        }
-        XmlRole {
-            name: 'updated'
-            query: 'lastupdate/@value/string()'
-        }
-        XmlRole {
-            name: 'rise'
-            query: 'city/sun/@rise/string()'
-        }
-        XmlRole {
-            name: 'set'
-            query: 'city/sun/@set/string()'
+    Component {
+        id: xmlModelLocationComponent
+        XmlModelLocation {
         }
     }
-
-    property alias xmlModelLocationStatus: xmlModelLocation.status
-    property alias xmlModelLongTermStatus: xmlModelLongTerm.status
-    property alias xmlModelCurrentStatus: xmlModelCurrent.status
-    property alias xmlModelHourByHourStatus: xmlModelHourByHour.status
 
     function parseDate(dateString) {
         let d = new Date(dateString + '.000Z')
         return timeUtils.convertDate(d, timezoneType, tzOffset)
     }
 
-    onXmlModelCurrentStatusChanged: handleStatusChanged(xmlModelCurrent)
-    onXmlModelHourByHourStatusChanged: handleStatusChanged(xmlModelHourByHour)
-    onXmlModelLongTermStatusChanged: handleStatusChanged(xmlModelLongTerm)
+    function createXmlModels() {
+        var props = {
+            handleStatusChanged: owm.handleStatusChanged
+        }
+        modelLocation = xmlModelLocationComponent.createObject(owm, props)
+        modelCurrent = xmlModelCurrentComponent.createObject(owm, props)
+        modelHourByHour = xmlModelHourByHourComponent.createObject(owm, props)
+        modelLongTerm = xmlModelLongTermComponent.createObject(owm, props)
+    }
+
+    function cleanUpXmlModels() {
+        if (modelLocation && modelLocation.destroy) {
+            modelLocation.destroy()
+            modelLocation = null
+        }
+        if (modelCurrent && modelCurrent.destroy) {
+            modelCurrent.destroy()
+            modelCurrent = null
+        }
+        if (modelLongTerm && modelLongTerm.destroy) {
+            modelLongTerm.destroy()
+            modelLongTerm = null
+        }
+        if (modelHourByHour && modelHourByHour.destroy) {
+            modelHourByHour.destroy()
+            modelHourByHour = null
+        }
+    }
 
     function handleStatusChanged(xmlModel) {
         if (!updateSemaphore) {
@@ -270,32 +111,25 @@ Item {
         xmlModelReady()
     }
 
-    onXmlModelLocationStatusChanged: {
-        if (xmlModelLocation.status != XmlListModel.Ready) {
-            return
-        }
-        xmlModelReady()
-    }
-
     function xmlModelReady() {
         if (!updateSemaphore) {
             return
         }
-        if (xmlModelLocation.status != XmlListModel.Ready) {
+        if (modelLocation.status != XmlListModel.Ready) {
             return
         }
-        if (xmlModelCurrent.status != XmlListModel.Ready) {
+        if (modelCurrent.status != XmlListModel.Ready) {
             return
         }
-        if (xmlModelHourByHour.status != XmlListModel.Ready) {
+        if (modelHourByHour.status != XmlListModel.Ready) {
             return
         }
-        if (xmlModelLongTerm.status != XmlListModel.Ready) {
+        if (modelLongTerm.status != XmlListModel.Ready) {
             return
         }
         dbgprint('all xml models ready')
-        if (xmlModelLocation.count > 0) {
-            let item = xmlModelLocation.get(0)
+        if (modelLocation.count > 0) {
+            let item = modelLocation.get(0)
             tzOffset = item.timezone * 1000
         } else {
             tzOffset = 0
@@ -310,14 +144,11 @@ Item {
         main.reloadMeteogram()
         updateSemaphore = false
 
-        xmlModelLocation.xml = ''
-        xmlModelCurrent.xml = ''
-        xmlModelLongTerm.xml = ''
-        xmlModelHourByHour.xml = ''
+        cleanUpXmlModels()
     }
 
     function createTodayTimeObj() {
-        var currentTimeObj = xmlModelCurrent.count > 0 ? xmlModelCurrent.get(0) : null
+        var currentTimeObj = modelCurrent.count > 0 ? modelCurrent.get(0) : null
         if (currentTimeObj === null) {
             return
         }
@@ -348,8 +179,8 @@ Item {
 
         // set current models
         var foundNow = false
-        for (var i = 0; i < xmlModelHourByHour.count; i++) {
-            var timeObj = xmlModelHourByHour.get(i)
+        for (var i = 0; i < modelHourByHour.count; i++) {
+            var timeObj = modelHourByHour.get(i)
             var dateFrom = parseDate(timeObj.from)
             var dateTo = parseDate(timeObj.to)
             dbgprint('HOUR BY HOUR: dateFrom=' + dateFrom + ', dateTo=' + dateTo + ', i=' + i)
@@ -435,8 +266,8 @@ Item {
         var dailyItem = null
         var dailyItemDate = null
 
-        for (var i = 0; i < xmlModelHourByHour.count && hourCount < main.maxMeteogramHours; i++) {
-            var obj = xmlModelHourByHour.get(i)
+        for (var i = 0; i < modelHourByHour.count && hourCount < main.maxMeteogramHours; i++) {
+            var obj = modelHourByHour.get(i)
             var dateFrom = parseDate(obj.from)
             var dateTo = parseDate(obj.to)
             var hour = dateFrom.getHours()
@@ -499,8 +330,8 @@ Item {
 
         dailyWeatherModels.beginList()
 
-        for (var i = 0; i < xmlModelLongTerm.count; i++) {
-            let item = xmlModelLongTerm.get(i)
+        for (var i = 0; i < modelLongTerm.count; i++) {
+            let item = modelLongTerm.get(i)
             let dailyModel = dailyWeatherModels.createItem()
 
             let dateFrom = Date.fromLocaleString(xmlLocale, item.date, 'yyyy-MM-dd')
@@ -570,8 +401,8 @@ Item {
         var dateNow = timeUtils.dateNow(timezoneType, tzOffset)
         var intervalStart = timeUtils.floorDate(dateNow)
 
-        for (var i = 0; i < xmlModelHourByHour.count && hourCount < main.maxMeteogramHours; i++) {
-            var obj = xmlModelHourByHour.get(i)
+        for (var i = 0; i < modelHourByHour.count && hourCount < main.maxMeteogramHours; i++) {
+            var obj = modelHourByHour.get(i)
             var dateFrom = parseDate(obj.from)
             var dateTo = parseDate(obj.to)
 //             dbgprint('meteo fill: i=' + i + ', from=' + obj.from + ', to=' + obj.to)
@@ -611,9 +442,7 @@ Item {
      */
     function loadDataFromInternet(successCallback, failureCallback, cacheKey, placeObject) {
         var placeIdentifier = placeObject.placeIdentifier
-
         var loadedCounter = 0
-
         var loadedData = {
             current: null,
             hourByHour: null,
@@ -649,6 +478,8 @@ Item {
             DataLoader.fetchXmlFromInternet(url, successHourByHour, failureCallback, cacheKey)
         }
 
+        createXmlModels()
+
         let url = urlPrefix +
                     '/weather?id=' +
                     placeIdentifier +
@@ -664,11 +495,15 @@ Item {
         if (!cacheContent.longTerm || !cacheContent.hourByHour || !cacheContent.current) {
             return false
         }
+
+        createXmlModels()
+
         updateSemaphore = true
-        xmlModelLocation.xml = cacheContent.longTerm
-        xmlModelCurrent.xml = cacheContent.current
-        xmlModelLongTerm.xml = cacheContent.longTerm
-        xmlModelHourByHour.xml = cacheContent.hourByHour
+        modelLocation.xml = cacheContent.longTerm
+        modelCurrent.xml = cacheContent.current
+        modelLongTerm.xml = cacheContent.longTerm
+        modelHourByHour.xml = cacheContent.hourByHour
+
         return true
     }
 
