@@ -38,87 +38,104 @@ ManagedListModel {
         return false
     }
 
-    function createInstantItem() {
-        return {
-
-            date: new Date(0),
-
-            // 0: Day
-            // 1: Night
-            partOfDay: 0,
-            iconName: "",
-
-            // Celsius
-            temperature: NaN,
-            temperatureHigh: NaN,
-            temperatureLow: NaN,
-            feelsLike: NaN,
-
-            // Millimeters
-            precipitationAmount: NaN,
-
-            // Degrees
-            windDirection: NaN,
-
-            // meters per second
-            windSpeed: NaN,
-
-            // hPa
-            pressure: NaN,
-
-            // [0 - 100]%
-            humidity: NaN,
-
-            // [0 - 100]%
-            cloudArea: NaN,
-
-            // [0 - 11+]
-            uvi: NaN
+    function createInstantItem(item) {
+        let i = undefined
+        if (item !== undefined) {
+            i = item
+        } else {
+            i = {}
         }
+
+        i.date = new Date(0)
+
+        // 0: Day
+        // 1: Night
+        i.partOfDay = 0
+
+        i.iconName = ""
+
+        // Celsius
+        i.temperature = NaN
+        i.temperatureHigh = NaN
+        i.temperatureLow = NaN
+        i.feelsLike = NaN
+
+        // Millimeters
+        i.precipitationAmount = NaN
+
+        // Degrees
+        i.windDirection = NaN
+
+        // meters per second
+        i.windSpeed = NaN
+
+        // hPa
+        i.pressure = NaN
+
+        // [0 - 100]%
+        i.humidity = NaN
+
+        // [0 - 100]%
+        i.cloudArea = NaN
+
+        // [0 - 11+]
+        i.uvi = NaN
+
+        return i
     }
 
-    function createItem() {
-        return {
-            foobar: "foobar",
-            date: new Date(0),
-
-            iconName: "",
-
-            temperatureMin: NaN,
-            temperatureMax: NaN,
-
-            temperatureNight: NaN,
-            temperatureMorn: NaN,
-            temperatureDay: NaN,
-            temperatureEve: NaN,
-
-            feelsLikeNight: NaN,
-            feelsLikeMorn: NaN,
-            feelsLikeDay: NaN,
-            feelsLikeEve: NaN,
-
-            windDirection: NaN,
-            windSpeed: NaN,
-            windGust: NaN,
-
-            precipitationProb: NaN,
-            precipitationAmount: NaN,
-
-            pressure: NaN,
-            humidity: NaN,
-            cloudArea: NaN,
-
-            sunrise: NaN,
-            sunset: NaN,
-            moonrise: NaN,
-            moonset: NaN,
-            moonphase: NaN,
-            models: [
-                createInstantItem(),
-                createInstantItem(),
-                createInstantItem(),
-                createInstantItem()
-            ]
+    function createItem(index) {
+        let item = undefined
+        if (index !== undefined && index < model.count) {
+            item = get(index)
+        } else {
+            item = {
+                models: []
+            }
         }
+
+        item.date = new Date(0)
+
+        item.iconName = ""
+
+        item.temperatureMin = NaN
+        item.temperatureMax = NaN
+
+        item.temperatureNight = NaN
+        item.temperatureMorn = NaN
+        item.temperatureDay = NaN
+        item.temperatureEve = NaN
+
+        item.feelsLikeNight = NaN
+        item.feelsLikeMorn = NaN
+        item.feelsLikeDay = NaN
+        item.feelsLikeEve = NaN
+
+        item.windDirection = NaN
+        item.windSpeed = NaN
+        item.windGust = NaN
+
+        item.precipitationProb = NaN
+        item.precipitationAmount = NaN
+
+        item.pressure = NaN
+        item.humidity = NaN
+        item.cloudArea = NaN
+
+        item.sunrise = NaN
+        item.sunset = NaN
+        item.moonrise = NaN
+        item.moonset = NaN
+        item.moonphase = NaN
+
+        for (var i = 0; i < 4; i++) {
+            if (i >= item.models.length) {
+                item.models.push(createInstantItem())
+            } else {
+                createInstantItem(item.models.get(i))
+            }
+        }
+
+        return item
     }
 }
