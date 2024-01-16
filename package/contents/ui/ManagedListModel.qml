@@ -14,7 +14,7 @@
  */
 import QtQuick 2.0
 
-Item {
+QtObject {
     id: root
 
     property int index: 0
@@ -27,8 +27,7 @@ Item {
 
     signal onDataChanged(variant topLeft, variant bottomRight)
 
-    ListModel {
-        id: listModel
+    property ListModel listModel: ListModel {
     }
 
     Component.onCompleted: {
