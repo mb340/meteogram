@@ -370,14 +370,10 @@ Item {
             let day = isListModel ? dailyModel.models.get(2) : dailyModel.models[2]
             let eve = isListModel ? dailyModel.models.get(3) : dailyModel.models[3]
 
-            night.date = new Date(dateFrom)
-            timeUtils.setDailyPeriodHour(0, night.date)
-            morn.date = new Date(dateFrom)
-            timeUtils.setDailyPeriodHour(1, morn.date)
-            day.date = new Date(dateFrom)
-            timeUtils.setDailyPeriodHour(2, day.date)
-            eve.date = new Date(dateFrom)
-            timeUtils.setDailyPeriodHour(3, eve.date)
+            night.date = timeUtils.setDailyPeriodHour(0, new Date(dateFrom))
+            morn.date = timeUtils.setDailyPeriodHour(1, new Date(dateFrom))
+            day.date = timeUtils.setDailyPeriodHour(2, new Date(dateFrom))
+            eve.date = timeUtils.setDailyPeriodHour(3, new Date(dateFrom))
 
             night.temperature = item.temperatureNight
             morn.temperature = item.temperatureMorning
