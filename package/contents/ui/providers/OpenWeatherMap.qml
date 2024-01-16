@@ -333,7 +333,7 @@ Item {
 
         for (var i = 0; i < modelLongTerm.count; i++) {
             let item = modelLongTerm.get(i)
-            let dailyModel = dailyWeatherModels.createItem()
+            let dailyModel = dailyWeatherModels.createItem(i)
 
             let dateFrom = Date.fromLocaleString(xmlLocale, item.date, 'yyyy-MM-dd')
             dailyModel.date = dateFrom
@@ -364,10 +364,11 @@ Item {
             dailyModel.windSpeed = item.windSpeedMps
             dailyModel.windGust = item.windGust
 
-            let night = dailyModel.models[0]
-            let morn = dailyModel.models[1]
-            let day = dailyModel.models[2]
-            let eve = dailyModel.models[3]
+            let isListModel = !!dailyModel.models.get
+            let night = isListModel ? dailyModel.models.get(0) : dailyModel.models[0]
+            let morn = isListModel ? dailyModel.models.get(1) : dailyModel.models[1]
+            let day = isListModel ? dailyModel.models.get(2) : dailyModel.models[2]
+            let eve = isListModel ? dailyModel.models.get(3) : dailyModel.models[3]
 
             night.date = new Date(dateFrom)
             timeUtils.setDailyPeriodHour(0, night.date)
@@ -414,7 +415,7 @@ Item {
 
             let prec = parseFloat(obj.precipitationValue)
 
-            var item = meteogramModel.createItem()
+            var item = meteogramModel.createItem(i)
             item.from = dateFrom
             item.temperature = parseFloat(obj.temperature)
             item.feelsLike = parseFloat(obj.feelsLike)
