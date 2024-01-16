@@ -197,7 +197,9 @@ Item {
             let uvi = parseFloat(hourly.uv_index_clear_sky[i])
             uviMax = Math.max(uviMax, uvi)
 
-            let item = dailyModel.models[dailyPeriodIdx]
+            let item = dailyModel.models.get ?
+                        dailyModel.models.get(dailyPeriodIdx) :
+                        dailyModel.models[dailyPeriodIdx]
             if (isNearestHour) {
                 item.date = new Date(date)
                 timeUtils.setDailyPeriodHour(dailyPeriodIdx, item.date)
@@ -244,7 +246,7 @@ Item {
 
             // print("buildDailyModel " + date)
 
-            let dailyModel = dailyWeatherModels.createItem()
+            let dailyModel = dailyWeatherModels.createItem(i)
             dailyModel.date = date
 
             dailyModel.temperatureMin = parseFloat(daily.temperature_2m_min[i])
@@ -284,7 +286,7 @@ Item {
                 continue
             }
 
-            var item = meteogramModel.createItem()
+            var item = meteogramModel.createItem(i)
             item.from = date
             item.iconName = String(hourly.weathercode[i])
             item.temperature = parseFloat(hourly.temperature_2m[i])
