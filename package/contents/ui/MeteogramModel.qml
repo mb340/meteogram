@@ -19,42 +19,28 @@ ManagedListModel {
 
     property double hourInterval: 1.0
 
-    function createItem() {
-        let item = get(index)
-        if (item) {
-            item.from = new Date(0)
-            item.temperature = NaN
-            item.feelsLike = NaN
-            item.dewPoint = NaN
-            item.precipitationProb = NaN
-            item.precipitationAmount = NaN
-            item.windDirection = NaN
-            item.windSpeed = NaN
-            item.windGust = NaN
-            item.pressure = NaN
-            item.iconName = ""
-            item.humidity = NaN
-            item.cloudArea = NaN
-            item.uvi = NaN
-            return item
+    function createItem(index) {
+        let item = undefined
+        if (index !== undefined && index < model.count) {
+            item = get(index)
+        } else {
+            item = {}
         }
-
-        return {
-            from: new Date(0),
-            temperature: NaN,
-            feelsLike: NaN,
-            dewPoint: NaN,
-            precipitationProb: NaN,
-            precipitationAmount: NaN,
-            windDirection: NaN,
-            windSpeed: NaN,
-            windGust: NaN,
-            pressure: NaN,
-            iconName: "",
-            humidity: NaN,
-            cloudArea: NaN,
-            uvi: NaN
-        }
+        item.from = new Date(0)
+        item.temperature = NaN
+        item.feelsLike = NaN
+        item.dewPoint = NaN
+        item.precipitationProb = NaN
+        item.precipitationAmount = NaN
+        item.windDirection = NaN
+        item.windSpeed = NaN
+        item.windGust = NaN
+        item.pressure = NaN
+        item.iconName = ""
+        item.humidity = NaN
+        item.cloudArea = NaN
+        item.uvi = NaN
+        return item
     }
 
     function hasVariable(varName) {
