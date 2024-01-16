@@ -364,7 +364,6 @@ KCM.SimpleKCM {
 
                     color: selected ? highlightColor : viewBackgroundColor
 
-                    clip: true
 
                     property var viewBackgroundColor: Kirigami.Theme.viewBackgroundColor ?
                                                         Kirigami.Theme.viewBackgroundColor : 'white'
