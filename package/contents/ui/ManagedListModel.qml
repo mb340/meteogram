@@ -12,9 +12,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick
 
-Item {
+QtObject {
     id: root
 
     property int index: 0
@@ -27,8 +27,7 @@ Item {
 
     signal onDataChanged(variant topLeft, variant bottomRight)
 
-    ListModel {
-        id: listModel
+    property ListModel listModel: ListModel {
     }
 
     Component.onCompleted: {
