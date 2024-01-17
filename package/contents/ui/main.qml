@@ -97,6 +97,16 @@ PlasmoidItem {
     compactRepresentation: cr
     fullRepresentation: fr
 
+    toolTipItem: Loader {
+
+        Layout.minimumWidth: item ? item.implicitWidth : 0
+        Layout.maximumWidth: item ? item.implicitWidth : 0
+        Layout.minimumHeight: item ? item.implicitHeight : 0
+        Layout.maximumHeight: item ? item.implicitHeight : 0
+
+        source: Qt.resolvedUrl("Tooltip.qml")
+    }
+
     property bool debugLogging: plasmoid.configuration.debugLogging
 
 
