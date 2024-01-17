@@ -838,8 +838,8 @@ Canvas {
         roundedDv = Math.max(minGridCount, roundedDv)
         roundedDv = ChartUtils.ceilBase(roundedDv, 10)
 
-        minValue = mid - (roundedDv / 2)
-        maxValue = mid + (roundedDv / 2)
+        minValue = Math.floor(mid - (roundedDv / 2))
+        maxValue = minValue + roundedDv
 
         temperatureYGridCount = roundedDv
         // print("temperatureYGridCount = " + temperatureYGridCount)

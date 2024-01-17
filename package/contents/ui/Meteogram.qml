@@ -122,9 +122,14 @@ Item {
                 if (i % temperatureYGridStep !== 0) {
                     continue
                 }
+                let y1 = temperatureAxisScale.invert(i)
+                let y2 = rightGridScale.invert(i)
+                if (!Number.isInteger(y1)) {
+                    throw new Error("Temperature axis tick is not integer.")
+                }
                 horizontalLinesModel.addItem({
-                    temperatureLabel: temperatureAxisScale.invert(i).toFixed(0),
-                    rightAxisLabel: rightGridScale.invert(i).toFixed(rightAxisDecimals)
+                    temperatureLabel: y1.toFixed(0),
+                    rightAxisLabel: y2.toFixed(rightAxisDecimals)
 
                 })
             }
