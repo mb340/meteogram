@@ -1,20 +1,13 @@
 #!/bin/bash
 
-DIR="$( dirname "${BASH_SOURCE[0]}" )"
-CURRDIR=$PWD
-cd $DIR
-rm -r buildWidget
-mkdir buildWidget
+VERSION="$(jq -r '.KPlugin.Version' package/metadata.json)"
+echo "version: ${VERSION}"
 
-#compile translations used inside the plasmoid
-pushd translations/po
-./build.sh
-popd
+FILENAME="com.github.mb340.meteogram-${VERSION}.plasmoid"
+echo "filename: ${FILENAME}"
 
-cd package
+if [[ -f ${FILENAME} ]]; then
+	rm ${FILENAME}
+fi
 
-
-VERSION="$( grep -i PluginInfo-Version ./metadata.desktop | cut -d'=' -f 2 )"
-echo $VERSION
-
-zip  -r "../buildWidget/weather-widget-$VERSION.plasmoid" * --exclude \.git\* --exclude *.bak
+zip -q  -r ${FILENAME} package/
