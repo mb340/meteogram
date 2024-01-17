@@ -12,7 +12,7 @@ Forked from `blackadderkate/weather-widget-2` which was forked from `kotelnik/pl
 
 ### Requirements
 
- - KDE Plasma 5
+ - KDE Plasma 6
 
 
 ### Data sources
