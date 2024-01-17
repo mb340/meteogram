@@ -12,8 +12,8 @@ Dialog {
     title: i18n("Location Search")
     id: searchWindow
 
-    contentWidth: 640
-    // contentHeight: contentContainer.height
+    contentWidth: 36 * Kirigami.Units.gridUnit
+    contentHeight: 27 * Kirigami.Units.gridUnit
 
     standardButtons: MessageDialog.Ok | MessageDialog.Cancel
     modal: false
