@@ -48,17 +48,6 @@ Item {
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton
         onClicked: plasmoid.expanded = !plasmoid.expanded
-
-        PlasmaCore.ToolTipArea {
-            id: toolTipArea
-            anchors.fill: parent
-            active: !plasmoid.expanded
-            interactive: true
-            mainText: placeAlias
-            subText: tooltipSubText
-            textFormat: Text.RichText
-            icon: Qt.resolvedUrl('../images/weather-widget.svg')
-        }
     }
 
     BusyIndicator {
