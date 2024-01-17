@@ -60,8 +60,6 @@ Item {
     property string creditLink
     property string creditLabel
 
-    property string tooltipSubText: ''
-
     property bool inTray: false
     property string plasmoidCacheId: plasmoid.id
 
@@ -416,7 +414,6 @@ Item {
 
     function reloadMeteogram() {
         setTimezoneName()
-        refreshTooltipSubText()
         fullRedraw()
     }
 
@@ -427,80 +424,6 @@ Item {
         } else {
             return PlasmaCore.Types.PassiveStatus
         }
-    }
-
-    function refreshTooltipSubText() {
-        dbgprint('refreshing sub text')
-        if (!currentWeatherModel.valid) {
-            dbgprint('model not yet ready')
-            tooltipSubText = ""
-            return
-        }
-
-        var temperature = unitUtils.formatValue(currentWeatherModel.temperature, "temperature",
-                                                temperatureType)
-        var windDir = unitUtils.getWindDirectionText(currentWeatherModel.windDirection,
-                                                     windDirectionType)
-        var windDirectionIcon = IconTools.getWindDirectionIconCode(
-                                    currentWeatherModel.windDirection)
-        var windSpeed = unitUtils.getWindSpeedText(currentWeatherModel.windSpeedMps, windSpeedType)
-        var pressure = unitUtils.getPressureText(currentWeatherModel.pressureHpa, pressureType)
-        var iconDesc = currentProvider.getIconDescription(currentWeatherModel.iconName)
-        var dateStr = currentWeatherModel.date.toLocaleDateString(Qt.locale(), 'dddd, dd MMMM')
-        var timeStr = currentWeatherModel.date.toLocaleTimeString(Qt.locale(), Locale.ShortFormat)
-
-        var sunRiseTime = ""
-        var sunSetTime = ""
-        if (timeUtils.hasSunriseSunsetData(currentWeatherModel)) {
-            let sunRise = currentWeatherModel.sunRise
-            let sunSet = currentWeatherModel.sunSet
-            sunRiseTime = Qt.formatTime(sunRise, Qt.locale().timeFormat(Locale.ShortFormat))
-            sunSetTime = Qt.formatTime(sunSet, Qt.locale().timeFormat(Locale.ShortFormat))
-        }
-
-        var subText = '<br />'
-        subText += '<font size="4">' + dateStr + '</font>'
-        subText += '<br />'
-        subText += '<font size="4">' + timeStr + '</font>'
-        subText += '<br /><br />'
-        subText += '<font size="4">' + iconDesc + '</font>'
-        subText += '<br /><br />'
-        subText += '<font size="4" style="font-family: weathericons;">\uf055 </font>'
-        subText += '<font size="4">' + temperature + '</font>'
-        subText += '<br />'
-        subText += '<font size="4" style="font-family: weathericons;">' + windDirectionIcon + '</font>'
-        subText += '<font size="4"> ' + windDir + '&nbsp;@ ' + windSpeed + '</font>'
-        subText += '<br />'
-        subText += '<font size="4" style="font-family: weathericons;">\uf079 </font>'
-        subText += '<font size="4">' + pressure + '</font>'
-        subText += '<br />'
-        
-        if (currentWeatherModel.humidity !== undefined) {
-            let humidity = unitUtils.formatValue(currentWeatherModel.humidity, "humidity")
-            subText += '<font size="4" style="font-family: weathericons;">\uf07a </font>'
-            subText += '<font size="4">' + humidity + '</font>'
-            subText += '<br />'
-        }
-        if (currentWeatherModel.cloudArea !== undefined) {
-            let cloudArea = unitUtils.formatValue(currentWeatherModel.cloudArea, "cloudArea")
-            subText += '<font size="4" style="font-family: weathericons;">\uf041 </font>'
-            subText += '<font size="4">' + cloudArea + '</font>'
-            subText += '<br />'
-        }
-        if (timeUtils.hasSunriseSunsetData(currentWeatherModel)) {
-            subText += '<table>'
-            subText += '<tr>'
-            subText += '<td><font size="4">'
-            subText += '<font style="font-family: weathericons">\uf051</font>&nbsp;'
-            subText += sunRiseTime + ' '+timezoneShortName + '&nbsp;&nbsp;&nbsp;</font></td>'
-            subText += '<td><font size="4">'
-            subText += '<font style="font-family: weathericons">\uf052</font>&nbsp;'
-            subText += sunSetTime + ' '+timezoneShortName + '</font></td>'
-            subText += '</tr>'
-            subText += '</table>'
-        }
-
-        tooltipSubText = subText
     }
 
     function getPartOfDayIndex() {
@@ -526,22 +449,18 @@ Item {
     }
 
     onTemperatureTypeChanged: {
-        refreshTooltipSubText()
         reloadMeteogram()
     }
 
     onPressureTypeChanged: {
-        refreshTooltipSubText()
         reloadMeteogram()
     }
 
     onWindSpeedTypeChanged: {
-        refreshTooltipSubText()
         reloadMeteogram()
     }
 
     onPrecipitationTypeChanged: {
-        refreshTooltipSubText()
         reloadMeteogram()
     }
 

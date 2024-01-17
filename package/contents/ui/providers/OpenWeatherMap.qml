@@ -141,7 +141,6 @@ Item {
         updateMeteogramModel()
         updateNextDaysModel()
         fixupNextDaysModel()
-        refreshTooltipSubText()
         main.reloadMeteogram()
         updateSemaphore = false
 
