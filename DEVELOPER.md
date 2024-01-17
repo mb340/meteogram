@@ -9,7 +9,7 @@
 
 ### Create plasmoid package
 
-	tar -czvf com.github.mb340.meteogram.plasmoid package/
+	zip -r com.github.mb340.meteogram.plasmoid package/
 
 ### Run with different language
 
