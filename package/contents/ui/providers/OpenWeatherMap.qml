@@ -199,7 +199,9 @@ Item {
             if (!foundNow && dateFrom <= now && now <= dateTo) {
                 dbgprint('foundNow setting to true')
                 foundNow = true
-                if (!currentWeatherModel.valid) {
+                let isStale = currentWeatherModel.date < dateFrom
+
+                if (!currentWeatherModel.valid || isStale) {
                     dbgprint('adding to actualWeatherModel - temperature: ' + timeObj.temperature + ', iconName: ' + timeObj.iconName)
                     currentWeatherModel.date = dateFrom
                     currentWeatherModel.temperature = timeObj.temperature
