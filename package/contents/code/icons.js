@@ -246,7 +246,7 @@ function getIconResource(iconVal, currentProvider, iconSetType, partOfDay) {
 
         let filename = metNoId.toString().padStart(2, '0')
         let pod = !hasMetNoPartOfDay(metNoId) ? "" : (partOfDay == 0 ? "d" : "n")
-        let path = "yr-weather-symbols/" + filename + pod + ".png"
+        let path = "images/yr-weather-symbols/" + filename + pod + ".png"
         return path
     }
     if (iconSetType === IconSetType.BASMILIUS) {
