@@ -111,6 +111,15 @@ Item {
         }
 
         WeatherItem {
+            visible: hasHumidity
+
+            iconText: '\uf07a'
+            valueText: !hasHumidity ? "" :
+                        unitUtils.formatValue(currentWeatherModel.humidity,
+                                             "humidity")
+        }
+
+        WeatherItem {
             visible: hasPrecipitationAmount || hasPrecipitationProb
 
             iconText: '\uf084'
@@ -124,27 +133,9 @@ Item {
         }
 
         WeatherItem {
-            iconText: IconTools.getWindDirectionIconCode(
-                                    currentWeatherModel.windDirection)
-            valueText: unitUtils.getWindDirectionText(currentWeatherModel.windDirection,
-                                                      windDirectionType) + " " +
-                  unitUtils.getWindSpeedText(currentWeatherModel.windSpeedMps,
-                                             windSpeedType)
-        }
-
-        WeatherItem {
             iconText: '\uf079'
             valueText: unitUtils.getPressureText(currentWeatherModel.pressureHpa,
                                                  pressureType)
-        }
-
-        WeatherItem {
-            visible: hasHumidity
-
-            iconText: '\uf07a'
-            valueText: !hasHumidity ? "" :
-                        unitUtils.formatValue(currentWeatherModel.humidity,
-                                             "humidity")
         }
 
         WeatherItem {
@@ -154,6 +145,15 @@ Item {
             valueText: !hasCloudArea ? "" :
                         unitUtils.formatValue(currentWeatherModel.cloudArea,
                                              "cloudArea")
+        }
+
+        WeatherItem {
+            iconText: IconTools.getWindDirectionIconCode(
+                                    currentWeatherModel.windDirection)
+            valueText: unitUtils.getWindDirectionText(currentWeatherModel.windDirection,
+                                                      windDirectionType) + " " +
+                  unitUtils.getWindSpeedText(currentWeatherModel.windSpeedMps,
+                                             windSpeedType)
         }
 
         WeatherItem {
