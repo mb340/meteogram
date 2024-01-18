@@ -13,6 +13,9 @@ QtObject {
     property double humidity: NaN
     property double cloudArea: NaN
 
+    property double precipitationProb: NaN
+    property double precipitationAmount: NaN
+
     property var sunRise: null
     property var sunSet: null
 
