@@ -19,6 +19,7 @@ import QtQuick.Controls
 import org.kde.plasma.plasmoid
 import org.kde.kirigami as Kirigami
 import "../code/icons.js" as IconTools
+import "data_models"
 
 Item {
     id: root

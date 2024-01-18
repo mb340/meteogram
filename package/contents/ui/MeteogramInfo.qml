@@ -18,6 +18,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 import org.kde.kirigami as Kirigami
 import "../code/icons.js" as IconTools
+import "data_models"
 
 
 Item {

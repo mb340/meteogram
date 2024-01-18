@@ -20,6 +20,8 @@ import QtQuick.Layouts 1.1
 import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
 import org.kde.kirigami as Kirigami
+import "data_models"
+
 
 Item {
     id: fullRepresentation
