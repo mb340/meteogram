@@ -26,6 +26,7 @@ import "../code/chart-utils.js" as ChartUtils
 import "../code/print.js" as PrintUtil
 import "providers"
 import "utils"
+import "data_models"
 
 Item {
     id: main
