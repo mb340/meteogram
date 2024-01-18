@@ -256,7 +256,7 @@ function getIconResource(iconVal, currentProvider, iconSetType, partOfDay) {
         }
 
         let filename = parts[partOfDay]
-        return "basmilius/weather-icons/" + filename + ".png"
+        return "images/basmilius/weather-icons/" + filename + ".png"
     }
     if (iconSetType === IconSetType.BREEZE) {
         let parts = Ir.ToBreeze[irName]
