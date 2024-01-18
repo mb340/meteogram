@@ -108,6 +108,7 @@ Item {
         var ap = currentWeather.data.instant.details["air_pressure_at_sea_level"]
         var hm = currentWeather.data.instant.details["relative_humidity"]
         var cld = currentWeather.data.instant.details["cloud_area_fraction"]
+        var prec = currentWeather.data.next_1_hours.details["precipitation_amount"]
 
         currentWeatherModel.date = timeUtils.convertDate(currentWeather.time, timezoneType,
                                                          main.timezoneOffset)
@@ -118,6 +119,7 @@ Item {
         currentWeatherModel.pressureHpa = ap
         currentWeatherModel.humidity = hm
         currentWeatherModel.cloudArea = cld
+        currentWeatherModel.precipitationAmount = prec
         currentWeatherModel.valid = true
 
         if (currentIndex + 1 < weatherData.properties.timeseries.length) {
