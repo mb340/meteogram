@@ -188,6 +188,11 @@ Item {
             if (!foundNow && dateFrom <= now && now <= dateTo) {
                 dbgprint('foundNow setting to true')
                 foundNow = true
+
+                let prec = parseFloat(timeObj.precipitationValue)
+                currentWeatherModel.precipitationAmount = !isNaN(prec) ? prec : 0
+                currentWeatherModel.precipitationProb = parseFloat(timeObj.precipitationProb)
+
                 let isStale = currentWeatherModel.date < dateFrom
 
                 if (!currentWeatherModel.valid || isStale) {
