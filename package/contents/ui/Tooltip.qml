@@ -13,6 +13,10 @@ Item {
 
     property var hasHumidity: currentWeatherModel.humidity !== undefined
     property var hasCloudArea: currentWeatherModel.cloudArea !== undefined
+    property var hasPrecipitationAmount: !isNaN(currentWeatherModel.precipitationAmount) &&
+                                            currentWeatherModel.precipitationAmount > 0
+    property var hasPrecipitationProb: !isNaN(currentWeatherModel.precipitationProb) &&
+                                            currentWeatherModel.precipitationProb > 0
     property var hasSunriseSunset: timeUtils.hasSunriseSunsetData(currentWeatherModel)
 
     ColumnLayout {
@@ -100,6 +104,19 @@ Item {
             valueText: unitUtils.formatValue(currentWeatherModel.temperature,
                                              "temperature",
                                              temperatureType)
+        }
+
+        WeatherItem {
+            visible: hasPrecipitationAmount || hasPrecipitationProb
+
+            iconText: '\uf084'
+            valueText: (!hasPrecipitationAmount ? "" :
+                        unitUtils.formatValue(currentWeatherModel.precipitationAmount,
+                                             "precipitationAmount")) +
+                        (!hasPrecipitationAmount ? "" : ", ") +
+                        (!hasPrecipitationProb ? "" :
+                         unitUtils.formatValue(currentWeatherModel.precipitationProb,
+                                             "precipitationProb"))
         }
 
         WeatherItem {
