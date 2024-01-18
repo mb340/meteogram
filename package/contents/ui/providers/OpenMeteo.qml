@@ -113,6 +113,9 @@ Item {
         currentWeatherModel.humidity = parseFloat(hourly.relativehumidity_2m[hourlyIdx])
         currentWeatherModel.cloudArea = parseFloat(hourly.cloudcover[hourlyIdx])
 
+        currentWeatherModel.precipitationProb = parseFloat(hourly.precipitation_probability[hourlyIdx]) / 100.0
+        currentWeatherModel.precipitationAmount = parseFloat(hourly.precipitation[hourlyIdx])
+
         currentWeatherModel.sunRise = parseDate(daily.sunrise[dailyIdx])
         currentWeatherModel.sunSet = parseDate(daily.sunset[dailyIdx])
 
