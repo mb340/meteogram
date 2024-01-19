@@ -90,6 +90,7 @@ TestCase {
         }
 
         reloadTimer.state = ReloadTimer.State.INITIAL
+        reloadTimer.reloadInterval = plasmoid.configuration.reloadIntervalHours
     }
 
     function cleanup() {
