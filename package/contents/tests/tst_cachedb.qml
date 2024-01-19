@@ -78,10 +78,10 @@ TestCase {
         let flag = "20"
         verify(flag !== Plasmoid.id)
 
-        sem = cacheDb.obtainUpdateSemaphore("123", flag)
+        var sem = cacheDb.obtainUpdateSemaphore("123", flag)
         verify(sem === true)
 
-        var sem = cacheDb.checkUpdateSemaphore("123")
+        sem = cacheDb.checkUpdateSemaphore("123")
         verify(sem === false)
     }
 
