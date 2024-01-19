@@ -1,5 +1,5 @@
-import QtQuick 2.0
-import QtTest 1.2
+import QtQuick
+import QtTest
 import "../ui/"
 import "../ui/utils"
 
