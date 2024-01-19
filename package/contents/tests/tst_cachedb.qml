@@ -76,7 +76,7 @@ TestCase {
 
     function test_checkUpdateSemaphore_already_locked() {
         let flag = "20"
-        verify(flag !== Plasmoid.id)
+        verify(flag !== plasmoid.id)
 
         var sem = cacheDb.obtainUpdateSemaphore("123", flag)
         verify(sem === true)
