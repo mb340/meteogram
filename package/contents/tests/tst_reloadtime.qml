@@ -76,19 +76,20 @@ TestCase {
     function init() {
         plasmoid = createTemporaryObject(mockPlasmoidComponent, root)
 
-        reloadTimer = createTemporaryObject(reloadTimerComponent, root)
-        reloadTimer.getDateNow = function(){
-            return 0
-        }
-
-        reloadTimer.state = ReloadTimer.State.INITIAL
-        
         mockCacheDb = createTemporaryObject(mockCacheDbComponent, root)
         mockCacheDb._content[mockMain.cacheKey] = {
             content: "{}",
             timestamp: 0,
             expireTime: -1
         }
+
+        let props = {cacheDb: mockCacheDb}
+        reloadTimer = createTemporaryObject(reloadTimerComponent, root, props)
+        reloadTimer.getDateNow = function(){
+            return 0
+        }
+
+        reloadTimer.state = ReloadTimer.State.INITIAL
     }
 
     function cleanup() {
