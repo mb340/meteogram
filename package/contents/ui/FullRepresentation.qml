@@ -292,7 +292,7 @@ Item {
         anchors.bottom: weatherAlertsView.bottom
 
         color: 'transparent'
-        border.color: Kirigami.Theme.borderColor ? Kirigami.Theme.borderColor : "black"
+        border.color: Kirigami.Theme.borderColor ?? "black"
         border.width: 1
 
         visible: isShowAlert

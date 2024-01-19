@@ -66,7 +66,7 @@ ColumnLayout {
 
                 iconSetType: (plasmoid && plasmoid.configuration && plasmoid.configuration.iconSetType) ?
                                plasmoid.configuration.iconSetType : 0
-                iconName: model ? model.iconName : null
+                iconName: model?.iconName ?? null
             }
         }
 
@@ -283,7 +283,7 @@ ColumnLayout {
             }
 
             Repeater {
-                model: tileValuesArr ? tileValuesArr : [tileValue]
+                model: tileValuesArr ?? [tileValue]
 
                 delegate: Item {
                     Layout.fillWidth: true
@@ -294,7 +294,7 @@ ColumnLayout {
                         width: parent.width
 
                         Label {
-                            text: modelData.titleStr ? modelData.titleStr : ""
+                            text: modelData.titleStr ?? ""
                             font.italic: true
                             color: Kirigami.Theme.disabledTextColor
                             anchors.topMargin: 10
@@ -302,8 +302,7 @@ ColumnLayout {
                             visible: !!modelData.titleStr
                         }
                         Label {
-                            text: modelData.valueStr ? modelData.valueStr :
-                                    (modelData ? modelData : "")
+                            text: modelData?.valueStr ?? (modelData ?? "")
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
                     }

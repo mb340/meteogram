@@ -118,7 +118,7 @@ Item {
                 Label {
                     id: valueLabel
                     text: valueStr
-                    color: valueColor ? valueColor : Kirigami.Theme.textColor
+                    color: valueColor ?? Kirigami.Theme.textColor
                     font.pixelSize: 11 * 1
                     font.pointSize: -1
                     wrapMode: Text.WordWrap

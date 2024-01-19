@@ -57,8 +57,8 @@ Item {
     Component {
         id: iconImageComponent
         Item {
-            x: iconX ? iconX : 0
-            y: iconY ? iconY : 0
+            x: iconX ?? 0
+            y: iconY ?? 0
             width: isFinite(iconDim) ? iconDim  : parent.width
 
             height: width
@@ -70,7 +70,7 @@ Item {
 
             Image {
                 id: image
-                source: imgSrc ? imgSrc : "images/placeholder.svg"
+                source: imgSrc ?? "images/placeholder.svg"
                 smooth: true
                 asynchronous: true
                 anchors.fill: parent

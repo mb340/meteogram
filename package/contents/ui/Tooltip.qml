@@ -42,15 +42,13 @@ Item {
         Kirigami.Heading {
             level: 5
             font.italic: true
-            text: !currentWeatherModel.date ? "" :
-                    currentWeatherModel.date.toLocaleDateString(Qt.locale(), 'dddd, dd MMMM')
+            text: currentWeatherModel.date?.toLocaleDateString(Qt.locale(), 'dddd, dd MMMM') ?? ""
         }
 
         Kirigami.Heading {
             level: 5
             font.italic: true
-            text: !currentWeatherModel.date ? "" :
-                    currentWeatherModel.date.toLocaleTimeString(Qt.locale(), Locale.ShortFormat)
+            text: currentWeatherModel.date?.toLocaleTimeString(Qt.locale(), Locale.ShortFormat) ?? ""
         }
 
         Item {

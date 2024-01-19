@@ -23,7 +23,7 @@ QtObject {
     property alias model: root._model
 
     property var defaultModel: null
-    property var _model: defaultModel ? defaultModel : listModel
+    property var _model: defaultModel ?? listModel
 
     signal onDataChanged(variant topLeft, variant bottomRight)
 

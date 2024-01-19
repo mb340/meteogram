@@ -186,7 +186,7 @@ Column {
             required property bool selected
             // required property bool current
 
-            implicitWidth: parentTable ? parentTable.width : childrenRect.width
+            implicitWidth: parentTable?.width ?? childrenRect.width
             implicitHeight: childrenRect.height
 
             color: selected ? highlightColor : viewBackgroundColor
