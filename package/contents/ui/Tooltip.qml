@@ -58,6 +58,9 @@ Item {
             WeatherIcon {
                 iconSetType: plasmoid.configuration.iconSetType
                 iconName: currentWeatherModel.iconName
+                partOfDay: timeUtils.isSunRisen(currentWeatherModel.date,
+                                                currentWeatherModel.sunRise,
+                                                currentWeatherModel.sunSet) ? 0 : 1
 
                 iconDim: units.iconSizes.medium
 
