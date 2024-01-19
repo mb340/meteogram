@@ -10,4 +10,4 @@ if [[ -f ${FILENAME} ]]; then
 	rm ${FILENAME}
 fi
 
-zip -q  -r ${FILENAME} package/
+zip -q  -r ${FILENAME} package/ --exclude "package/contents/tests/*"
