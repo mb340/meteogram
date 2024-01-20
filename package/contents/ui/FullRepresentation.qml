@@ -29,8 +29,8 @@ Item {
 
     Layout.preferredWidth: preferredImageWidth
     Layout.preferredHeight: headingHeight + preferredImageHeight + footerHeight + nextDaysHeight + 14
-    Layout.minimumWidth: Layout.preferredWidth * 3 / 4
-    Layout.minimumHeight: Layout.preferredHeight * 3 / 4
+    Layout.minimumWidth: main.isPanel ? Layout.preferredWidth * 3 / 4 : 0
+    Layout.minimumHeight: main.isPanel ? Layout.preferredHeight * 3 / 4 : 0
 
     width: Layout.preferredWidth
     height: Layout.preferredHeight

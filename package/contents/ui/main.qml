@@ -83,6 +83,11 @@ Item {
 
     anchors.fill: parent
 
+    property bool isPanel: (Plasmoid.location === PlasmaCore.Types.TopEdge ||
+                            Plasmoid.location === PlasmaCore.Types.BottomEdge ||
+                            Plasmoid.location === PlasmaCore.Types.LeftEdge ||
+                            Plasmoid.location === PlasmaCore.Types.RightEdge)
+
     property Component crInTray: CompactRepresentationInTray { }
     property Component cr: CompactRepresentation { }
 
@@ -95,9 +100,11 @@ Item {
 
     }
 
-    Plasmoid.preferredRepresentation: Plasmoid.compactRepresentation
     Plasmoid.compactRepresentation: cr
     Plasmoid.fullRepresentation: fr
+
+    Plasmoid.switchWidth: inTray ? 0 : 34 * units.gridUnit
+    Plasmoid.switchHeight: inTray ? 0 : 21 * units.gridUnit
 
     Plasmoid.toolTipItem: Loader {
 
