@@ -78,23 +78,29 @@ PlasmoidItem {
 
     property int maxMeteogramHours: plasmoid.configuration.maxMeteogramHours
 
+    property bool isPanel: (Plasmoid.location === PlasmaCore.Types.TopEdge ||
+                            Plasmoid.location === PlasmaCore.Types.BottomEdge ||
+                            Plasmoid.location === PlasmaCore.Types.LeftEdge ||
+                            Plasmoid.location === PlasmaCore.Types.RightEdge)
+
     signal fullRedraw()
 
     anchors.fill: parent
 
-    property Component cr: CompactRepresentation { }
 
-    property Component fr: FullRepresentation {
+    switchWidth: 44 * Kirigami.Units.gridUnit
+    switchHeight: 28 * Kirigami.Units.gridUnit
+
+    compactRepresentation: CompactRepresentation { }
+
+    fullRepresentation: FullRepresentation {
+        anchors.margins: isPanel ? 0 : Kirigami.Units.largeSpacing
+
         Component.onCompleted: {
             main.fullRedraw.connect(this.meteogram.fullRedraw)
         }
-
-
     }
 
-    preferredRepresentation: compactRepresentation
-    compactRepresentation: cr
-    fullRepresentation: fr
 
     toolTipItem: Loader {
 
