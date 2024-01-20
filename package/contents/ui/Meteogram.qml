@@ -414,7 +414,7 @@ Item {
             onPaint: {
                 var context = getContext("2d")
                 context.clearRect(0, 0, width, height)
-                if (!meteogramInfo.visible) {
+                if (!meteogramInfo || !meteogramInfo.visible) {
                     return
                 }
 

@@ -877,6 +877,9 @@ Canvas {
 
     function computeHourStrWidth() {
         var context = root.context ? root.context : getContext("2d")
+        if (!context) {
+            return
+        }
         hourStrWidth = 0
         let fontSize = 11 * units.devicePixelRatio
         context.font = fontSize + 'px "' + theme.defaultFont.family + '"'
