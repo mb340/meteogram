@@ -33,7 +33,7 @@ RowLayout {
                 id: varNameLabel
                 text: modelData.label
                 font.family: 'weathericons'
-                color: textColor
+                enabled: (isVarSelected && hasVariable)
 
                 property bool isHighlighted: false
                 property bool isSelected: modelData.isSelected !== undefined ?
@@ -46,9 +46,13 @@ RowLayout {
                 property bool hasVariable: modelData.hasVariable !== undefined ? modelData.hasVariable :
                                             meteogramModel.hasVariable(modelData.varName)
 
-                property var textColor: isHighlighted ? theme.highlightColor :
-                                        ((isVarSelected && hasVariable) ? theme.textColor :
-                                                         PlasmaCore.Theme.disabledTextColor)
+                ColorOverlay {
+                    anchors.fill: parent
+                    source: parent
+                    color: theme.highlightColor
+                    antialiasing: true
+                    visible: varNameLabel.isHighlighted
+                }
 
                 Image {
                     id: notAvailable
