@@ -26,7 +26,7 @@ import org.kde.kirigami as Kirigami
 Item {
 
     property int nColumns: 5
-    property color lineColor: Kirigami.Theme.textColor
+    property color lineColor: main.theme.textColor
 
     property var model: null
     property var dayParts: model ? model.models : null

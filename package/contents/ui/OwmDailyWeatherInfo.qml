@@ -129,7 +129,7 @@ ColumnLayout {
                 Layout.preferredWidth: width
                 Label {
                     text: modelData
-                    color: Kirigami.Theme.disabledTextColor
+                    color: main.theme.disabledTextColor
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
             }
@@ -138,7 +138,7 @@ ColumnLayout {
         /* row headings */
         Label {
             text: "Temperature"
-            color: Kirigami.Theme.disabledTextColor
+            color: main.theme.disabledTextColor
             Layout.row: 1
             Layout.rowSpan: 2
             Layout.column: 1
@@ -147,7 +147,7 @@ ColumnLayout {
 
         Label {
             text: "Feels Like"
-            color: Kirigami.Theme.disabledTextColor
+            color: main.theme.disabledTextColor
             Layout.row: 3
             Layout.rowSpan: 2
             Layout.column: 1
@@ -277,7 +277,7 @@ ColumnLayout {
 
                 Label {
                     text: tileTitle
-                    color: Kirigami.Theme.disabledTextColor
+                    color: main.theme.disabledTextColor
                     anchors.centerIn: parent
                 }
             }
@@ -296,7 +296,7 @@ ColumnLayout {
                         Label {
                             text: modelData.titleStr ?? ""
                             font.italic: true
-                            color: Kirigami.Theme.disabledTextColor
+                            color: main.theme.disabledTextColor
                             anchors.topMargin: 10
                             anchors.horizontalCenter: parent.horizontalCenter
                             visible: !!modelData.titleStr

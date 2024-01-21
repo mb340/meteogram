@@ -65,7 +65,8 @@ PlasmoidItem {
 
     property string plasmoidCacheId: Plasmoid.id
 
-    property bool textColorLight: ((Kirigami.Theme.textColor.r + Kirigami.Theme.textColor.g + Kirigami.Theme.textColor.b) / 3) > 0.5
+    property Item lightDarkItem: null
+    property var theme: lightDarkItem
 
     // 0 - standard
     // 1 - vertical
@@ -97,7 +98,18 @@ PlasmoidItem {
         anchors.margins: isPanel ? 0 : Kirigami.Units.largeSpacing
 
         Component.onCompleted: {
+            main.lightDarkItem = lightDarkItem
             main.fullRedraw.connect(this.meteogram.fullRedraw)
+        }
+
+
+        LightDarkItem {
+            id: lightDarkItem
+            visible: false
+
+            Component.onCompleted: {
+                main.initialize()
+            }
         }
     }
 
@@ -224,7 +236,7 @@ PlasmoidItem {
         }
     }
 
-    Component.onCompleted: {
+    function initialize() {
         dbgprint("main: onCompleted: Plasmoid.id", Plasmoid.id, Plasmoid.containment.id)
 
         if (plasmoid.configuration.firstRun === true) {

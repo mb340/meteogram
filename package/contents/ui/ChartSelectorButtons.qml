@@ -52,7 +52,7 @@ RowLayout {
                 ColorOverlay {
                     anchors.fill: parent
                     source: parent
-                    color: Kirigami.Theme.highlightColor
+                    color: main.theme.highlightColor
                     antialiasing: true
                     visible: varNameLabel.isHighlighted
                 }
@@ -71,11 +71,11 @@ RowLayout {
                     anchors.centerIn: varNameLabel
                 }
 
-                ColorOverlay{
+                ColorOverlay {
                     anchors.fill: notAvailable
                     source: notAvailable
                     color: (visible && varNameLabel.isVarSelected) ?
-                                Kirigami.Theme.textColor : Kirigami.Theme.disabledTextColor
+                                main.theme.textColor : main.theme.disabledTextColor
                     antialiasing: true
                     visible: !varNameLabel.hasVariable
                 }

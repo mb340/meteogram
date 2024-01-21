@@ -50,12 +50,12 @@ Item {
      * Background
      */
     Rectangle {
-        color: Qt.rgba(Kirigami.Theme.backgroundColor.r,
-                       Kirigami.Theme.backgroundColor.g,
-                       Kirigami.Theme.backgroundColor.b,
+        color: Qt.rgba(main.theme.meteogram.backgroundColor.r,
+                       main.theme.meteogram.backgroundColor.g,
+                       main.theme.meteogram.backgroundColor.b,
                        1.00)
         radius: 2
-        border.color: Kirigami.Theme.textColor
+        border.color: main.theme.meteogram.textColor
         border.width: 1
 
         anchors.fill: hoverItem
@@ -75,6 +75,7 @@ Item {
         Label {
             id: dateLabel
             text: ""
+            color: main.theme.meteogram.textColor
             Layout.alignment: Qt.AlignHCenter
         }
 
@@ -109,6 +110,7 @@ Item {
                 Label {
                     id: nameLabel
                     text: nameStr
+                    color: main.theme.meteogram.textColor
                     font.pixelSize: 11 * 1
                     font.pointSize: -1
                     verticalAlignment: Text.AlignTop
@@ -118,7 +120,7 @@ Item {
                 Label {
                     id: valueLabel
                     text: valueStr
-                    color: valueColor ?? Kirigami.Theme.textColor
+                    color: valueColor ?? main.theme.meteogram.textColor
                     font.pixelSize: 11 * 1
                     font.pointSize: -1
                     wrapMode: Text.WordWrap

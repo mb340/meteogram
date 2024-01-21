@@ -43,9 +43,12 @@ Item {
 
     property double precipitationMaxGraphY: 10
 
-    property bool textColorLight: ((Kirigami.Theme.textColor.r + Kirigami.Theme.textColor.g + Kirigami.Theme.textColor.b) / 3) > 0.5
-    property color gridColor: textColorLight ? Qt.tint(Kirigami.Theme.textColor, '#80000000') : Qt.tint(Kirigami.Theme.textColor, '#80FFFFFF')
-    property color gridColorHighlight: textColorLight ? Qt.tint(Kirigami.Theme.textColor, '#50000000') : Qt.tint(Kirigami.Theme.textColor, '#50FFFFFF')
+    property color gridColor: main.theme.meteogram.isLightMode ?
+                                Qt.tint(main.theme.meteogram.textColor, '#80000000') :
+                                Qt.tint(main.theme.meteogram.textColor, '#80FFFFFF')
+    property color gridColorHighlight: main.theme.meteogram.isLightMode ?
+                                        Qt.tint(main.theme.meteogram.textColor, '#50000000') :
+                                        Qt.tint(main.theme.meteogram.textColor, '#50FFFFFF')
 
     property string y2VarName: plasmoid.configuration.y2VarName
     property bool y2AxisVisble: meteogramModel.hasVariable(y2VarName)
@@ -170,7 +173,7 @@ Item {
                 horizontalAlignment: Text.AlignLeft
                 font.pixelSize: 11 * 1
                 font.pointSize: -1
-                color: colorPalette.pressureColor()
+                color: colorPalette.pressureColor(main.theme.isLightMode)
 
                 visible: y2AxisVisble
             }
@@ -349,7 +352,7 @@ Item {
 
                     Image {
                         id: wind
-                        source: !isNaN(windSpeed) ? windStrength(windSpeed, textColorLight) : ""
+                        source: !isNaN(windSpeed) ? windStrength(windSpeed, main.theme.isLightMode) : ""
                         rotation: windFrom(windDirection)
                         fillMode: Image.PreserveAspectFit
 
@@ -420,11 +423,10 @@ Item {
                     return
                 }
 
-                context.fillStyle = Qt.rgba(Kirigami.Theme.highlightColor.r,
-                                            Kirigami.Theme.highlightColor.g,
-                                            Kirigami.Theme.highlightColor.b,
+                context.fillStyle = Qt.rgba(main.theme.meteogram.highlightColor.r,
+                                            main.theme.meteogram.highlightColor.g,
+                                            main.theme.meteogram.highlightColor.b,
                                             0.25)
-
 
                 var [x0, x1] = meteogramCanvas.getItemIntervalX(meteogramInfo.idx)
                 context.fillRect(x0, 0, x1 - x0, height);

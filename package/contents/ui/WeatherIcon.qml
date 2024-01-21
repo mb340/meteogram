@@ -82,7 +82,7 @@ Item {
                 verticalOffset: 0
                 radius: 8.0
                 samples: 17
-                color: !textColorLight ? "#80000000" : "#80ffffff"
+                color: !main.theme?.isLightMode ? "#80000000" : "#80ffffff"
                 source: image
                 visible: plasmoid.configuration.iconDropShadow
             }
@@ -115,7 +115,7 @@ Item {
                 verticalOffset: 0
                 radius: 8.0
                 samples: 17
-                color: !textColorLight ? "#80000000" : "#80ffffff"
+                color: !main.theme?.isLightMode ? "#80000000" : "#80ffffff"
                 source: image
                 visible: plasmoid.configuration.iconDropShadow
             }

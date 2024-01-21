@@ -274,8 +274,8 @@ Canvas {
     }
 
     function drawShadowText(context, str, x, y) {
-        context.strokeStyle = Kirigami.Theme.textColor
-        context.shadowColor = textColorLight ? 'black' : 'white';
+        context.strokeStyle = main.theme.meteogram.textColor
+        context.shadowColor = main.theme.meteogram.isLightMode ? 'black' : 'white';
         context.shadowBlur = 0.5;
         context.lineWidth = 0.5;
         context.strokeText(str, x, y)
@@ -330,7 +330,7 @@ Canvas {
                 var metrics = context.measureText(precExcessStr)
                 var x0 = x - (metrics.width / 2) + (rectWidth / 2)
                 drawShadowText(context, precExcessStr, x0, y0)
-                context.fillStyle = Kirigami.Theme.textColor
+                context.fillStyle = main.theme.meteogram.textColor
                 context.fillText(precExcessStr, x0, y0)
                 y0 -= lineHeight
             }
@@ -342,7 +342,7 @@ Canvas {
             context.translate(x, y0)
             context.rotate((-90 * Math.PI) / 180);
             drawShadowText(context, precStr, xOffs, yOffs)
-            context.fillStyle = Kirigami.Theme.textColor
+            context.fillStyle = main.theme.meteogram.textColor
             context.fillText(precStr, xOffs, yOffs)
             context.restore()
         }
@@ -482,7 +482,7 @@ Canvas {
                 var metrics = context.measureText(str)
                 var textWidth = metrics.width
                 x0 = x - (textWidth / 2.0)
-                context.fillStyle = Kirigami.Theme.textColor
+                context.fillStyle = main.theme.meteogram.textColor
                 context.fillText(str, x0, y0)
             } else if (iconSetType === 1 || iconSetType === 2 || iconSetType === 3) {
                 x0 = x - rectWidth
@@ -526,7 +526,7 @@ Canvas {
 
         for (var i = 0; i < weatherAlertsModel.count; i++) {
             var a = weatherAlertsModel.get(i)
-            context.fillStyle = textColorLight ? "#33ff7751" :  "#22ee3800"
+            context.fillStyle = main.theme.meteogram.isLightMode ? "#33ff7751" :  "#22ee3800"
             var x0 = timeScale.translate(a.alertStart.getTime())
             var x1 = timeScale.translate(a.alertEnd.getTime())
             var w = x1 - x0
@@ -581,7 +581,7 @@ Canvas {
             drawColdTemp(context, temperaturePath, colorPalette.temperatureColdColor(), 2 * 1)
 
             if (y1VarName && y1VarName !== "") {
-                let color = !textColorLight ? 'black' : 'white'
+                let color = !main.theme.meteogram.isLightMode ? 'black' : 'white'
                 drawPath(context, y1Path, color, 1 * 1)
             }
         }

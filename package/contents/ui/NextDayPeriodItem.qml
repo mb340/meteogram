@@ -48,6 +48,7 @@ RowLayout {
                                plasmoid.configuration.iconSetType : 0
 
     opacity: past ? 0.25 : 1
+    // enabled: !past
 
     Item {
         /*spacer*/

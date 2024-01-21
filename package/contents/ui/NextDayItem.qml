@@ -26,7 +26,7 @@ Item {
     id: root
 
     property double periodFontSize: Kirigami.Theme.defaultFont.pixelSize
-    property color lineColor: Kirigami.Theme.textColor
+    property color lineColor: main.theme.textColor
 
     property double titleHeight: NaN
     property double rowHeight: NaN
