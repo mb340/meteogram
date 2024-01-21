@@ -70,7 +70,8 @@ Item {
 
             PlasmaExtras.Heading {
                 level: 3
-                text: currentProvider.getIconDescription(currentWeatherModel.iconName)
+                text: !currentProvider ? "" :
+                        currentProvider.getIconDescription(currentWeatherModel.iconName)
 
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
