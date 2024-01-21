@@ -126,7 +126,7 @@ ColumnLayout {
                 Layout.preferredWidth: width
                 Label {
                     text: modelData
-                    color: PlasmaCore.Theme.disabledTextColor
+                    color: main.disabledTextColor
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
             }
@@ -135,7 +135,7 @@ ColumnLayout {
         /* row headings */
         Label {
             text: "Temperature"
-            color: PlasmaCore.Theme.disabledTextColor
+            color: main.disabledTextColor
             Layout.row: 1
             Layout.rowSpan: 2
             Layout.column: 1
@@ -144,7 +144,7 @@ ColumnLayout {
 
         Label {
             text: "Feels Like"
-            color: PlasmaCore.Theme.disabledTextColor
+            color: main.disabledTextColor
             Layout.row: 3
             Layout.rowSpan: 2
             Layout.column: 1
@@ -274,7 +274,7 @@ ColumnLayout {
 
                 Label {
                     text: tileTitle
-                    color: PlasmaCore.Theme.disabledTextColor
+                    color: main.disabledTextColor
                     anchors.centerIn: parent
                 }
             }
@@ -293,7 +293,7 @@ ColumnLayout {
                         Label {
                             text: modelData.titleStr ? modelData.titleStr : ""
                             font.italic: true
-                            color: PlasmaCore.Theme.disabledTextColor
+                            color: main.disabledTextColor
                             anchors.topMargin: 10
                             anchors.horizontalCenter: parent.horizontalCenter
                             visible: !!modelData.titleStr

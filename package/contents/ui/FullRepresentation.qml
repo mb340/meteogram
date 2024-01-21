@@ -24,6 +24,9 @@ import "data_models"
 Item {
     id: fullRepresentation
 
+    Plasmoid.backgroundHints: PlasmaCore.Types.DefaultBackground
+                                | PlasmaCore.Types.ConfigurableBackground
+
     property int preferredImageWidth: 800 * units.devicePixelRatio // Makes yr.no images grainy,
     property int preferredImageHeight: 320 * units.devicePixelRatio + defaultFontPixelSize// prefer rendering meteograms
 
@@ -123,7 +126,7 @@ Item {
 
         Label {
             text: "\uFF5C"
-            color: PlasmaCore.Theme.disabledTextColor
+            color: main.disabledTextColor
             Layout.leftMargin: 0
             Layout.rightMargin: 0
         }
@@ -167,7 +170,7 @@ Item {
 
         Label {
             text: "\uFF5C"
-            color: PlasmaCore.Theme.disabledTextColor
+            color: main.disabledTextColor
             Layout.leftMargin: 0
             Layout.rightMargin: 0
         }
@@ -217,7 +220,7 @@ Item {
                         anchors.fill: parent
                         onClicked: main.setNextPlace(modelData.previous)
                         onEntered: parent.color = theme.highlightColor
-                        onExited: parent.color = theme.textColor
+                        onExited: parent.color = main.textColor
                     }
                 }
             }
@@ -320,7 +323,7 @@ Item {
 
                 Text {
                     text: i18n("Weather Alerts")
-                    color: theme.textColor
+                    color: main.textColor
                     horizontalAlignment: Text.AlignHCenter
                     anchors.centerIn: parent
                 }

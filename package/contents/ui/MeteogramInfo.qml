@@ -74,6 +74,7 @@ Item {
         Label {
             id: dateLabel
             text: ""
+            color: theme.textColor
             Layout.alignment: Qt.AlignHCenter
         }
 
@@ -107,6 +108,7 @@ Item {
                 Label {
                     id: nameLabel
                     text: nameStr
+                    color: theme.textColor
                     font.pixelSize: 11 * units.devicePixelRatio
                     font.pointSize: -1
                     verticalAlignment: Text.AlignTop

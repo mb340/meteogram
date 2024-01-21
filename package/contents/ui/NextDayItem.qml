@@ -23,7 +23,7 @@ Item {
     id: root
 
     property double periodFontSize: theme.defaultFont.pixelSize
-    property color lineColor: theme.textColor
+    property color lineColor: main.textColor
 
     property double titleHeight: NaN
     property double rowHeight: NaN

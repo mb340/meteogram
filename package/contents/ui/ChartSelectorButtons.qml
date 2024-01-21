@@ -68,11 +68,11 @@ RowLayout {
                     anchors.centerIn: varNameLabel
                 }
 
-                ColorOverlay{
+                ColorOverlay {
                     anchors.fill: notAvailable
                     source: notAvailable
                     color: (visible && varNameLabel.isVarSelected) ?
-                                theme.textColor : PlasmaCore.Theme.disabledTextColor
+                                main.textColor : main.disabledTextColor
                     antialiasing: true
                     visible: !varNameLabel.hasVariable
                 }

@@ -66,7 +66,15 @@ Item {
 
     property int inTrayActiveTimeoutSec: plasmoid.configuration.inTrayActiveTimeoutSec
 
-    property bool textColorLight: ((theme.textColor.r + theme.textColor.g + theme.textColor.b) / 3) > 0.5
+    property Item lightDarkItem: null
+
+    property bool isShowBackground: lightDarkItem.isShowBackground
+    property bool textColorLight: lightDarkItem.isLightMode
+    property bool isMeteogramLight: lightDarkItem.isMeteogramLight
+
+    property var textColor: lightDarkItem.textColor
+    property var disabledTextColor: lightDarkItem.disabledTextColor
+
 
     // 0 - standard
     // 1 - vertical
@@ -94,10 +102,18 @@ Item {
     property Component frInTray: FullRepresentationInTray { }
     property Component fr: FullRepresentation {
         Component.onCompleted: {
+            main.lightDarkItem = lightDarkItem
             main.fullRedraw.connect(this.meteogram.fullRedraw)
         }
 
+        LightDarkItem {
+            id: lightDarkItem
+            visible: false
 
+            Component.onCompleted: {
+                main.initialize()
+            }
+        }
     }
 
     Plasmoid.compactRepresentation: cr
@@ -226,7 +242,7 @@ Item {
         }
     }
 
-    Component.onCompleted: {
+    function initialize() {
         dbgprint("main: onCompleted: plasmoid.id", plasmoid.id, plasmoid.parent.id)
 
         if (plasmoid.configuration.firstRun === true) {

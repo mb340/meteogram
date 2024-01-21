@@ -42,9 +42,8 @@ Item {
 
     property double precipitationMaxGraphY: 10
 
-    property bool textColorLight: ((theme.textColor.r + theme.textColor.g + theme.textColor.b) / 3) > 0.5
-    property color gridColor: textColorLight ? Qt.tint(theme.textColor, '#80000000') : Qt.tint(theme.textColor, '#80FFFFFF')
-    property color gridColorHighlight: textColorLight ? Qt.tint(theme.textColor, '#50000000') : Qt.tint(theme.textColor, '#50FFFFFF')
+    property color gridColor: main.textColorLight ? Qt.tint(main.textColor, '#80000000') : Qt.tint(main.textColor, '#80FFFFFF')
+    property color gridColorHighlight: main.textColorLight ? Qt.tint(main.textColor, '#50000000') : Qt.tint(main.textColor, '#50FFFFFF')
 
     property string y2VarName: plasmoid.configuration.y2VarName
     property bool y2AxisVisble: meteogramModel.hasVariable(y2VarName)
@@ -168,7 +167,7 @@ Item {
                 horizontalAlignment: Text.AlignLeft
                 font.pixelSize: 11 * units.devicePixelRatio
                 font.pointSize: -1
-                color: colorPalette.pressureColor()
+                color: colorPalette.pressureColor(main.textColorLight)
 
                 visible: y2AxisVisble
             }
@@ -347,7 +346,7 @@ Item {
 
                     Image {
                         id: wind
-                        source: !isNaN(windSpeed) ? windStrength(windSpeed, textColorLight) : ""
+                        source: !isNaN(windSpeed) ? windStrength(windSpeed, main.textColorLight) : ""
                         rotation: windFrom(windDirection)
                         fillMode: Image.PreserveAspectFit
 
