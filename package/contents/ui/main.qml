@@ -68,12 +68,18 @@ Item {
 
     property Item lightDarkItem: null
 
-    property bool isShowBackground: lightDarkItem.isShowBackground
-    property bool textColorLight: lightDarkItem.isLightMode
-    property bool isMeteogramLight: lightDarkItem.isMeteogramLight
+    property bool isShowBackground:  !lightDarkItem ? true :
+                                        lightDarkItem.isShowBackground
+    property bool textColorLight:  !lightDarkItem ? true :
+                                        lightDarkItem.isLightMode
+    property bool isMeteogramLight:  !lightDarkItem ? true :
+                                        lightDarkItem.isMeteogramLight
 
-    property var textColor: lightDarkItem.textColor
-    property var disabledTextColor: lightDarkItem.disabledTextColor
+    property var textColor:  !lightDarkItem ? theme.textColor :
+                                              lightDarkItem.textColor
+    property var disabledTextColor: !lightDarkItem ?
+                                        theme.disabledTextColor :
+                                        lightDarkItem.disabledTextColor
 
 
     // 0 - standard
