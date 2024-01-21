@@ -36,7 +36,7 @@ RowLayout {
                 id: varNameLabel
                 text: modelData.label
                 font.family: 'weathericons'
-                color: textColor
+                enabled: (isVarSelected && hasVariable)
 
                 property bool isHighlighted: false
                 property bool isSelected: modelData.isSelected !== undefined ?
@@ -49,9 +49,13 @@ RowLayout {
                 property bool hasVariable: modelData.hasVariable !== undefined ? modelData.hasVariable :
                                             meteogramModel.hasVariable(modelData.varName)
 
-                property var textColor: isHighlighted ? Kirigami.Theme.highlightColor :
-                                        ((isVarSelected && hasVariable) ? Kirigami.Theme.textColor :
-                                                         Kirigami.Theme.disabledTextColor)
+                ColorOverlay {
+                    anchors.fill: parent
+                    source: parent
+                    color: Kirigami.Theme.highlightColor
+                    antialiasing: true
+                    visible: varNameLabel.isHighlighted
+                }
 
                 Image {
                     id: notAvailable
