@@ -106,10 +106,10 @@ function getContrastingColor(color, bgColor, targetContrast) {
         lightness += 0.005
     }
 
-    if (!equals(color, color_)) {
-        print("targetColor = " + color_)
-        print("new contrast = " + contrast)
-    }
+    // if (!equals(color, color_)) {
+    //     print("targetColor = " + color_)
+    //     print("new contrast = " + contrast)
+    // }
 
     return color_
 }
