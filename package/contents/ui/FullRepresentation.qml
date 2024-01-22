@@ -139,7 +139,7 @@ Item {
             meteogramModel: main.meteogramModel
 
             model: [
-                { label: String.fromCodePoint(0x1F3F7), varName: "precipitationAmount",
+                { label: String.fromCodePoint(0x0023), varName: "precipitationAmount",
                     tooltip: i18n("Precipitation Labels"),
                     isSelected: plasmoid.configuration.renderPrecipitationLabels
                 },
