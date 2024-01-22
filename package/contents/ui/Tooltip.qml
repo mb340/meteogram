@@ -127,7 +127,8 @@ Item {
             iconText: '\uf084'
             valueText: (!hasPrecipitationAmount ? "" :
                         unitUtils.formatValue(currentWeatherModel.precipitationAmount,
-                                             "precipitationAmount")) +
+                                             "precipitationAmount",
+                                             precipitationType)) +
                         (!hasPrecipitationAmount ? "" : ", ") +
                         (!hasPrecipitationProb ? "" :
                          unitUtils.formatValue(currentWeatherModel.precipitationProb,
