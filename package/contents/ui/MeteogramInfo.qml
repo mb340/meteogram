@@ -196,6 +196,9 @@ Item {
                             (timeUtils.twelveHourClockEnabled ? timeUtils.getAmOrPm(hourFrom) : '00')
         dateLabel.text = dateStr
 
+        var y2VarName = plasmoid.configuration.y2VarName
+        var y2Color = colorPalette.pressureColor().toString()
+
         var iconNameStr = ""
         if (hourModel.iconName) {
             var sunRise = main.currentWeatherModel.sunRise
@@ -236,14 +239,14 @@ Item {
         model.addItem({
             nameStr: i18n("Pressure") + ":",
             valueStr: unitUtils.getPressureText(hourModel.pressure, pressureType),
-            valueColor: colorPalette.pressureColor().toString()
+            valueColor: y2VarName == "pressure" ? y2Color : ""
         })
 
         var windStr = unitUtils.getWindSpeedText(hourModel.windSpeed, windSpeedType)
         model.addItem({
             nameStr: i18n("Wind Speed") + ":",
             valueStr: windStr,
-            valueColor: ""
+            valueColor: y2VarName == "windSpeed" ? y2Color : ""
         })
 
         if (isFinite(hourModel.windGust)) {
@@ -251,7 +254,7 @@ Item {
             model.addItem({
                 nameStr: i18n("Wind Gust") + ":",
                 valueStr: gustStr,
-                valueColor: ""
+                valueColor: y2VarName == "windGust" ? y2Color : ""
             })
         }
 
@@ -290,7 +293,8 @@ Item {
             model.addItem({
                 nameStr: i18n("PoP") + ":",
                 valueStr: unitUtils.getPopText(hourModel.precipitationProb),
-                valueColor: colorPalette.rainColor().toString()
+                valueColor: y2VarName == "precipitationProb" ? y2Color :
+                                colorPalette.rainColor().toString()
             })
         }
 
@@ -298,7 +302,7 @@ Item {
             model.addItem({
                 nameStr: i18n("UV Index") + ":",
                 valueStr: hourModel.uvi.toFixed(2),
-                valueColor: ""
+                valueColor: y2VarName == "uvi" ? y2Color : ""
             })
         }
 
