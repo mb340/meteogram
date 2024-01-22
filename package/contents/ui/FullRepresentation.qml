@@ -420,19 +420,31 @@ Item {
             horizontalAlignment: Text.AlignCenter
             anchors.horizontalCenter: parent.horizontalCenter
             opacity: 0.6
+
+            ToolTip.visible: mouseArea.containsMouse
+
+            MouseArea {
+                id: mouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+            }
         }
 
         HourLegendLabel {
             text: "\uf0d2"  // wi-moon-alt-waxing-crescent-3
+            ToolTip.text: i18n("Night")
         }
         HourLegendLabel {
             text: "\uf051"  // wi-horizon-alt
+            ToolTip.text: i18n("Morning")
         }
         HourLegendLabel {
             text: "\uf00d"  // wi-day-sunny
+            ToolTip.text: i18n("Day")
         }
         HourLegendLabel {
             text: "\uf052"  // wi-horizon
+            ToolTip.text: i18n("Evening")
         }
     }
 
