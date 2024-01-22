@@ -417,9 +417,9 @@ Item {
                     return
                 }
 
-                context.fillStyle = Qt.rgba(theme.highlightColor.r,
-                                            theme.highlightColor.g,
-                                            theme.highlightColor.b,
+                context.fillStyle = Qt.rgba(main.meteogramHighlightColor.r,
+                                            main.meteogramHighlightColor.g,
+                                            main.meteogramHighlightColor.b,
                                             0.25)
 
 

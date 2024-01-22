@@ -219,7 +219,7 @@ Item {
                         hoverEnabled: true
                         anchors.fill: parent
                         onClicked: main.setNextPlace(modelData.previous)
-                        onEntered: parent.color = theme.highlightColor
+                        onEntered: parent.color = main.highlightColor
                         onExited: parent.color = main.textColor
                     }
                 }

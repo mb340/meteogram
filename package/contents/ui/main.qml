@@ -80,6 +80,12 @@ Item {
     property var disabledTextColor: !lightDarkItem ?
                                         theme.disabledTextColor :
                                         lightDarkItem.disabledTextColor
+    property var highlightColor: !lightDarkItem ?
+                                    theme.highlightColor :
+                                    lightDarkItem.highlightColor
+    property var meteogramHighlightColor: !lightDarkItem ?
+                                            theme.highlightColor :
+                                            lightDarkItem.meteogramHighlightColor
 
 
     // 0 - standard

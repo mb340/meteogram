@@ -49,7 +49,7 @@ RowLayout {
                 ColorOverlay {
                     anchors.fill: parent
                     source: parent
-                    color: theme.highlightColor
+                    color: main.highlightColor
                     antialiasing: true
                     visible: varNameLabel.isHighlighted
                 }

@@ -3,6 +3,8 @@ import QtQuick.Controls 2.15
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.plasmoid 2.0
 
+import "../code/color.js" as ColorTools
+
 
 // Handles the case where the widget background is hidden. In this case
 // Plasma uses dark mode text color on a light theme. In other words white text
@@ -23,6 +25,9 @@ Item {
     property var textColor: isShowBackground ? theme.textColor : label.color
     property var disabledTextColor: isShowBackground ? theme.disabledTextColor :
                                                        disabledLabel.color
+
+    property var highlightColor: null
+    property var meteogramHighlightColor: null
 
     property var themeTextColor: theme.textColor
 
@@ -66,6 +71,14 @@ Item {
         } else {
             isShowBackground = true
         }
+
+        let bgColor = isLightMode ? Qt.rgba(1, 1, 1, 1) : Qt.rgba(0, 0, 0, 1)
+        let contrast = isLightMode ? 3 : 10
+        highlightColor = ColorTools.getContrastingColor(theme.highlightColor, bgColor, contrast)
+
+        bgColor = isMeteogramLight ? Qt.rgba(1, 1, 1, 1) : Qt.rgba(0, 0, 0, 1)
+        contrast = isMeteogramLight ? 3 : 10
+        meteogramHighlightColor = ColorTools.getContrastingColor(theme.highlightColor, bgColor, contrast)
 
         if (doReload) {
             main.reloadMeteogram()
