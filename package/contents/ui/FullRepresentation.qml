@@ -214,7 +214,12 @@ Item {
 
                 Label {
                     text: modelData.label
+
+                    ToolTip.text: modelData.tooltipText
+                    ToolTip.visible: mouseArea.containsMouse
+
                     MouseArea {
+                        id: mouseArea
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true
                         anchors.fill: parent
@@ -227,8 +232,16 @@ Item {
 
             Repeater {
                 model: [
-                    { label: "     \u25C4", previous: true },
-                    { label: "\u25BA     ", previous: false }
+                    {
+                        label: "     \u25C4",
+                        previous: true,
+                        tooltipText: i18n("Previous location")
+                    },
+                    {
+                        label: "\u25BA     ",
+                        previous: false,
+                        tooltipText: i18n("Next location")
+                    }
                 ]
 
                 delegate: buttonComponent
