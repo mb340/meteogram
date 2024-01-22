@@ -412,45 +412,27 @@ Item {
             height: 1
         }
 
-        Label {
+        component HourLegendLabel: Label {
+            height: parent.itemHeight
+            font.family: 'weathericons'
+            font.pixelSize: hourLegend.fontPixelSize
+            font.pointSize: -1
+            horizontalAlignment: Text.AlignCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            opacity: 0.6
+        }
+
+        HourLegendLabel {
             text: "\uf0d2"  // wi-moon-alt-waxing-crescent-3
-            height: parent.itemHeight
-            font.family: 'weathericons'
-            font.pixelSize: hourLegend.fontPixelSize
-            font.pointSize: -1
-            horizontalAlignment: Text.AlignCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            opacity: 0.6
         }
-        Label {
+        HourLegendLabel {
             text: "\uf051"  // wi-horizon-alt
-            height: parent.itemHeight
-            font.family: 'weathericons'
-            font.pixelSize: hourLegend.fontPixelSize
-            font.pointSize: -1
-            horizontalAlignment: Text.AlignCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            opacity: 0.6
         }
-        Label {
+        HourLegendLabel {
             text: "\uf00d"  // wi-day-sunny
-            height: parent.itemHeight
-            font.family: 'weathericons'
-            font.pixelSize: hourLegend.fontPixelSize
-            font.pointSize: -1
-            horizontalAlignment: Text.AlignCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            opacity: 0.6
         }
-        Label {
+        HourLegendLabel {
             text: "\uf052"  // wi-horizon
-            height: parent.itemHeight
-            font.family: 'weathericons'
-            font.pixelSize: hourLegend.fontPixelSize
-            font.pointSize: -1
-            horizontalAlignment: Text.AlignCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            opacity: 0.6
         }
     }
 
