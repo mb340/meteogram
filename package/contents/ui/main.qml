@@ -273,6 +273,9 @@ Item {
                     break;
                 default:
             }
+
+            plasmoid.configuration.layoutSpacing = units.smallSpacing
+
             plasmoid.configuration.firstRun = false
         }
         inTray = (plasmoid.parent !== null && (plasmoid.parent.pluginName === 'org.kde.plasma.private.systemtray' || plasmoid.parent.objectName === 'taskItemContainer'))
