@@ -261,6 +261,9 @@ PlasmoidItem {
                     break;
                 default:
             }
+
+            plasmoid.configuration.layoutSpacing = Kirigami.Units.smallSpacing
+
             plasmoid.configuration.firstRun = false
         }
 
