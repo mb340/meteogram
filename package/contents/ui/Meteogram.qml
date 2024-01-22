@@ -266,6 +266,7 @@ Item {
             }
             Label {
                 text: hourFromEnding
+                color: main.disabledTextColor
                 verticalAlignment: Text.AlignTop
                 horizontalAlignment: Text.AlignLeft
                 anchors.top: hourText.top
