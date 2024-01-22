@@ -37,6 +37,10 @@ QtObject {
         humidity = NaN
         cloudArea = NaN
 
+        precipitationProb = NaN
+        precipitationAmount = NaN
+
+
         sunRise = null
         sunSet = null
 
