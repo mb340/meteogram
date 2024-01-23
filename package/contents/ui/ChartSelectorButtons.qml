@@ -63,7 +63,7 @@ RowLayout {
                     smooth: true
                     visible: false
 
-                    width: parent.height
+                    width: parent.height * 0.8
                     height: width
                     sourceSize.width: width
                     sourceSize.height: width
