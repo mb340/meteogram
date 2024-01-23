@@ -145,15 +145,12 @@ Item {
                     anchors.left: parent.left
                     anchors.right: parent.right
 
-                    RowLayout {
+                    Label {
+                        text: dayPartTitles[index] ? dayPartTitles[index] : ""
                         width: parent.width / nColumns
-                        height: childrenRect.height
-                        Label {
-                            text: dayPartTitles[index] ? dayPartTitles[index] : ""
-                            Layout.alignment: Qt.AlignHLeft | Qt.AlignVBottom
-                        }
-
+                        height: contentHeight
                         visible: tableRow.visible
+                        Layout.alignment: Qt.AlignHLeft | Qt.AlignVBottom
                     }
 
                     Repeater {
@@ -189,29 +186,28 @@ Item {
         Component {
             id: defaultCellComponent
 
-            RowLayout {
+            Label {
                 width: parent.width / nColumns
-                height: childrenRect.height
-                Label {
+                height: contentHeight
+                anchors.left: parent.left
+                anchors.right: parent.right
 
-                    property var value: (model && model[varName] != undefined) ? model[varName] : null
-                    property int partOfDay: model ? model["partOfDay"] : 0
-                    property var iconDesc: (value && varName !== "iconName") ? null :
-                                                currentProvider ? currentProvider.getIconDescription(value) : ""
-                    property string valueStr: isNaN(value) || value === null ? "-" :
-                                                unitUtils.formatValue(value, varName,
-                                                                      unitUtils.getUnitType(varName),
-                                                                      dayPart)
+                property var value: (model && model[varName] != undefined) ? model[varName] : null
+                property int partOfDay: model ? model["partOfDay"] : 0
+                property var iconDesc: (value && varName !== "iconName") ? null :
+                                            currentProvider ? currentProvider.getIconDescription(value) : ""
+                property string valueStr: isNaN(value) || value === null ? "-" :
+                                            unitUtils.formatValue(value, varName,
+                                                                  unitUtils.getUnitType(varName),
+                                                                  dayPart)
 
-                    text: varName === "iconName" ? (iconDesc ? iconDesc : "-") : valueStr
-                    horizontalAlignment: Text.AlignHCenter
+                text: varName === "iconName" ? (iconDesc ? iconDesc : "-") : valueStr
+                horizontalAlignment: Text.AlignHCenter
 
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    Layout.preferredWidth: parent.width
-                    // visible: dayParts && dayParts[dayPart]["temperature"]
-                }
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Layout.preferredWidth: parent.width
+                // visible: dayParts && dayParts[dayPart]["temperature"]
             }
-
         }
 
         Component {
