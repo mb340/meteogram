@@ -204,7 +204,10 @@ Item {
                                                                       dayPart)
 
                     text: varName === "iconName" ? (iconDesc ? iconDesc : "-") : valueStr
+                    horizontalAlignment: Text.AlignHCenter
+
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    Layout.preferredWidth: parent.width
                     // visible: dayParts && dayParts[dayPart]["temperature"]
                 }
             }
