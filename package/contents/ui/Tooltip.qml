@@ -19,6 +19,11 @@ Item {
                                             currentWeatherModel.precipitationAmount > 0
     property var hasPrecipitationProb: !isNaN(currentWeatherModel.precipitationProb) &&
                                             currentWeatherModel.precipitationProb > 0
+
+
+    property bool hasWindSpeed: !isNaN(currentWeatherModel.windSpeedMps)
+    property bool hasWindDirection: !isNaN(currentWeatherModel.windDirection)
+
     property var hasSunriseSunset: timeUtils.hasSunriseSunsetData(currentWeatherModel)
 
 
@@ -165,13 +170,30 @@ Item {
                                              "cloudArea")
         }
 
-        WeatherItem {
-            iconText: IconTools.getWindDirectionIconCode(
-                                    currentWeatherModel.windDirection)
-            valueText: unitUtils.getWindDirectionText(currentWeatherModel.windDirection,
-                                                      windDirectionType) + " " +
-                  unitUtils.getWindSpeedText(currentWeatherModel.windSpeedMps,
-                                             windSpeedType)
+        RowLayout {
+            spacing: 0
+
+            WeatherItem {
+                iconText: IconTools.getWindDirectionIconCode(
+                                        currentWeatherModel.windDirection)
+                valueText: unitUtils.getWindSpeedText(currentWeatherModel.windSpeedMps,
+                                                 windSpeedType)
+            }
+
+            Label {
+                text: " | "
+                color: Kirigami.Theme.disabledTextColor
+                visible: hasWindSpeed && hasWindDirection
+            }
+
+            WeatherItem {
+                iconText: hasWindSpeed ? '' :
+                            IconTools.getWindDirectionIconCode(
+                                        currentWeatherModel.windDirection)
+                valueText: unitUtils.getWindDirectionText(currentWeatherModel.windDirection,
+                                                          windDirectionType)
+            }
+
         }
 
         WeatherItem {
