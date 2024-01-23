@@ -16,6 +16,7 @@
  */
 import QtQuick 2.5
 import QtQuick.Controls 2.5
+import QtGraphicalEffects 1.12
 import org.kde.plasma.plasmoid 2.0
 import "../code/icons.js" as IconTools
 import "data_models"
@@ -354,6 +355,17 @@ Item {
                         width: Math.min(16 * units.devicePixelRatio, windSpeedRepeater.rectWidth)
                         height: width
                         anchors.centerIn: parent
+
+                        opacity: 0
+                    }
+
+                    ColorOverlay {
+                        anchors.fill: wind
+                        source: wind
+                        rotation: wind.rotation
+                        color: main.disabledTextColor
+                        antialiasing: true
+                        visible: true
                     }
 
                     ToolTip{
