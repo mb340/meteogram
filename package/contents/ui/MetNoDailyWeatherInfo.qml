@@ -100,6 +100,7 @@ Item {
                     Label {
                         id: headerLabel
                         text: index === 0 ? "" : dayPartHeaders[index - 1]
+                        color: main.theme.textColor
                         Layout.alignment: Qt.AlignHLeft | Qt.AlignVCenter
                         Layout.leftMargin: Kirigami.Units.smallSpacing
                     }
