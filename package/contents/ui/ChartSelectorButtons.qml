@@ -36,6 +36,7 @@ RowLayout {
                 id: varNameLabel
                 height: parent.height
                 text: modelData.label
+                color: enabled ? main.theme.textColor : main.theme.disabledTextColor
                 font.family: 'weathericons'
                 enabled: (isVarSelected && hasVariable)
 
