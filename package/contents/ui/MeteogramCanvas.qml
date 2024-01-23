@@ -805,7 +805,7 @@ Canvas {
 
         var decimalPlaces = Math.max(ChartUtils.countDecimalPlaces(maxP),
                                      ChartUtils.countDecimalPlaces(minP))
-        decimalPlaces = Math.min(ChartUtils.countDecimalPlaces(gridStepSize), decimalPlaces)
+        decimalPlaces = Math.max(ChartUtils.countDecimalPlaces(gridStepSize), decimalPlaces)
 
         rightAxisDecimals = decimalPlaces
         rightAxisScale.setDomain(minP, maxP)
