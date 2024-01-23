@@ -95,6 +95,8 @@ Item {
                     text: iconText
                     horizontalAlignment: Text.AlignHCenter
 
+                    visible: iconText && iconText.length > 0
+
                     Layout.preferredWidth: units.iconSizes.medium
                 }
                 Label {
@@ -119,18 +121,31 @@ Item {
                                              "humidity")
         }
 
-        WeatherItem {
-            visible: hasPrecipitationAmount || hasPrecipitationProb
+        RowLayout {
+            spacing: 0
 
-            iconText: '\uf084'
-            valueText: (!hasPrecipitationAmount ? "" :
-                        unitUtils.formatValue(currentWeatherModel.precipitationAmount,
-                                             "precipitationAmount",
-                                             precipitationType)) +
-                        (!hasPrecipitationAmount ? "" : ", ") +
-                        (!hasPrecipitationProb ? "" :
-                         unitUtils.formatValue(currentWeatherModel.precipitationProb,
-                                             "precipitationProb"))
+            WeatherItem {
+                visible: hasPrecipitationAmount
+
+                iconText: '\uf084'
+                valueText: unitUtils.formatValue(currentWeatherModel.precipitationAmount,
+                                                 "precipitationAmount",
+                                                 precipitationType)
+            }
+
+            Label {
+                text: " | "
+                color: theme.disabledTextColor
+                visible: hasPrecipitationAmount && hasPrecipitationProb
+            }
+
+            WeatherItem {
+                visible: hasPrecipitationProb
+
+                iconText: hasPrecipitationAmount ? '' : '\uf084'
+                valueText: unitUtils.formatValue(currentWeatherModel.precipitationProb,
+                                                 "precipitationProb")
+            }
         }
 
         WeatherItem {
