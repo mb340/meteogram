@@ -24,7 +24,7 @@ RowLayout {
 
         Item {
             width: childrenRect.width
-            height: childrenRect.height
+            Layout.fillHeight: true
 
             Layout.leftMargin: 1
             Layout.rightMargin: 1
@@ -34,6 +34,7 @@ RowLayout {
 
             Label {
                 id: varNameLabel
+                height: parent.height
                 text: modelData.label
                 font.family: 'weathericons'
                 enabled: (isVarSelected && hasVariable)
