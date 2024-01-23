@@ -16,8 +16,10 @@
  */
 import QtQuick
 import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 import org.kde.plasma.plasmoid
 import org.kde.kirigami as Kirigami
+
 import "../code/icons.js" as IconTools
 import "data_models"
 
@@ -360,6 +362,17 @@ Item {
                         width: Math.min(16 * 1, windSpeedRepeater.rectWidth)
                         height: width
                         anchors.centerIn: parent
+
+                        opacity: 0
+                    }
+
+                    ColorOverlay {
+                        anchors.fill: wind
+                        source: wind
+                        rotation: wind.rotation
+                        color: main.theme.disabledTextColor
+                        antialiasing: true
+                        visible: true
                     }
 
                     ToolTip{
