@@ -233,12 +233,12 @@ Item {
             Repeater {
                 model: [
                     {
-                        label: "     \u25C4",
+                        label: "     \u140A",
                         previous: true,
                         tooltipText: i18n("Previous location")
                     },
                     {
-                        label: "\u25BA     ",
+                        label: "\u1405     ",
                         previous: false,
                         tooltipText: i18n("Next location")
                     }
