@@ -799,14 +799,13 @@ Canvas {
         }
 
         let stepSize = (maxP - minP) / temperatureYGridCount
-        let gridStepSize = temperatureYGridStep * stepSize
 
-        // Limit to 2 decimal places
-        gridStepSize = Math.round(gridStepSize * 100) / 100
+        let [stepDp, stepMult] = ChartUtils.getMagnitude(stepSize)
+        stepDp *= -1
 
-        var decimalPlaces = Math.max(ChartUtils.countDecimalPlaces(maxP),
-                                     ChartUtils.countDecimalPlaces(minP))
-        decimalPlaces = Math.max(ChartUtils.countDecimalPlaces(gridStepSize), decimalPlaces)
+        let decimalPlaces = stepDp
+        decimalPlaces = !isNaN(decimalPlaces) ? decimalPlaces : 0
+        decimalPlaces = Math.max(0, Math.min(decimalPlaces, 3))
 
         rightAxisDecimals = decimalPlaces
         rightAxisScale.setDomain(minP, maxP)
