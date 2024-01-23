@@ -24,7 +24,10 @@ Item {
 
     property var textColor: isShowBackground ? theme.textColor : label.color
     property var disabledTextColor: isShowBackground ? theme.disabledTextColor :
-                                                       disabledLabel.color
+                                                       Qt.rgba(disabledLabel.color.r,
+                                                               disabledLabel.color.g,
+                                                               disabledLabel.color.b,
+                                                               0.50)
 
     property var highlightColor: null
     property var meteogramHighlightColor: null
