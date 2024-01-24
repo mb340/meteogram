@@ -13,6 +13,10 @@ Forked from `blackadderkate/weather-widget-2` which was forked from `kotelnik/pl
 ### Requirements
 
  - KDE Plasma 5
+ - QtQuick.XmlListModel  
+    - DEB: `qml-module-qtquick-xmllistmodel`  
+    - RPM: `libqt5-qtxmlpatterns-imports`  
+    - Arch: `qt5-xmlpatterns`  
 
 
 ### Data sources
