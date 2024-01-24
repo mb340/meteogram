@@ -45,7 +45,7 @@ RowLayout {
     property int iconSetType: (plasmoid && plasmoid.configuration && plasmoid.configuration.iconSetType) ?
                                plasmoid.configuration.iconSetType : 0
 
-    opacity: past ? 0.25 : 1
+    opacity: !past ? 1.0 : (main.colors.isShowBackground ? 0.25 : 0.50)
     // enabled: !past
 
     Item {
