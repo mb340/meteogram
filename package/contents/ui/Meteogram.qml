@@ -271,7 +271,10 @@ Item {
             }
             Label {
                 text: hourFromEnding
-                color: main.colors.disabledTextColor
+                color: main.colors.isShowBackground ?
+                            main.colors.disabledTextColor :
+                            main.colors.textColor
+                opacity: main.colors.isShowBackground ? 1.0 : 0.60
                 verticalAlignment: Text.AlignTop
                 horizontalAlignment: Text.AlignLeft
                 anchors.top: hourText.top
@@ -369,7 +372,10 @@ Item {
                         anchors.fill: wind
                         source: wind
                         rotation: wind.rotation
-                        color: main.colors.disabledTextColor
+                        color: main.colors.isShowBackground ?
+                                    main.colors.disabledTextColor :
+                                    main.colors.textColor
+                        opacity: main.colors.isShowBackground ? 1.0 : 0.60
                         antialiasing: true
                         visible: true
                     }

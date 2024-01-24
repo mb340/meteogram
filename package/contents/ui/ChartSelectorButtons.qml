@@ -33,7 +33,15 @@ RowLayout {
                 id: varNameLabel
                 height: parent.height
                 text: modelData.label
-                color: enabled ? main.colors.textColor : main.colors.disabledTextColor
+                color: main.colors.isShowBackground ?
+                            (enabled ?
+                                main.colors.textColor :
+                                main.colors.disabledTextColor) :
+                            main.colors.textColor
+
+                opacity: main.colors.isShowBackground ? 1.0 :
+                            (varNameLabel.isVarSelected ? 1.0 : 0.60)
+
                 font.family: 'weathericons'
                 enabled: (isVarSelected && hasVariable)
 
@@ -73,8 +81,14 @@ RowLayout {
                 ColorOverlay {
                     anchors.fill: notAvailable
                     source: notAvailable
-                    color: (visible && varNameLabel.isVarSelected) ?
-                                main.colors.textColor : main.colors.disabledTextColor
+                    color: main.colors.isShowBackground ?
+                                ((visible && varNameLabel.isVarSelected) ?
+                                    main.colors.textColor :
+                                    main.colors.disabledTextColor)
+                                :
+                                main.colors.textColor
+                    opacity: main.colors.isShowBackground ? 1.0 :
+                                (varNameLabel.isVarSelected ? 1.0 : 0.60)
                     antialiasing: true
                     visible: !varNameLabel.hasVariable
                 }

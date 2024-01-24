@@ -26,10 +26,7 @@ Item {
 
     property var textColor: isShowBackground ? theme.textColor : label.color
     property var disabledTextColor: isShowBackground ? theme.disabledTextColor :
-                                                       Qt.rgba(disabledLabel.color.r,
-                                                               disabledLabel.color.g,
-                                                               disabledLabel.color.b,
-                                                               0.50)
+                                                       disabledLabel.color
 
     property var highlightColor: null
 
