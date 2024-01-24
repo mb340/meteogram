@@ -23,7 +23,7 @@ import "../code/icons.js" as IconTools
 Item {
 
     property int nColumns: 5
-    property color lineColor: main.textColor
+    property color lineColor: main.colors.textColor
 
     property var model: null
     property var dayParts: model ? model.models : null

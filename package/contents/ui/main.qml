@@ -67,26 +67,7 @@ Item {
     property int inTrayActiveTimeoutSec: plasmoid.configuration.inTrayActiveTimeoutSec
 
     property Item lightDarkItem: null
-
-    property bool isShowBackground:  !lightDarkItem ? true :
-                                        lightDarkItem.isShowBackground
-    property bool textColorLight:  !lightDarkItem ? true :
-                                        lightDarkItem.isLightMode
-    property bool isMeteogramLight:  !lightDarkItem ? true :
-                                        lightDarkItem.isMeteogramLight
-
-    property var textColor:  !lightDarkItem ? theme.textColor :
-                                              lightDarkItem.textColor
-    property var disabledTextColor: !lightDarkItem ?
-                                        theme.disabledTextColor :
-                                        lightDarkItem.disabledTextColor
-    property var highlightColor: !lightDarkItem ?
-                                    theme.highlightColor :
-                                    lightDarkItem.highlightColor
-    property var meteogramHighlightColor: !lightDarkItem ?
-                                            theme.highlightColor :
-                                            lightDarkItem.meteogramHighlightColor
-
+    property var colors: lightDarkItem
 
     // 0 - standard
     // 1 - vertical

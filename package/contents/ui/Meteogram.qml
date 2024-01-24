@@ -43,8 +43,12 @@ Item {
 
     property double precipitationMaxGraphY: 10
 
-    property color gridColor: main.textColorLight ? Qt.tint(main.textColor, '#80000000') : Qt.tint(main.textColor, '#80FFFFFF')
-    property color gridColorHighlight: main.textColorLight ? Qt.tint(main.textColor, '#50000000') : Qt.tint(main.textColor, '#50FFFFFF')
+    property color gridColor: main.colors.meteogram.textColorLight ?
+                                Qt.tint(main.colors.meteogram.textColor, '#80000000') :
+                                Qt.tint(main.colors.meteogram.textColor, '#80FFFFFF')
+    property color gridColorHighlight: main.colors.meteogram.textColorLight ?
+                                        Qt.tint(main.colors.meteogram.textColor, '#50000000') :
+                                        Qt.tint(main.colors.meteogram.textColor, '#50FFFFFF')
 
     property string y2VarName: plasmoid.configuration.y2VarName
     property bool y2AxisVisble: meteogramModel.hasVariable(y2VarName)
@@ -168,7 +172,7 @@ Item {
                 horizontalAlignment: Text.AlignLeft
                 font.pixelSize: 11 * units.devicePixelRatio
                 font.pointSize: -1
-                color: colorPalette.pressureColor(main.textColorLight)
+                color: colorPalette.pressureColor(main.colors.textColorLight)
 
                 visible: y2AxisVisble
             }
@@ -267,7 +271,7 @@ Item {
             }
             Label {
                 text: hourFromEnding
-                color: main.disabledTextColor
+                color: main.colors.disabledTextColor
                 verticalAlignment: Text.AlignTop
                 horizontalAlignment: Text.AlignLeft
                 anchors.top: hourText.top
@@ -348,7 +352,9 @@ Item {
 
                     Image {
                         id: wind
-                        source: !isNaN(windSpeed) ? windStrength(windSpeed, main.textColorLight) : ""
+                        source: isNaN(windSpeed) ? "" :
+                                    windStrength(windSpeed,
+                                                 main.colors.textColorLight)
                         rotation: windFrom(windDirection)
                         fillMode: Image.PreserveAspectFit
 
@@ -363,7 +369,7 @@ Item {
                         anchors.fill: wind
                         source: wind
                         rotation: wind.rotation
-                        color: main.disabledTextColor
+                        color: main.colors.disabledTextColor
                         antialiasing: true
                         visible: true
                     }
@@ -430,9 +436,9 @@ Item {
                     return
                 }
 
-                context.fillStyle = Qt.rgba(main.meteogramHighlightColor.r,
-                                            main.meteogramHighlightColor.g,
-                                            main.meteogramHighlightColor.b,
+                context.fillStyle = Qt.rgba(main.colors.meteogram.highlightColor.r,
+                                            main.colors.meteogram.highlightColor.g,
+                                            main.colors.meteogram.highlightColor.b,
                                             0.25)
 
 

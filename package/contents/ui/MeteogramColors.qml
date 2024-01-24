@@ -120,7 +120,8 @@ Item {
 
     function backgroundColor() {
         if (colorPaletteType == MeteogramColors.PaletteType.Custom) {
-            return !main.isMeteogramLight ? plasmoid.configuration.backgroundColor :
+            return !main.colors.meteogram.isLightMode ?
+                                    plasmoid.configuration.backgroundColor :
                                     plasmoid.configuration.backgroundColorDark
         }
         return getPalette().backgroundColor
@@ -128,7 +129,8 @@ Item {
 
     function pressureColor(colorLight) {
         if (colorPaletteType == MeteogramColors.PaletteType.Custom) {
-            let lightMode = colorLight !== undefined ? colorLight : main.isMeteogramLight
+            let lightMode = colorLight !== undefined ?
+                                colorLight : main.colors.meteogram.isLightMode
             return !lightMode ? plasmoid.configuration.pressureColor :
                                     plasmoid.configuration.pressureColorDark
         }
@@ -137,7 +139,8 @@ Item {
 
     function temperatureWarmColor() {
         if (colorPaletteType == MeteogramColors.PaletteType.Custom) {
-            return !main.isMeteogramLight ? plasmoid.configuration.temperatureWarmColor :
+            return !main.colors.meteogram.isLightMode ?
+                                    plasmoid.configuration.temperatureWarmColor :
                                     plasmoid.configuration.temperatureWarmColorDark
         }
         return getPalette().temperatureWarmColor
@@ -145,7 +148,8 @@ Item {
 
     function temperatureColdColor() {
         if (colorPaletteType === MeteogramColors.PaletteType.Custom) {
-            return !main.isMeteogramLight ? plasmoid.configuration.temperatureColdColor :
+            return !main.colors.meteogram.isLightMode ?
+                                    plasmoid.configuration.temperatureColdColor :
                                     plasmoid.configuration.temperatureColdColorDark
         }
         return getPalette().temperatureColdColor
@@ -153,7 +157,8 @@ Item {
 
     function rainColor() {
         if (colorPaletteType === MeteogramColors.PaletteType.Custom) {
-            return !main.isMeteogramLight ? plasmoid.configuration.rainColor :
+            return !main.colors.meteogram.isLightMode ?
+                                    plasmoid.configuration.rainColor :
                                     plasmoid.configuration.rainColorDark
         }
         return getPalette().rainColor
@@ -161,7 +166,8 @@ Item {
 
     function cloudAreaColor() {
         if (colorPaletteType === MeteogramColors.PaletteType.Custom) {
-            return !main.isMeteogramLight ? plasmoid.configuration.cloudAreaColor :
+            return !main.colors.meteogram.isLightMode ?
+                                    plasmoid.configuration.cloudAreaColor :
                                     plasmoid.configuration.cloudAreaColorDark
         }
         return getPalette().cloudAreaColor
@@ -169,7 +175,8 @@ Item {
 
     function cloudAreaColor2() {
         if (colorPaletteType === MeteogramColors.PaletteType.Custom) {
-            return !main.isMeteogramLight ? plasmoid.configuration.cloudAreaColor2 :
+            return !main.colors.meteogram.isLightMode ?
+                                    plasmoid.configuration.cloudAreaColor2 :
                                     plasmoid.configuration.cloudAreaColor2Dark
         }
         return getPalette().cloudAreaColor2
@@ -177,7 +184,8 @@ Item {
 
     function humidityColor() {
         if (colorPaletteType === MeteogramColors.PaletteType.Custom) {
-            return !main.isMeteogramLight ? plasmoid.configuration.humidityColor :
+            return !main.colors.meteogram.isLightMode ?
+                                    plasmoid.configuration.humidityColor :
                                     plasmoid.configuration.humidityColorDark
         }
         return getPalette().humidityColor
@@ -187,14 +195,17 @@ Item {
         switch (colorPaletteType) {
             case MeteogramColors.PaletteType.Prot:     // prot
             case MeteogramColors.PaletteType.Deut:     // deut
-                return main.isMeteogramLight ? protPaletteDark : protPalette
+                return main.colors.meteogram.isLightMode ?
+                        protPaletteDark : protPalette
             case MeteogramColors.PaletteType.Trit:     // trit
-                return main.isMeteogramLight ? tritPaletteDark : tritPalette
+                return main.colors.meteogram.isLightMode ?
+                        tritPaletteDark : tritPalette
             case MeteogramColors.PaletteType.Custom:
                 return null
             case MeteogramColors.PaletteType.Default:
             default:
-                return main.isMeteogramLight ? paletteDark : palette
+                return main.colors.meteogram.isLightMode ?
+                        paletteDark : palette
         }
     }
 }

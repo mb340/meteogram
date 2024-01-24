@@ -17,10 +17,12 @@ Item {
     property bool isShowBackground: true
 
     property bool isLightMode: isShowBackground ?
-                                    (((theme.textColor.r + theme.textColor.g + theme.textColor.b) / 3) > 0.5) :
-                                    ((label.color.r + label.color.g + label.color.b) / 3) > 0.5
-
-    property bool isMeteogramLight: ((theme.textColor.r + theme.textColor.g + theme.textColor.b) / 3) > 0.5
+                                    (((theme.textColor.r +
+                                       theme.textColor.g +
+                                       theme.textColor.b) / 3) > 0.5) :
+                                    ((label.color.r +
+                                      label.color.g +
+                                      label.color.b) / 3) > 0.5
 
     property var textColor: isShowBackground ? theme.textColor : label.color
     property var disabledTextColor: isShowBackground ? theme.disabledTextColor :
@@ -30,9 +32,10 @@ Item {
                                                                0.50)
 
     property var highlightColor: null
-    property var meteogramHighlightColor: null
 
     property var themeTextColor: theme.textColor
+
+    property alias meteogram: _meteogram
 
     // This event handles Plasma theme changes
     onThemeTextColorChanged: {
@@ -46,6 +49,18 @@ Item {
         function onEffectiveBackgroundHintsChanged() {
             update(true)
         }
+    }
+
+    QtObject {
+        id: _meteogram
+
+        property bool isLightMode: ((theme.textColor.r +
+                                     theme.textColor.g +
+                                     theme.textColor.b) / 3) > 0.5
+
+        property var textColor: theme.textColor
+        property var disabledTextColor: theme.disabledTextColor
+        property var highlightColor: null
     }
 
     Label {
@@ -79,9 +94,9 @@ Item {
         let contrast = isLightMode ? 3 : 10
         highlightColor = ColorTools.getContrastingColor(theme.highlightColor, bgColor, contrast)
 
-        bgColor = isMeteogramLight ? Qt.rgba(1, 1, 1, 1) : Qt.rgba(0, 0, 0, 1)
-        contrast = isMeteogramLight ? 3 : 10
-        meteogramHighlightColor = ColorTools.getContrastingColor(theme.highlightColor, bgColor, contrast)
+        bgColor = _meteogram.isLightMode ? Qt.rgba(1, 1, 1, 1) : Qt.rgba(0, 0, 0, 1)
+        contrast = _meteogram.isLightMode ? 3 : 10
+        _meteogram.highlightColor = ColorTools.getContrastingColor(theme.highlightColor, bgColor, contrast)
 
         if (doReload) {
             main.reloadMeteogram()

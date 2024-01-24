@@ -126,7 +126,7 @@ Item {
 
         Label {
             text: "\uFF5C"
-            color: main.disabledTextColor
+            color: main.colors.disabledTextColor
             Layout.leftMargin: 0
             Layout.rightMargin: 0
         }
@@ -170,7 +170,7 @@ Item {
 
         Label {
             text: "\uFF5C"
-            color: main.disabledTextColor
+            color: main.colors.disabledTextColor
             Layout.leftMargin: 0
             Layout.rightMargin: 0
         }
@@ -224,8 +224,8 @@ Item {
                         hoverEnabled: true
                         anchors.fill: parent
                         onClicked: main.setNextPlace(modelData.previous)
-                        onEntered: parent.color = main.highlightColor
-                        onExited: parent.color = main.textColor
+                        onEntered: parent.color = main.colors.highlightColor
+                        onExited: parent.color = main.colors.textColor
                     }
                 }
             }
@@ -336,7 +336,7 @@ Item {
 
                 Text {
                     text: i18n("Weather Alerts")
-                    color: main.textColor
+                    color: main.colors.textColor
                     horizontalAlignment: Text.AlignHCenter
                     anchors.centerIn: parent
                 }
