@@ -15,7 +15,7 @@
 import QtQuick 2.0
 import "../../code/print.js" as PrintUtil
 
-Item {
+QtObject {
     id: dataDownloader
 
     objectName: "DataDownloader "
@@ -160,14 +160,11 @@ Item {
     }
 
 
-    Component {
-        id: abortTimer
-        Timer {
-            interval: abortTimeInterval
-            running: false
-            repeat: false
-            triggeredOnStart: false
-        }
+    property Component abortTimer: Timer {
+        interval: abortTimeInterval
+        running: false
+        repeat: false
+        triggeredOnStart: false
     }
 
     function startAbortTimer(key, func) {
