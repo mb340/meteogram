@@ -103,6 +103,11 @@ Item {
         hoverEnabled: true
 
         onEntered: {
+            if (!currentProvider) {
+                metnoDailyWeatherInfo.model = null
+                owmDailyWeatherInfo.model = null
+                return
+            }
             if (currentProvider.providerId === "metno" || currentProvider.providerId === "openMeteo") {
                 metnoDailyWeatherInfo.model = dailyWeatherModels.get(index)
             } else if (currentProvider.providerId === "owm") {
