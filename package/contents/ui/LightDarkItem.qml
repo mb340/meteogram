@@ -22,15 +22,15 @@ Item {
                                   Kirigami.Theme.textColor.g +
                                   Kirigami.Theme.textColor.b) / 3) > 0.5)
 
-    property var textColor: Kirigami.Theme.textColor
-    property var disabledTextColor: isShowBackground ? Kirigami.Theme.disabledTextColor :
-                                                       Qt.rgba(Kirigami.Theme.disabledTextColor.r,
-                                                               Kirigami.Theme.disabledTextColor.g,
-                                                               Kirigami.Theme.disabledTextColor.b,
-                                                               0.50)
-    property var highlightColor: null
+    property color textColor: Kirigami.Theme.textColor
+    property color disabledTextColor: isShowBackground ? Kirigami.Theme.disabledTextColor :
+                                                         Qt.rgba(Kirigami.Theme.disabledTextColor.r,
+                                                                 Kirigami.Theme.disabledTextColor.g,
+                                                                 Kirigami.Theme.disabledTextColor.b,
+                                                                 0.50)
+    property color highlightColor: Kirigami.Theme.highlightColor
 
-    property var themeTextColor: systemPalette.text
+    property color themeTextColor: systemPalette.text
 
     property alias meteogram: _meteogram
 
@@ -62,12 +62,12 @@ Item {
                                      systemPalette.text.b) / 3) > 0.5
 
 
-        property var textColor: !systemPalette ?  Kirigami.Theme.textColor :
-                                                  systemPalette.text
+        property color textColor: !systemPalette ?  Kirigami.Theme.textColor :
+                                                    systemPalette.text
 
-        property var backgroundColor: !systemPalette ?  Kirigami.Theme.backgroundColor :
-                                                        systemPalette.window
-        property var highlightColor: null
+        property color backgroundColor: !systemPalette ?  Kirigami.Theme.backgroundColor :
+                                                          systemPalette.window
+        property color highlightColor: Kirigami.Theme.highlightColor
 
     }
 
