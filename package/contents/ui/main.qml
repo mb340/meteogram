@@ -295,6 +295,7 @@ Item {
     }
 
     function setCurrentProviderAccordingId(providerId) {
+        currentProvider = null
         if (providerId === 'owm') {
             dbgprint('setting provider OpenWeatherMap')
             currentProvider = owmProvider
@@ -403,6 +404,10 @@ Item {
         meteogramModel.hourInterval = 1
 
         weatherAlertsModel.clear()
+
+        if (currentProvider == null) {
+            return
+        }
 
         beginLoadFromCache()
 
