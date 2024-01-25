@@ -394,7 +394,13 @@ PlasmoidItem {
 
         weatherAlertsModel.clear()
 
+        creditLink = ""
+        creditLabel = ""
+
         if (currentProvider == null) {
+            dailyWeatherModels.clear()
+            meteogramModel.clear()
+            reloadMeteogram()
             return
         }
 
@@ -402,6 +408,10 @@ PlasmoidItem {
 
         var content = cacheDb.getContent(cacheKey)
         if (content === null) {
+            dailyWeatherModels.clear()
+            meteogramModel.clear()
+            endLoadFromCache()
+            reloadMeteogram()
             return
         }
 
@@ -409,6 +419,10 @@ PlasmoidItem {
         if (!success) {
             print('error: setting weather contents not successful')
             cacheKey = null
+            dailyWeatherModels.clear()
+            meteogramModel.clear()
+            endLoadFromCache()
+            reloadMeteogram()
             return
         }
 
