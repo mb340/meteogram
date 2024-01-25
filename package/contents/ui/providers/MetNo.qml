@@ -3,7 +3,7 @@ import "../../code/data-loader.js" as DataLoader
 import "../../code/icons.js" as IconTools
 
 
-Item {
+QtObject {
     id: metno
 
     property string providerId: 'metno'
