@@ -24,13 +24,13 @@ Item {
                                       label.color.g +
                                       label.color.b) / 3) > 0.5
 
-    property var textColor: isShowBackground ? theme.textColor : label.color
-    property var disabledTextColor: isShowBackground ? theme.disabledTextColor :
-                                                       disabledLabel.color
+    property color textColor: isShowBackground ? theme.textColor : label.color
+    property color disabledTextColor: isShowBackground ? theme.disabledTextColor :
+                                                         disabledLabel.color
 
-    property var highlightColor: null
+    property color highlightColor: theme.highlightColor
 
-    property var themeTextColor: theme.textColor
+    property color themeTextColor: theme.textColor
 
     property alias meteogram: _meteogram
 
@@ -55,9 +55,9 @@ Item {
                                      theme.textColor.g +
                                      theme.textColor.b) / 3) > 0.5
 
-        property var textColor: theme.textColor
-        property var disabledTextColor: theme.disabledTextColor
-        property var highlightColor: null
+        property color textColor: theme.textColor
+        property color disabledTextColor: theme.disabledTextColor
+        property color highlightColor: theme.highlightColor
     }
 
     Label {
