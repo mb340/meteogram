@@ -205,6 +205,7 @@ ColumnLayout {
                 icon.name: 'list-add'
                 text: 'OWM'
                 width: 100
+                visible: plasmoid.configuration.hasOwmProvider
                 onClicked: {
                     editEntryNumber = -1
                     addOwmCityIdDialog.open()

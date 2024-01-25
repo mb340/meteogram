@@ -95,6 +95,8 @@ Item {
     property Component frInTray: FullRepresentationInTray { }
     property Component fr: FullRepresentation {
         Component.onCompleted: {
+            loadOwmProvider()
+
             main.lightDarkItem = lightDarkItem
             main.fullRedraw.connect(this.meteogram.fullRedraw)
         }
@@ -178,11 +180,7 @@ Item {
         id: metnoProvider
     }
 
-    OpenWeatherMap {
-        id: owmProvider
-
-        property alias tzOffset: main.timezoneOffset
-    }
+    property QtObject owmProvider: null
 
     OpenMeteo {
         id: openMeteo
@@ -206,6 +204,21 @@ Item {
 
     MeteogramColors {
         id: colorPalette
+    }
+
+    function loadOwmProvider() {
+        let component = null
+        try {
+            component = Qt.createComponent("providers/OpenWeatherMap.qml");
+        } catch (e) {
+            print(e)
+        }
+
+        if (component && component.status == Component.Ready) {
+            owmProvider = component.createObject(main)
+        }
+
+        plasmoid.configuration.hasOwmProvider = (owmProvider != null)
     }
 
     function initPausedAction() {
@@ -296,7 +309,7 @@ Item {
 
     function setCurrentProviderAccordingId(providerId) {
         currentProvider = null
-        if (providerId === 'owm') {
+        if (owmProvider !== null && providerId === 'owm') {
             dbgprint('setting provider OpenWeatherMap')
             currentProvider = owmProvider
         }
