@@ -3,7 +3,7 @@ import "../../code/data-loader.js" as DataLoader
 import "../../code/icons.js" as IconTools
 
 
-Item {
+QtObject {
 
     property string providerId: 'openMeteo'
 
