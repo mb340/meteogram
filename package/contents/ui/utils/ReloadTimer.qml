@@ -15,7 +15,7 @@
 import QtQuick 2.0
 import "../../code/print.js" as PrintUtil
 
-Item {
+QtObject {
     id: root
 
     objectName: "ReloadTimer"
@@ -48,7 +48,6 @@ Item {
     required property var dataDownloader
     required property var currentCacheKey
 
-    property alias reloadTimer: reloadTimer
 
     signal loadFromCache(string key);
     signal reloadData(string key, variant placeObject);
@@ -64,8 +63,7 @@ Item {
     }
 
 
-    Timer {
-        id: reloadTimer
+    property Timer reloadTimer: Timer {
         interval: msPerHour
         running: false
         repeat: false
