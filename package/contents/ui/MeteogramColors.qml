@@ -16,7 +16,7 @@ import QtQuick 2.0
 import org.kde.kirigami as Kirigami
 
 
-Item {
+QtObject {
 
     property int colorPaletteType: plasmoid.configuration.colorPaletteType
 
@@ -37,82 +37,82 @@ Item {
      * 1.5 contrast ratio for cloudarea
      * 4.0 contrast ratio for cloudarea2
      */
-    Item {
-        id: defaultPalette
-        property color backgroundColor: "#FFFFFFFF"
-        property color pressureColor: "#FF006800"
-        property color temperatureWarmColor: "#FFEE0000"
-        property color temperatureColdColor: "#FF0071f2"
-        property color rainColor: "#FF0059A6"
-        property color cloudAreaColor: "#50d3d3d3"
-        property color cloudAreaColor2: "#506c6c6c"
-        property color humidityColor: "#FF6105FF"
+    property QtObject defaultPalette: Palette {
+        // id: defaultPalette
+        backgroundColor: "#FFFFFFFF"
+        pressureColor: "#FF006800"
+        temperatureWarmColor: "#FFEE0000"
+        temperatureColdColor: "#FF0071f2"
+        rainColor: "#FF0059A6"
+        cloudAreaColor: "#50d3d3d3"
+        cloudAreaColor2: "#506c6c6c"
+        humidityColor: "#FF6105FF"
     }
 
-    Item {
-        id: defaultPaletteDark
-        property color backgroundColor: "#FF000000"
-        property color pressureColor: "#FF00AE00"
-        property color temperatureWarmColor: "#FFEA0000"
-        property color temperatureColdColor: "#FF0071ea"
-        property color rainColor: "#FF1B98FF"
-        property color cloudAreaColor: "#50b3b3b3"
-        property color cloudAreaColor2: "#506c6c6c"
-        property color humidityColor: "#FFAB7BFF"
+    property QtObject defaultPaletteDark: Palette {
+        // id: defaultPaletteDark
+        backgroundColor: "#FF000000"
+        pressureColor: "#FF00AE00"
+        temperatureWarmColor: "#FFEA0000"
+        temperatureColdColor: "#FF0071ea"
+        rainColor: "#FF1B98FF"
+        cloudAreaColor: "#50b3b3b3"
+        cloudAreaColor2: "#506c6c6c"
+        humidityColor: "#FFAB7BFF"
     }
 
     /*
      * red-green
      */
-    Item {
-        id: protPalette
-        property color backgroundColor: "#FFFFFFFF"
-        property color pressureColor: "#9F0162"
-        property color temperatureWarmColor: "#E20134"
-        property color temperatureColdColor: "#E20134"
-        property color rainColor: "#8400CD"
-        property color cloudAreaColor: defaultPalette.cloudAreaColor
-        property color cloudAreaColor2: defaultPalette.cloudAreaColor2
-        property color humidityColor: "#008DF9"
+    property QtObject protPalette: Palette {
+        // id: protPalette
+        backgroundColor: "#FFFFFFFF"
+        pressureColor: "#9F0162"
+        temperatureWarmColor: "#E20134"
+        temperatureColdColor: "#E20134"
+        rainColor: "#8400CD"
+        cloudAreaColor: defaultPalette.cloudAreaColor
+        cloudAreaColor2: defaultPalette.cloudAreaColor2
+        humidityColor: "#008DF9"
     }
 
-    Item {
-        id: protPaletteDark
-        property color backgroundColor: "#FF000000"
-        property color pressureColor: "#00FCCF"
-        property color temperatureWarmColor: "#FFC33B"
-        property color temperatureColdColor: "#FFC33B"
-        property color rainColor: "#008DF9"
-        property color cloudAreaColor: defaultPaletteDark.cloudAreaColor
-        property color cloudAreaColor2: defaultPaletteDark.cloudAreaColor2
-        property color humidityColor: "#00C2F9"
+    property QtObject protPaletteDark: Palette {
+        // id: protPaletteDark
+        backgroundColor: "#FF000000"
+        pressureColor: "#00FCCF"
+        temperatureWarmColor: "#FFC33B"
+        temperatureColdColor: "#FFC33B"
+        rainColor: "#008DF9"
+        cloudAreaColor: defaultPaletteDark.cloudAreaColor
+        cloudAreaColor2: defaultPaletteDark.cloudAreaColor2
+        humidityColor: "#00C2F9"
     }
 
     /*
      * blue-yellow
      */
-    Item {
-        id: tritPalette
-        property color backgroundColor: "#FFFFFFFF"
-        property color pressureColor: "#8400CD"
-        property color temperatureWarmColor: "#E20134"
-        property color temperatureColdColor: "#E20134"
-        property color rainColor: "#00C2F9"
-        property color cloudAreaColor: defaultPalette.cloudAreaColor
-        property color cloudAreaColor2: defaultPalette.cloudAreaColor2
-        property color humidityColor: "#008DF9"
+    property QtObject tritPalette: Palette {
+        // id: tritPalette
+        backgroundColor: "#FFFFFFFF"
+        pressureColor: "#8400CD"
+        temperatureWarmColor: "#E20134"
+        temperatureColdColor: "#E20134"
+        rainColor: "#00C2F9"
+        cloudAreaColor: defaultPalette.cloudAreaColor
+        cloudAreaColor2: defaultPalette.cloudAreaColor2
+        humidityColor: "#008DF9"
     }
 
-    Item {
-        id: tritPaletteDark
-        property color backgroundColor: "#FF000000"
-        property color pressureColor: "#FFB2FD"
-        property color temperatureWarmColor: "#FF6E3A"
-        property color temperatureColdColor: "#FF6E3A"
-        property color rainColor: "#00C2F9"
-        property color cloudAreaColor: defaultPaletteDark.cloudAreaColor
-        property color cloudAreaColor2: defaultPaletteDark.cloudAreaColor2
-        property color humidityColor: "#008DF9"
+    property QtObject tritPaletteDark: Palette {
+        // id: tritPaletteDark
+        backgroundColor: "#FF000000"
+        pressureColor: "#FFB2FD"
+        temperatureWarmColor: "#FF6E3A"
+        temperatureColdColor: "#FF6E3A"
+        rainColor: "#00C2F9"
+        cloudAreaColor: defaultPaletteDark.cloudAreaColor
+        cloudAreaColor2: defaultPaletteDark.cloudAreaColor2
+        humidityColor: "#008DF9"
     }
 
     onColorPaletteTypeChanged: {
