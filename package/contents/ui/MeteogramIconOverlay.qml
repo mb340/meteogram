@@ -14,7 +14,6 @@
  */
 import QtQuick 2.0
 import QtQuick.Controls 2.15
-import QtGraphicalEffects 1.12
 import "data_models"
 
 Item {
