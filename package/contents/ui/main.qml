@@ -418,7 +418,13 @@ Item {
 
         weatherAlertsModel.clear()
 
+        creditLink = ""
+        creditLabel = ""
+
         if (currentProvider == null) {
+            dailyWeatherModels.clear()
+            meteogramModel.clear()
+            reloadMeteogram()
             return
         }
 
@@ -426,6 +432,10 @@ Item {
 
         var content = cacheDb.getContent(cacheKey)
         if (content === null) {
+            dailyWeatherModels.clear()
+            meteogramModel.clear()
+            endLoadFromCache()
+            reloadMeteogram()
             return
         }
 
@@ -433,6 +443,10 @@ Item {
         if (!success) {
             print('error: setting weather contents not successful')
             cacheKey = null
+            dailyWeatherModels.clear()
+            meteogramModel.clear()
+            endLoadFromCache()
+            reloadMeteogram()
             return
         }
 
