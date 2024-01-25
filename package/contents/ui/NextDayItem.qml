@@ -102,7 +102,9 @@ Item {
         hoverEnabled: !mainInTray
 
         onEntered: {
-            if (mainInTray) {
+            if (mainInTray || !currentProvider) {
+                metnoDailyWeatherInfo.model = null
+                owmDailyWeatherInfo.model = null
                 return
             }
             if (currentProvider.providerId === "metno" || currentProvider.providerId === "openMeteo") {
