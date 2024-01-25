@@ -20,7 +20,7 @@ import QtQml.XmlListModel
 import "../../code/data-loader.js" as DataLoader
 import "./owm"
 
-Item {
+QtObject {
     id: owm
 
     property string providerId: 'owm'
@@ -41,35 +41,23 @@ Item {
     property var modelHourByHour: null
     property var modelCurrent: null
 
-    CacheListModel {
-        id: cacheModelLongTerm
+    property QtObject cacheModelLongTerm: CacheListModel {
     }
 
-    CacheListModel {
-        id: cacheModelHourByHour
+    property QtObject cacheModelHourByHour: CacheListModel {
     }
 
-    CacheListModel {
-        id: cacheModelCurrent
+    property QtObject cacheModelCurrent: CacheListModel {
     }
 
 
-    Component {
-        id: xmlModelLongTermComponent
-        XmlModelLongTerm {
-        }
+    property Component xmlModelLongTermComponent: XmlModelLongTerm {
     }
 
-    Component {
-        id: xmlModelHourByHourComponent
-        XmlModelHourByHour {
-        }
+    property Component xmlModelHourByHourComponent: XmlModelHourByHour {
     }
 
-    Component {
-        id: xmlModelCurrentComponent
-        XmlModelCurrent {
-        }
+    property Component xmlModelCurrentComponent: XmlModelCurrent {
     }
 
     function parseDate(dateString) {
