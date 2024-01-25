@@ -284,6 +284,7 @@ PlasmoidItem {
     }
 
     function setCurrentProviderAccordingId(providerId) {
+        currentProvider = null
         if (providerId === 'owm') {
             dbgprint('setting provider OpenWeatherMap')
             currentProvider = owmProvider
@@ -392,6 +393,10 @@ PlasmoidItem {
         meteogramModel.hourInterval = 1
 
         weatherAlertsModel.clear()
+
+        if (currentProvider == null) {
+            return
+        }
 
         beginLoadFromCache()
 
