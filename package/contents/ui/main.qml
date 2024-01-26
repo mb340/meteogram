@@ -117,6 +117,8 @@ Item {
     Plasmoid.switchWidth: inTray ? 0 : 34 * units.gridUnit
     Plasmoid.switchHeight: inTray ? 0 : 21 * units.gridUnit
 
+    Plasmoid.hideOnWindowDeactivate: !Plasmoid.userConfiguring
+
     Plasmoid.toolTipItem: Loader {
 
         Layout.minimumWidth: item ? item.implicitWidth : 0
