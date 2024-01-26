@@ -23,6 +23,9 @@ KCM.SimpleKCM {
     property bool cfg_renderAlerts: plasmoid.configuration.renderAlerts
     property bool cfg_renderSunsetShade: plasmoid.configuration.renderSunsetShade
 
+    property alias cfg_lightModeShadeFactor: lightModeShadeFactor.value
+    property alias cfg_darkModeShadeFactor: darkModeShadeFactor.value
+
     property int cfg_colorPaletteType: plasmoid.configuration.colorPaletteType
 
     property string cfg_backgroundColor: plasmoid.configuration.backgroundColor
@@ -258,6 +261,68 @@ KCM.SimpleKCM {
                     }
 
                 }
+            }
+
+            GridLayout {
+                Layout.fillWidth: true
+                columns: 2
+
+                Label {
+                    text: i18n("Sunset Shade")
+                    font.bold: true
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                    Layout.columnSpan: 2
+
+                    Layout.preferredWidth: maxColWidth
+                    onWidthChanged: updateMaxColWidth(width)
+                }
+
+                Label {
+                    text: i18n("Light mode shade factor:")
+                    Layout.alignment: Qt.AlignVCenter|Qt.AlignRight
+
+                    Layout.preferredWidth: maxColWidth
+                    onWidthChanged: updateMaxColWidth(width)
+                }
+
+                SpinBox {
+                    id: lightModeShadeFactor
+                    property int decimals: 2
+                    stepSize: 1
+                    from: 0
+                    to: 100
+                    enabled: cfg_renderSunsetShade
+                    textFromValue: function(value, locale) {
+                        return Number(value / 100).toLocaleString(locale, 'f', decimals)
+                    }
+                    valueFromText: function(text, locale) {
+                        return Number.fromLocaleString(locale, text) * 100
+                    }
+                }
+
+                Label {
+                    text: i18n("Dark mode shade factor:")
+                    Layout.alignment: Qt.AlignVCenter|Qt.AlignRight
+
+                    Layout.preferredWidth: maxColWidth
+                    onWidthChanged: updateMaxColWidth(width)
+                }
+
+                SpinBox {
+                    id: darkModeShadeFactor
+                    property int decimals: 2
+                    stepSize: 1
+                    from: 0
+                    to: 100
+                    enabled: cfg_renderSunsetShade
+                    textFromValue: function(value, locale) {
+                        return Number(value / 100).toLocaleString(locale, 'f', decimals)
+                    }
+                    valueFromText: function(text, locale) {
+                        return Number.fromLocaleString(locale, text) * 100
+                    }
+                }
+
             }
 
             GridLayout {

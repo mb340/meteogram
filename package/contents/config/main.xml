@@ -186,6 +186,13 @@
             <default>true</default>
         </entry>
 
+        <entry name="lightModeShadeFactor" type="Int">
+            <default>3</default>
+        </entry>
+        <entry name="darkModeShadeFactor" type="Int">
+            <default>10</default>
+        </entry>
+
         <entry name="y1VarName" type="String">
             <default></default>
         </entry>
