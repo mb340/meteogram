@@ -11,37 +11,37 @@ ColumnLayout {
 
     property alias cfg_maxMeteogramHours: maxMeteogramHours.value
 
-    property bool cfg_renderTemperature: plasmoid.configuration.renderTemperature
-    property bool cfg_renderPressure: plasmoid.configuration.renderPressure
-    property bool cfg_renderHumidity: plasmoid.configuration.renderHumidity
-    property bool cfg_renderPrecipitation: plasmoid.configuration.renderPrecipitation
-    property bool cfg_renderCloudCover: plasmoid.configuration.renderCloudCover
-    property bool cfg_renderIcons: plasmoid.configuration.renderIcons
-    property bool cfg_renderAlerts: plasmoid.configuration.renderAlerts
-    property bool cfg_renderSunsetShade: plasmoid.configuration.renderSunsetShade
+    property bool cfg_renderTemperature
+    property bool cfg_renderPressure
+    property bool cfg_renderHumidity
+    property bool cfg_renderPrecipitation
+    property bool cfg_renderCloudCover
+    property bool cfg_renderIcons
+    property bool cfg_renderAlerts
+    property bool cfg_renderSunsetShade
 
     property alias cfg_lightModeShadeFactor: lightModeShadeFactor.value
     property alias cfg_darkModeShadeFactor: darkModeShadeFactor.value
 
-    property int cfg_colorPaletteType: plasmoid.configuration.colorPaletteType
+    property int cfg_colorPaletteType
 
-    property string cfg_backgroundColor: plasmoid.configuration.backgroundColor
-    property string cfg_pressureColor: plasmoid.configuration.pressureColor
-    property string cfg_temperatureWarmColor: plasmoid.configuration.temperatureWarmColor
-    property string cfg_temperatureColdColor: plasmoid.configuration.temperatureColdColor
-    property string cfg_rainColor: plasmoid.configuration.rainColor
-    property string cfg_cloudAreaColor: plasmoid.configuration.cloudAreaColor
-    property string cfg_cloudAreaColor2: plasmoid.configuration.cloudAreaColor2
-    property string cfg_humidityColor: plasmoid.configuration.humidityColor
+    property string cfg_backgroundColor
+    property string cfg_pressureColor
+    property string cfg_temperatureWarmColor
+    property string cfg_temperatureColdColor
+    property string cfg_rainColor
+    property string cfg_cloudAreaColor
+    property string cfg_cloudAreaColor2
+    property string cfg_humidityColor
 
-    property string cfg_backgroundColorDark: plasmoid.configuration.backgroundColorDark
-    property string cfg_pressureColorDark: plasmoid.configuration.pressureColorDark
-    property string cfg_temperatureWarmColorDark: plasmoid.configuration.temperatureWarmColorDark
-    property string cfg_temperatureColdColorDark: plasmoid.configuration.temperatureColdColorDark
-    property string cfg_rainColorDark: plasmoid.configuration.rainColorDark
-    property string cfg_cloudAreaColorDark: plasmoid.configuration.cloudAreaColorDark
-    property string cfg_cloudAreaColor2Dark: plasmoid.configuration.cloudAreaColor2Dark
-    property string cfg_humidityColorDark: plasmoid.configuration.humidityColorDark
+    property string cfg_backgroundColorDark
+    property string cfg_pressureColorDark
+    property string cfg_temperatureWarmColorDark
+    property string cfg_temperatureColdColorDark
+    property string cfg_rainColorDark
+    property string cfg_cloudAreaColorDark
+    property string cfg_cloudAreaColor2Dark
+    property string cfg_humidityColorDark
 
     property bool isCustomColor: cfg_colorPaletteType === 4
     property int lightDarkMode: 0
