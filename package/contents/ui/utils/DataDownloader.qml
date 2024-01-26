@@ -97,15 +97,21 @@ QtObject {
 
         stopAbortTimer(cacheKey)
 
-        let noConnection = false
         let errorStatus = null
         let xhrs = loadingXhrs[cacheKey]
-        xhrs.forEach(function (xhr) {
-            noConnection |= (xhr.status === 0 || xhr.status === undefined)
-            if (noConnection || xhr.status !== 200) {
-                errorStatus = !errorStatus ? xhr.status : errorStatus
+        try {
+            xhrs.forEach(function (xhr) {
+                if (errorStatus !== null && errorStatus !== 0) {
+                    return
+                }
+                errorStatus = (xhr.status === undefined) ? 0 : xhr.status
+            })
+        } catch (e) {
+            print("xhr exception: ", e)
+            if (errorStatus === null) {
+                errorStatus = 0
             }
-        })
+        }
         clearLoadingXhrs(cacheKey, true)
 
         if (errorStatus === null && err != undefined) {
