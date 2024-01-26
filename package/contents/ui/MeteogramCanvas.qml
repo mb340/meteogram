@@ -208,6 +208,67 @@ Canvas {
     onWidthChanged: Qt.callLater(fullRedraw)
     onHeightChanged: Qt.callLater(fullRedraw)
 
+
+    /*
+     * Repaint canvas on config changes
+     */
+    property bool renderTemperature: plasmoid.configuration.renderTemperature
+    property bool renderPressure: plasmoid.configuration.renderPressure
+    property bool renderHumidity: plasmoid.configuration.renderHumidity
+    property bool renderPrecipitation: plasmoid.configuration.renderPrecipitation
+    property bool renderCloudCover: plasmoid.configuration.renderCloudCover
+    property bool renderIcons: plasmoid.configuration.renderIcons
+    property bool renderAlerts: plasmoid.configuration.renderAlerts
+    property bool renderSunsetShade: plasmoid.configuration.renderSunsetShade
+
+    property int colorPaletteType: plasmoid.configuration.colorPaletteType
+
+    property string backgroundColor: plasmoid.configuration.backgroundColor
+    property string pressureColor: plasmoid.configuration.pressureColor
+    property string temperatureWarmColor: plasmoid.configuration.temperatureWarmColor
+    property string temperatureColdColor: plasmoid.configuration.temperatureColdColor
+    property string rainColor: plasmoid.configuration.rainColor
+    property string cloudAreaColor: plasmoid.configuration.cloudAreaColor
+    property string cloudAreaColor2: plasmoid.configuration.cloudAreaColor2
+    property string humidityColor: plasmoid.configuration.humidityColor
+
+    property string backgroundColorDark: plasmoid.configuration.backgroundColorDark
+    property string pressureColorDark: plasmoid.configuration.pressureColorDark
+    property string temperatureWarmColorDark: plasmoid.configuration.temperatureWarmColorDark
+    property string temperatureColdColorDark: plasmoid.configuration.temperatureColdColorDark
+    property string rainColorDark: plasmoid.configuration.rainColorDark
+    property string cloudAreaColorDark: plasmoid.configuration.cloudAreaColorDark
+    property string cloudAreaColor2Dark: plasmoid.configuration.cloudAreaColor2Dark
+    property string humidityColorDark: plasmoid.configuration.humidityColorDark
+
+    onRenderTemperatureChanged: Qt.callLater(fullRedraw)
+    onRenderPressureChanged: Qt.callLater(fullRedraw)
+    onRenderHumidityChanged: Qt.callLater(fullRedraw)
+    onRenderPrecipitationChanged: Qt.callLater(fullRedraw)
+    onRenderCloudCoverChanged: Qt.callLater(fullRedraw)
+    onRenderIconsChanged: Qt.callLater(fullRedraw)
+    onRenderAlertsChanged: Qt.callLater(fullRedraw)
+    onRenderSunsetShadeChanged: Qt.callLater(fullRedraw)
+
+    onColorPaletteTypeChanged: Qt.callLater(fullRedraw)
+
+    onBackgroundColorChanged: Qt.callLater(fullRedraw)
+    onPressureColorChanged: Qt.callLater(fullRedraw)
+    onTemperatureWarmColorChanged: Qt.callLater(fullRedraw)
+    onTemperatureColdColorChanged: Qt.callLater(fullRedraw)
+    onRainColorChanged: Qt.callLater(fullRedraw)
+    onCloudAreaColorChanged: Qt.callLater(fullRedraw)
+    onCloudAreaColor2Changed: Qt.callLater(fullRedraw)
+    onHumidityColorChanged: Qt.callLater(fullRedraw)
+    onBackgroundColorDarkChanged: Qt.callLater(fullRedraw)
+    onPressureColorDarkChanged: Qt.callLater(fullRedraw)
+    onTemperatureWarmColorDarkChanged: Qt.callLater(fullRedraw)
+    onTemperatureColdColorDarkChanged: Qt.callLater(fullRedraw)
+    onRainColorDarkChanged: Qt.callLater(fullRedraw)
+    onCloudAreaColorDarkChanged: Qt.callLater(fullRedraw)
+    onCloudAreaColor2DarkChanged: Qt.callLater(fullRedraw)
+    onHumidityColorDarkChanged: Qt.callLater(fullRedraw)
+
     /*
      * Load weather icons
      */
