@@ -43,10 +43,10 @@ Item {
 
     property double precipitationMaxGraphY: 10
 
-    property color gridColor: main.colors.meteogram.isLightMode ?
+    property color gridColor: main.colors.meteogram.isDarkMode ?
                                 Qt.tint(main.colors.meteogram.textColor, '#80000000') :
                                 Qt.tint(main.colors.meteogram.textColor, '#80FFFFFF')
-    property color gridColorHighlight: main.colors.meteogram.isLightMode ?
+    property color gridColorHighlight: main.colors.meteogram.isDarkMode ?
                                         Qt.tint(main.colors.meteogram.textColor, '#50000000') :
                                         Qt.tint(main.colors.meteogram.textColor, '#50FFFFFF')
 
@@ -172,7 +172,7 @@ Item {
                 horizontalAlignment: Text.AlignLeft
                 font.pixelSize: 11 * units.devicePixelRatio
                 font.pointSize: -1
-                color: colorPalette.pressureColor(main.colors.isLightMode)
+                color: colorPalette.pressureColor(main.colors.isDarkMode)
 
                 visible: y2AxisVisble
             }
@@ -357,7 +357,7 @@ Item {
                         id: wind
                         source: isNaN(windSpeed) ? "" :
                                     windStrength(windSpeed,
-                                                 main.colors.isLightMode)
+                                                 main.colors.isDarkMode)
                         rotation: windFrom(windDirection)
                         fillMode: Image.PreserveAspectFit
 

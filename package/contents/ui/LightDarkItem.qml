@@ -16,7 +16,7 @@ Item {
 
     property bool isShowBackground: true
 
-    property bool isLightMode: isShowBackground ?
+    property bool isDarkMode: isShowBackground ?
                                     (((theme.textColor.r +
                                        theme.textColor.g +
                                        theme.textColor.b) / 3) > 0.5) :
@@ -51,7 +51,7 @@ Item {
     QtObject {
         id: _meteogram
 
-        property bool isLightMode: ((theme.textColor.r +
+        property bool isDarkMode: ((theme.textColor.r +
                                      theme.textColor.g +
                                      theme.textColor.b) / 3) > 0.5
 
@@ -87,12 +87,12 @@ Item {
             isShowBackground = true
         }
 
-        let bgColor = isLightMode ? Qt.rgba(1, 1, 1, 1) : Qt.rgba(0, 0, 0, 1)
-        let contrast = isLightMode ? 3 : 10
+        let bgColor = isDarkMode ? Qt.rgba(1, 1, 1, 1) : Qt.rgba(0, 0, 0, 1)
+        let contrast = isDarkMode ? 3 : 10
         highlightColor = ColorTools.getContrastingColor(theme.highlightColor, bgColor, contrast)
 
-        bgColor = _meteogram.isLightMode ? Qt.rgba(1, 1, 1, 1) : Qt.rgba(0, 0, 0, 1)
-        contrast = _meteogram.isLightMode ? 3 : 10
+        bgColor = _meteogram.isDarkMode ? Qt.rgba(1, 1, 1, 1) : Qt.rgba(0, 0, 0, 1)
+        contrast = _meteogram.isDarkMode ? 3 : 10
         _meteogram.highlightColor = ColorTools.getContrastingColor(theme.highlightColor, bgColor, contrast)
 
         if (doReload) {

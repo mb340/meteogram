@@ -120,7 +120,7 @@ QtObject {
 
     function backgroundColor() {
         if (colorPaletteType == MeteogramColors.PaletteType.Custom) {
-            return !main.colors.meteogram.isLightMode ?
+            return !main.colors.meteogram.isDarkMode ?
                                     plasmoid.configuration.backgroundColor :
                                     plasmoid.configuration.backgroundColorDark
         }
@@ -130,7 +130,7 @@ QtObject {
     function pressureColor(colorLight) {
         if (colorPaletteType == MeteogramColors.PaletteType.Custom) {
             let lightMode = colorLight !== undefined ?
-                                colorLight : main.colors.meteogram.isLightMode
+                                colorLight : main.colors.meteogram.isDarkMode
             return !lightMode ? plasmoid.configuration.pressureColor :
                                     plasmoid.configuration.pressureColorDark
         }
@@ -139,7 +139,7 @@ QtObject {
 
     function temperatureWarmColor() {
         if (colorPaletteType == MeteogramColors.PaletteType.Custom) {
-            return !main.colors.meteogram.isLightMode ?
+            return !main.colors.meteogram.isDarkMode ?
                                     plasmoid.configuration.temperatureWarmColor :
                                     plasmoid.configuration.temperatureWarmColorDark
         }
@@ -148,7 +148,7 @@ QtObject {
 
     function temperatureColdColor() {
         if (colorPaletteType === MeteogramColors.PaletteType.Custom) {
-            return !main.colors.meteogram.isLightMode ?
+            return !main.colors.meteogram.isDarkMode ?
                                     plasmoid.configuration.temperatureColdColor :
                                     plasmoid.configuration.temperatureColdColorDark
         }
@@ -157,7 +157,7 @@ QtObject {
 
     function rainColor() {
         if (colorPaletteType === MeteogramColors.PaletteType.Custom) {
-            return !main.colors.meteogram.isLightMode ?
+            return !main.colors.meteogram.isDarkMode ?
                                     plasmoid.configuration.rainColor :
                                     plasmoid.configuration.rainColorDark
         }
@@ -166,7 +166,7 @@ QtObject {
 
     function cloudAreaColor() {
         if (colorPaletteType === MeteogramColors.PaletteType.Custom) {
-            return !main.colors.meteogram.isLightMode ?
+            return !main.colors.meteogram.isDarkMode ?
                                     plasmoid.configuration.cloudAreaColor :
                                     plasmoid.configuration.cloudAreaColorDark
         }
@@ -175,7 +175,7 @@ QtObject {
 
     function cloudAreaColor2() {
         if (colorPaletteType === MeteogramColors.PaletteType.Custom) {
-            return !main.colors.meteogram.isLightMode ?
+            return !main.colors.meteogram.isDarkMode ?
                                     plasmoid.configuration.cloudAreaColor2 :
                                     plasmoid.configuration.cloudAreaColor2Dark
         }
@@ -184,7 +184,7 @@ QtObject {
 
     function humidityColor() {
         if (colorPaletteType === MeteogramColors.PaletteType.Custom) {
-            return !main.colors.meteogram.isLightMode ?
+            return !main.colors.meteogram.isDarkMode ?
                                     plasmoid.configuration.humidityColor :
                                     plasmoid.configuration.humidityColorDark
         }
@@ -195,16 +195,16 @@ QtObject {
         switch (colorPaletteType) {
             case MeteogramColors.PaletteType.Prot:     // prot
             case MeteogramColors.PaletteType.Deut:     // deut
-                return main.colors.meteogram.isLightMode ?
+                return main.colors.meteogram.isDarkMode ?
                         protPaletteDark : protPalette
             case MeteogramColors.PaletteType.Trit:     // trit
-                return main.colors.meteogram.isLightMode ?
+                return main.colors.meteogram.isDarkMode ?
                         tritPaletteDark : tritPalette
             case MeteogramColors.PaletteType.Custom:
                 return null
             case MeteogramColors.PaletteType.Default:
             default:
-                return main.colors.meteogram.isLightMode ?
+                return main.colors.meteogram.isDarkMode ?
                         paletteDark : palette
         }
     }
