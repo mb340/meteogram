@@ -171,6 +171,7 @@ ColumnLayout {
 
     Label {
         text: i18n("Visible Parameters")
+        font.bold: true
         Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
     }
 
@@ -301,6 +302,7 @@ ColumnLayout {
 
         Label {
             text: i18n("Color Palette") + ":"
+            font.bold: true
             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
 
             Layout.preferredWidth: maxColWidth
