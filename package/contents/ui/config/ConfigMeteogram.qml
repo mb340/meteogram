@@ -110,10 +110,8 @@ ColumnLayout {
                 setModelColor(colorVar, String(color), String(targetColor))
             }
 
-            Qt.quit()
         }
         onRejected: {
-            Qt.quit()
         }
     }
 
