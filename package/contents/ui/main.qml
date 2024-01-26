@@ -92,6 +92,8 @@ PlasmoidItem {
     switchWidth: 44 * Kirigami.Units.gridUnit
     switchHeight: 28 * Kirigami.Units.gridUnit
 
+    hideOnWindowDeactivate: !plasmoid.userConfiguring
+
     compactRepresentation: CompactRepresentation { }
 
     fullRepresentation: FullRepresentation {
