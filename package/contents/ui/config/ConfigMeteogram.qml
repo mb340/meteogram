@@ -105,7 +105,7 @@ ColumnLayout {
             bgColor = ColorTools.strToColor(bgColor)
             var targetColor = ColorTools.getContrastingColor(color, bgColor, targetContrast)
 
-            eval("cfg_" + colorVar + " = \"" + color + "\"")
+            root["cfg_" + colorVar] = color
             if (!colorVar.startsWith("background") && !ColorTools.equals(color, targetColor)) {
                 setModelColor(colorVar, String(color), String(targetColor))
             }
@@ -515,7 +515,7 @@ ColumnLayout {
                     return
                 }
 
-                eval("cfg_" + item.colorVar + " = \"" + item.suggestedColor + "\"")
+                root["cfg_" + item.colorVar] = item.suggestedColor
                 setModelColor(item.colorVar, item.suggestedColor, "")
             }
         }
@@ -536,7 +536,7 @@ ColumnLayout {
                         continue
                     }
 
-                    eval("cfg_" + item.colorVar + " = \"" + item.suggestedColor + "\"")
+                    root["cfg_" + item.colorVar] = item.suggestedColor
                     setModelColor(item.colorVar, item.suggestedColor, "")
                 }
             }
