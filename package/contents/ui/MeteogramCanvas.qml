@@ -613,32 +613,32 @@ Canvas {
         context.globalCompositeOperation = "source-over"
 
 
-        if (plasmoid.configuration.renderAlerts) {
+        if (renderAlerts) {
             context.globalCompositeOperation = "source-over"
             drawAlerts(context)
         }
 
-        if (plasmoid.configuration.renderPrecipitation) {
+        if (renderPrecipitation) {
             drawPrecipitationBars(context, rectWidth)
         }
 
         // Carve out negative space when weather icons overlap precipitation bars
-        if (plasmoid.configuration.renderIcons && iconSetType === 0) {
+        if (renderIcons && iconSetType === 0) {
             context.globalCompositeOperation = "xor"
             drawWeatherIcons(context, rectWidth)
         }
 
         context.globalCompositeOperation = "source-over"
-        if (plasmoid.configuration.renderCloudCover) {
+        if (renderCloudCover) {
             drawCloudArea(context)
         }
-        if (plasmoid.configuration.renderHumidity) {
+        if (renderHumidity) {
             drawPath(context, humidityPath, colorPalette.humidityColor(), 1 * units.devicePixelRatio)
         }
-        if (plasmoid.configuration.renderPressure && y2VarName && y2VarName !== "") {
+        if (renderPressure && y2VarName && y2VarName !== "") {
             drawPath(context, y2Path, colorPalette.pressureColor(), 1 * units.devicePixelRatio)
         }
-        if (plasmoid.configuration.renderTemperature) {
+        if (renderTemperature) {
             drawWarmTemp(context, temperaturePath, colorPalette.temperatureWarmColor(), 2 * units.devicePixelRatio)
             drawColdTemp(context, temperaturePath, colorPalette.temperatureColdColor(), 2 * units.devicePixelRatio)
 
@@ -649,7 +649,7 @@ Canvas {
             }
         }
 
-        if (plasmoid.configuration.renderIcons) {
+        if (renderIcons) {
             // Ensure weather icons atop graph lines without drawing over carve out
             context.globalCompositeOperation = "source-atop"
             drawWeatherIcons(context, rectWidth)
@@ -658,7 +658,7 @@ Canvas {
             iconOverlay.endList()
         }
 
-        if (plasmoid.configuration.renderPrecipitation &&
+        if (renderPrecipitation &&
             plasmoid.configuration.renderPrecipitationLabels)
         {
             context.globalCompositeOperation = "source-over"
@@ -990,7 +990,7 @@ Canvas {
 
         buildCurves()
 
-        if (plasmoid.configuration.renderCloudCover) {
+        if (renderCloudCover) {
             buildCloudPath()
         }
 
