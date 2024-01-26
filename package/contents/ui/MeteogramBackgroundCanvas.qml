@@ -32,12 +32,18 @@ Canvas {
     onRenderSunsetShadeChanged: requestPaint()
 
     onShadeFactorChanged: {
+        if (!colors || !colors.meteogram) {
+            return
+        }
         if (!colors.meteogram.isDarkMode) {
             requestPaint()
         }
     }
 
     onDarkShadeFactorChanged: {
+        if (!colors || !colors.meteogram) {
+            return
+        }
         if (colors.meteogram.isDarkMode) {
             requestPaint()
         }
