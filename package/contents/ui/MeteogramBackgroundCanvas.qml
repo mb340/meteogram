@@ -11,8 +11,8 @@ Canvas {
     /*required*/ property var meteogramModel
     /*required*/ property var scale
 
-    property real shadeFactor: 0.03
-    property real darkShadeFactor: 0.10
+    property real shadeFactor: plasmoid.configuration.lightModeShadeFactor / 100
+    property real darkShadeFactor: plasmoid.configuration.darkModeShadeFactor / 100
 
     property color bgColor: colors.meteogram.isDarkMode ?
                                 Qt.rgba(shadeColor.r + darkShadeFactor,
@@ -30,6 +30,18 @@ Canvas {
 
 
     onRenderSunsetShadeChanged: requestPaint()
+
+    onShadeFactorChanged: {
+        if (!colors.meteogram.isDarkMode) {
+            requestPaint()
+        }
+    }
+
+    onDarkShadeFactorChanged: {
+        if (colors.meteogram.isDarkMode) {
+            requestPaint()
+        }
+    }
 
     onPaint: {
         let context = getContext("2d")
