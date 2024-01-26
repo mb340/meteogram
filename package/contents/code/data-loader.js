@@ -41,7 +41,9 @@ function fetchJsonFromInternet(getUrl, successCallback, failureCallback, cacheKe
         if (xhr.status !== 200 && xhr.status !== 203) {
             print('ERROR - url: ' + getUrl)
             print('ERROR - status: ' + xhr.status)
-            print('ERROR - responseText: ' + xhr.responseText)
+            if (xhr.responseText && xhr.responseText.length > 0) {
+                print('ERROR - responseText: ' + xhr.responseText)
+            }
             failureCallback(cacheKey)
             return
         }
