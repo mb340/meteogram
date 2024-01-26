@@ -59,10 +59,6 @@ Dialog {
         if (visible && timezoneDataModel) {
             addMetnoCityIdDialog.setTimezone(addMetnoCityIdDialog.timezoneID)
         }
-        if (!visible) {
-            tzComboBox.currentIndex = -1
-            addMetnoCityIdDialog.timezoneID = -1
-        }
     }
 
     function validateFields() {
@@ -125,6 +121,11 @@ Dialog {
             placesModel.set(editEntryNumber, data)
         }
         _placesModelChanged()
+        cleanUp()
+    }
+
+    onRejected: {
+        cleanUp()
     }
 
     Dialog {
@@ -311,5 +312,10 @@ Dialog {
         setTimezone(addMetnoCityIdDialog.timezoneID)
         newMetnoCityAlias.text = placeObject.placeAlias
         addMetnoCityIdDialog.providerId = placeObject.providerId
+    }
+
+    function cleanUp() {
+        tzComboBox.currentIndex = -1
+        addMetnoCityIdDialog.timezoneID = -1
     }
 }
