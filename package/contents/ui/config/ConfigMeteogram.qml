@@ -21,6 +21,7 @@ KCM.SimpleKCM {
     property bool cfg_renderCloudCover: plasmoid.configuration.renderCloudCover
     property bool cfg_renderIcons: plasmoid.configuration.renderIcons
     property bool cfg_renderAlerts: plasmoid.configuration.renderAlerts
+    property bool cfg_renderSunsetShade: plasmoid.configuration.renderSunsetShade
 
     property int cfg_colorPaletteType: plasmoid.configuration.colorPaletteType
 
@@ -164,6 +165,7 @@ KCM.SimpleKCM {
                 cfg_renderCloudCoverChanged()
                 cfg_renderIconsChanged()
                 cfg_renderAlertsChanged()
+                cfg_renderSunsetShadeChanged()
 
                 cfg_colorPaletteTypeChanged()
                 lightDarkModeChanged()
@@ -211,6 +213,7 @@ KCM.SimpleKCM {
                     i18n("Cloud Cover"),
                     i18n("Icons"),
                     i18n("Alerts"),
+                    i18n("Sunset Shade")
                 ]
 
                 property var values: [
@@ -220,7 +223,8 @@ KCM.SimpleKCM {
                     "renderPrecipitation",
                     "renderCloudCover",
                     "renderIcons",
-                    "renderAlerts"
+                    "renderAlerts",
+                    "renderSunsetShade"
                 ]
 
                 Repeater {

@@ -182,6 +182,9 @@
         <entry name="renderAlerts" type="Bool">
             <default>true</default>
         </entry>
+        <entry name="renderSunsetShade" type="Bool">
+            <default>true</default>
+        </entry>
 
         <entry name="y1VarName" type="String">
             <default></default>

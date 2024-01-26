@@ -92,6 +92,9 @@ Item {
         width: imageWidth + (labelWidth * 2)
         height: imageHeight + (labelHeight) + cloudarea + windarea
     }
+
+    property alias backgroundCanvas: backgroundCanvas
+
     Rectangle {
         id: graphArea
         width: imageWidth
@@ -102,7 +105,18 @@ Item {
         anchors.rightMargin: labelWidth
         anchors.topMargin: labelHeight  + cloudarea
         border.color:gridColor
-        color: colorPalette.backgroundColor()
+        // color: colorPalette.backgroundColor()
+        color: "transparent"
+
+        MeteogramBackgroundCanvas {
+            id: backgroundCanvas
+            anchors.fill: parent
+
+            colors: main.theme
+            currentWeatherModel: main.currentWeatherModel
+            meteogramModel: main.meteogramModel
+            scale: meteogramCanvas.timeScale
+        }
     }
     ListView {
         id: horizontalLines1

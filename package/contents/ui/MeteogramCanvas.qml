@@ -932,6 +932,7 @@ Canvas {
         }
 
         initialized = true
+        backgroundCanvas.requestPaint()
         requestPaint()
     }
 
