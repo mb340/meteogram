@@ -110,6 +110,11 @@ ColumnLayout {
                 setModelColor(colorVar, String(color), String(targetColor))
             }
 
+            let changedFuncName = "cfg_" + colorVar + "Changed"
+            let changedFunc = root[changedFuncName]
+            if (changedFunc) {
+                changedFunc()
+            }
         }
         onRejected: {
         }
