@@ -18,7 +18,7 @@ Item {
 
     property bool isShowBackground: true
 
-    property bool isLightMode: (((Kirigami.Theme.textColor.r +
+    property bool isDarkMode: (((Kirigami.Theme.textColor.r +
                                   Kirigami.Theme.textColor.g +
                                   Kirigami.Theme.textColor.b) / 3) > 0.5)
 
@@ -57,7 +57,7 @@ Item {
     QtObject {
         id: _meteogram
 
-        property bool isLightMode: ((systemPalette.text.r +
+        property bool isDarkMode: ((systemPalette.text.r +
                                      systemPalette.text.g +
                                      systemPalette.text.b) / 3) > 0.5
 
@@ -81,12 +81,12 @@ Item {
             isShowBackground = true
         }
 
-        let bgColor = isLightMode ? Qt.rgba(1, 1, 1, 1) : Qt.rgba(0, 0, 0, 1)
-        let contrast = isLightMode ? 3 : 10
+        let bgColor = isDarkMode ? Qt.rgba(1, 1, 1, 1) : Qt.rgba(0, 0, 0, 1)
+        let contrast = isDarkMode ? 3 : 10
         highlightColor = ColorTools.getContrastingColor(Kirigami.Theme.highlightColor, bgColor, contrast)
 
-        bgColor = meteogram.isLightMode ? Qt.rgba(1, 1, 1, 1) : Qt.rgba(0, 0, 0, 1)
-        contrast = meteogram.isLightMode ? 3 : 10
+        bgColor = meteogram.isDarkMode ? Qt.rgba(1, 1, 1, 1) : Qt.rgba(0, 0, 0, 1)
+        contrast = meteogram.isDarkMode ? 3 : 10
         meteogram.highlightColor = ColorTools.getContrastingColor(Kirigami.Theme.highlightColor, bgColor, contrast)
 
         if (doReload) {

@@ -275,7 +275,7 @@ Canvas {
 
     function drawShadowText(context, str, x, y) {
         context.strokeStyle = main.theme.meteogram.textColor
-        context.shadowColor = main.theme.meteogram.isLightMode ? 'black' : 'white';
+        context.shadowColor = main.theme.meteogram.isDarkMode ? 'black' : 'white';
         context.shadowBlur = 0.5;
         context.lineWidth = 0.5;
         context.strokeText(str, x, y)
@@ -526,7 +526,7 @@ Canvas {
 
         for (var i = 0; i < weatherAlertsModel.count; i++) {
             var a = weatherAlertsModel.get(i)
-            context.fillStyle = main.theme.meteogram.isLightMode ? "#33ff7751" :  "#22ee3800"
+            context.fillStyle = main.theme.meteogram.isDarkMode ? "#33ff7751" :  "#22ee3800"
             var x0 = timeScale.translate(a.alertStart.getTime())
             var x1 = timeScale.translate(a.alertEnd.getTime())
             var w = x1 - x0
@@ -581,7 +581,7 @@ Canvas {
             drawColdTemp(context, temperaturePath, colorPalette.temperatureColdColor(), 2 * 1)
 
             if (y1VarName && y1VarName !== "") {
-                let color = !main.theme.meteogram.isLightMode ? 'black' : 'white'
+                let color = !main.theme.meteogram.isDarkMode ? 'black' : 'white'
                 drawPath(context, y1Path, color, 1 * 1)
             }
         }
