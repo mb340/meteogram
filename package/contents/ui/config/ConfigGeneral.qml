@@ -64,6 +64,24 @@ KCM.SimpleKCM {
         print('[weatherWidget] places: ' + cfg_places)
     }
 
+    function showEditDialog() {
+        editEntryNumber = tableView.selectionModel.selectedIndexes[0].row
+        let entry = placesModel.get(editEntryNumber)
+        let hasAltitude = (entry.providerId === "metno")
+        if (entry.providerId === "metno" ||
+            entry.providerId === "openMeteo")
+        {
+            addMetnoCityIdDialog.hasAltitude = hasAltitude
+            addMetnoCityIdDialog.populateFields(entry)
+            addMetnoCityIdDialog.open()
+        }
+        if (entry.providerId === "owm") {
+            newOwmCityIdField.text = "https://openweathermap.org/city/"+entry.placeIdentifier
+            newOwmCityAlias.text = entry.placeAlias
+            addOwmCityIdDialog.open()
+        }
+    }
+
     property alias newOwmCityIdField: addOwmCityIdDialog.newOwmCityIdField
     property alias newOwmCityAlias: addOwmCityIdDialog.newOwmCityAlias
 
@@ -168,6 +186,7 @@ KCM.SimpleKCM {
                             }
                         }
                         onDoubleClicked: {
+                            showEditDialog()
                         }
                     }
                 }
@@ -318,21 +337,7 @@ KCM.SimpleKCM {
                             if (!tableView.selectionModel.hasSelection) {
                                 return
                             }
-                            editEntryNumber = tableView.selectionModel.selectedIndexes[0].row
-                            let entry = placesModel.get(editEntryNumber)
-                            let hasAltitude = (entry.providerId === "metno")
-                            if (entry.providerId === "metno" ||
-                                entry.providerId === "openMeteo")
-                            {
-                                addMetnoCityIdDialog.hasAltitude = hasAltitude
-                                addMetnoCityIdDialog.populateFields(entry)
-                                addMetnoCityIdDialog.open()
-                            }
-                            if (entry.providerId === "owm") {
-                                newOwmCityIdField.text = "https://openweathermap.org/city/"+entry.placeIdentifier
-                                newOwmCityAlias.text = entry.placeAlias
-                                addOwmCityIdDialog.open()
-                            }
+                            showEditDialog()
                         }
                     }
                 }
