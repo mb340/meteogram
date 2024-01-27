@@ -44,15 +44,15 @@ Item {
             text: main.placeAlias
         }
 
-        Kirigami.Heading {
-            level: 5
+        Label {
             font.italic: true
+            color: main.theme?.disabledTextColor ?? Kirigami.Theme.disabledTextColor
             text: currentWeatherModel.date?.toLocaleDateString(Qt.locale(), 'dddd, dd MMMM') ?? ""
         }
 
-        Kirigami.Heading {
-            level: 5
+        Label {
             font.italic: true
+            color: main.theme?.disabledTextColor ?? Kirigami.Theme.disabledTextColor
             text: currentWeatherModel.date?.toLocaleTimeString(Qt.locale(), Locale.ShortFormat) ?? ""
         }
 
