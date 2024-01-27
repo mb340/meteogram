@@ -37,12 +37,14 @@ Item {
         PlasmaExtras.Heading {
             level: 2
             font.bold: true
+            color: main.colors.textColor
             text: main.placeAlias
         }
 
         PlasmaExtras.Heading {
             level: 5
             font.italic: true
+            color: main.colors.textColor
             text: !currentWeatherModel.date ? "" :
                     currentWeatherModel.date.toLocaleDateString(Qt.locale(), 'dddd, dd MMMM')
         }
@@ -50,6 +52,7 @@ Item {
         PlasmaExtras.Heading {
             level: 5
             font.italic: true
+            color: main.colors.textColor
             text: !currentWeatherModel.date ? "" :
                     currentWeatherModel.date.toLocaleTimeString(Qt.locale(), Locale.ShortFormat)
         }
@@ -75,6 +78,7 @@ Item {
 
             PlasmaExtras.Heading {
                 level: 3
+                color: main.colors.textColor
                 text: !currentProvider ? "" :
                         currentProvider.getIconDescription(currentWeatherModel.iconName)
 
