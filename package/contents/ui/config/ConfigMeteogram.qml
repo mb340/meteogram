@@ -130,6 +130,12 @@ KCM.SimpleKCM {
                         setModelColor(colorVar, String(color), String(targetColor))
                     }
 
+                    let changedFuncName = "cfg_" + colorVar + "Changed"
+                    let changedFunc = root[changedFuncName]
+                    if (changedFunc) {
+                        changedFunc()
+                    }
+
                     colorDialogWindow.destroy()
                 }
                 onRejected: {
