@@ -100,12 +100,12 @@ Item {
 
         anchors.centerIn: parent
 
-        Rectangle {
-            anchors.fill: parent
-            color: "red"
-            visible: false
-            z: -1
-        }
+        // Rectangle {
+        //     anchors.fill: parent
+        //     color: "red"
+        //     visible: false
+        //     z: -1
+        // }
     }
 
     DropShadow {
@@ -119,14 +119,14 @@ Item {
         visible: showDropShadow
     }
 
-    Rectangle {
-        anchors.fill: parent
-        // color: "blue"
-        border.color: Qt.rgba(0, 0, 0, 0.5)
-        border.width: 2
-        z: -1
-        visible: false
-    }
+    // Rectangle {
+    //     anchors.fill: parent
+    //     // color: "blue"
+    //     border.color: Qt.rgba(0, 0, 0, 0.5)
+    //     border.width: 2
+    //     z: -1
+    //     visible: false
+    // }
 
     states: [
         State {
