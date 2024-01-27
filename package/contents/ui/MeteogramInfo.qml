@@ -201,8 +201,6 @@ Item {
 
         var iconNameStr = ""
         if (hourModel.iconName) {
-            var sunRise = main.currentWeatherModel.sunRise
-            var sunSet = main.currentWeatherModel.sunSet
             var iconNameStr = currentProvider.getIconDescription(hourModel.iconName)
             model.addItem({
                 nameStr: i18n("Conditions") + ":",
