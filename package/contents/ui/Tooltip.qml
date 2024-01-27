@@ -41,18 +41,16 @@ Item {
             text: main.placeAlias
         }
 
-        PlasmaExtras.Heading {
-            level: 5
+        Label {
             font.italic: true
-            color: main.colors.textColor
+            color: main.colors.disabledTextColor
             text: !currentWeatherModel.date ? "" :
                     currentWeatherModel.date.toLocaleDateString(Qt.locale(), 'dddd, dd MMMM')
         }
 
-        PlasmaExtras.Heading {
-            level: 5
+        Label {
             font.italic: true
-            color: main.colors.textColor
+            color: main.colors.disabledTextColor
             text: !currentWeatherModel.date ? "" :
                     currentWeatherModel.date.toLocaleTimeString(Qt.locale(), Locale.ShortFormat)
         }
