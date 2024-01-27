@@ -36,9 +36,6 @@ Grid {
 
     property string places: plasmoid.configuration.places
 
-    property bool constrainCityAliasLabel: plasmoid.configuration.constrainCityAliasLabel
-    property bool constrainTemperatureLabel: plasmoid.configuration.constrainTemperatureLabel
-
     property int cityAliasSizeMode: plasmoid.configuration.cityAliasSizeMode
     property string cityAliasFontName: plasmoid.configuration.cityAliasFontName
     property int cityAliasFontSize: plasmoid.configuration.cityAliasFontSize
@@ -120,8 +117,6 @@ Grid {
         sizerHeight:  (sizeMode === CompactItem.SizeMode.FixedSize && isVerticalState) ?
                         cityAliasFixedSize : compactItem.sizerHeight
 
-        isConstrainedToSizerText: constrainCityAliasLabel
-
         state: compactItem.state
         onStateChanged: visible = order.includes(CompactItem.ItemType.PlaceAlias)
     }
@@ -151,8 +146,6 @@ Grid {
 
         isHeightSizer: true
         isWidthSizer: true
-
-        isConstrainedToSizerText: constrainTemperatureLabel
 
         state: compactItem.state
         onStateChanged: visible = order.includes(CompactItem.ItemType.TemperatureText)

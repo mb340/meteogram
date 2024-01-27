@@ -42,12 +42,6 @@
             <!-- <default>0, 1, 2</default> -->
             <default>0,1,2</default>
         </entry>
-        <entry name="constrainCityAliasLabel" type="Bool">
-            <default>true</default>
-        </entry>
-        <entry name="constrainTemperatureLabel" type="Bool">
-            <default>true</default>
-        </entry>
         <entry name="layoutSpacing" type="Double">
             <default>0</default>
         </entry>

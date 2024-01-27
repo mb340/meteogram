@@ -40,7 +40,6 @@ Item {
     property bool isHeightSizer: false
     property bool isWidthSizer: false
 
-    property bool isConstrainedToSizerText: true
     property bool showDropShadow
 
     property font font: Qt.font({
