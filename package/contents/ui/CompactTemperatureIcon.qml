@@ -35,12 +35,12 @@ Item {
     property alias contentWidth: sizerLabel.contentWidth
     property alias contentHeight: sizerLabel.contentHeight
 
-    Rectangle {
-        anchors.fill: temperatureIcon
-        color: "green"
-        z: -1
-        visible: false
-    }
+    // Rectangle {
+    //     anchors.fill: temperatureIcon
+    //     color: "green"
+    //     z: -1
+    //     visible: false
+    // }
 
     Label {
         id: sizerLabel

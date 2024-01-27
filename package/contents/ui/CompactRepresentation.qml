@@ -30,19 +30,19 @@ Item {
         id: compactItem
     }
 
-    Rectangle {
-        anchors.fill: parent
-        color: "red"
-        z: -1
-        visible: false
-    }
+    // Rectangle {
+    //     anchors.fill: parent
+    //     color: "red"
+    //     z: -1
+    //     visible: false
+    // }
 
-    Rectangle {
-        anchors.fill: compactItem
-        color: "green"
-        z: -1
-        visible: false
-    }
+    // Rectangle {
+    //     anchors.fill: compactItem
+    //     color: "green"
+    //     z: -1
+    //     visible: false
+    // }
 
     MouseArea {
         anchors.fill: parent
