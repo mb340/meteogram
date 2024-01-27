@@ -196,7 +196,7 @@ Item {
                 // font.pointSize: 1024
 
                 width: parentWidth
-                height: (sizeMode === CompactItem.SizeMode.Fill) ? innerLabel.contentHeight :
+                height: (sizeMode === CompactItem.SizeMode.Fill) ? sizerLabel.contentHeight :
                           (sizeMode === CompactItem.SizeMode.FixedSize) ? sizerHeight :
                             /*(sizeMode === CompactItem.SizeMode.FontSize)*/ innerLabel.contentHeight
 
