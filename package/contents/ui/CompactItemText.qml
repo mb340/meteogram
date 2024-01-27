@@ -259,6 +259,8 @@ Item {
                 height: Math.min(textContainer.parent.width, textContainer.parent.height)
 
                 fontSizeMode: Text.Fit
+
+                font.pointSize: 1024
             }
             PropertyChanges {
                 target: innerLabel
