@@ -183,6 +183,11 @@ Dialog {
             validator: DoubleValidator { bottom: -90; top: 90; decimals: 5 }
             color: acceptableInput ? newMetnoCityLatitudeLabel.color : "red"
             onAcceptableInputChanged: validateFields()
+            Keys.onReturnPressed: function(event) {
+                if (acceptableInput) {
+                    addMetnoCityIdDialog.accept()
+                }
+            }
         }
 
         Item {
@@ -200,6 +205,11 @@ Dialog {
             validator: DoubleValidator { bottom: -180; top: 180; decimals: 5 }
             color: acceptableInput ? newMetnoCityLongitudeLabel.color : "red"
             onAcceptableInputChanged: validateFields()
+            Keys.onReturnPressed: function(event) {
+                if (acceptableInput) {
+                    addMetnoCityIdDialog.accept()
+                }
+            }
         }
 
         Item {
@@ -219,6 +229,11 @@ Dialog {
             color: acceptableInput ? newMetnoCityAltitudeLabel.color : "red"
             enabled: hasAltitude
             onAcceptableInputChanged: validateFields()
+            Keys.onReturnPressed: function(event) {
+                if (acceptableInput) {
+                    addMetnoCityIdDialog.accept()
+                }
+            }
         }
 
         Label {
@@ -251,6 +266,11 @@ Dialog {
             validator: RegularExpressionValidator { regularExpression: /\S.*/  }
             color: acceptableInput ? newMetnoCityAliasLabel.color : "red"
             onAcceptableInputChanged: validateFields()
+            Keys.onReturnPressed: function(event) {
+                if (acceptableInput) {
+                    addMetnoCityIdDialog.accept()
+                }
+            }
         }
         Button {
             text: i18n("Search")
