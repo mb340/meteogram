@@ -111,6 +111,9 @@ Item {
         }
     }
 
+    property bool isFullRepresentation: Plasmoid.compactRepresentationItem == null ? false :
+                                            (Plasmoid.compactRepresentationItem.width >= Plasmoid.switchWidth &&
+                                             Plasmoid.compactRepresentationItem.height >= Plasmoid.switchHeight)
     Plasmoid.compactRepresentation: cr
     Plasmoid.fullRepresentation: fr
 

@@ -16,7 +16,7 @@ Item {
 
     property bool isShowBackground: true
 
-    property bool isDarkMode: isShowBackground ?
+    property bool isDarkMode: !isFullRepresentation && isShowBackground ?
                                     (((theme.textColor.r +
                                        theme.textColor.g +
                                        theme.textColor.b) / 3) > 0.5) :
@@ -96,6 +96,7 @@ Item {
         _meteogram.highlightColor = ColorTools.getContrastingColor(theme.highlightColor, bgColor, contrast)
 
         if (doReload) {
+            main.isFullRepresentationChanged()
             main.reloadMeteogram()
         }
     }
