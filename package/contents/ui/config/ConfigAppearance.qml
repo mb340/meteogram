@@ -17,8 +17,6 @@ KCM.SimpleKCM {
 
     property int cfg_layoutType
     property bool cfg_iconDropShadow
-    property bool cfg_constrainCityAliasLabel
-    property bool cfg_constrainTemperatureLabel
 
     property int cfg_cityAliasSizeMode
     property string cfg_cityAliasFontName
@@ -52,8 +50,6 @@ KCM.SimpleKCM {
 
         Component.onCompleted: {
             cfg_layoutTypeChanged()
-            cfg_constrainCityAliasLabelChanged()
-            cfg_constrainTemperatureLabelChanged()
             cfg_iconSetTypeChanged()
 
             if (!cfg_cityAliasFontSize) {
