@@ -277,7 +277,7 @@ Dialog {
                 font.capitalization: Font.Capitalize
                 selectByMouse: true
                 clip: false
-                Keys.onReturnPressed: {
+                Keys.onReturnPressed: function(event) {
                     event.accepted = true
                 }
                 onTextChanged: {
