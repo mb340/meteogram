@@ -70,11 +70,17 @@ Canvas {
         let itemFirst = meteogramModel.get(0)
         let from = itemFirst.from
 
+        let initialStep = 0
+        if (from.getHours() <= sunRise.getHours()) {
+            // Handle case where sunset was the previous day
+            initialStep = -1
+        }
+
         let currSet = new Date(sunSet)
-        currSet.setDate(from.getDate())
+        currSet.setDate(from.getDate() + initialStep)
 
         let currRise = new Date(sunRise)
-        currRise.setDate(from.getDate() + 1)
+        currRise.setDate(from.getDate() + initialStep + 1)
 
         let xInitial = scale.translate(currSet)
 
