@@ -14,8 +14,6 @@
  */
 import QtQuick
 import QtQuick.Layouts
-// import QtGraphicalEffects
-import Qt5Compat.GraphicalEffects
 import org.kde.plasma.core as PlasmaCore
 import "../code/icons.js" as IconTools
 import "../code/print.js" as PrintUtil
