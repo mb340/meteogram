@@ -256,7 +256,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: nextDaysView.top
-        anchors.bottomMargin: windarea /* wind area */
+        anchors.bottomMargin: windarea + units.smallSpacing
         visible: !isShowAlert && !metnoDailyWeatherInfo.visible && !owmDailyWeatherInfo.visible
      }
 
