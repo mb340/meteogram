@@ -111,7 +111,7 @@ Item {
                     id: nameLabel
                     text: nameStr
                     color: main.theme.meteogram.textColor
-                    font.pixelSize: 11 * 1
+                    font.pixelSize: Kirigami.Theme.smallFont.pixelSize
                     font.pointSize: -1
                     verticalAlignment: Text.AlignTop
 
@@ -122,7 +122,7 @@ Item {
                     text: valueStr
                     color: valueColor && valueColor != "" ?
                             valueColor : main.theme.meteogram.textColor
-                    font.pixelSize: 11 * 1
+                    font.pixelSize: Kirigami.Theme.smallFont.pixelSize
                     font.pointSize: -1
                     wrapMode: Text.WordWrap
 
