@@ -33,7 +33,7 @@ Item {
     property int labelHeight: textMetrics.height
 
     property int cloudarea: 0
-    property int windarea: 20 * units.devicePixelRatio
+    property int windarea: units.largeSpacing
 
     readonly property int minTemperatureYGridCount: 20
 
@@ -378,8 +378,8 @@ Item {
                         rotation: windFrom(windDirection, windSpeedRepeater.iconSetType)
                         fillMode: Image.PreserveAspectFit
 
-                        width: Math.min(16 * units.devicePixelRatio, windSpeedRepeater.rectWidth)
-                        height: width
+                        width: height
+                        height: windarea
                         anchors.centerIn: parent
 
                         opacity: 0
