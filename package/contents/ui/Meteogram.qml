@@ -20,6 +20,8 @@ import QtGraphicalEffects 1.12
 import org.kde.plasma.plasmoid 2.0
 import "../code/icons.js" as IconTools
 import "data_models"
+import "utils"
+
 
 Item {
     id: root
@@ -354,6 +356,7 @@ Item {
             delegate: windIconDelegate
 
             property double rectWidth: meteogramCanvas.hourStep * (meteogramCanvas.rectWidth)
+            property int iconSetType: plasmoid.configuration.windIconSetType
 
             Component {
                 id: windIconDelegate
@@ -370,9 +373,8 @@ Item {
                     Image {
                         id: wind
                         source: isNaN(windSpeed) ? "" :
-                                    windStrength(windSpeed,
-                                                 main.colors.isDarkMode)
-                        rotation: windFrom(windDirection)
+                                    windStrength(windSpeed, windSpeedRepeater.iconSetType)
+                        rotation: windFrom(windDirection, windSpeedRepeater.iconSetType)
                         fillMode: Image.PreserveAspectFit
 
                         width: Math.min(16 * units.devicePixelRatio, windSpeedRepeater.rectWidth)
@@ -417,16 +419,17 @@ Item {
                         }
                     }
 
-                    function windFrom(rotation) {
+                    function windFrom(rotation, iconSetType) {
+                        rotation = IconTools.translateWindDirection(rotation, iconSetType)
+
                         rotation = (Math.round( rotation / 22.5 ) * 22.5)
                         rotation = (rotation >= 180) ? rotation - 180 : rotation + 180
                         return rotation
                     }
-                    function windStrength(windspeed,themecolor) {
-                        var img = "images/"
-                        img += (themecolor) ? "light" : "dark"
-                        img += Math.min(5,Math.trunc(windspeed / 5) + 1)
-                        return img
+                    function windStrength(windspeed, iconSetType) {
+                        windspeed = unitUtils.convertWindspeed(windspeed,
+                                                UnitUtils.WindSpeedType.KNOTS)
+                        return IconTools.getWindSpeedIconResource(windspeed, iconSetType)
                     }
                 }
             }
