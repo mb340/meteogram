@@ -35,7 +35,7 @@ Item {
     property int labelHeight: textMetrics.height
 
     property int cloudarea: 0
-    property int windarea: 20 * 1
+    property int windarea: 2.5 * Kirigami.Units.largeSpacing
 
     readonly property int minTemperatureYGridCount: 20
 
@@ -378,8 +378,8 @@ Item {
                         rotation: windFrom(windDirection, windSpeedRepeater.iconSetType)
                         fillMode: Image.PreserveAspectFit
 
-                        width: Math.min(16 * 1, windSpeedRepeater.rectWidth)
-                        height: width
+                        width: height
+                        height: windarea
                         anchors.centerIn: parent
 
                         opacity: 0
