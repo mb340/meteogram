@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 71.999999 72"
+   version="1.1"
+   id="svg1"
+   width="72"
+   height="72"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <style
+     type="text/css"
+     id="style1">
+        .svg-wb{fill:#1A232D;stroke:#1A232D;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+    </style>
+  <path
+     class="svg-wb"
+     d="M 35.982864,57.499997 V 1.5000036 m 0,0 H 49.982932 L 35.982864,15.500003 Z m 0,23.9999974 14.000068,-13.999998 M 35.982864,35.5 49.982932,21.500001 M 35.982864,45.499999 49.982932,31.5 M 35.982864,70.499996 42.982898,58.399997 H 28.98283 Z"
+     id="path1" />
+</svg>
