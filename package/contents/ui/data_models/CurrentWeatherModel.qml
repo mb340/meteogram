@@ -19,11 +19,6 @@ QtObject {
     property var sunRise: null
     property var sunSet: null
 
-    property var nearFuture: ({
-        iconName: null,
-        temperature: NaN
-    })
-
     function clear() {
         valid = false
 
@@ -40,13 +35,7 @@ QtObject {
         precipitationProb = NaN
         precipitationAmount = NaN
 
-
         sunRise = null
         sunSet = null
-
-        nearFuture = {
-            iconName: null,
-            temperature: NaN
-        }
     }
 }
