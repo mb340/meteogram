@@ -52,7 +52,8 @@ Item {
                 labels: [
                     i18n("m/s"),
                     i18n("mph"),
-                    i18n("km/h")
+                    i18n("km/h"),
+                    i18n("kn")
                 ],
             },
             {
