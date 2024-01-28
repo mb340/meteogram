@@ -109,7 +109,7 @@ Item {
                     id: nameLabel
                     text: nameStr
                     color: theme.textColor
-                    font.pixelSize: 11 * units.devicePixelRatio
+                    font.pixelSize: theme.smallestFont.pixelSize
                     font.pointSize: -1
                     verticalAlignment: Text.AlignTop
 
@@ -119,7 +119,7 @@ Item {
                     id: valueLabel
                     text: valueStr
                     color: valueColor ? valueColor : theme.textColor
-                    font.pixelSize: 11 * units.devicePixelRatio
+                    font.pixelSize: theme.smallestFont.pixelSize
                     font.pointSize: -1
                     wrapMode: Text.WordWrap
 

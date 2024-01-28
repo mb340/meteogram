@@ -83,7 +83,7 @@ Item {
     TextMetrics {
         id: textMetrics
         font.family: theme.defaultFont.family
-        font.pixelSize: 11 * units.devicePixelRatio
+        font.pixelSize: theme.smallestFont.pixelSize
         text: "999999"
     }
 
@@ -174,7 +174,7 @@ Item {
                 anchors.top: gridLine.top
                 anchors.leftMargin: -labelWidth - 2
                 anchors.topMargin: -labelHeight / 2
-                font.pixelSize: 11 * units.devicePixelRatio
+                font.pixelSize: theme.smallestFont.pixelSize
                 font.pointSize: -1
             }
             Label {
@@ -186,7 +186,7 @@ Item {
                 anchors.left: gridLine.right
                 anchors.leftMargin: 2
                 horizontalAlignment: Text.AlignLeft
-                font.pixelSize: 11 * units.devicePixelRatio
+                font.pixelSize: theme.smallestFont.pixelSize
                 font.pointSize: -1
                 color: colorPalette.pressureColor(main.colors.isDarkMode)
 
@@ -201,7 +201,7 @@ Item {
         horizontalAlignment: (text.length > 4) ? Text.AlignRight : Text.AlignLeft
         anchors.right: (graphArea.right)
         anchors.rightMargin: -labelWidth
-        font.pixelSize: 11 * units.devicePixelRatio
+        font.pixelSize: theme.smallestFont.pixelSize
         font.pointSize: -1
         color: colorPalette.pressureColor()
         anchors.bottom: graphArea.top
@@ -214,7 +214,7 @@ Item {
         width: labelWidth
         horizontalAlignment: Text.AlignHCenter
         anchors.right: (graphArea.left)
-        font.pixelSize: 11 * units.devicePixelRatio
+        font.pixelSize: theme.smallestFont.pixelSize
         font.pointSize: -1
         anchors.bottom: graphArea.top
         anchors.bottomMargin: 6
@@ -279,7 +279,7 @@ Item {
                 anchors.top: verticalLine.bottom
                 anchors.right: verticalLine.left
                 anchors.topMargin: 2
-                font.pixelSize: 11 * units.devicePixelRatio
+                font.pixelSize: theme.smallestFont.pixelSize
                 font.pointSize: -1
                 visible: textVisible
             }
@@ -293,7 +293,7 @@ Item {
                 horizontalAlignment: Text.AlignLeft
                 anchors.top: hourText.top
                 anchors.left: hourText.right
-                font.pixelSize: 7 * units.devicePixelRatio
+                font.pixelSize: theme.smallestFont.pixelSize * 0.70
                 font.pointSize: -1
                 visible: textVisible
             }
@@ -305,7 +305,7 @@ Item {
                 anchors.topMargin: -labelHeight
                 anchors.left: parent.left
                 anchors.leftMargin: parent.width / 2
-                font.pixelSize: 11 * units.devicePixelRatio
+                font.pixelSize: theme.smallestFont.pixelSize
                 font.pointSize: -1
                 visible: date.getHours() === 0 && (itemEndX < hourGrid.width)
 
