@@ -40,7 +40,8 @@ QtObject {
     enum WindSpeedType {
         MPS = 0,
         MPH = 1,
-        KMH = 2
+        KMH = 2,
+        KNOTS = 3
     }
 
     enum WindDirectionType {
@@ -181,6 +182,8 @@ QtObject {
             return Math.round(mps * 2.2369362920544 * 10) / 10
         } else if (windSpeedType === UnitUtils.WindSpeedType.KMH) {
             return Math.round(mps * 3.6 * 10) / 10
+        } else if (windSpeedType === UnitUtils.WindSpeedType.KNOTS) {
+            return mps * 1.94384
         }
         return parseFloat(mps)
     }
