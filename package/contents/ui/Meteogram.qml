@@ -382,6 +382,8 @@ Item {
                         anchors.centerIn: parent
 
                         opacity: 0
+
+                        asynchronous: true
                     }
 
                     ColorOverlay {
