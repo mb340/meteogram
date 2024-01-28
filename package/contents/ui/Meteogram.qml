@@ -277,6 +277,7 @@ Item {
                 height: labelHeight
                 width: hourGrid.hourItemWidth
                 anchors.top: verticalLine.bottom
+                anchors.right: verticalLine.left
                 anchors.topMargin: 2
                 //                anchors.horizontalCenter: verticalLine.left
                 anchors.horizontalCenter: verticalLine.horizontalCenter
