@@ -20,6 +20,41 @@ function getWindDirectionIconCode(angle) {
     return iconCode
 }
 
+const WindIconSetType = {
+    BLACKADDERKATE: 0,
+    QULLE: 1
+}
+
+// Translate image rotation to a set standard.
+// The standard is arrows pointing up is zero degrees.
+function translateWindDirection(rotation, iconSetType) {
+    if (iconSetType === WindIconSetType.QULLE) {
+        return (rotation + 180) % 360
+    }
+    return rotation
+}
+
+// Wind speed in knots
+function getWindSpeedIconResource(windSpeed, iconSetType) {
+    if (iconSetType === WindIconSetType.QULLE) {
+        windSpeed = Math.min(190, windSpeed)
+    } else {
+        windSpeed = Math.min(30, windSpeed)
+    }
+
+    if (windSpeed < 2) {
+        windSpeed = 0
+    } else if (windSpeed < 5) {
+        windSpeed = 2
+    } else {
+        windSpeed = Math.floor(windSpeed / 5) * 5
+    }
+
+    if (iconSetType === WindIconSetType.QULLE) {
+        return "images/wind-barbs/" + windSpeed.toFixed(0) + ".svg"
+    }
+    return "images/dark" + windSpeed.toFixed(0) + ".svg"
+}
 
 const IconSetType = {
     WEATHERFONT: 0,
