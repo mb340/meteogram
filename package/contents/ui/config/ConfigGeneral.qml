@@ -428,6 +428,10 @@ KCM.SimpleKCM {
                     {
                         text: i18n("Weather icons created by %1.", "Norwegian National Broadcasting"),
                         url: 'https://nrkno.github.io/yr-weather-symbols/'
+                    },
+                    {
+                        text: i18n("Wind speed icons created by %1.", "Qulle"),
+                        url: 'https://github.com/qulle/svg-wind-barbs/'
                     }
                 ]
                 delegate: Label {
