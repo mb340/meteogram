@@ -208,6 +208,8 @@ QtObject {
             return i18n("mph")
         } else if (windSpeedType === UnitUtils.WindSpeedType.KMH) {
             return i18n("km/h")
+        } else if (windSpeedType === UnitUtils.WindSpeedType.KNOTS) {
+            return i18n("kn")
         }
         return i18n("m/s")
     }
