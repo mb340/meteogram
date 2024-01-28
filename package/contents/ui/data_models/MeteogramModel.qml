@@ -26,20 +26,49 @@ ManagedListModel {
         } else {
             item = {}
         }
+
+        // Date
         item.from = new Date(0)
+
+        // Celsius
         item.temperature = NaN
+
+        // Celsius
         item.feelsLike = NaN
+
+        // Celsius
         item.dewPoint = NaN
+
+        // [0 - 1]
         item.precipitationProb = NaN
+
+        // Millimeters
         item.precipitationAmount = NaN
+
+        // Degrees
         item.windDirection = NaN
+
+        // meters per second
         item.windSpeed = NaN
+
+        // meters per second
         item.windGust = NaN
+
+        // hPa
         item.pressure = NaN
+
+        // String
         item.iconName = ""
+
+        // [0 - 100]%
         item.humidity = NaN
+
+        // [0 - 100]%
         item.cloudArea = NaN
+
+        // [0 - 11+]
         item.uvi = NaN
+
         return item
     }
 
