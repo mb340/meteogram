@@ -177,17 +177,13 @@ QtObject {
         var now = timeUtils.dateNow(timezoneType, tzOffset)
 
         // set current models
-        var foundNow = false
         for (var i = 0; i < modelHourByHour.count; i++) {
             var timeObj = modelHourByHour.get(i)
             var dateFrom = parseDate(timeObj.from)
             var dateTo = parseDate(timeObj.to)
             dbgprint('HOUR BY HOUR: dateFrom=' + dateFrom + ', dateTo=' + dateTo + ', i=' + i)
 
-            if (!foundNow && dateFrom <= now && now <= dateTo) {
-                dbgprint('foundNow setting to true')
-                foundNow = true
-
+            if (dateFrom <= now && now <= dateTo) {
                 let prec = parseFloat(timeObj.precipitationValue)
                 currentWeatherModel.precipitationAmount = !isNaN(prec) ? prec : 0
                 currentWeatherModel.precipitationProb = parseFloat(timeObj.precipitationProb)
@@ -205,21 +201,12 @@ QtObject {
                     currentWeatherModel.humidity = timeObj.humidity
                     currentWeatherModel.cloudArea = timeObj.clouds
                     currentWeatherModel.valid = true
+                    break
                 }
-                continue
-            }
-
-            if (foundNow) {
-                currentWeatherModel.nearFuture.iconName = timeObj.iconName
-                currentWeatherModel.nearFuture.temperature = timeObj.temperature
-                dbgprint('setting near future - ' + timeObj.iconName + ', temp: ' + timeObj.temperature)
-                break
             }
         }
 
         dbgprint('result currentWeatherModel.valid: ' + currentWeatherModel.valid)
-        dbgprint('result nearFutureWeather.iconName: ' + currentWeatherModel.nearFuture.iconName)
-
     }
 
     /* Update next days model with more granular data from hourly data */
