@@ -279,8 +279,6 @@ Item {
                 anchors.top: verticalLine.bottom
                 anchors.right: verticalLine.left
                 anchors.topMargin: 2
-                //                anchors.horizontalCenter: verticalLine.left
-                anchors.horizontalCenter: verticalLine.horizontalCenter
                 anchors.rightMargin: 1 * units.devicePixelRatio
                 font.pixelSize: 11 * units.devicePixelRatio
                 font.pointSize: -1
