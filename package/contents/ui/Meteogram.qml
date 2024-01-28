@@ -322,7 +322,7 @@ Item {
         height: windarea
         anchors.top: hourGrid.bottom
         anchors.left: hourGrid.left
-        anchors.topMargin: labelHeight
+        anchors.topMargin: labelHeight + Kirigami.Units.smallSpacing
 
         ManagedListModel {
             id: windSpeedModel
