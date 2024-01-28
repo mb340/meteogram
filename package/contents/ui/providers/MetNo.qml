@@ -121,14 +121,6 @@ QtObject {
         currentWeatherModel.cloudArea = cld
         currentWeatherModel.precipitationAmount = prec
         currentWeatherModel.valid = true
-
-        if (currentIndex + 1 < weatherData.properties.timeseries.length) {
-            let futureWeather = weatherData.properties.timeseries[currentIndex + 1]
-            temperature = futureWeather.data.instant.details["air_temperature"]
-            iconnumber = geticonNumber(futureWeather.data.next_1_hours.summary.symbol_code)
-            currentWeatherModel.nearFuture.temperature = temperature
-            currentWeatherModel.nearFuture.iconName = iconnumber
-        }
     }
 
     function buildMetogramData(readingsArray) {
