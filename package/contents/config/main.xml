@@ -105,6 +105,9 @@
         <entry name="iconDropShadow" type="Bool">
             <default>true</default>
         </entry>
+        <entry name="windIconSetType" type="Int">
+            <default>1</default>
+        </entry>
 
         <entry name="backgroundColor" type="String">
             <default>#FFFFFFFF</default>
