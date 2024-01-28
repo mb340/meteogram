@@ -329,6 +329,7 @@ Item {
         }
 
         function setModel(count) {
+            let xOffset = (windSpeedRepeater.rectWidth / 2)
             windSpeedModel.beginList()
             for (var i = 0; i < count; i++) {
                 let item = meteogramModel.get(i)
@@ -342,9 +343,9 @@ Item {
                 }
 
                 windSpeedModel.addItem({
-                    xPos: timeScale.translate(t.getTime()) - (windSpeedRepeater.rectWidth / 2),
-                    windSpeed: parseFloat(item.windSpeed),
-                    windDirection: parseFloat(item.windDirection),
+                    xPos: timeScale.translate(t.getTime()) - xOffset,
+                    windSpeed: item.windSpeed,
+                    windDirection: item.windDirection,
                 })
             }
             windSpeedModel.endList()
