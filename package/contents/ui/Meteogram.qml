@@ -279,7 +279,6 @@ Item {
                 anchors.top: verticalLine.bottom
                 anchors.right: verticalLine.left
                 anchors.topMargin: 2
-                anchors.rightMargin: 1 * units.devicePixelRatio
                 font.pixelSize: 11 * units.devicePixelRatio
                 font.pointSize: -1
                 visible: textVisible
