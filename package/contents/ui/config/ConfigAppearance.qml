@@ -33,6 +33,7 @@ KCM.SimpleKCM {
 
     property alias cfg_layoutSpacing: layoutSpacing.value
     property int cfg_iconSetType: plasmoid.configuration.iconSetType
+    property int cfg_windIconSetType: plasmoid.configuration.windIconSetType
 
     property alias cfg_compactItemOrder: compactItemOrder.order
 
@@ -51,6 +52,7 @@ KCM.SimpleKCM {
         Component.onCompleted: {
             cfg_layoutTypeChanged()
             cfg_iconSetTypeChanged()
+            cfg_windIconSetTypeChanged()
 
             if (!cfg_cityAliasFontSize) {
                 cfg_cityAliasFontSize = PlasmaCore.Theme.defaultFont.pointSize
@@ -128,6 +130,36 @@ KCM.SimpleKCM {
                 Layout.rowSpan: 1
                 onCheckedChanged: cfg_iconDropShadow = checked
             }
+
+            Label {
+                text: i18n("Wind Icon Set") + ":"
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+                Layout.rowSpan: 1
+            }
+
+            ComboBox {
+                Layout.rowSpan: 1
+                Layout.minimumWidth: Kirigami.Units.gridUnit * 10
+                currentIndex: cfg_windIconSetType
+                model: [
+                    i18n("Blackadderkate"),
+                    i18n("Qulle"),
+                ]
+
+                onCurrentIndexChanged: {
+                    if (currentIndex < 0 || currentIndex >= model.length) {
+                        return
+                    }
+                    cfg_windIconSetType = currentIndex
+                }
+            }
+
+        Item {
+            width: 2
+            height: 2
+            Layout.rowSpan: 3
+        }
+
             Item {
                 width: 2
                 height: 2
