@@ -374,14 +374,13 @@ Item {
                         id: wind
                         source: isNaN(windSpeed) ? "" :
                                     windStrength(windSpeed, windSpeedRepeater.iconSetType)
-                        rotation: windFrom(windDirection, windSpeedRepeater.iconSetType)
                         fillMode: Image.PreserveAspectFit
 
                         width: height
                         height: windarea
                         anchors.centerIn: parent
 
-                        opacity: 0
+                        visible: false
 
                         asynchronous: true
                     }
@@ -389,7 +388,7 @@ Item {
                     ColorOverlay {
                         anchors.fill: wind
                         source: wind
-                        rotation: wind.rotation
+                        rotation: windFrom(windDirection, windSpeedRepeater.iconSetType)
                         color: main.theme.disabledTextColor
                         antialiasing: true
                         visible: true
