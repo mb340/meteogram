@@ -148,7 +148,8 @@ Dialog {
 
             delegate: Rectangle {
                 id: rowRoot
-                implicitHeight: providerIdLabel.contentHeight + (11 * 1)
+                implicitHeight: providerIdLabel.contentHeight +
+                                    Kirigami.Units.smallSpacing
                 implicitWidth: tableView.width
 
                 required property bool selected
