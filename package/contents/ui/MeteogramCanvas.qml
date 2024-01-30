@@ -191,6 +191,9 @@ Canvas {
         id: iconOverlay
         anchors.fill: parent
         clip: true
+
+        iconSetType: root.iconSetType
+        iconDim: 2 * root.rectWidth
     }
 
     Connections {
@@ -550,11 +553,9 @@ Canvas {
                 y0 -= 1.5 * rectWidth
 
                 iconOverlay.addItem({
-                    iconSetType: iconSetType,
                     iconName: iconName,
                     iconX: x0,
                     iconY: y0,
-                    iconDim: 2 * rectWidth,
                     partOfDay: timePeriod
                 })
             }

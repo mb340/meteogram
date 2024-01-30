@@ -21,6 +21,9 @@ Item {
 
     property alias weatherIcons: weatherIcons
 
+    property int iconSetType: -1
+    property double iconDim: 0
+
     signal beginList()
     signal addItem(var data)
     signal endList()
@@ -39,12 +42,12 @@ Item {
         model: weatherIcons.model
 
         delegate: WeatherIcon {
-            iconSetType: (1 <= model.iconSetType && model.iconSetType <= 3) ? model.iconSetType : -1
+            iconSetType: root.iconSetType
             iconName: model.iconName
             partOfDay: model.partOfDay
             iconX: model.iconX
             iconY: model.iconY
-            iconDim: model.iconDim
+            iconDim: root.iconDim
         }
     }
 }
