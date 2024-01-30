@@ -179,7 +179,7 @@ ColumnLayout {
 
             delegate: Rectangle {
                 id: rowRoot
-                implicitHeight: providerIdLabel.contentHeight + (11 * units.devicePixelRatio)
+                implicitHeight: providerIdLabel.contentHeight + (units.smallSpacing)
                 implicitWidth: tableView.width
 
                 RowLayout {
