@@ -26,7 +26,7 @@ Canvas {
 
     property bool initialized: false
 
-    property double fontSize: 14 * 1
+    property double fontSize: Kirigami.Theme.defaultFont.pixelSize
     property var precLabelPositions: ({})
 
     property int nHours: 0
