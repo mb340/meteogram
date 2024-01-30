@@ -94,20 +94,18 @@ Item {
             required property string iconText
             required property string valueText
 
-            RowLayout {
-                Label {
-                    font.family: 'weathericons'
-                    font.pointSize: 1.5 * units.iconSizes.tiny
-                    text: iconText
-                    horizontalAlignment: Text.AlignHCenter
+            Label {
+                font.family: 'weathericons'
+                font.pointSize: 1.5 * units.iconSizes.tiny
+                text: iconText
+                horizontalAlignment: Text.AlignHCenter
 
-                    visible: iconText && iconText.length > 0
+                visible: iconText && iconText.length > 0
 
-                    Layout.preferredWidth: units.iconSizes.medium
-                }
-                Label {
-                    text: valueText
-                }
+                Layout.preferredWidth: units.iconSizes.medium
+            }
+            Label {
+                text: valueText
             }
         }
 
