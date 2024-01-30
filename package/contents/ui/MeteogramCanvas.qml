@@ -25,7 +25,7 @@ Canvas {
 
     property bool initialized: false
 
-    property double fontSize: 14 * units.devicePixelRatio
+    property double fontSize: theme.defaultFont.pixelSize
     property var precLabelPositions: ({})
 
     property int nHours: 0
