@@ -62,7 +62,8 @@ Canvas {
         }
     })
 
-    property double hourStrWidth: NaN
+    property double hourStrWidth: computeHourStrWidth(theme.smallestFont,
+                                                      available)
     property int hourStep: 2
 
     property bool isRectWidthChanged: true
@@ -920,24 +921,27 @@ Canvas {
         hourGrid.setModel(startTime)
     }
 
-    function computeHourStrWidth() {
-        var context = root.context ? root.context : getContext("2d")
-        if (!context) {
-            return
+    function computeHourStrWidth(font, available) {
+        if (!available || !context || !font) {
+            return 0
         }
-        hourStrWidth = 0
-        let fontSize = 11 * units.devicePixelRatio
-        context.font = fontSize + 'px "' + theme.defaultFont.family + '"'
+        let ctx = root.context ? root.context : getContext("2d")
+        if (!ctx) {
+            return theme.defaultFont.pixelSize
+        }
+        let hourStrWidth = 0
+        let fontSize = font.pixelSize
+        context.font = fontSize + 'px "' + font.family + '"'
         let metrics = context.measureText("00")
         hourStrWidth += metrics.width
 
-        fontSize = 7 * units.devicePixelRatio
-        context.font = fontSize + 'px "' + theme.defaultFont.family + '"'
+        fontSize = (font.pixelSize * 0.70).toFixed(1)
+        context.font = fontSize + 'px "' + font.family + '"'
         metrics = context.measureText("00")
         hourStrWidth += metrics.width
 
-        // print("rectWidth ", rectWidth)
         // print("hourStrWidth ", hourStrWidth)
+        return hourStrWidth
     }
 
     function computeHourStep(hourStrWidth, rectWidth) {
@@ -968,7 +972,6 @@ Canvas {
         buildMetogramData()
 
         computeFontSize()
-        computeHourStrWidth()
 
         buildCurves()
 
