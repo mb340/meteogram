@@ -514,8 +514,6 @@ Canvas {
             var y = temperatureScale.translate(unitUtils.convertTemperature(
                                                item.temperature, temperatureType))
             var timePeriod = timeUtils.isSunRisen(item.from, sunRise, sunSet) ? 0 : 1
-            var iconIr = currentProvider.getIconIr(iconName)
-            var str = IconTools.getIconResource(iconIr, iconSetType, timePeriod)
 
             var x0 = x
             var y0 = y - rectWidth
@@ -543,6 +541,9 @@ Canvas {
             y0 = Math.min(newY0, newY1)
 
             if (iconSetType === 0) {
+                var iconIr = currentProvider.getIconIr(iconName)
+                var str = IconTools.getIconResource(iconIr, iconSetType, timePeriod)
+
                 var metrics = context.measureText(str)
                 var textWidth = metrics.width
                 x0 = x - (textWidth / 2.0)
