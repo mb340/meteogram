@@ -228,7 +228,6 @@ Item {
                     height: iconDim
 
                     anchors.centerIn: parent
-                    centerInParent: true
 
                     partOfDay: model ? model["partOfDay"] : 0
                     iconSetType: (plasmoid && plasmoid.configuration && plasmoid.configuration.iconSetType) ?

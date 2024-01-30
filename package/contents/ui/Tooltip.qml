@@ -72,7 +72,6 @@ Item {
                 iconDim: Kirigami.Units.iconSizes.medium
 
                 Layout.preferredWidth: iconDim
-                centerInParent: true
             }
 
             Kirigami.Heading {

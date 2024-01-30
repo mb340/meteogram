@@ -79,8 +79,6 @@ RowLayout {
             iconName: root.iconName
             partOfDay: root.partOfDay
             iconDim: Math.min(iconParent.width, iconParent.height)
-
-            centerInParent: true
         }
     }
 }
