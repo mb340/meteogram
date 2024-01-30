@@ -458,24 +458,6 @@ Canvas {
         context.restore()
     }
 
-    function invertColor(color) {
-        const NCHANNELS = 3
-        const STRIDE = 2
-        if (color[0] !== '#' && color.length !== 9 && color.length !== 7) {
-            return null
-        }
-        var first_ch = color.length === 9 ? 3 : 1
-        var res = color.substr(0, first_ch)
-        for (var i = 0; i < NCHANNELS; i++) {
-            let si = first_ch + (STRIDE * i)
-            let ei = si + STRIDE
-            let hex = color.substring(si, ei)
-            let inv = 255 - parseInt(hex, 16)
-            res = res + inv.toString(16).padStart(STRIDE, "0")
-        }
-        return res
-    }
-
     function drawWeatherIcons(context, rectWidth) {
 
         // Avoid icons overlapping with precipitation labels.
@@ -492,8 +474,6 @@ Canvas {
 
         context.font =  (fontSize + 1) + 'px "%1"'.arg(weatherIconFont.name)
 
-        var bgColor = colorPalette.backgroundColor()
-        var dropShadowColor = invertColor(bgColor)
 
         iconOverlay.beginList()
 
