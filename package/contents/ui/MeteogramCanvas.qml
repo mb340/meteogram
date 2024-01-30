@@ -26,7 +26,7 @@ Canvas {
 
     property bool initialized: false
 
-    property double fontSize: Kirigami.Theme.defaultFont.pixelSize
+    property double fontSize: computeFontSize(available, rectWidth)
     property var precLabelPositions: ({})
 
     property int nHours: 0
@@ -66,8 +66,6 @@ Canvas {
     property double hourStrWidth: computeHourStrWidth(Kirigami.Theme.smallFont,
                                                       available)
     property int hourStep: 2
-
-    property bool isRectWidthChanged: true
 
     property alias temperatureScale: temperatureScale
     property alias temperatureAxisScale: temperatureAxisScale
@@ -204,9 +202,6 @@ Canvas {
         }
     }
 
-    onRectWidthChanged: isRectWidthChanged = true
-    onNHoursChanged: isRectWidthChanged = true
-
     /*
      * Repaint canvas on resize.
      */
@@ -280,18 +275,18 @@ Canvas {
     property int iconSetType: (plasmoid && plasmoid.configuration && plasmoid.configuration.iconSetType) ?
                                 plasmoid.configuration.iconSetType : 0
 
-    function computeFontSize() {
-        if (!available || !isRectWidthChanged) {
-            return
+    function computeFontSize(available, rectWidth) {
+        if (!available) {
+            return Kirigami.Theme.defaultFont.pixelSize
         }
 
         if (!isFinite(rectWidth) || rectWidth <= 0) {
-            return
+            return Kirigami.Theme.defaultFont.pixelSize
         }
 
         let ctx = context ? context : getContext("2d")
         if (!ctx) {
-            return
+            return Kirigami.Theme.defaultFont.pixelSize
         }
 
         let size = 1
@@ -303,8 +298,7 @@ Canvas {
             }
             size += 0.5
         }
-        fontSize = size
-        isRectWidthChanged = false
+        return size
     }
 
     function drawPrecipitationBars(context, rectWidth) {
@@ -969,8 +963,6 @@ Canvas {
 
         processMeteogramData()
         buildMetogramData()
-
-        computeFontSize()
 
         buildCurves()
 
