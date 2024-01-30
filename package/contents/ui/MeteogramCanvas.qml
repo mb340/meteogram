@@ -64,7 +64,7 @@ Canvas {
 
     property double hourStrWidth: computeHourStrWidth(theme.smallestFont,
                                                       available)
-    property int hourStep: 2
+    property int hourStep: computeHourStep(hourStrWidth, rectWidth)
 
     property alias temperatureScale: temperatureScale
     property alias temperatureAxisScale: temperatureAxisScale
@@ -906,7 +906,6 @@ Canvas {
         precipitationScale.setDomain(0, 50)
         precipitationMaxGraphY = 15
 
-        computeHourStep(root.hourStrWidth, root.rectWidth)
 
         xIndexScale.setDomain(0, meteogramModel.count - 1)
         timeScale.setDomain(startTime.getTime(), endTime.getTime())
@@ -939,7 +938,10 @@ Canvas {
     }
 
     function computeHourStep(hourStrWidth, rectWidth) {
-        hourStep = Math.ceil(meteogramCanvas.hourStrWidth / meteogramCanvas.rectWidth)
+        let hourStep = Math.ceil(hourStrWidth / rectWidth)
+        if (!isFinite(hourStep)) {
+            return 2
+        }
         if (hourStep <= 2) {
             hourStep = 2
         }
@@ -955,6 +957,7 @@ Canvas {
             hourStep = 24
         }
         // print("hourStep ", hourStep)
+        return hourStep
     }
 
     function fullRedraw() {
