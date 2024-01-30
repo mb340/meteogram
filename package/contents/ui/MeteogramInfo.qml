@@ -33,7 +33,7 @@ Item {
     property double idx: -1
     property var hourModel: undefined
 
-    readonly property double textPad: 32 * 1
+    readonly property double textPad: (1.75 * Kirigami.Units.largeSpacing)
 
     property alias boxWidth: hoverItem.width
     property alias boxHeight: hoverItem.height
