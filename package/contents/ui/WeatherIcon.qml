@@ -10,8 +10,6 @@ import "../code/icons.js" as IconTools
 Loader {
     asynchronous: true
     visible: status == Loader.Ready
-    anchors.centerIn: centerInParent ? parent : null
-
 
     property int iconSetType
 
@@ -22,7 +20,6 @@ Loader {
     property double iconY: 0
     property double iconDim: NaN
 
-    property bool centerInParent: false
 
     sourceComponent: (iconSetType === 0) ? iconLabelComponent :
                         ((iconSetType === 1 || iconSetType === 2) ? iconImageComponent :

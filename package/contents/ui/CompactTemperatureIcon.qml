@@ -79,8 +79,7 @@ Item {
         anchors.fill: parent
         anchors.bottomMargin: temperatureIcon.bottomPadding
 
-        // anchors.centerIn: parent
-        centerInParent: true
+        anchors.centerIn: parent
 
         Component.onCompleted: {
             updateModel()

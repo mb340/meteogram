@@ -71,7 +71,6 @@ Item {
                 iconDim: units.iconSizes.medium
 
                 Layout.preferredWidth: iconDim
-                centerInParent: true
             }
 
             PlasmaExtras.Heading {
