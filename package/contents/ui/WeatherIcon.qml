@@ -9,8 +9,11 @@ import org.kde.kirigami as Kirigami
 import "../code/icons.js" as IconTools
 
 
-Item {
-    id: root
+Loader {
+    asynchronous: true
+    visible: status == Loader.Ready
+    anchors.centerIn: centerInParent ? parent : null
+
 
     property int iconSetType
 
@@ -22,6 +25,10 @@ Item {
     property double iconDim: NaN
 
     property bool centerInParent: false
+
+    sourceComponent: (iconSetType === 0) ? iconLabelComponent :
+                        ((iconSetType === 1 || iconSetType === 2) ? iconImageComponent :
+                        ((iconSetType === 3) ? iconItemComponent : null))
 
     // Component.onCompleted: {
     //     print("WeatherIcon " + iconSetType + ", " + iconName + ", " + iconX + ", " + iconY + ", " + iconDim)
@@ -119,28 +126,6 @@ Item {
                 source: image
                 visible: plasmoid.configuration.iconDropShadow
             }
-        }
-    }
-
-    Loader {
-        asynchronous: true
-        visible: status == Loader.Ready
-
-        anchors.centerIn: centerInParent ? parent : null
-
-        // anchors.fill: parent
-
-        sourceComponent: {
-            if (iconSetType === 0) {
-                return iconLabelComponent
-            }
-            if (iconSetType === 1 || iconSetType === 2) {
-                return iconImageComponent
-            }
-            if (iconSetType === 3) {
-                return iconItemComponent
-            }
-            return null
         }
     }
 }
