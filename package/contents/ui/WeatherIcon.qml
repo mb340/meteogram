@@ -32,27 +32,22 @@ Loader {
     Component {
         id: iconLabelComponent
 
-        Item {
+        Label {
+            id: textItem
+            text: IconTools.getIconResource(iconName, currentProvider, iconSetType, partOfDay)
+            font.family: 'weathericons'
+
             x: iconX
             y: iconY
             width: iconDim
             height: width
 
-            Label {
-                id: textItem
-                text: IconTools.getIconResource(iconName, currentProvider, iconSetType, partOfDay)
-                font.family: 'weathericons'
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
 
-                width: parent.width
-                height: parent.height
-
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-
-                font.pixelSize: 1024
-                minimumPixelSize: 1
-                fontSizeMode: Text.Fit
-            }
+            font.pixelSize: 1024
+            minimumPixelSize: 1
+            fontSizeMode: Text.Fit
         }
     }
 
