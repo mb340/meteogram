@@ -34,7 +34,10 @@ Loader {
 
         Label {
             id: textItem
-            text: IconTools.getIconResource(iconName, currentProvider, iconSetType, partOfDay)
+            text: !currentProvider ? null :
+                    IconTools.getIconResource(
+                        currentProvider.getIconIr(iconName),
+                        iconSetType, partOfDay)
             font.family: 'weathericons'
 
             x: iconX
@@ -60,10 +63,10 @@ Loader {
 
             height: width
 
-            property var imgSrc: IconTools.getIconResource(iconName,
-                                                           currentProvider,
-                                                           iconSetType,
-                                                           partOfDay)
+            property var imgSrc: !currentProvider ? null :
+                                    IconTools.getIconResource(
+                                        currentProvider.getIconIr(iconName),
+                                        iconSetType, partOfDay)
 
             Image {
                 id: image
@@ -99,10 +102,10 @@ Loader {
 
             PlasmaCore.IconItem {
                 id: image
-                source: IconTools.getIconResource(iconName,
-                                                  currentProvider,
-                                                  iconSetType,
-                                                  partOfDay)
+                source: !currentProvider ? null :
+                            IconTools.getIconResource(
+                                currentProvider.getIconIr(iconName),
+                                iconSetType, partOfDay)
 
                 anchors.fill: parent
             }

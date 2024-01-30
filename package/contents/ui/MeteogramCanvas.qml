@@ -514,8 +514,8 @@ Canvas {
             var y = temperatureScale.translate(unitUtils.convertTemperature(
                                                item.temperature, temperatureType))
             var timePeriod = timeUtils.isSunRisen(item.from, sunRise, sunSet) ? 0 : 1
-            var str = IconTools.getIconResource(iconName, currentProvider, iconSetType,
-                                                timePeriod)
+            var iconIr = currentProvider.getIconIr(iconName)
+            var str = IconTools.getIconResource(iconIr, iconSetType, timePeriod)
 
             var x0 = x
             var y0 = y - rectWidth

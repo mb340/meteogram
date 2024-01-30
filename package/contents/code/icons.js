@@ -243,21 +243,15 @@ const Ir = {
     }
 }
 
-function getIconResource(iconVal, currentProvider, iconSetType, partOfDay) {
+function getIconResource(irName, iconSetType, partOfDay) {
     if (partOfDay === undefined) {
         partOfDay = 0
     }
 
-    if (!currentProvider) {
-        return null
-    }
-
-    let irName = currentProvider.getIconIr(iconVal)
-    if (irName === null || irName === "") {
-        return null
-    }
-
     // print('irName = ' + irName)
+    if (!irName) {
+        return null
+    }
 
     if (iconSetType === IconSetType.WEATHERFONT) {
         let parts = Ir.ToWeatherFont[irName]
