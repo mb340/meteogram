@@ -42,6 +42,7 @@ Item {
         }
 
         Label {
+            id: dateLabel
             font.italic: true
             color: main.colors.disabledTextColor
             text: !currentWeatherModel.date ? "" :
@@ -79,8 +80,12 @@ Item {
                 text: !currentProvider ? "" :
                         currentProvider.getIconDescription(currentWeatherModel.iconName)
 
-                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
+
+                horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignVCenter
+
+                Layout.maximumWidth: 8 * units.largeSpacing
             }
         }
 
