@@ -1,8 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
-// import QtGraphicalEffects 1.0
-import Qt5Compat.GraphicalEffects
 // import org.kde.plasma.core as PlasmaCore
 import org.kde.kirigami as Kirigami
 
@@ -78,15 +76,21 @@ Loader {
                 anchors.fill: parent
             }
 
+            // DropShadow {
+            //     anchors.fill: image
+            //     horizontalOffset: 0
+            //     verticalOffset: 0
+            //     radius: 8.0
+            //     samples: 17
+            //     color: !main.theme?.isDarkMode ? "#80000000" : "#80ffffff"
+            //     source: image
+            //     visible: plasmoid.configuration.iconDropShadow
+            // }
+
             DropShadow {
                 anchors.fill: image
-                horizontalOffset: 0
-                verticalOffset: 0
-                radius: 8.0
-                samples: 17
-                color: !main.theme?.isDarkMode ? "#80000000" : "#80ffffff"
-                source: image
-                visible: plasmoid.configuration.iconDropShadow
+                z: -1
+                scale: 1.05
             }
         }
     }
@@ -111,15 +115,19 @@ Loader {
                 anchors.fill: parent
             }
 
+            // DropShadow {
+            //     anchors.fill: image
+            //     horizontalOffset: 0
+            //     verticalOffset: 0
+            //     radius: 8.0
+            //     samples: 17
+            //     color: !main.theme?.isDarkMode ? "#80000000" : "#80ffffff"
+            //     source: image
+            //     visible: plasmoid.configuration.iconDropShadow
+            // }
+
             DropShadow {
                 anchors.fill: image
-                horizontalOffset: 0
-                verticalOffset: 0
-                radius: 8.0
-                samples: 17
-                color: !main.theme?.isDarkMode ? "#80000000" : "#80ffffff"
-                source: image
-                visible: plasmoid.configuration.iconDropShadow
             }
         }
     }
