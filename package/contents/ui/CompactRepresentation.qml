@@ -44,6 +44,10 @@ Item {
     //     visible: false
     // }
 
+    CompactItemDebugRect {
+        color: theme.backgroundColor
+    }
+
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton

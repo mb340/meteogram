@@ -41,6 +41,8 @@ Item {
     property bool temperatureEnabled: cfg_compactItemOrder.includes("1")
     property bool temperatureIconEnabled: cfg_compactItemOrder.includes("2")
 
+    property bool cfg_debugLayoutBoundaries
+
     onCfg_compactItemOrderChanged: {
         dbgprint(JSON.stringify(cfg_compactItemOrder))
     }
@@ -277,6 +279,33 @@ Item {
             Layout.minimumHeight: childrenRect.height
             Layout.columnSpan: 2
             enabled: compactItemsEnabled
+        }
+
+
+        Item {
+            width: 2
+            height: 2
+            Layout.columnSpan: 3
+        }
+
+        Label {
+            text: i18n("Show layout geometry") + ":"
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            Layout.columnSpan: 1
+        }
+        CheckBox {
+            checked: cfg_debugLayoutBoundaries
+            Layout.alignment: Qt.AlignLeft
+            Layout.rowSpan: 1
+            onCheckedChanged: cfg_debugLayoutBoundaries = checked
+        }
+
+        Label {
+            text: i18n("Debug the layout of compact representation items.")
+            font.pixelSize: theme.defaultFont.pixelSize - 2
+            Layout.rowSpan: 1
+            Layout.preferredWidth: 250
+            wrapMode: Text.WordWrap
         }
 
         Item {
