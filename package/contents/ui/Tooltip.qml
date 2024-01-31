@@ -45,6 +45,7 @@ Item {
         }
 
         Label {
+            id: dateLabel
             font.italic: true
             color: main.theme?.disabledTextColor ?? Kirigami.Theme.disabledTextColor
             text: currentWeatherModel.date?.toLocaleDateString(Qt.locale(), 'dddd, dd MMMM') ?? ""
@@ -79,8 +80,12 @@ Item {
                 text: !currentProvider ? "" :
                         currentProvider.getIconDescription(currentWeatherModel.iconName)
 
-                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
+
+                horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignVCenter
+
+                Layout.maximumWidth: 8 * Kirigami.Units.largeSpacing
             }
         }
 
