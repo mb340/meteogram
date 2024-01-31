@@ -18,6 +18,7 @@ import QtQuick
 import QtQuick.Controls
 import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
+import org.kde.kirigami as Kirigami
 import "utils"
 
 Item {
@@ -43,6 +44,10 @@ Item {
     //     z: -1
     //     visible: false
     // }
+
+    CompactItemDebugRect {
+        color: Kirigami.Theme.backgroundColor
+    }
 
     MouseArea {
         anchors.fill: parent

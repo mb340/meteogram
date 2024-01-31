@@ -128,6 +128,9 @@ Item {
     //     visible: false
     // }
 
+    CompactItemDebugRect {
+    }
+
     states: [
         State {
             name: "base"

@@ -99,6 +99,9 @@ Item {
         }
     }
 
+    CompactItemDebugRect {
+    }
+
     states: [
         State {
             name: "horizontalOnHorizontalPanel"
