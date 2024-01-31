@@ -214,7 +214,7 @@ Item {
                 // fontSizeMode: Text.Fit
                 // font.pointSize:  textContainer.contentHeight
 
-                fontSizeMode: (sizeMode === CompactItem.SizeMode.Fill) ? Text.HorizontalFit :
+                fontSizeMode: (sizeMode === CompactItem.SizeMode.Fill) ? Text.Fit :
                                 (sizeMode === CompactItem.SizeMode.FixedSize) ? Text.Fit :
                                 /*(sizeMode === CompactItem.SizeMode.FontSize)*/ Text.FixedSize
             }
