@@ -76,11 +76,17 @@ Canvas {
             initialStep = -1
         }
 
-        let currSet = new Date(sunSet)
+        let currSet = new Date(from)
         currSet.setDate(from.getDate() + initialStep)
+        currSet.setHours(sunSet.getHours(),
+                         sunSet.getMinutes(),
+                         sunSet.getSeconds())
 
-        let currRise = new Date(sunRise)
+        let currRise = new Date(from)
         currRise.setDate(from.getDate() + initialStep + 1)
+        currRise.setHours(sunRise.getHours(),
+                          sunRise.getMinutes(),
+                          sunRise.getSeconds())
 
         let xInitial = scale.translate(currSet)
 
