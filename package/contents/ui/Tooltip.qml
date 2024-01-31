@@ -37,21 +37,21 @@ Item {
         PlasmaExtras.Heading {
             level: 2
             font.bold: true
-            color: main.colors.textColor
+            color: main.colors ? main.colors.textColor : theme.textColor
             text: main.placeAlias
         }
 
         Label {
             id: dateLabel
             font.italic: true
-            color: main.colors.disabledTextColor
+            color: main.colors ? main.colors.disabledTextColor : theme.disabledTextColor
             text: !currentWeatherModel.date ? "" :
                     currentWeatherModel.date.toLocaleDateString(Qt.locale(), 'dddd, dd MMMM')
         }
 
         Label {
             font.italic: true
-            color: main.colors.disabledTextColor
+            color: main.colors ? main.colors.disabledTextColor : theme.disabledTextColor
             text: !currentWeatherModel.date ? "" :
                     currentWeatherModel.date.toLocaleTimeString(Qt.locale(), Locale.ShortFormat)
         }
@@ -76,7 +76,7 @@ Item {
 
             PlasmaExtras.Heading {
                 level: 3
-                color: main.colors.textColor
+                color: main.colors ? main.colors.textColor : theme.textColor
                 text: !currentProvider ? "" :
                         currentProvider.getIconDescription(currentWeatherModel.iconName)
 
