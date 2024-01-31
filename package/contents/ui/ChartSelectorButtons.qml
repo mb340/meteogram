@@ -1,7 +1,8 @@
 import QtQuick 2.2
 import QtQuick.Controls 2.5
 // import QtGraphicalEffects 1.12
-import Qt5Compat.GraphicalEffects
+// import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 import QtQuick.Layouts 1.1
 import org.kde.plasma.core as PlasmaCore
 import org.kde.kirigami as Kirigami
@@ -36,7 +37,8 @@ RowLayout {
                 id: varNameLabel
                 height: parent.height
                 text: modelData.label
-                color: enabled ? main.theme.textColor : main.theme.disabledTextColor
+                color: isHighlighted ? main.theme.highlightColor :
+                            enabled ? main.theme.textColor : main.theme.disabledTextColor
                 font.family: 'weathericons'
                 enabled: (isVarSelected && hasVariable)
 
@@ -51,13 +53,25 @@ RowLayout {
                 property bool hasVariable: modelData.hasVariable !== undefined ? modelData.hasVariable :
                                             meteogramModel.hasVariable(modelData.varName)
 
-                ColorOverlay {
-                    anchors.fill: parent
-                    source: parent
-                    color: main.theme.highlightColor
-                    antialiasing: true
-                    visible: varNameLabel.isHighlighted
-                }
+                // ColorOverlay {
+                //     anchors.fill: parent
+                //     source: parent
+                //     color: main.theme.highlightColor
+                //     antialiasing: true
+                //     visible: varNameLabel.isHighlighted
+                // }
+
+                // MultiEffect {
+                //     anchors.fill: parent
+                //     source: parent
+                //     colorization: 1.0
+                //     colorizationColor: main.theme.highlightColor
+                //     // colorizationColor: Qt.rgba(Kirigami.Theme.highlightColor.r,
+                //     //                            Kirigami.Theme.highlightColor.g,
+                //     //                            Kirigami.Theme.highlightColor.b,
+                //     //                            1.0)
+                //     visible: varNameLabel.isHighlighted
+                // }
 
                 Image {
                     id: notAvailable
@@ -71,14 +85,25 @@ RowLayout {
                     sourceSize.height: width
 
                     anchors.centerIn: varNameLabel
+
+                    opacity: 0.0
                 }
 
-                ColorOverlay {
+                // ColorOverlay {
+                //     anchors.fill: notAvailable
+                //     source: notAvailable
+                //     color: (visible && varNameLabel.isVarSelected) ?
+                //                 main.theme.textColor : main.theme.disabledTextColor
+                //     antialiasing: true
+                //     visible: !varNameLabel.hasVariable
+                // }
+
+                MultiEffect {
                     anchors.fill: notAvailable
                     source: notAvailable
-                    color: (visible && varNameLabel.isVarSelected) ?
-                                main.theme.textColor : main.theme.disabledTextColor
-                    antialiasing: true
+                    colorization: 1.0
+                    colorizationColor: (visible && varNameLabel.isVarSelected) ?
+                                            main.theme.textColor : main.theme.disabledTextColor
                     visible: !varNameLabel.hasVariable
                 }
             }
