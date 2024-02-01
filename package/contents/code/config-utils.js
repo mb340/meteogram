@@ -1,8 +1,4 @@
-function getPlacesArray() {
-    var cfgPlaces = plasmoid.configuration.places
-//     print('Reading places from configuration: ' + cfgPlaces)
-    return JSON.parse(cfgPlaces)
-}
+.pragma library
 
 function formatPlaceIdentifier(placeObject) {
     let placeIdentifier = null

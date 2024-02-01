@@ -364,7 +364,7 @@ Item {
         currentWeatherModel.clear()
         meteogramModel.hourInterval = 1
 
-        var places = ConfigUtils.getPlacesArray()
+        var places = JSON.parse(plasmoid.configuration.places)
 
         onlyOnePlace = places.length === 1
 
