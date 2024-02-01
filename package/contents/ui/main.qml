@@ -82,6 +82,8 @@ PlasmoidItem {
                             Plasmoid.location === PlasmaCore.Types.LeftEdge ||
                             Plasmoid.location === PlasmaCore.Types.RightEdge)
 
+    property bool fillModels: main.expanded /*|| (!isPanel && isFullRepresentation)*/
+
     signal fullRedraw()
 
     anchors.fill: parent

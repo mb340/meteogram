@@ -56,6 +56,14 @@ Item {
     property bool hasAlerts: weatherAlertsModel.count > 0
     property bool isShowAlert: isShowAlertClicked && hasAlerts
 
+    property bool fillModels: main.expanded
+
+
+    onFillModelsChanged: {
+        loadMetNoInfo(false)
+        loadOwmInfo(false)
+    }
+
     Label {
         id: currentLocationText
 
@@ -259,7 +267,9 @@ Item {
         anchors.right: parent.right
         anchors.bottom: nextDaysView.top
         anchors.bottomMargin: windarea + Kirigami.Units.smallSpacing
-        visible: !isShowAlert && !metnoDailyWeatherInfo.visible && !owmDailyWeatherInfo.visible
+        visible: !isShowAlert &&
+                    (!metnoDailyWeatherInfo || !metnoDailyWeatherInfo.visible) &&
+                    (!owmDailyWeatherInfo || !owmDailyWeatherInfo.visible)
      }
 
     MeteogramInfo {
@@ -267,38 +277,64 @@ Item {
         z: 1
     }
 
-     MetNoDailyWeatherInfo {
-        id: metnoDailyWeatherInfo
+    function loadMetNoInfo(load) {
+        if (load && metnoDailyWeatherInfo == null) {
+            metnoDailyWeatherInfo = metnoInfoComponent.createObject(fullRepresentation)
+            return
+        } else if (!load && metnoDailyWeatherInfo != null) {
+            metnoDailyWeatherInfo.destroy()
+            metnoDailyWeatherInfo = null
+        }
+    }
 
-        anchors.top: parent.top
-        anchors.topMargin: headingHeight
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: nextDaysView.top
-        anchors.bottomMargin: meteogram.windarea /* wind area */
+    function loadOwmInfo(load) {
+        if (load && owmDailyWeatherInfo == null) {
+            owmDailyWeatherInfo = owmInfoComponent.createObject(fullRepresentation)
+            return
+        } else if (!load && owmDailyWeatherInfo != null) {
+            owmDailyWeatherInfo.destroy()
+            owmDailyWeatherInfo = null
+        }
+    }
 
+    property Item metnoDailyWeatherInfo: null
+    property Item owmDailyWeatherInfo: null
+
+    Component {
+        id: metnoInfoComponent
+
+        MetNoDailyWeatherInfo {
+            anchors.top: parent.top
+            anchors.topMargin: headingHeight
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: nextDaysView.top
+            anchors.bottomMargin: meteogram.windarea /* wind area */
+
+            anchors.leftMargin: Kirigami.Units.largeSpacing
+            anchors.rightMargin: Kirigami.Units.largeSpacing
+
+            model: null
+            visible: model != null
+        }
+    }
+
+    Component {
+        id: owmInfoComponent
+
+        OwmDailyWeatherInfo {
+            anchors.top: parent.top
+            anchors.topMargin: headingHeight
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: nextDaysView.top
+            anchors.bottomMargin: meteogram.windarea /* wind area */
         anchors.leftMargin: Kirigami.Units.largeSpacing
         anchors.rightMargin: Kirigami.Units.largeSpacing
 
-        model: null
-        visible: model != null
-     }
-
-     OwmDailyWeatherInfo {
-        id: owmDailyWeatherInfo
-
-        anchors.top: parent.top
-        anchors.topMargin: headingHeight
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: nextDaysView.top
-        anchors.bottomMargin: meteogram.windarea /* wind area */
-
-        anchors.leftMargin: Kirigami.Units.largeSpacing
-        anchors.rightMargin: Kirigami.Units.largeSpacing
-
-        model: null
-        visible: model != null
+            model: null
+            visible: model != null
+        }
      }
 
     Rectangle {
@@ -352,6 +388,7 @@ Item {
         }
     }
 
+
   /*
      *
      * NEXT DAYS
@@ -367,7 +404,7 @@ Item {
         anchors.rightMargin: hourLegendMargin
         height: nextDaysHeight
 
-        model: dailyWeatherModels.model
+        model: fillModels ? dailyWeatherModels.model : []
         orientation: Qt.Horizontal
         spacing: nextDayItemSpacing
         interactive: false
@@ -390,12 +427,10 @@ Item {
         }
 
         function beginLoadFromCache() {
-            nextDaysView.model = null
         }
 
         function endLoadFromCache() {
             now = timeUtils.dateNow(timezoneType, main.timezoneOffset)
-            nextDaysView.model = dailyWeatherModels.model
         }
     }
 

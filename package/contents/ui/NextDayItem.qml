@@ -109,15 +109,21 @@ Item {
                 return
             }
             if (currentProvider.providerId === "metno" || currentProvider.providerId === "openMeteo") {
+                loadMetNoInfo(true)
                 metnoDailyWeatherInfo.model = dailyWeatherModels.get(index)
             } else if (currentProvider.providerId === "owm") {
+                loadOwmInfo(true)
                 owmDailyWeatherInfo.model = dailyWeatherModels.get(index)
             }
         }
 
         onExited: {
-            metnoDailyWeatherInfo.model = null
-            owmDailyWeatherInfo.model = null
+            if (metnoDailyWeatherInfo) {
+                metnoDailyWeatherInfo.model = null
+            }
+            if (owmDailyWeatherInfo) {
+                owmDailyWeatherInfo.model = null
+            }
         }
     }
 }

@@ -36,7 +36,7 @@ Item {
     Repeater {
         id: hourGridRepeater
 
-        model: hourGridModel2.model
+        model: fillModels ? hourGridModel2.model : []
 
         readonly property int oneHourMs: 60 * 60 * 1000
 
