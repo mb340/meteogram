@@ -39,7 +39,7 @@ Item {
     }
 
     Repeater {
-        model: weatherIcons.model
+        model: fillModels ? weatherIcons.model : undefined
 
         delegate: WeatherIcon {
             iconSetType: root.iconSetType

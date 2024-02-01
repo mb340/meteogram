@@ -24,7 +24,7 @@ Item {
 
     Repeater {
         id: horizontalLinesRepeater
-        model: horizontalLinesModel.model
+        model: fillModels ? horizontalLinesModel.model : []
 
         delegate: Item {
             height: 0

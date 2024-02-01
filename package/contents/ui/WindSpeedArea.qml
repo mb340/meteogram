@@ -34,7 +34,7 @@ Item {
 
     Repeater {
         id: windSpeedRepeater
-        model: windSpeedModel.model
+        model: fillModels ? windSpeedModel.model : []
         delegate: windIconDelegate
 
         property double rectWidth: meteogramCanvas.hourStep * (meteogramCanvas.rectWidth)
