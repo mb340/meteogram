@@ -31,13 +31,10 @@ Canvas {
     property int nHours: 0
     property double rectWidth: width / nHours
 
-    property var temperaturePathItems: []
-    property var humidityPathItems: []
-    property var y1PathItems: []
-    property var y2PathItems: []
-
+    property var meteogramPathItems: []
     property var cloudPathItems: []
 
+    property string pathChartName: ""
 
     property var pathLineConfigs: ({
         "temperature": {
@@ -125,30 +122,14 @@ Canvas {
     }
 
     Path {
-        id: y2Path
+        id: meteogramPath
         startX: 0
         pathElements: []
-    }
-    Path {
-        id: temperaturePath
-        startX: 0
-        pathElements: []
-    }
 
-    Path {
-        id: y1Path
-        startX: 0
-        pathElements: []
     }
 
     Path {
         id: cloudAreaPath
-        startX: 0
-        pathElements: []
-    }
-
-    Path {
-        id: humidityPath
         startX: 0
         pathElements: []
     }
@@ -164,7 +145,7 @@ Canvas {
                                                pathLineConfig.unitType ? pathLineConfig.unitType : -1))
 
             property int i
-            property var pathLineConfig
+            property var pathLineConfig: pathLineConfigs[pathChartName]
             property var model: meteogramModel.get(i)
         }
     }
@@ -610,19 +591,27 @@ Canvas {
             drawCloudArea(context)
         }
         if (renderHumidity) {
-            drawPath(context, humidityPath, colorPalette.humidityColor(), 1 * units.devicePixelRatio)
+            pathChartName = "humidity"
+            meteogramPath.startY = meteogramPathItems[0].y
+            drawPath(context, meteogramPath, colorPalette.humidityColor(), 1 * units.devicePixelRatio)
         }
         if (renderPressure && y2VarName && y2VarName !== "") {
-            drawPath(context, y2Path, colorPalette.pressureColor(), 1 * units.devicePixelRatio)
+            pathChartName = "y2Chart"
+            meteogramPath.startY = meteogramPathItems[0].y
+            drawPath(context, meteogramPath, colorPalette.pressureColor(), 1 * units.devicePixelRatio)
         }
         if (renderTemperature) {
-            drawWarmTemp(context, temperaturePath, colorPalette.temperatureWarmColor(), 2 * units.devicePixelRatio)
-            drawColdTemp(context, temperaturePath, colorPalette.temperatureColdColor(), 2 * units.devicePixelRatio)
+            pathChartName = "temperature"
+            meteogramPath.startY = meteogramPathItems[0].y
+            drawWarmTemp(context, meteogramPath, colorPalette.temperatureWarmColor(), 2 * units.devicePixelRatio)
+            drawColdTemp(context, meteogramPath, colorPalette.temperatureColdColor(), 2 * units.devicePixelRatio)
 
             if (y1VarName && y1VarName !== "") {
                 let color = !main.colors.meteogram.isDarkMode ?
                                 'black' : 'white'
-                drawPath(context, y1Path, color, 1 * units.devicePixelRatio)
+                pathChartName = "y1Chart"
+                meteogramPath.startY = meteogramPathItems[0].y
+                drawPath(context, meteogramPath, color, 1 * units.devicePixelRatio)
             }
         }
 
@@ -643,12 +632,9 @@ Canvas {
         }
     }
 
-    function updatePathElement(index, chartName, pathList) {
+    function updatePathElement(index, pathList) {
         if (index >= pathList.length) {
-            let obj = pathLine.createObject(root, {
-                i: index,
-                pathLineConfig: Qt.binding(function() { return pathLineConfigs[chartName] }),
-            })
+            let obj = pathLine.createObject(meteogramPath, { i: index, })
             if (obj != null) {
                 pathList.push(obj)
             } else {
@@ -666,48 +652,15 @@ Canvas {
 
     function buildCurves() {
         if (meteogramModel.count <= 0) {
-            temperaturePath.pathElements = []
-            humidityPath.pathElements = []
-            y1Path.pathElements = []
-            y2Path.pathElements = []
+            meteogramPath.pathElements = []
             return
         }
 
-        let y1Count = 0
-        let y2Count = 0
-        let hasY1Chart = y1VarName && y1VarName !== ""
-        let hasY2Chart = y2VarName && y2VarName !== ""
-
         for (var i = 0; i < meteogramModel.count; i++) {
-            updatePathElement(i, "temperature", temperaturePathItems)
-            updatePathElement(i, "humidity", humidityPathItems)
-
-            if (hasY1Chart) {
-                updatePathElement(i, "y1Chart", y1PathItems)
-                y1Count++
-            }
-
-            if (hasY2Chart) {
-                updatePathElement(i, "y2Chart", y2PathItems)
-                y2Count++
-            }
+            updatePathElement(i, meteogramPathItems)
         }
 
-        temperaturePath.startY = temperaturePathItems[0].y
-        temperaturePath.pathElements = temperaturePathItems.slice(0, meteogramModel.count)
-
-        humidityPath.startY = humidityPathItems[0].y
-        humidityPath.pathElements = humidityPathItems.slice(0, meteogramModel.count)
-
-        y1Path.pathElements = y1PathItems.slice(0, y1Count)
-        if (y1Count > 0) {
-            y1Path.startY = y1PathItems[0].y
-        }
-
-        y2Path.pathElements = y2PathItems.slice(0, y2Count)
-        if (y2Count > 0) {
-            y2Path.startY = y2PathItems[0].y
-        }
+        meteogramPath.pathElements = meteogramPathItems.slice(0, meteogramModel.count)
     }
 
     function buildCloudPath() {
