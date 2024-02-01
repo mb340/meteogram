@@ -46,8 +46,6 @@ PlasmoidItem {
     property int timezoneOffset
     property string timezoneShortName
 
-    property string places: plasmoid.configuration.places
-
     property int temperatureType: plasmoid.configuration.temperatureType
     property int pressureType: plasmoid.configuration.pressureType
     property int windSpeedType: plasmoid.configuration.windSpeedType
@@ -235,6 +233,16 @@ PlasmoidItem {
                 reloadTimer.updateLastLoadText()
                 reloadTimer.checkNextLoadElapsed(cacheKey)
             }
+        }
+    }
+
+    Connections {
+        target: plasmoid.configuration
+        function onPlacesChanged() {
+            if (!initialized) {
+                return
+            }
+            setNextPlace(false, true)
         }
     }
 
@@ -460,13 +468,6 @@ PlasmoidItem {
             return
         }
         reloadTimer.updateState(cacheKey)
-    }
-
-    onPlacesChanged: {
-        if (!initialized) {
-            return
-        }
-        setNextPlace(false, true)
     }
 
     onTemperatureTypeChanged: {

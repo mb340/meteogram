@@ -34,8 +34,6 @@ Grid {
 
     property var itemOrder: plasmoid.configuration.compactItemOrder
 
-    property string places: plasmoid.configuration.places
-
     property int cityAliasSizeMode: plasmoid.configuration.cityAliasSizeMode
     property string cityAliasFontName: plasmoid.configuration.cityAliasFontName
     property int cityAliasFontSize: plasmoid.configuration.cityAliasFontSize
@@ -170,6 +168,12 @@ Grid {
         onStateChanged: visible = order.includes(CompactItem.ItemType.TemperatureIcon)
     }
 
+    Connections {
+        target: plasmoid.configuration
+
+        onPlacesChanged: updateOrder()
+    }
+
     Component.onCompleted: {
         dbgprint("CompactItem: onCompleted: formFactor " + plasmoid.formFactor)
     }
@@ -183,10 +187,6 @@ Grid {
     }
 
     onTemperatureTypeChanged: {
-        updateOrder()
-    }
-
-    onPlacesChanged: {
         updateOrder()
     }
 
