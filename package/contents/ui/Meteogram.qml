@@ -172,7 +172,6 @@ Item {
         }
 
         function setModel(count) {
-            let xOffset = (windSpeedRepeater.rectWidth / 2)
             windSpeedModel.beginList()
             for (var i = 0; i < count; i++) {
                 let item = meteogramModel.get(i)
@@ -186,9 +185,7 @@ Item {
                 }
 
                 windSpeedModel.addItem({
-                    xPos: timeScale.translate(t.getTime()) - xOffset,
-                    windSpeed: item.windSpeed,
-                    windDirection: item.windDirection,
+                    index: i
                 })
             }
             windSpeedModel.endList()
@@ -200,6 +197,7 @@ Item {
             delegate: windIconDelegate
 
             property double rectWidth: meteogramCanvas.hourStep * (meteogramCanvas.rectWidth)
+            property double xOffset: (windSpeedRepeater.rectWidth / 2)
             property int iconSetType: plasmoid.configuration.windIconSetType
 
             Component {
@@ -209,15 +207,17 @@ Item {
                     id: windspeedAnchor
                     width: windSpeedRepeater.rectWidth
                     height: labelHeight
-                    x: xPos
+                    x: !item ? 0 : timeScale.translate(item.from.getTime()) - windSpeedRepeater.xOffset
                     y: 0
 
                     anchors.verticalCenter: parent.verticalCenter
 
+                    property var item: meteogramModel.get(model.index)
+
                     Image {
                         id: wind
-                        source: isNaN(windSpeed) ? "" :
-                                    windStrength(windSpeed, windSpeedRepeater.iconSetType)
+                        source: !item || isNaN(item.windSpeed) ? "" :
+                                    windStrength(item.windSpeed, windSpeedRepeater.iconSetType)
                         fillMode: Image.PreserveAspectFit
 
                         width: height
@@ -232,7 +232,8 @@ Item {
                     ColorOverlay {
                         anchors.fill: wind
                         source: wind
-                        rotation: windFrom(windDirection, windSpeedRepeater.iconSetType)
+                        rotation: windFrom(!item ? 0 : item.windDirection,
+                                            windSpeedRepeater.iconSetType)
                         color: main.colors.isShowBackground ?
                                     main.colors.disabledTextColor :
                                     main.colors.textColor
