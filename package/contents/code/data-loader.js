@@ -10,12 +10,6 @@ function dbgprint(msg) {
     print('[weatherWidget] ' + msg)
 }
 
-function scheduleDataReload() {
-    var now = new Date().getTime()
-    loadingError = true
-    return now + 600000
-}
-
 function getReloadedAgoMs(lastReloaded) {
     if (!lastReloaded) {
         lastReloaded = 0
