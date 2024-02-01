@@ -67,6 +67,8 @@ Item {
     property alias cloudAreaScale: meteogramCanvas.cloudAreaScale
     property alias humidityScale: meteogramCanvas.humidityScale
     property alias xIndexScale: meteogramCanvas.xIndexScale
+    property alias xAxisScale: meteogramCanvas.xAxisScale
+    property alias yAxisScale: meteogramCanvas.yAxisScale
     property alias timeScale: meteogramCanvas.timeScale
 
     property alias nHours: meteogramCanvas.nHours
@@ -120,83 +122,15 @@ Item {
             scale: meteogramCanvas.timeScale
         }
     }
-    ListView {
-        id: horizontalLines1
-        model: horizontalLinesModel.model
+
+    VerticalAxisLabels {
+        id: horizontalLines
         anchors.left: graphArea.left
         anchors.right: graphArea.right
         anchors.top: graphArea.top
-//         anchors.bottom: graphArea.bottom + labelHeight
-//         anchors.fill: graphArea
         height: graphArea.height + labelHeight
-        interactive: false
-
-        property double itemHeight: graphArea.height / (temperatureYGridCount)
-
-
-        ManagedListModel {
-            id: horizontalLinesModel
-        }
-
-        function setModel(count) {
-            horizontalLinesModel.beginList()
-            for (var i = 0; i <= count; i++) {
-                if (i % temperatureYGridStep !== 0) {
-                    continue
-                }
-                let y1 = temperatureAxisScale.invert(i)
-                let y2 = rightGridScale.invert(i)
-                if (!Number.isInteger(y1)) {
-                    throw new Error("Temperature axis tick is not integer.")
-                }
-                horizontalLinesModel.addItem({
-                    temperatureLabel: y1.toFixed(0),
-                    rightAxisLabel: y2.toFixed(rightAxisDecimals)
-
-                })
-            }
-            horizontalLinesModel.endList()
-        }
-
-        delegate: Item {
-            height: horizontalLines1.itemHeight * temperatureYGridStep
-            width: graphArea.width
-
-            Rectangle {
-                id: gridLine
-                width: parent.width
-                height: 1 * 1
-                color: gridColor
-            }
-            Label {
-                text: temperatureLabel
-                height: labelHeight
-                width: labelWidth
-                horizontalAlignment: Text.AlignRight
-                anchors.left: gridLine.left
-                anchors.top: gridLine.top
-                anchors.leftMargin: -labelWidth - 2
-                anchors.topMargin: -labelHeight / 2
-                font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-                font.pointSize: -1
-            }
-            Label {
-                text: rightAxisLabel
-                height: labelHeight
-                width: labelWidth
-                anchors.top: gridLine.top
-                anchors.topMargin: -labelHeight / 2
-                anchors.left: gridLine.right
-                anchors.leftMargin: 2
-                horizontalAlignment: Text.AlignLeft
-                font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-                font.pointSize: -1
-                color: colorPalette.pressureColor(main.theme.isDarkMode)
-
-                visible: y2AxisVisble
-            }
-        }
     }
+
     Label {
         text: unitUtils.formatUnits(y2VarName, unitUtils.getUnitType(y2VarName))
         height: labelHeight
@@ -223,104 +157,17 @@ Item {
         anchors.bottomMargin: 6
     }
 
-    ListView {
-        id: hourGrid
-        model: hourGridModel.model
-        property double hourItemWidth: nHours < 2 ? 0 : imageWidth / (nHours - 1)
+    HorizontalAxisLabels {
+        id: hourGrid2
         anchors.fill: graphArea
-        interactive: false
-        orientation: ListView.Horizontal
-
-        property var startTime: new Date(0)
-
-        ManagedListModel {
-            id: hourGridModel
-        }
-
-        function setModel(startTime) {
-            hourGrid.startTime = startTime
-
-            hourGridModel.beginList()
-            for (var i = 0; i < root.nHours; i++) {
-                hourGridModel.addItem({ index: i })
-            }
-            hourGridModel.endList()
-        }
-
-        delegate: Item {
-            height: labelHeight
-            width: hourGrid.hourItemWidth
-
-            property int onHourMs: 60 * 60 * 1000
-            property var date: new Date(Number(hourGrid.startTime) + (model.index * onHourMs))
-
-            property int hourFrom: date.getHours()
-            property string hourFromStr: timeUtils.getHourText(hourFrom)
-            property string hourFromEnding: timeUtils.twelveHourClockEnabled ?
-                                                timeUtils.getAmOrPm(hourFrom) : '00'
-            property bool dayBegins: hourFrom === 0
-            property bool hourVisible: (hourFrom + 0) % meteogramCanvas.hourStep === 0
-            property bool textVisible: hourVisible && model.index < root.nHours - 1
-
-            Rectangle {
-                id: verticalLine
-                width: dayBegins ? 2 : 1
-                height: imageHeight
-                color: dayBegins ? gridColorHighlight : gridColor
-                visible: hourVisible
-                anchors.leftMargin: labelWidth
-                anchors.top: parent.top
-            }
-            anchors.leftMargin: labelWidth
-            Label {
-                id: hourText
-                text: hourFromStr
-                verticalAlignment: Text.AlignBottom
-                horizontalAlignment: Text.AlignRight
-                height: labelHeight
-                width: hourGrid.hourItemWidth
-                anchors.top: verticalLine.bottom
-                anchors.right: verticalLine.left
-                anchors.topMargin: 2
-                anchors.horizontalCenter: verticalLine.horizontalCenter
-                font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-                font.pointSize: -1
-                visible: textVisible
-            }
-            Label {
-                text: hourFromEnding
-                color: main.theme.disabledTextColor
-                verticalAlignment: Text.AlignTop
-                horizontalAlignment: Text.AlignLeft
-                anchors.top: hourText.top
-                anchors.left: hourText.right
-                font.pixelSize: Kirigami.Theme.smallFont.pixelSize * 0.70
-                font.pointSize: -1
-                visible: textVisible
-            }
-            Label {
-                id: dayTest
-                text: Qt.locale().dayName(date.getDay(), Locale.LongFormat)
-                height: labelHeight
-                anchors.top: parent.top
-                anchors.topMargin: -labelHeight
-                anchors.left: parent.left
-                anchors.leftMargin: parent.width / 2
-                font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-                font.pointSize: -1
-                visible: date.getHours() === 0 && (itemEndX < hourGrid.width)
-
-                property double itemEndX: timeScale.translate(date) + dayTest.width
-            }
-        }
     }
 
     Item {
         id: windSpeedArea
         width: imageWidth
         height: windarea
-        anchors.top: hourGrid.bottom
-        anchors.left: hourGrid.left
+        anchors.top: hourGrid2.bottom
+        anchors.left: hourGrid2.left
         anchors.topMargin: labelHeight + Kirigami.Units.smallSpacing
 
         ManagedListModel {
