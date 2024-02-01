@@ -543,6 +543,12 @@ Canvas {
             root.fullRedraw()
         }
 
+        buildCurves()
+
+        if (plasmoid.configuration.renderCloudCover) {
+            buildCloudPath()
+        }
+
         var context = getContext("2d")
         context.clearRect(0, 0, width, height)
 
@@ -611,6 +617,19 @@ Canvas {
             context.globalCompositeOperation = "source-over"
             drawPrecipitationText(context, rectWidth)
         }
+
+        meteogramPath.pathElements = []
+        let i = 0
+        for (; i < meteogramPathItems.length; i++) {
+            meteogramPathItems[i].destroy()
+        }
+        meteogramPathItems = []
+
+        cloudAreaPath.pathElements = []
+        for (i = 0; i < cloudPathItems.length; i++) {
+            cloudPathItems[i].destroy()
+        }
+        cloudPathItems = []
     }
 
     function updatePathElement(index, pathList) {
@@ -906,11 +925,7 @@ Canvas {
         processMeteogramData()
         buildMetogramData()
 
-        buildCurves()
 
-        if (plasmoid.configuration.renderCloudCover) {
-            buildCloudPath()
-        }
 
         initialized = true
         backgroundCanvas.requestPaint()
