@@ -72,6 +72,8 @@ Canvas {
     property alias humidityScale: humidityScale
     property alias xIndexScale: xIndexScale
     property alias timeScale: timeScale
+    property alias xAxisScale: xAxisScale
+    property alias yAxisScale: yAxisScale
 
     LinearScale {
         id: temperatureScale
@@ -114,6 +116,16 @@ Canvas {
     LinearScale {
         id: xIndexScale
         range: [0, width]
+    }
+
+    LinearScale {
+        id: xAxisScale
+        range: [0, width]
+    }
+
+    LinearScale {
+        id: yAxisScale
+        range: [0, height]
     }
 
     LinearScale {
@@ -861,10 +873,13 @@ Canvas {
 
 
         xIndexScale.setDomain(0, meteogramModel.count - 1)
+
+        yAxisScale.setDomain(0, temperatureYGridCount)
+        xAxisScale.setDomain(0, root.nHours - 1)
         timeScale.setDomain(startTime.getTime(), endTime.getTime())
         windSpeedArea.setModel(meteogramModel.count)
-        horizontalLines1.setModel(temperatureYGridCount)
-        hourGrid.setModel(startTime)
+        horizontalLines.setModel(temperatureYGridCount)
+        hourGrid2.setModel(startTime)
     }
 
     function computeHourStrWidth(font, available) {
