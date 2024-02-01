@@ -666,7 +666,7 @@ Canvas {
         let count = 0
         for (var i = 0; i < meteogramModel.count; i++) {
             if (i >= cloudPathItems.length) {
-                cloudPathItems.push(cloudPathLine.createObject(humidityPath, {
+                cloudPathItems.push(cloudPathLine.createObject(root, {
                     i: i,
                     isCloudTop: false
                 }))
@@ -682,7 +682,7 @@ Canvas {
 
         for (var i = meteogramModel.count - 1; i > -1; i--) {
             if (count >= cloudPathItems.length) {
-                cloudPathItems.push(cloudPathLine.createObject(humidityPath, {
+                cloudPathItems.push(cloudPathLine.createObject(root, {
                     i: i,
                     isCloudTop: true
                 }))
