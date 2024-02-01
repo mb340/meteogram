@@ -26,7 +26,7 @@ KCM.SimpleKCM {
         ListModel {
             id: placesModel
             Component.onCompleted: {
-                var places = ConfigUtils.getPlacesArray()
+                var places = JSON.parse(plasmoid.configuration.places)
                 places.forEach(function (placeObj) {
                     placesModel.append({
                            providerId: placeObj.providerId,
