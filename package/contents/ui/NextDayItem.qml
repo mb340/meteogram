@@ -17,8 +17,6 @@
 import QtQuick 2.2
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
-//import QtGraphicalEffects 1.0
-import Qt5Compat.GraphicalEffects
 import org.kde.kirigami as Kirigami
 
 
@@ -48,7 +46,7 @@ Item {
         verticalAlignment: Text.AlignBottom
     }
 
-    Item {
+    Image {
         id: dayTitleLine
         width: parent.width
         height: 1 * 1
@@ -56,17 +54,10 @@ Item {
         anchors.topMargin: 0
         anchors.bottomMargin: 0
 
-        LinearGradient {
-            anchors.fill: parent
-            start: Qt.point(0, 0)
-            end: Qt.point(parent.width, 0)
-            gradient: Gradient {
-                GradientStop { position: 0.0; color: Qt.rgba(lineColor.r, lineColor.g, lineColor.b, 0) }
-                GradientStop { position: 0.1; color: Qt.rgba(lineColor.r, lineColor.g, lineColor.b, 1) }
-                GradientStop { position: 1.0; color: Qt.rgba(lineColor.r, lineColor.g, lineColor.b, 0) }
-            }
-        }
-
+        source: "images/gradient_line.svg"
+        sourceSize.width: 100
+        sourceSize.height: 1
+        smooth: true
     }
 
     Grid {
