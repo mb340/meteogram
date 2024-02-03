@@ -15,8 +15,6 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.1
-// import QtGraphicalEffects 1.0
-import Qt5Compat.GraphicalEffects
 import org.kde.kirigami as Kirigami
 
 
@@ -90,6 +88,9 @@ Item {
 
         text: actualText
 
+        style: showDropShadow ? Text.Outline : Text.Normal
+        styleColor: Kirigami.Theme.backgroundColor
+
         font.family: sizerLabel.font.family
         font.pointSize: sizerLabel.font.pointSize
         minimumPixelSize: 1
@@ -106,17 +107,6 @@ Item {
         //     visible: false
         //     z: -1
         // }
-    }
-
-    DropShadow {
-        anchors.fill: innerLabel
-        radius: 3
-        samples: 16
-        spread: 0.9
-        fast: true
-        color: Kirigami.Theme.backgroundColor
-        source: innerLabel
-        visible: showDropShadow
     }
 
     // Rectangle {
