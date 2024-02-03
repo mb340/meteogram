@@ -62,7 +62,9 @@ Item {
                     fillMode: Image.PreserveAspectFit
 
                     width: height
-                    height: windarea
+                    height: (windSpeedRepeater.iconSetType ==
+                                IconTools.WindIconSetType.QULLE) ?
+                                windarea : labelHeight
                     anchors.centerIn: parent
 
                     visible: false
