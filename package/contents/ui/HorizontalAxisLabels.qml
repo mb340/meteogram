@@ -79,9 +79,6 @@ Item {
                 verticalAlignment: Text.AlignBottom
                 horizontalAlignment: Text.AlignRight
 
-                height: labelHeight
-                width: hourGrid.hourItemWidth
-
                 anchors.top: parent.bottom
                 anchors.right: parent.left
                 anchors.topMargin: 2
