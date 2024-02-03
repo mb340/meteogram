@@ -15,7 +15,6 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.1
-import QtGraphicalEffects 1.0
 
 
 Item {
@@ -88,6 +87,9 @@ Item {
 
         text: actualText
 
+        style: showDropShadow ? Text.Outline : Text.Normal
+        styleColor: theme.backgroundColor
+
         font.family: sizerLabel.font.family
         font.pointSize: sizerLabel.font.pointSize
         minimumPixelSize: 1
@@ -106,16 +108,6 @@ Item {
         // }
     }
 
-    DropShadow {
-        anchors.fill: innerLabel
-        radius: 3
-        samples: 16
-        spread: 0.9
-        fast: true
-        color: theme.backgroundColor
-        source: innerLabel
-        visible: showDropShadow
-    }
 
     // Rectangle {
     //     anchors.fill: parent
