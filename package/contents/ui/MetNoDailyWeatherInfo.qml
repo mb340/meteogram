@@ -16,7 +16,6 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
-import QtGraphicalEffects 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "../code/icons.js" as IconTools
 
@@ -101,25 +100,20 @@ Item {
                         Layout.leftMargin: units.smallSpacing
                     }
 
-                    Item {
+                    Image {
                         id: dayTitleLine
                         height: 1 * units.devicePixelRatio
 
                         Layout.fillWidth: true
 
-                        LinearGradient {
-                            anchors.fill: parent
-                            start: Qt.point(0, 0)
-                            end: Qt.point(parent.width, 0)
-                            gradient: Gradient {
-                                GradientStop { position: 0.0; color: Qt.rgba(lineColor.r, lineColor.g, lineColor.b, 0) }
-                                GradientStop { position: 0.1; color: Qt.rgba(lineColor.r, lineColor.g, lineColor.b, 1) }
-                                GradientStop { position: 1.0; color: Qt.rgba(lineColor.r, lineColor.g, lineColor.b, 0) }
-                            }
-                        }
+                        source: "images/gradient_line.svg"
+                        sourceSize.width: 100
+                        sourceSize.height: 1
+                        smooth: true
 
                         visible: index !== 0
                     }
+
                 }
             }
         }
