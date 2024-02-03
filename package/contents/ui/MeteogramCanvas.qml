@@ -461,14 +461,14 @@ Canvas {
         if (plasmoid.configuration.renderPrecipitationLabels) {
             let pType = unitUtils.getSmallestPrecipitationType(precipitationType)
             var precStr = unitUtils.getPrecipitationText(0.1, pType, 1)
-            context.font = (fontSize * 0.75) + 'px "' + theme.defaultFont.family + '"'
+            context.font = (fontSize * 0.75).toFixed(2) + 'px "' + theme.defaultFont.family + '"'
             var metrics = context.measureText(precStr)
             labelHeight = metrics.width
         }
 
-
-        context.font =  (fontSize + 1) + 'px "%1"'.arg(weatherIconFont.name)
-
+        if (iconSetType === 0) {
+            context.font =  '%1px "%2"'.arg((fontSize + 1)).arg(weatherIconFont.name)
+        }
 
         iconOverlay.beginList()
 
