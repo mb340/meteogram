@@ -75,11 +75,19 @@ Item {
 
 
         Repeater {
-            model: models
+            model: [0, 1, 2, 3]
 
             NextDayPeriodItem {
                 width: parent.width / parent.columns
                 height: rowHeight
+
+                property var model: root.models.get(index)
+
+                date: !model ? new Date(0) : model.date
+                temperature: !model ? NaN : model.temperature
+                temperatureLow: !model ? NaN : model.temperatureLow
+                temperatureHigh: !model ? NaN : model.temperatureHigh
+                iconName: !model ? "" : model.iconName
 
                 now: root.now
 
