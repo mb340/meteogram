@@ -7,6 +7,9 @@ import "utils"
 
 
 Item {
+    id: root
+
+    signal modelsChanged()
 
     ManagedListModel {
         id: windSpeedModel
@@ -30,6 +33,7 @@ Item {
             })
         }
         windSpeedModel.endList()
+        modelsChanged()
     }
 
     Repeater {
@@ -53,7 +57,11 @@ Item {
 
                 anchors.verticalCenter: parent.verticalCenter
 
-                property QtObject item: meteogramModel.get(model.index)
+                property var item: meteogramModel.get(model.index)
+
+                Component.onCompleted: {
+                    root.modelsChanged.connect(itemChanged)
+                }
 
                 Image {
                     id: wind
