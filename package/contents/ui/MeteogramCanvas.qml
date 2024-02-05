@@ -172,7 +172,7 @@ Canvas {
                              cloudAreaScale.translate(50 - ((model.cloudArea) / 4))
 
             property int i
-            property bool isCloudTop: true
+            property bool isCloudTop: (i >= meteogramModel.count)
 
             property var model: meteogramModel.get(i)
         }
@@ -671,13 +671,10 @@ Canvas {
             if (i >= cloudPathItems.length) {
                 cloudPathItems.push(cloudPathLine.createObject(root, {
                     i: i,
-                    isCloudTop: false
                 }))
             } else {
                 cloudPathItems[count].i = i
-                cloudPathItems[count].isCloudTop = false
                 cloudPathItems[count].iChanged()
-                cloudPathItems[count].isCloudTopChanged()
             }
 
             count++
@@ -687,13 +684,10 @@ Canvas {
             if (count >= cloudPathItems.length) {
                 cloudPathItems.push(cloudPathLine.createObject(root, {
                     i: i,
-                    isCloudTop: true
                 }))
             } else {
                 cloudPathItems[count].i = i
-                cloudPathItems[count].isCloudTop = true
                 cloudPathItems[count].iChanged()
-                cloudPathItems[count].isCloudTopChanged()
             }
 
             count++
