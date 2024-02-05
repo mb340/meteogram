@@ -26,7 +26,7 @@ Item {
 
         hourGridModel2.beginList()
         let i = rem
-        for (; (i - rem) < root.nHours; i += meteogramCanvas.hourStep) {
+        for (; (i - rem) < root.nHours - rem; i += meteogramCanvas.hourStep) {
             hourGridModel2.addItem({ index: i })
         }
         hourGridModel2.endList()
