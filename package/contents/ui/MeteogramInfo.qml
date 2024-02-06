@@ -23,7 +23,7 @@ import "data_models"
 
 Item {
     id: meteogramInfo
-    visible: false
+    visible: true
 
     property bool isAnchorTop: true
     property bool isAnchorLeft: true
