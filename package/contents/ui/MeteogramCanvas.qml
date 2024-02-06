@@ -32,9 +32,6 @@ Canvas {
     property int nHours: 0
     property double rectWidth: width / nHours
 
-    property var meteogramPathItems: []
-    property var cloudPathItems: []
-
     property string pathChartName: ""
 
     property var pathLineConfigs: ({
@@ -175,7 +172,9 @@ Canvas {
             property int i
             property bool isCloudTop: (i >= meteogramModel.count)
 
-            property var model: meteogramModel.get(i)
+            property var model: meteogramModel.get(i < meteogramModel.count ? i :
+                                                   meteogramModel.count -
+                                                   (i - meteogramModel.count) - 1)
         }
     }
 
@@ -508,6 +507,10 @@ Canvas {
         if (cloudAreaPath.pathElements.length === 0) {
             return
         }
+
+        let count = cloudAreaPath.pathElements.length
+        cloudAreaPath.startY = cloudAreaPath.pathElements[count - 1].y
+
         context.beginPath()
 
         var y0 = cloudAreaScale.translate(50 - (100 / 2))
@@ -545,10 +548,6 @@ Canvas {
 
         buildCurves()
 
-        if (plasmoid.configuration.renderCloudCover) {
-            buildCloudPath()
-        }
-
         var context = getContext("2d")
         context.clearRect(0, 0, width, height)
 
@@ -580,24 +579,25 @@ Canvas {
         }
         if (plasmoid.configuration.renderHumidity) {
             pathChartName = "humidity"
-            meteogramPath.startY = meteogramPathItems[0].y
+            meteogramPath.startY = meteogramPath.pathElements[0].y
             drawPath(context, meteogramPath, colorPalette.humidityColor(), 1 * 1)
         }
         if (plasmoid.configuration.renderPressure && y2VarName && y2VarName !== "") {
             pathChartName = "y2Chart"
-            meteogramPath.startY = meteogramPathItems[0].y
+            meteogramPath.startY = meteogramPath.pathElements[0].y
             drawPath(context, meteogramPath, colorPalette.pressureColor(), 1 * 1)
         }
         if (plasmoid.configuration.renderTemperature) {
             pathChartName = "temperature"
-            meteogramPath.startY = meteogramPathItems[0].y
+            meteogramPath.startY = meteogramPath.pathElements[0].y
             drawWarmTemp(context, meteogramPath, colorPalette.temperatureWarmColor(), 2 * 1)
             drawColdTemp(context, meteogramPath, colorPalette.temperatureColdColor(), 2 * 1)
+
             if (y1VarName && y1VarName !== "") {
                 let color = !main.theme.meteogram.isDarkMode ?
                                 'black' : 'white'
                 pathChartName = "y1Chart"
-                meteogramPath.startY = meteogramPathItems[0].y
+                meteogramPath.startY = meteogramPath.pathElements[0].y
                 drawPath(context, meteogramPath, color, 1 * 1)
             }
         }
@@ -618,83 +618,33 @@ Canvas {
             drawPrecipitationText(context, rectWidth)
         }
 
-        meteogramPath.pathElements = []
         let i = 0
-        for (; i < meteogramPathItems.length; i++) {
-            meteogramPathItems[i].destroy()
+        for (; i < meteogramPath.pathElements.length; i++) {
+            meteogramPath.pathElements[i].destroy()
         }
-        meteogramPathItems = []
+        meteogramPath.pathElements = []
 
+        for (i = 0; i < cloudAreaPath.pathElements.length; i++) {
+            cloudAreaPath.pathElements[i].destroy()
+        }
         cloudAreaPath.pathElements = []
-        for (i = 0; i < cloudPathItems.length; i++) {
-            cloudPathItems[i].destroy()
-        }
-        cloudPathItems = []
-    }
-
-    function updatePathElement(index, pathList) {
-        if (index >= pathList.length) {
-            let obj = pathLine.createObject(meteogramPath, { i: index, })
-            if (obj != null) {
-                pathList.push(obj)
-            } else {
-                print("Error: PathLine createObject returned null.")
-            }
-        } else {
-            let item = pathList[index]
-            let tmp = item.i
-            item.i = index
-            if (tmp === index) {
-                item.iChanged()
-            }
-        }
     }
 
     function buildCurves() {
-        if (meteogramModel.count <= 0) {
-            meteogramPath.pathElements = []
-            return
+        let count = meteogramModel.count
+        if (plasmoid.configuration.renderCloudCover) {
+            count *= 2
         }
-
-        for (var i = 0; i < meteogramModel.count; i++) {
-            updatePathElement(i, meteogramPathItems)
-        }
-
-        meteogramPath.pathElements = meteogramPathItems.slice(0, meteogramModel.count)
-    }
-
-    function buildCloudPath() {
-        let count = 0
-        for (var i = 0; i < meteogramModel.count; i++) {
-            if (i >= cloudPathItems.length) {
-                cloudPathItems.push(cloudPathLine.createObject(root, {
-                    i: i,
-                }))
-            } else {
-                cloudPathItems[count].i = i
-                cloudPathItems[count].iChanged()
+        for (let i = 0; i < count; i++) {
+            let props = { i: i }
+            if (i < meteogramModel.count) {
+                meteogramPath.pathElements.push(
+                                pathLine.createObject(meteogramPath, props))
             }
-
-            count++
-        }
-
-        for (var i = meteogramModel.count - 1; i > -1; i--) {
-            if (count >= cloudPathItems.length) {
-                cloudPathItems.push(cloudPathLine.createObject(root, {
-                    i: i,
-                }))
-            } else {
-                cloudPathItems[count].i = i
-                cloudPathItems[count].iChanged()
+            if (plasmoid.configuration.renderCloudCover) {
+                cloudAreaPath.pathElements.push(
+                                cloudPathLine.createObject(root, props))
             }
-
-            count++
-        }
-
-
-        cloudAreaPath.pathElements = cloudPathItems.slice(0, count)
-        if (count > 0) {
-            cloudAreaPath.startY = cloudAreaPath.pathElements[count - 1].y
         }
     }
 
@@ -918,8 +868,6 @@ Canvas {
 
         processMeteogramData()
         buildMetogramData()
-
-
 
         initialized = true
         backgroundCanvas.requestPaint()
