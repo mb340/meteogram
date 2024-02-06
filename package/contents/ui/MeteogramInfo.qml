@@ -69,13 +69,21 @@ Item {
         anchors.margins: anchorsMargins
         spacing: 0
 
-        width: dateLabel.width + textPad
+        width: dateLabelMetrics.width + textPad
 
         Label {
             id: dateLabel
+            width: contentWidth
             text: ""
             color: theme.textColor
             Layout.alignment: Qt.AlignHCenter
+
+            TextMetrics {
+                id: dateLabelMetrics
+                font.family: dateLabel.font.family
+                font.pixelSize: dateLabel.font.pixelSize
+                text: dateLabel.text
+            }
         }
 
         ManagedListModel {
