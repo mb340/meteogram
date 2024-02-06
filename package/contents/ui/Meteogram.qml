@@ -209,34 +209,35 @@ Item {
             anchors.fill: parent
 
             onPressed: {
-                meteogramInfo.visible = true
+                fullRepresentation.showMeteogramInfo = true
                 cursorShape = Qt.CrossCursor
                 update(mouse)
                 meteogramInfoCanvas.requestPaint()
             }
 
             onReleased: {
-                meteogramInfo.visible = false
+                fullRepresentation.showMeteogramInfo = false
                 cursorShape = Qt.PointingHandCursor
                 meteogramInfoCanvas.requestPaint()
             }
 
             onExited: {
-                if (meteogramInfo.visible) {
-                    meteogramInfo.idx = -1
-                    meteogramInfo.visible = false
-                    meteogramInfoCanvas.requestPaint()
-                }
+                fullRepresentation.showMeteogramInfo = false
+                meteogramInfoCanvas.requestPaint()
             }
 
             onPositionChanged: {
                 update(mouse)
-                if (meteogramInfo.visible) {
+                if (meteogramInfo && meteogramInfo.visible) {
                     meteogramInfoCanvas.requestPaint()
                 }
             }
 
             function update(mouse) {
+                if (!meteogramInfo) {
+                    return
+                }
+
                 var idx = Math.round(xIndexScale.invert(mouse.x) - 0.5)
                 if (idx < 0 || idx >= meteogramModel.count) {
                     return

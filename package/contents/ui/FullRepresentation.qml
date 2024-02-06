@@ -56,6 +56,9 @@ Item {
 
     property bool fillModels: plasmoid.expanded
 
+    property Item meteogramInfo: meteogramInfoLoader.item
+    property bool showMeteogramInfo: false
+
 
     onFillModelsChanged: {
         if (!fillModels) {
@@ -272,9 +275,22 @@ Item {
                     (!owmDailyWeatherInfo || !owmDailyWeatherInfo.visible)
      }
 
-    MeteogramInfo {
-        id: meteogramInfo
-        z: 1
+
+    Loader {
+        id: meteogramInfoLoader
+        sourceComponent: showMeteogramInfo ? meteogramInfoComponent : undefined
+
+        Component {
+            id: meteogramInfoComponent
+            MeteogramInfo {
+                id: meteogramInfo
+                z: 1
+            }
+        }
+
+        onLoaded: {
+            item.parent = fullRepresentation
+        }
     }
 
     function loadMetNoInfo(load) {
