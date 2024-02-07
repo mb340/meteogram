@@ -241,29 +241,6 @@ Item {
                         visible: true
                     }
 
-                    ToolTip{
-                        id: windspeedhover
-                        text: unitUtils.getWindSpeedText(windSpeed, windSpeedType)
-                        padding: 4
-                        x: windspeedAnchor.width + 6
-                        y: (windspeedAnchor.height / 2)
-                        opacity: 1
-                        visible: false
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-
-                        onEntered: {
-                            windspeedhover.visible = (windspeedhover.text.length > 0)
-                        }
-
-                        onExited: {
-                            windspeedhover.visible = false
-                        }
-                    }
-
                     function windFrom(rotation, iconSetType) {
                         rotation = IconTools.translateWindDirection(rotation, iconSetType)
 
