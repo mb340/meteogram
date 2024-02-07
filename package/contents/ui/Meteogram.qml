@@ -283,7 +283,6 @@ Item {
                 anchors.right: verticalLine.left
                 anchors.topMargin: 2
                 anchors.horizontalCenter: verticalLine.horizontalCenter
-                anchors.rightMargin: 1 * 1
                 font.pixelSize: 11 * 1
                 font.pointSize: -1
                 visible: textVisible
