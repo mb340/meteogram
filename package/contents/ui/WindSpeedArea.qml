@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 import org.kde.kirigami as Kirigami
 import "../code/icons.js" as IconTools
 import "data_models"
@@ -85,13 +85,15 @@ Item {
                     asynchronous: true
                 }
 
-                ColorOverlay {
+                MultiEffect {
                     anchors.fill: wind
+                    width: labelHeight
+                    height: width
                     source: wind
                     rotation: windFrom(item?.windDirection ?? 0,
                                        windSpeedRepeater.iconSetType)
-                    color: main.theme.disabledTextColor
-                    antialiasing: true
+                    colorization: 1.0
+                    colorizationColor: main.theme.disabledTextColor
                     visible: true
                 }
 
