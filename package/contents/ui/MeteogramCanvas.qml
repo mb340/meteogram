@@ -582,41 +582,40 @@ Canvas {
         context.globalCompositeOperation = "source-over"
 
 
-        if (renderAlerts) {
+        if (plasmoid.configuration.renderAlerts) {
             context.globalCompositeOperation = "source-over"
             drawAlerts(context)
         }
 
-        if (renderPrecipitation) {
+        if (plasmoid.configuration.renderPrecipitation) {
             drawPrecipitationBars(context, rectWidth)
         }
 
         // Carve out negative space when weather icons overlap precipitation bars
-        if (renderIcons && iconSetType === 0) {
+        if (plasmoid.configuration.renderIcons && iconSetType === 0) {
             context.globalCompositeOperation = "xor"
             drawWeatherIcons(context, rectWidth)
         }
 
         context.globalCompositeOperation = "source-over"
-        if (renderCloudCover) {
+        if (plasmoid.configuration.renderCloudCover) {
             drawCloudArea(context)
         }
-        if (renderHumidity) {
+        if (plasmoid.configuration.renderHumidity) {
             pathChartName = "humidity"
             meteogramPath.startY = meteogramPathItems[0].y
             drawPath(context, meteogramPath, colorPalette.humidityColor(), 1 * 1)
         }
-        if (renderPressure && y2VarName && y2VarName !== "") {
+        if (plasmoid.configuration.renderPressure && y2VarName && y2VarName !== "") {
             pathChartName = "y2Chart"
             meteogramPath.startY = meteogramPathItems[0].y
             drawPath(context, meteogramPath, colorPalette.pressureColor(), 1 * 1)
         }
-        if (renderTemperature) {
+        if (plasmoid.configuration.renderTemperature) {
             pathChartName = "temperature"
             meteogramPath.startY = meteogramPathItems[0].y
             drawWarmTemp(context, meteogramPath, colorPalette.temperatureWarmColor(), 2 * 1)
             drawColdTemp(context, meteogramPath, colorPalette.temperatureColdColor(), 2 * 1)
-
             if (y1VarName && y1VarName !== "") {
                 let color = !main.theme.meteogram.isDarkMode ?
                                 'black' : 'white'
@@ -626,7 +625,7 @@ Canvas {
             }
         }
 
-        if (renderIcons) {
+        if (plasmoid.configuration.renderIcons) {
             // Ensure weather icons atop graph lines without drawing over carve out
             context.globalCompositeOperation = "source-atop"
             drawWeatherIcons(context, rectWidth)
@@ -635,7 +634,7 @@ Canvas {
             iconOverlay.endList()
         }
 
-        if (renderPrecipitation &&
+        if (plasmoid.configuration.renderPrecipitation &&
             plasmoid.configuration.renderPrecipitationLabels)
         {
             context.globalCompositeOperation = "source-over"
@@ -938,7 +937,7 @@ Canvas {
 
         buildCurves()
 
-        if (renderCloudCover) {
+        if (plasmoid.configuration.renderCloudCover) {
             buildCloudPath()
         }
 
