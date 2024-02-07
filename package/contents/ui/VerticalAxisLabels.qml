@@ -31,7 +31,7 @@ Item {
             width: graphArea.width
 
             x: 0
-            y: yAxisScale.translate(modelData)
+            y: yAxisScale.translate(index)
 
             Rectangle {
                 id: gridLine
@@ -44,7 +44,7 @@ Item {
             }
 
             Label {
-                text: temperatureAxisScale.invert(modelData).toFixed(0)
+                text: temperatureAxisScale.invert(index).toFixed(0)
                 font.pixelSize: theme.smallestFont.pixelSize
                 font.pointSize: -1
                 horizontalAlignment: Text.AlignRight
@@ -59,7 +59,7 @@ Item {
             }
 
             Label {
-                text: rightGridScale.invert(modelData).toFixed(rightAxisDecimals)
+                text: rightGridScale.invert(index).toFixed(rightAxisDecimals)
                 font.pixelSize: theme.smallestFont.pixelSize
                 font.pointSize: -1
                 horizontalAlignment: Text.AlignLeft
