@@ -76,17 +76,6 @@ Loader {
                 anchors.fill: parent
             }
 
-            // DropShadow {
-            //     anchors.fill: image
-            //     horizontalOffset: 0
-            //     verticalOffset: 0
-            //     radius: 8.0
-            //     samples: 17
-            //     color: !main.theme?.isDarkMode ? "#80000000" : "#80ffffff"
-            //     source: image
-            //     visible: plasmoid.configuration.iconDropShadow
-            // }
-
             DropShadow {
                 anchors.fill: image
                 z: -1
@@ -114,17 +103,6 @@ Loader {
 
                 anchors.fill: parent
             }
-
-            // DropShadow {
-            //     anchors.fill: image
-            //     horizontalOffset: 0
-            //     verticalOffset: 0
-            //     radius: 8.0
-            //     samples: 17
-            //     color: !main.theme?.isDarkMode ? "#80000000" : "#80ffffff"
-            //     source: image
-            //     visible: plasmoid.configuration.iconDropShadow
-            // }
 
             DropShadow {
                 anchors.fill: image
