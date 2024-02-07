@@ -282,7 +282,6 @@ Item {
                 anchors.top: verticalLine.bottom
                 anchors.right: verticalLine.left
                 anchors.topMargin: 2
-                //                anchors.horizontalCenter: verticalLine.left
                 anchors.horizontalCenter: verticalLine.horizontalCenter
                 anchors.rightMargin: 1 * 1
                 font.pixelSize: 11 * 1
