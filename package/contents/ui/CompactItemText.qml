@@ -43,8 +43,8 @@ Item {
     property bool showDropShadow
 
     property font font: Qt.font({
-        family: theme.defaultFont.family,
-        pointSize: 1024,
+        family: "",
+        pointSize: 0,
     })
 
     property alias innerLabel: innerLabel
@@ -71,8 +71,11 @@ Item {
 
         // font.family: theme.defaultFont
         // font.pointSize: fontPointSize
-        font.family: textContainer.font.family
-        font.pointSize: textContainer.font.pointSize
+        font.family: textContainer.font.family ?
+                        textContainer.font.family :
+                        Kirigami.Theme.defaultFont.family
+        font.pointSize: textContainer.font.pointSize > 0 ?
+                            textContainer.font.pointSize : 1024
         minimumPixelSize: 1
         minimumPointSize: 1
 
