@@ -14,9 +14,15 @@ Forked from `blackadderkate/weather-widget-2` which was forked from `kotelnik/pl
 
  - KDE Plasma 5
  - QtQuick.XmlListModel  
-    - DEB: `qml-module-qtquick-xmllistmodel`  
-    - RPM: `libqt5-qtxmlpatterns-imports`  
-    - Arch: `qt5-xmlpatterns`  
+    - Debian: `qml-module-qtquick-xmllistmodel`
+    - OpenSUSE: `libqt5-qtxmlpatterns-imports`
+    - Fedora: `qt5-qtxmlpatterns`
+    - Arch: `qt5-xmlpatterns`
+ - QtGraphicalEffects
+    - Debian: `qml-module-qtgraphicaleffects`
+    - OpenSUSE: `libqt5-qtgraphicaleffects`
+    - Fedora: `qt5-qtgraphicaleffects`
+    - Arch: `qt5-graphicaleffects`
 
 
 ### Data sources
