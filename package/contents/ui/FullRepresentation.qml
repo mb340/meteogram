@@ -41,11 +41,9 @@ Item {
     property double defaultFontPixelSize: theme.defaultFont.pixelSize
     property double footerHeight: defaultFontPixelSize
 
-    property int nextDayItemSpacing: defaultFontPixelSize * 0.5
     property int nextDaysHeight: defaultFontPixelSize * 9
     property int nextDaysVerticalMargin: defaultFontPixelSize
-    property int hourLegendMargin: defaultFontPixelSize * 2
-    property double nextDayItemWidth: (width / dailyWeatherModels.count) - (2 * nextDayItemSpacing)
+
     property int headingHeight: defaultFontPixelSize * 2
 
     property alias meteogram: meteogram2
@@ -333,115 +331,16 @@ Item {
         }
     }
 
-  /*
-     *
-     * NEXT DAYS
-     *
-     */
-    ListView {
+    NextDays {
         id: nextDaysView
+
         anchors.bottom: parent.bottom
         anchors.bottomMargin: footerHeight + nextDaysVerticalMargin
         anchors.left: parent.left
-        anchors.leftMargin: hourLegendMargin
         anchors.right: parent.right
-        anchors.rightMargin: hourLegendMargin
+
         height: nextDaysHeight
-
-        model: fillModels ? dailyWeatherModels.model : []
-        orientation: Qt.Horizontal
-        spacing: nextDayItemSpacing
-        interactive: false
-
-        property var now: undefined
-
-        delegate: NextDayItem {
-            width: nextDayItemWidth
-            height: nextDaysView.height
-
-            titleHeight: nextDayTitleMetrics.height
-            rowHeight: (nextDaysView.height - titleHeight) / 4
-
-            now: nextDaysView.now
-        }
-
-        Component.onCompleted: {
-            main.beginLoadFromCache.connect(beginLoadFromCache)
-            main.endLoadFromCache.connect(endLoadFromCache)
-        }
-
-        function beginLoadFromCache() {
-        }
-
-        function endLoadFromCache() {
-            now = timeUtils.dateNow(timezoneType, main.timezoneOffset)
-        }
     }
-
-    TextMetrics {
-        id: nextDayTitleMetrics
-        font.family: theme.defaultFont.family
-        font.pixelSize: theme.defaultFont.pixelSize
-        text: "MMMMMM"
-    }
-
-    Column {
-        id: hourLegend
-        anchors.top: nextDaysView.top
-        width: hourLegendMargin
-        height: nextDaysView.height
-
-        property double itemHeight: (hourLegend.height - nextDayTitleMetrics.height) / 4
-        property double fontPixelSize: defaultFontPixelSize * 1.25
-
-        Label {
-            id: hourLegendSpacer
-            text: " "
-            height: nextDayTitleMetrics.height
-        }
-
-        Item {
-            id: hourLegendLineSpacer
-            width: 1
-            height: 1
-        }
-
-        component HourLegendLabel: Label {
-            height: parent.itemHeight
-            font.family: 'weathericons'
-            font.pixelSize: hourLegend.fontPixelSize
-            font.pointSize: -1
-            horizontalAlignment: Text.AlignCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            opacity: 0.6
-
-            ToolTip.visible: mouseArea.containsMouse
-
-            MouseArea {
-                id: mouseArea
-                anchors.fill: parent
-                hoverEnabled: true
-            }
-        }
-
-        HourLegendLabel {
-            text: "\uf0d2"  // wi-moon-alt-waxing-crescent-3
-            ToolTip.text: i18n("Night")
-        }
-        HourLegendLabel {
-            text: "\uf051"  // wi-horizon-alt
-            ToolTip.text: i18n("Morning")
-        }
-        HourLegendLabel {
-            text: "\uf00d"  // wi-day-sunny
-            ToolTip.text: i18n("Day")
-        }
-        HourLegendLabel {
-            text: "\uf052"  // wi-horizon
-            ToolTip.text: i18n("Evening")
-        }
-    }
-
 
     /*
      *
