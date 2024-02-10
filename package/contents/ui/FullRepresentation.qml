@@ -61,10 +61,20 @@ Item {
     property Item meteogramInfo: meteogramInfoLoader.item
     property bool showMeteogramInfo: false
 
+    property alias labelWidth: textMetrics.width
+    property alias labelHeight: textMetrics.height
+
 
     onFillModelsChanged: {
         loadMetNoInfo(false)
         loadOwmInfo(false)
+    }
+
+    TextMetrics {
+        id: textMetrics
+        font.family: Kirigami.Theme.defaultFont.family
+        font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+        text: "999999"
     }
 
     Label {
@@ -282,7 +292,7 @@ Item {
 
         anchors.bottom: nextDaysView.top
         anchors.left: meteogram2.left
-        anchors.leftMargin: meteogram2.labelWidth
+        anchors.leftMargin: labelWidth
 
         visible: meteogram2.visible
 

@@ -77,8 +77,7 @@ Item {
                     width: height
                     height: (windSpeedRepeater.iconSetType ==
                                 IconTools.WindIconSetType.QULLE) ?
-                                root.height - Kirigami.Units.smallSpacing :
-                                root.height - (2 * Kirigami.Units.smallSpacing)
+                                root.height - Kirigami.Units.smallSpacing : labelHeight
                     anchors.centerIn: parent
 
                     visible: false
