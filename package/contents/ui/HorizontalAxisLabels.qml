@@ -81,7 +81,7 @@ Item {
                 horizontalAlignment: Text.AlignRight
 
                 anchors.top: parent.bottom
-                anchors.right: parent.left
+                anchors.horizontalCenter: parent.horizontalCenter
                 anchors.topMargin: 2
             }
 
