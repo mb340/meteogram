@@ -24,15 +24,12 @@ import "utils"
 
 Item {
     id: root
-    visible: true
 
-    property int imageWidth: width - (labelWidth * 2)
-    property int imageHeight: height - labelHeight - cloudarea - windarea
-    property int labelWidth: textMetrics.width
-    property int labelHeight: textMetrics.height
+    property int imageWidth: width - (2 * labelWidth)
+    property int imageHeight: height - (2 * labelHeight)
 
-    property int cloudarea: 0
-    property int windarea: units.largeSpacing
+    property alias labelWidth: textMetrics.width
+    property alias labelHeight: textMetrics.height
 
     readonly property int minTemperatureYGridCount: 20
 
@@ -69,6 +66,11 @@ Item {
     property alias timeScale: meteogramCanvas.timeScale
 
     property alias nHours: meteogramCanvas.nHours
+    property alias hourStep: meteogramCanvas.hourStep
+
+    property alias rectWidth: meteogramCanvas.rectWidth
+
+    property alias backgroundCanvas: backgroundCanvas
 
 
     onY2VarNameChanged: {
@@ -88,43 +90,22 @@ Item {
         text: "999999"
     }
 
-    Item {
-        id: meteogram
-        width: imageWidth + (labelWidth * 2)
-        height: imageHeight + (labelHeight) + cloudarea + windarea
-    }
+    MeteogramBackgroundCanvas {
+        id: backgroundCanvas
+        anchors.fill: meteogramCanvas
 
-    property alias backgroundCanvas: backgroundCanvas
+        colors: main.colors
+        currentWeatherModel: main.currentWeatherModel
+        meteogramModel: main.meteogramModel
+        scale: meteogramCanvas.timeScale
 
-    Rectangle {
-        id: graphArea
-        width: imageWidth
-        height: imageHeight
-        anchors.top: meteogram.top
-        anchors.left: meteogram.left
-        anchors.leftMargin: labelWidth
-        anchors.rightMargin: labelWidth
-        anchors.topMargin: labelHeight  + cloudarea
-        border.color:gridColor
-        // color: colorPalette.backgroundColor()
-        color: "transparent"
-
-        MeteogramBackgroundCanvas {
-            id: backgroundCanvas
-            anchors.fill: parent
-
-            colors: main.colors
-            currentWeatherModel: main.currentWeatherModel
-            meteogramModel: main.meteogramModel
-            scale: meteogramCanvas.timeScale
-        }
+        z: 1
     }
 
     VerticalAxisLabels {
         id: horizontalLines
-        anchors.left: graphArea.left
-        anchors.top: graphArea.top
-        height: graphArea.height + labelHeight
+        anchors.fill: meteogramCanvas
+        z: 2
     }
 
     Label {
@@ -132,12 +113,12 @@ Item {
         height: labelHeight
         width: labelWidth
         horizontalAlignment: (text.length > 4) ? Text.AlignRight : Text.AlignLeft
-        anchors.right: (graphArea.right)
+        anchors.right: (meteogramCanvas.right)
         anchors.rightMargin: -labelWidth
         font.pixelSize: theme.smallestFont.pixelSize
         font.pointSize: -1
         color: colorPalette.pressureColor()
-        anchors.bottom: graphArea.top
+        anchors.bottom: meteogramCanvas.top
         anchors.bottomMargin: 6
         visible: y2AxisVisble
     }
@@ -146,122 +127,114 @@ Item {
         height: labelHeight
         width: labelWidth
         horizontalAlignment: Text.AlignHCenter
-        anchors.right: (graphArea.left)
+        anchors.right: (meteogramCanvas.left)
         font.pixelSize: theme.smallestFont.pixelSize
         font.pointSize: -1
-        anchors.bottom: graphArea.top
+        anchors.bottom: meteogramCanvas.top
         anchors.bottomMargin: 6
     }
 
     HorizontalAxisLabels {
         id: hourGrid2
-        anchors.fill: graphArea
+        anchors.fill: meteogramCanvas
+        z: 2
     }
 
-    WindSpeedArea {
-        id: windSpeedArea
+    MeteogramCanvas {
+        id: meteogramCanvas
 
-        width: imageWidth
-        height: windarea
+        anchors.fill: parent
 
-        anchors.top: hourGrid2.bottom
-        anchors.left: hourGrid2.left
-        anchors.topMargin: labelHeight + units.smallSpacing
+        anchors.leftMargin: labelWidth
+        anchors.rightMargin: labelWidth
+        anchors.topMargin: labelHeight
+        anchors.bottomMargin: labelHeight
+
+        z: 3
     }
 
+    Canvas {
+        id: meteogramInfoCanvas
+        contextType: '2d'
 
-    Item {
-        z: 1
-        id: canvases
-        anchors.fill: graphArea
-        anchors.topMargin: 0
+        anchors.fill: meteogramCanvas
+        z: 4
 
-        MeteogramCanvas {
-            id: meteogramCanvas
-            anchors.fill: parent
+        onPaint: {
+            var context = getContext("2d")
+            context.clearRect(0, 0, width, height)
+            if (!meteogramInfo || !meteogramInfo.visible) {
+                return
+            }
+
+            context.fillStyle = Qt.rgba(main.colors.meteogram.highlightColor.r,
+                                        main.colors.meteogram.highlightColor.g,
+                                        main.colors.meteogram.highlightColor.b,
+                                        0.25)
+
+            var [x0, x1] = meteogramCanvas.getItemIntervalX(meteogramInfo.idx)
+            context.fillRect(x0, 0, x1 - x0, height);
+        }
+    }
+
+    MouseArea {
+        cursorShape: Qt.PointingHandCursor
+        anchors.fill: meteogramCanvas
+
+        onPressed: {
+            fullRepresentation.showMeteogramInfo = true
+            cursorShape = Qt.CrossCursor
+            update(mouse)
+            meteogramInfoCanvas.requestPaint()
         }
 
-        Canvas {
-            id: meteogramInfoCanvas
-            anchors.fill: parent
-            contextType: '2d'
+        onReleased: {
+            fullRepresentation.showMeteogramInfo = false
+            cursorShape = Qt.PointingHandCursor
+            meteogramInfoCanvas.requestPaint()
+        }
 
-            onPaint: {
-                var context = getContext("2d")
-                context.clearRect(0, 0, width, height)
-                if (!meteogramInfo || !meteogramInfo.visible) {
-                    return
-                }
+        onExited: {
+            fullRepresentation.showMeteogramInfo = false
+            meteogramInfoCanvas.requestPaint()
+        }
 
-                context.fillStyle = Qt.rgba(main.colors.meteogram.highlightColor.r,
-                                            main.colors.meteogram.highlightColor.g,
-                                            main.colors.meteogram.highlightColor.b,
-                                            0.25)
-
-
-                var [x0, x1] = meteogramCanvas.getItemIntervalX(meteogramInfo.idx)
-                context.fillRect(x0, 0, x1 - x0, height);
+        onPositionChanged: {
+            update(mouse)
+            if (meteogramInfo && meteogramInfo.visible) {
+                meteogramInfoCanvas.requestPaint()
             }
         }
 
-        MouseArea {
-            cursorShape: Qt.PointingHandCursor
-            anchors.fill: parent
-
-            onPressed: {
-                fullRepresentation.showMeteogramInfo = true
-                cursorShape = Qt.CrossCursor
-                update(mouse)
-                meteogramInfoCanvas.requestPaint()
+        function update(mouse) {
+            if (!meteogramInfo) {
+                return
             }
 
-            onReleased: {
-                fullRepresentation.showMeteogramInfo = false
-                cursorShape = Qt.PointingHandCursor
-                meteogramInfoCanvas.requestPaint()
+            var idx = Math.round(xIndexScale.invert(mouse.x) - 0.5)
+            if (idx < 0 || idx >= meteogramModel.count) {
+                return
             }
 
-            onExited: {
-                fullRepresentation.showMeteogramInfo = false
-                meteogramInfoCanvas.requestPaint()
-            }
+            var [x0, x1] = meteogramCanvas.getItemIntervalX(idx)
+            var rectWidth = x1 - x0
 
-            onPositionChanged: {
-                update(mouse)
-                if (meteogramInfo && meteogramInfo.visible) {
-                    meteogramInfoCanvas.requestPaint()
-                }
-            }
+            var globalCoord = mapToItem(fullRepresentation, 0, 0)
+            meteogramInfo.x = globalCoord.x + mouse.x
+            meteogramInfo.y = globalCoord.y + mouse.y
 
-            function update(mouse) {
-                if (!meteogramInfo) {
-                    return
-                }
+            meteogramInfo.isAnchorLeft = mouse.x < (imageWidth - meteogramInfo.boxWidth - (1.5 * rectWidth))
+            meteogramInfo.isAnchorTop = mouse.y < (globalCoord.y + meteogramInfo.boxHeight + (1.5 * rectWidth))
 
-                var idx = Math.round(xIndexScale.invert(mouse.x) - 0.5)
-                if (idx < 0 || idx >= meteogramModel.count) {
-                    return
-                }
+            if (meteogramInfo.idx !== idx) {
+                meteogramInfo.anchorsMargins = 1.5 * rectWidth
 
-                var [x0, x1] = meteogramCanvas.getItemIntervalX(idx)
-                var rectWidth = x1 - x0
-
-                var globalCoord = mapToItem(fullRepresentation, 0, 0)
-                meteogramInfo.x = globalCoord.x + mouse.x
-                meteogramInfo.y = globalCoord.y + mouse.y
-
-                meteogramInfo.isAnchorLeft = mouse.x < (imageWidth - meteogramInfo.boxWidth - (1.5 * rectWidth))
-                meteogramInfo.isAnchorTop = mouse.y < (globalCoord.y + meteogramInfo.boxHeight + (1.5 * rectWidth))
-
-                if (meteogramInfo.idx !== idx) {
-                    meteogramInfo.anchorsMargins = 1.5 * rectWidth
-
-                    meteogramInfo.idx = idx
-                    meteogramInfo.hourModel = meteogramModel.get(idx)
-                }
+                meteogramInfo.idx = idx
+                meteogramInfo.hourModel = meteogramModel.get(idx)
             }
         }
     }
+
 
     function fullRedraw() {
         meteogramCanvas.fullRedraw()
