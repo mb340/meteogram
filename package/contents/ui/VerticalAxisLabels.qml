@@ -29,7 +29,7 @@ Item {
 
         delegate: Item {
             height: 0
-            width: graphArea.width
+            width: meteogramCanvas.width
 
             x: 0
             y: yAxisScale.translate(index)

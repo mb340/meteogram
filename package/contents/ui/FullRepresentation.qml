@@ -268,12 +268,30 @@ Item {
         anchors.topMargin: headingHeight
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.bottom: nextDaysView.top
-        anchors.bottomMargin: windarea + Kirigami.Units.smallSpacing
+        anchors.bottom: windSpeedArea.top
         visible: !isShowAlert &&
                     (!metnoDailyWeatherInfo || !metnoDailyWeatherInfo.visible) &&
                     (!owmDailyWeatherInfo || !owmDailyWeatherInfo.visible)
-     }
+    }
+
+    WindSpeedArea {
+        id: windSpeedArea
+
+        width: meteogram2.imageWidth
+        height: Kirigami.Units.largeSpacing + (2 * Kirigami.Units.smallSpacing)
+
+        anchors.bottom: nextDaysView.top
+        anchors.left: meteogram2.left
+        anchors.leftMargin: meteogram2.labelWidth
+
+        visible: meteogram2.visible
+
+        hourStep: meteogram2.hourStep
+        rectWidth: meteogram2.rectWidth
+
+        timeScale: meteogram2.timeScale
+
+    }
 
 
     Loader {
@@ -325,7 +343,6 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: nextDaysView.top
-            anchors.bottomMargin: meteogram.windarea /* wind area */
 
             anchors.leftMargin: Kirigami.Units.largeSpacing
             anchors.rightMargin: Kirigami.Units.largeSpacing
@@ -344,9 +361,9 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: nextDaysView.top
-            anchors.bottomMargin: meteogram.windarea /* wind area */
-        anchors.leftMargin: Kirigami.Units.largeSpacing
-        anchors.rightMargin: Kirigami.Units.largeSpacing
+
+            anchors.leftMargin: Kirigami.Units.largeSpacing
+            anchors.rightMargin: Kirigami.Units.largeSpacing
 
             model: null
             visible: model != null

@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
+import org.kde.kirigami as Kirigami
 import "../code/icons.js" as IconTools
 import "data_models"
 import "utils"
@@ -8,6 +9,11 @@ import "utils"
 
 Item {
     id: root
+
+    required property int hourStep
+    required property double rectWidth
+
+    required property var timeScale
 
     signal modelsChanged()
 
@@ -24,7 +30,7 @@ Item {
             }
 
             let t = item.from
-            if (meteogramModel.hourInterval === 1 && (t.getHours()) % meteogramCanvas.hourStep !== 0) {
+            if (meteogramModel.hourInterval === 1 && (t.getHours()) % hourStep !== 0) {
                 continue
             }
 
@@ -41,7 +47,7 @@ Item {
         model: fillModels ? windSpeedModel.model : []
         delegate: windIconDelegate
 
-        property double rectWidth: meteogramCanvas.hourStep * (meteogramCanvas.rectWidth)
+        property double rectWidth: hourStep * rectWidth
         property double xOffset: (windSpeedRepeater.rectWidth / 2)
         property int iconSetType: plasmoid.configuration.windIconSetType
 
@@ -51,7 +57,6 @@ Item {
             Item {
                 id: windspeedAnchor
                 width: windSpeedRepeater.rectWidth
-                height: labelHeight
                 x: !item ? 0 : timeScale.translate(item.from.getTime()) - windSpeedRepeater.xOffset
                 y: 0
 
@@ -72,7 +77,8 @@ Item {
                     width: height
                     height: (windSpeedRepeater.iconSetType ==
                                 IconTools.WindIconSetType.QULLE) ?
-                                windarea : labelHeight
+                                root.height - Kirigami.Units.smallSpacing :
+                                root.height - (2 * Kirigami.Units.smallSpacing)
                     anchors.centerIn: parent
 
                     visible: false
