@@ -85,21 +85,33 @@ Item {
                 anchors.topMargin: 2
             }
 
-            Label {
-                text: timeUtils.twelveHourClockEnabled ?
-                                timeUtils.getAmOrPm(hourFrom) : '00'
-                font.pixelSize: Kirigami.Theme.smallFont.pixelSize * 0.70
-                font.pointSize: -1
-                color: main.theme.isShowBackground ?
-                            main.theme.disabledTextColor :
-                            main.theme.textColor
-                opacity: main.theme.isShowBackground ? 1.0 : 0.60
+            Loader {
+                property bool doLoad: timeUtils.twelveHourClockEnabled &&
+                                        (hourFrom === 0 || hourFrom === 12)
 
-                verticalAlignment: Text.AlignTop
-                horizontalAlignment: Text.AlignLeft
+                sourceComponent: !doLoad ? undefined : hourSubLabel
 
                 anchors.top: hourText.top
                 anchors.left: hourText.right
+            }
+
+
+            Component {
+                id: hourSubLabel
+                Label {
+                    text: timeUtils.twelveHourClockEnabled ?
+                                    timeUtils.getAmOrPm(hourFrom) : '00'
+                    font.pixelSize: Kirigami.Theme.smallFont.pixelSize * 0.70
+                    font.pointSize: -1
+                    color: main.theme.isShowBackground ?
+                                main.theme.disabledTextColor :
+                                main.theme.textColor
+                    opacity: main.theme.isShowBackground ? 1.0 : 0.60
+
+                    verticalAlignment: Text.AlignTop
+                    horizontalAlignment: Text.AlignLeft
+
+                }
             }
 
             Loader {
