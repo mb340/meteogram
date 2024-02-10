@@ -28,9 +28,6 @@ Item {
     property int imageWidth: width - (2 * labelWidth)
     property int imageHeight: height - (2 * labelHeight)
 
-    property alias labelWidth: textMetrics.width
-    property alias labelHeight: textMetrics.height
-
     readonly property int minTemperatureYGridCount: 20
 
     property double temperatureYGridStep: 1.0
@@ -81,13 +78,6 @@ Item {
     onY1VarNameChanged: {
         plasmoid.configuration.y1VarName = y1VarName
         fullRedraw()
-    }
-
-    TextMetrics {
-        id: textMetrics
-        font.family: theme.defaultFont.family
-        font.pixelSize: theme.smallestFont.pixelSize
-        text: "999999"
     }
 
     MeteogramBackgroundCanvas {

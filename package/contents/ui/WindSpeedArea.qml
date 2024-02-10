@@ -76,8 +76,7 @@ Item {
                     width: height
                     height: (windSpeedRepeater.iconSetType ==
                                 IconTools.WindIconSetType.QULLE) ?
-                                root.height - units.smallSpacing :
-                                root.height - (2 * units.smallSpacing)
+                                root.height - units.smallSpacing : labelHeight
                     anchors.centerIn: parent
 
                     visible: false
