@@ -84,21 +84,32 @@ Item {
                 anchors.topMargin: 2
             }
 
-            Label {
-                text: timeUtils.twelveHourClockEnabled ?
-                                timeUtils.getAmOrPm(hourFrom) : '00'
-                font.pixelSize: theme.smallestFont.pixelSize * 0.70
-                font.pointSize: -1
-                color: main.colors.isShowBackground ?
-                            main.colors.disabledTextColor :
-                            main.colors.textColor
-                opacity: main.colors.isShowBackground ? 1.0 : 0.60
+            Loader {
+                property bool doLoad: timeUtils.twelveHourClockEnabled &&
+                                        (hourFrom === 0 || hourFrom === 12)
 
-                verticalAlignment: Text.AlignTop
-                horizontalAlignment: Text.AlignLeft
+                sourceComponent: !doLoad ? undefined : hourSubLabel
 
                 anchors.top: hourText.top
                 anchors.left: hourText.right
+            }
+
+
+            Component {
+                id: hourSubLabel
+                Label {
+                    text: timeUtils.getAmOrPm(hourFrom)
+                    font.pixelSize: theme.smallestFont.pixelSize * 0.70
+                    font.pointSize: -1
+                    color: main.colors.isShowBackground ?
+                                main.colors.disabledTextColor :
+                                main.colors.textColor
+                    opacity: main.colors.isShowBackground ? 1.0 : 0.60
+
+                    verticalAlignment: Text.AlignTop
+                    horizontalAlignment: Text.AlignLeft
+
+                }
             }
 
             Loader {
