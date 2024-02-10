@@ -54,7 +54,7 @@ Item {
                        theme.backgroundColor.b,
                        1.00)
         radius: 2
-        border.color: theme.textColor
+        border.color: theme.disabledTextColor
         border.width: 1
 
         anchors.fill: hoverItem
