@@ -55,7 +55,7 @@ Item {
                        main.theme.meteogram.backgroundColor.b,
                        1.00)
         radius: 2
-        border.color: main.theme.meteogram.textColor
+        border.color: Kirigami.Theme.disabledTextColor
         border.width: 1
 
         anchors.fill: hoverItem
