@@ -14,13 +14,13 @@ Canvas {
     property real shadeFactor: plasmoid.configuration.lightModeShadeFactor / 100
     property real darkShadeFactor: plasmoid.configuration.darkModeShadeFactor / 100
 
-    property color bgColor: colors.meteogram.isDarkMode ?
-                                Qt.rgba(shadeColor.r + darkShadeFactor,
-                                        shadeColor.g + darkShadeFactor,
-                                        shadeColor.b + darkShadeFactor,
-                                        shadeColor.a) :
-                                colorPalette.backgroundColor()
-
+    property color bgColor: (plasmoid.configuration.renderSunsetShade &&
+                                colors.meteogram.isDarkMode) ?
+                                    Qt.rgba(shadeColor.r + darkShadeFactor,
+                                            shadeColor.g + darkShadeFactor,
+                                            shadeColor.b + darkShadeFactor,
+                                            shadeColor.a) :
+                                    colorPalette.backgroundColor()
 
     property color shadeColor: colors.meteogram.isDarkMode ?
                                 colorPalette.backgroundColor() :
