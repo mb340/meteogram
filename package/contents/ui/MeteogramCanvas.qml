@@ -189,6 +189,9 @@ Canvas {
     Connections {
         target: plasmoid
         function onExpandedChanged() {
+            if (!available || !plasmoid.expanded) {
+                return
+            }
             root.markDirty(Qt.rect(0, 0, width, height))
         }
     }
