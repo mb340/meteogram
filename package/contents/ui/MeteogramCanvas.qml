@@ -189,12 +189,12 @@ Canvas {
 
     Connections {
         target: main
-        function onExpandedChanged() {
-            if (!available || !main.expanded) {
-                return
-            }
-            root.markDirty(Qt.rect(0, 0, width, height))
-        }
+        // function onExpandedChanged() {
+        //     if (!available || !main.expanded) {
+        //         return
+        //     }
+        //     root.markDirty(Qt.rect(0, 0, width, height))
+        // }
     }
 
     Connections {
