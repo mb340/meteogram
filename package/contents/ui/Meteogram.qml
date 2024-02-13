@@ -40,11 +40,11 @@ Item {
     property double precipitationMaxGraphY: 10
 
     property color gridColor: main.theme.meteogram.isDarkMode ?
-                                Qt.tint(main.theme.meteogram.textColor, '#80000000') :
-                                Qt.tint(main.theme.meteogram.textColor, '#80FFFFFF')
+                                Qt.tint(main.theme.meteogram.textColor, '#A0000000') :
+                                Qt.tint(main.theme.meteogram.textColor, '#A0FFFFFF')
     property color gridColorHighlight: main.theme.meteogram.isDarkMode ?
-                                        Qt.tint(main.theme.meteogram.textColor, '#50000000') :
-                                        Qt.tint(main.theme.meteogram.textColor, '#50FFFFFF')
+                                        Qt.tint(main.theme.meteogram.textColor, '#90000000') :
+                                        Qt.tint(main.theme.meteogram.textColor, '#90FFFFFF')
 
     property string y2VarName: plasmoid.configuration.y2VarName
     property bool y2AxisVisble: meteogramModel.hasVariable(y2VarName)
