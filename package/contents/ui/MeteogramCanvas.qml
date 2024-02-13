@@ -438,8 +438,8 @@ Canvas {
 
         iconOverlay.beginList()
 
-        var sunRise = main.currentWeatherModel.sunRise
-        var sunSet = main.currentWeatherModel.sunSet
+        var sunRise = timeUtils.roundToHour(main.currentWeatherModel.sunRise)
+        var sunSet = timeUtils.roundToHour(main.currentWeatherModel.sunSet)
 
         for (var i = 0; i < meteogramModel.count; i++) {
             var item = meteogramModel.get(i)
