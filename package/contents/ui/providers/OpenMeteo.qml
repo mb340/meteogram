@@ -413,7 +413,7 @@ QtObject {
             67: i18n("Heavy freezing rain"),
             71: i18n("Slight snow fall"),
             73: i18n("Moderate snow fall"),
-            75: i18n("Heave snow fall"),
+            75: i18n("Heavy snow fall"),
             77: i18n("Snow grains"),
             80: i18n("Slight rain showers"),
             81: i18n("Moderate rain showers"),
