@@ -119,6 +119,11 @@ QtObject {
         return date
     }
 
+    function roundToHour(date) {
+        const MS_PER_HOUR = 60 * 60 * 1000
+        return new Date(Math.round(date.getTime() / MS_PER_HOUR ) * MS_PER_HOUR)
+    }
+
     function hasSunriseSunsetData(currentWeatherModel) {
         return currentWeatherModel && Number(currentWeatherModel.sunRise) !== 0 &&
                 Number(currentWeatherModel.sunSet) !== 0
