@@ -80,8 +80,8 @@ Loader {
                 anchors.fill: image
                 horizontalOffset: 0
                 verticalOffset: 0
-                radius: 8.0
-                samples: 17
+                radius: 1.0
+                samples: 3
                 color: main.colors && !main.colors.isDarkMode ?
                             "#80000000" : "#80ffffff"
                 source: image
@@ -114,8 +114,8 @@ Loader {
                 anchors.fill: image
                 horizontalOffset: 0
                 verticalOffset: 0
-                radius: 8.0
-                samples: 17
+                radius: 1.0
+                samples: 3
                 color: !main.colors.isDarkMode ? "#80000000" : "#80ffffff"
                 source: image
                 visible: plasmoid.configuration.iconDropShadow
