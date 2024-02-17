@@ -228,5 +228,6 @@ Item {
 
     function fullRedraw() {
         meteogramCanvas.fullRedraw()
+        backgroundCanvas.requestPaint()
     }
 }

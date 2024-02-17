@@ -873,7 +873,6 @@ Canvas {
         buildMetogramData()
 
         initialized = true
-        backgroundCanvas.requestPaint()
         requestPaint()
     }
 
