@@ -188,7 +188,7 @@ Item {
         id: windSpeedArea
 
         width: meteogram2.imageWidth
-        height: Kirigami.Units.largeSpacing + (2 * Kirigami.Units.smallSpacing)
+        height: labelHeight + (2 * Kirigami.Units.smallSpacing)
 
         anchors.bottom: nextDaysView.top
         anchors.left: meteogram2.left
