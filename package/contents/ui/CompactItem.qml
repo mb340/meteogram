@@ -28,9 +28,8 @@ Grid {
 
     property int temperatureType: plasmoid.configuration.temperatureType
 
-    property int iconSetType: (plasmoid && plasmoid.configuration &&
-                               plasmoid.configuration.iconSetType) ?
-                                plasmoid.configuration.iconSetType : 0
+    property int iconSetType: plasmoid.configuration.temperatureIconTypeSymbolic ? 0 :
+                                plasmoid.configuration.iconSetType
 
     property var itemOrder: plasmoid.configuration.compactItemOrder
 

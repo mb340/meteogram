@@ -89,6 +89,9 @@
             </choices>
             <default>0</default>
         </entry>
+        <entry name="temperatureIconTypeSymbolic" type="Bool">
+            <default>true</default>
+        </entry>
 
         <entry name="colorPaletteType" type="Int">
             <default>0</default>

@@ -30,6 +30,7 @@ KCM.SimpleKCM {
 
     property int cfg_temperatureIconSizeMode
     property alias cfg_temperatureIconFixedSize: temperatureIconFixedSize.value
+    property bool cfg_temperatureIconTypeSymbolic
 
     property alias cfg_layoutSpacing: layoutSpacing.value
     property int cfg_iconSetType: plasmoid.configuration.iconSetType
@@ -601,6 +602,19 @@ KCM.SimpleKCM {
                     }
                     return data[0]
                 }
+            }
+
+            Label {
+                text: i18n("Symbolic icon")
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+                Layout.columnSpan: 1
+            }
+            CheckBox {
+                id: temperatureIconTypeSymbolic
+                checked: cfg_temperatureIconTypeSymbolic
+                Layout.alignment: Qt.AlignLeft
+                Layout.rowSpan: 1
+                onCheckedChanged: cfg_temperatureIconTypeSymbolic = checked
             }
 
             Item {
