@@ -188,7 +188,7 @@ Item {
         id: windSpeedArea
 
         width: meteogram2.imageWidth
-        height: units.largeSpacing + (2 * units.smallSpacing)
+        height: labelHeight + (2 * units.smallSpacing)
 
         anchors.bottom: nextDaysView.top
         anchors.left: meteogram2.left
