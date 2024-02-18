@@ -368,7 +368,7 @@ KCM.SimpleKCM {
                 function onAccepted() {
                     cfg_cityAliasFontName = fontDialog.selectedFont.family
                     cfg_cityAliasFontSize = fontDialog.selectedFont.pointSize
-                    print('cfg_cityAliasFontSize', cfg_cityAliasFontSize)
+                    dbgprint('cfg_cityAliasFontSize', cfg_cityAliasFontSize)
                     fontDialog.visible = false
                     fontDialog.onAccepted.disconnect(onAccepted)
                 }
@@ -476,7 +476,7 @@ KCM.SimpleKCM {
                 function onAccepted() {
                     cfg_temperatureFontName = fontDialog.selectedFont.family
                     cfg_temperatureFontSize = fontDialog.selectedFont.pointSize
-                    print('cfg_temperatureFontSize', cfg_temperatureFontSize)
+                    dbgprint('cfg_temperatureFontSize', cfg_temperatureFontSize)
                     fontDialog.visible = false
                     fontDialog.onAccepted.disconnect(onAccepted)
                 }
