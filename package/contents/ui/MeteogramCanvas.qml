@@ -183,7 +183,7 @@ Canvas {
         clip: true
 
         iconSetType: root.iconSetType
-        iconDim: 2 * root.rectWidth
+        iconDim: hourStep === 1 ? root.rectWidth : 2 * root.rectWidth
     }
 
     Connections {
@@ -441,11 +441,20 @@ Canvas {
         var sunRise = timeUtils.roundToHour(main.currentWeatherModel.sunRise)
         var sunSet = timeUtils.roundToHour(main.currentWeatherModel.sunSet)
 
+        var offset = (hourStep === 1) ? (rectWidth / 2) : rectWidth
+
         for (var i = 0; i < meteogramModel.count; i++) {
             var item = meteogramModel.get(i)
             var iconName = item.iconName
             var hourFrom = item.from.getHours()
-            var textVisible = meteogramModel.hourInterval > 1 || ((hourFrom % 2 === 1) && iconName != '')
+
+            if (!iconName) {
+                continue
+            }
+
+            var textVisible = meteogramModel.hourInterval > 1 ||
+                                (hourStep > 1 && hourFrom % 2 === 1) ||
+                                (hourStep === 1)
             if (!textVisible) {
                 continue
             }
@@ -457,7 +466,7 @@ Canvas {
             var timePeriod = timeUtils.isSunRisen(item.from, sunRise, sunSet) ? 0 : 1
 
             var x0 = x
-            var y0 = y - rectWidth
+            var y0 = y - offset
 
             // Avoid overlapping precipitation labels.
             // Shifting from one label position may result in overlap of other label or vice
@@ -467,15 +476,15 @@ Canvas {
             var newY0 = y0
             var newY1 = y0
 
-            if (labelPosY0 - (2 * rectWidth) <= y0 && y0 <= labelPosY0 + (2 * rectWidth)) {
+            if (labelPosY0 - (2 * offset) <= y0 && y0 <= labelPosY0 + (2 * offset)) {
                 newY0 = Math.min(y0, labelPosY0 - (labelHeight))
-                if (labelPosY1 - (2 * rectWidth) <= newY0 && newY0 <= labelPosY1 + (1 * rectWidth)) {
+                if (labelPosY1 - (2 * offset) <= newY0 && newY0 <= labelPosY1 + (1 * offset)) {
                     newY0 = Math.min(newY0, labelPosY1 - (labelHeight))
                 }
             }
-            if (labelPosY1 - (2 * rectWidth) <= y0 && y0 <= labelPosY1 + (2 * rectWidth)) {
+            if (labelPosY1 - (2 * offset) <= y0 && y0 <= labelPosY1 + (2 * offset)) {
                 newY1 = Math.min(y0, labelPosY1 - (labelHeight))
-                if (labelPosY0 - (2 * rectWidth) <= newY1 && newY1 <= labelPosY0 + (1 * rectWidth)) {
+                if (labelPosY0 - (2 * offset) <= newY1 && newY1 <= labelPosY0 + (1 * offset)) {
                     newY1 = Math.min(newY1, labelPosY0 - (labelHeight))
                 }
             }
@@ -491,8 +500,8 @@ Canvas {
                 context.fillStyle = theme.textColor
                 context.fillText(str, x0, y0)
             } else if (iconSetType === 1 || iconSetType === 2 || iconSetType === 3) {
-                x0 = x - rectWidth
-                y0 -= 1.5 * rectWidth
+                x0 = x - offset
+                y0 -= 1.5 * offset
 
                 iconOverlay.addItem({
                     iconName: iconName,
@@ -846,10 +855,9 @@ Canvas {
         if (!isFinite(hourStep)) {
             return 2
         }
-        if (hourStep <= 2) {
-            hourStep = 2
-        }
-        if (hourStep <= 4) {
+        if (hourStep <= 0) {
+            hourStep = 1
+        } else if (hourStep <= 4) {
             // hourStep
         } else if (hourStep <= 6) {
             hourStep = 6
