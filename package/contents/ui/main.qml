@@ -510,12 +510,9 @@ PlasmoidItem {
         repeat: false
         running: false
         triggeredOnStart: false
+
         onTriggered: {
-            if (!loadFromCache(cacheKey)) {
-                dbgprint('updateViewsTimer error')
-            } else {
-                dbgprint('updateViewsTimer loaded from cache')
-            }
+            _loadFromCache(cacheKey)
             reloadTimer.updateState(cacheKey)
             init()
         }
