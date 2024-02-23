@@ -122,5 +122,6 @@ const CITIES = [
 	"24	Puerto Francisco de Orellana	-0.46645	-76.98719	255	140",
 	"25	Salinas	-2.21452	-80.95151	12	140",
 	"25	Santa Elena	-2.22622	-80.85873	43	140",
+	"26	La Concordia	0.00801	-79.39462	216	140",
 	"26	Santo Domingo de los Colorados	-0.25305	-79.17536	554	140",
 ];

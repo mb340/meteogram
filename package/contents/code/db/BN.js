@@ -1,4 +1,5 @@
 const CITIES = [
+	"01	Kampung Sungai Teraban	4.58445	114.18117	1	58",
 	"01	Kuala Belait	4.58361	114.2312	5	58",
 	"01	Seria	4.60637	114.32476	6	58",
 	"02	Bandar Seri Begawan	4.89035	114.94006	10	58",
