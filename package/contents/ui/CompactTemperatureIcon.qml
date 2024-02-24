@@ -94,8 +94,8 @@ Item {
                 return
             }
             partOfDay = timeUtils.isSunRisen(currentWeatherModel.date,
-                                             currentWeatherModel.sunRise,
-                                             currentWeatherModel.sunSet) ? 0 : 1
+                                             timeUtils.roundToHour(currentWeatherModel.sunRise),
+                                             timeUtils.roundToHour(currentWeatherModel.sunSet)) ? 0 : 1
         }
     }
 
