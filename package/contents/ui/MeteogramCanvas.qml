@@ -56,8 +56,7 @@ Canvas {
         }
     })
 
-    property double hourStrWidth: computeHourStrWidth(theme.smallestFont,
-                                                      available)
+    property double hourStrWidth: computeHourStrWidth(theme.smallestFont)
     property int hourStep: computeHourStep(hourStrWidth, rectWidth)
 
     property alias temperatureScale: temperatureScale
@@ -827,7 +826,7 @@ Canvas {
         hourGrid2.setModel(startTime)
     }
 
-    function computeHourStrWidth(font, available) {
+    function computeHourStrWidth(font) {
         if (!available || !context || !font) {
             return 0
         }
