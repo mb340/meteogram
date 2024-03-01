@@ -255,10 +255,11 @@ Canvas {
         }
 
         let size = 1
+        let w = Math.min(hourStrWidth / 1.75, rectWidth * meteogramModel.hourInterval)
         while (true) {
             ctx.font = 'bold ' + size + 'px "' + Kirigami.Theme.defaultFont.family + '"'
             let lineHeight = context.measureText('M').width;
-            if (lineHeight >= rectWidth) {
+            if (lineHeight >= w) {
                 break
             }
             size += 0.5
