@@ -75,8 +75,7 @@ Item {
                 id: hourText
 
                 text: timeUtils.getHourText(hourFrom)
-                font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-                font.pointSize: -1
+                font: Kirigami.Theme.smallFont
                 verticalAlignment: Text.AlignBottom
                 horizontalAlignment: Text.AlignRight
 
@@ -101,7 +100,7 @@ Item {
                 Label {
                     text: timeUtils.twelveHourClockEnabled ?
                                     timeUtils.getAmOrPm(hourFrom) : '00'
-                    font.pixelSize: Kirigami.Theme.smallFont.pixelSize * 0.70
+                    font.pixelSize: timePeriodLabelSize
                     font.pointSize: -1
                     color: main.theme.isShowBackground ?
                                 main.theme.disabledTextColor :
