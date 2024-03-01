@@ -177,9 +177,6 @@ QtObject {
     }
 
     function getAmOrPm(hourNumber) {
-        if (hourNumber === 0) {
-            return Qt.locale().amText
-        }
         return hourNumber > 11 ? Qt.locale().pmText : Qt.locale().amText
     }
 
