@@ -91,6 +91,7 @@ Item {
 
                 anchors.top: hourText.top
                 anchors.left: hourText.right
+                anchors.topMargin: 1
             }
 
 
@@ -98,16 +99,20 @@ Item {
                 id: hourSubLabel
                 Label {
                     text: timeUtils.getAmOrPm(hourFrom)
-                    font.pixelSize: timePeriodLabelSize
-                    font.pointSize: -1
+                    font.family: theme.smallestFont.family
+                    font.pixelSize: 1024
+                    minimumPixelSize: 1
+                    fontSizeMode: Text.Fit
                     color: main.colors.isShowBackground ?
                                 main.colors.disabledTextColor :
                                 main.colors.textColor
                     opacity: main.colors.isShowBackground ? 1.0 : 0.60
 
+                    width: hourText.width - 1
+                    height: hourText.height
+
                     verticalAlignment: Text.AlignTop
                     horizontalAlignment: Text.AlignLeft
-
                 }
             }
 
