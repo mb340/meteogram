@@ -838,13 +838,7 @@ Canvas {
         let fontSize = font.pixelSize
         context.font = fontSize + 'px "' + font.family + '"'
         let metrics = context.measureText("00")
-        hourStrWidth += metrics.width
-
-        let text = timeUtils.getAmOrPm(0)
-        fontSize = timePeriodLabelSize.toFixed(1)
-        context.font = fontSize + 'px "' + font.family + '"'
-        metrics = context.measureText(text)
-        hourStrWidth += metrics.width
+        hourStrWidth = 2 * metrics.width
 
         // print("hourStrWidth ", hourStrWidth)
         return hourStrWidth

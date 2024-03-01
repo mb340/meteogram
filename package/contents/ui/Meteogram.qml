@@ -39,8 +39,6 @@ Item {
 
     property double precipitationMaxGraphY: 10
 
-    property double timePeriodLabelSize: Kirigami.Theme.smallFont.pixelSize * 0.70
-
     property color gridColor: main.theme.meteogram.isDarkMode ?
                                 Qt.tint(main.theme.meteogram.textColor, '#A0000000') :
                                 Qt.tint(main.theme.meteogram.textColor, '#A0FFFFFF')
