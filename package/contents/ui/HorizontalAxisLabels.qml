@@ -74,8 +74,7 @@ Item {
                 id: hourText
 
                 text: timeUtils.getHourText(hourFrom)
-                font.pixelSize: theme.smallestFont.pixelSize
-                font.pointSize: -1
+                font: theme.smallestFont
                 verticalAlignment: Text.AlignBottom
                 horizontalAlignment: Text.AlignRight
 
@@ -99,7 +98,7 @@ Item {
                 id: hourSubLabel
                 Label {
                     text: timeUtils.getAmOrPm(hourFrom)
-                    font.pixelSize: theme.smallestFont.pixelSize * 0.70
+                    font.pixelSize: timePeriodLabelSize
                     font.pointSize: -1
                     color: main.colors.isShowBackground ?
                                 main.colors.disabledTextColor :

@@ -38,6 +38,8 @@ Item {
 
     property double precipitationMaxGraphY: 10
 
+    property double timePeriodLabelSize: theme.smallestFont.pixelSize * 0.70
+
     property color gridColor: main.colors.meteogram.isDarkMode ?
                                 Qt.tint(main.colors.meteogram.textColor, '#A0000000') :
                                 Qt.tint(main.colors.meteogram.textColor, '#A0FFFFFF')
