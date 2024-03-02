@@ -70,8 +70,7 @@ Item {
 
     TextMetrics {
         id: textMetrics
-        font.family: Kirigami.Theme.defaultFont.family
-        font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+        font: Kirigami.Theme.smallFont
         text: "999999"
     }
 
