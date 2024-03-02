@@ -70,8 +70,7 @@ Item {
 
     TextMetrics {
         id: textMetrics
-        font.family: theme.defaultFont.family
-        font.pixelSize: theme.smallestFont.pixelSize
+        font: theme.smallestFont
         text: "999999"
     }
 
