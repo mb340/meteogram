@@ -34,4 +34,9 @@ QtObject {
     function invert(val) {
         return domain[0] + (val - range[0]) / factor
     }
+
+    /* Translate a unit step from drawing coordindate to data value */
+    function invertUnitStep(val) {
+        return Math.abs(val / factor)
+    }
 }
