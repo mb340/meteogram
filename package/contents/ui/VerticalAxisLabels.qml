@@ -10,14 +10,15 @@ Item {
         id: horizontalLinesModel
     }
 
-    function setModel(count) {
+    function setModel(count, gridStep, maxTemperature) {
         horizontalLinesModel.beginList()
         for (var i = 0; i <= count; i++) {
-            if (i % temperatureYGridStep !== 0) {
+            if (i % gridStep !== 0) {
                 continue
             }
             horizontalLinesModel.addItem({
                 index: i,
+                temperature: maxTemperature - i
             })
         }
         horizontalLinesModel.endList()
@@ -32,7 +33,7 @@ Item {
             width: meteogramCanvas.width
 
             x: 0
-            y: yAxisScale.translate(index)
+            y: temperatureScale.translate(temperature)
 
             Rectangle {
                 id: gridLine
@@ -44,7 +45,7 @@ Item {
                 visible: true
             }
             Label {
-                text: temperatureAxisScale.invert(index).toFixed(0)
+                text: temperature.toFixed(0)
                 font.pixelSize: Kirigami.Theme.smallFont.pixelSize
                 font.pointSize: -1
                 horizontalAlignment: Text.AlignRight

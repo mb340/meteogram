@@ -724,6 +724,9 @@ Canvas {
         temperatureAxisScale.setDomain(minT, maxT)
         temperatureAxisScale.setRange(temperatureYGridCount, 0)
 
+        let temperatureYGridCount = maxT - minT
+        let temperatureYGridStep = Math.max(1, Math.round(temperatureYGridCount / 10))
+
         minY2 = unitUtils.convertValue(minY2, y2VarName, unitUtils.getUnitType(y2VarName))
         maxY2 = unitUtils.convertValue(maxY2, y2VarName, unitUtils.getUnitType(y2VarName))
 
@@ -787,7 +790,7 @@ Canvas {
         xAxisScale.setDomain(0, root.nHours - 1)
         timeScale.setDomain(startTime.getTime(), endTime.getTime())
         windSpeedArea.setModel(meteogramModel.count)
-        horizontalLines.setModel(temperatureYGridCount)
+        horizontalLines.setModel(temperatureYGridCount, temperatureYGridStep, maxT)
         hourGrid2.setModel(startTime)
     }
 
@@ -795,28 +798,15 @@ Canvas {
      * Compute y-axis scale for temperature graph
      */
     function computeTemperatureAxisRange(minValue, maxValue) {
-
-        // Convert window size from Celsius
-        var minGridCount = minTemperatureYGridCount
-        // print('minGridCount = ' + minGridCount)
-
         var dV = maxValue - minValue
         var mid = minValue + (dV / 2)
 
         var roundedDv = ChartUtils.ceilBase(dV, 10)
-        roundedDv = Math.max(minGridCount, roundedDv)
+        roundedDv = Math.max(minTemperatureYGridCount, roundedDv)
         roundedDv = ChartUtils.ceilBase(roundedDv, 10)
 
         minValue = Math.floor(mid - (roundedDv / 2))
         maxValue = Math.ceil(mid + (roundedDv / 2))
-
-        temperatureYGridCount = roundedDv
-        // print("temperatureYGridCount = " + temperatureYGridCount)
-
-        // y-axis ticks
-        temperatureYGridStep = Math.max(1, Math.round(temperatureYGridCount / 10))
-        // print("temperatureYGridStep = " + temperatureYGridStep)
-
         return [minValue, maxValue]
     }
 
