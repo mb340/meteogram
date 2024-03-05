@@ -52,7 +52,6 @@ Item {
     property string y1VarName: plasmoid.configuration.y1VarName
 
     property alias temperatureScale: meteogramCanvas.temperatureScale
-    property alias temperatureAxisScale: meteogramCanvas.temperatureAxisScale
     property alias rightAxisScale: meteogramCanvas.rightAxisScale
     property alias rightGridScale: meteogramCanvas.rightGridScale
     property alias precipitationScale: meteogramCanvas.precipitationScale
@@ -60,7 +59,6 @@ Item {
     property alias humidityScale: meteogramCanvas.humidityScale
     property alias xIndexScale: meteogramCanvas.xIndexScale
     property alias xAxisScale: meteogramCanvas.xAxisScale
-    property alias yAxisScale: meteogramCanvas.yAxisScale
     property alias timeScale: meteogramCanvas.timeScale
 
     property alias nHours: meteogramCanvas.nHours

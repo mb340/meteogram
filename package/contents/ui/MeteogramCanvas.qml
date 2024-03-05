@@ -61,7 +61,6 @@ Canvas {
     property int hourStep: computeHourStep(hourStrWidth, rectWidth)
 
     property alias temperatureScale: temperatureScale
-    property alias temperatureAxisScale: temperatureAxisScale
     property alias rightAxisScale: rightAxisScale
     property alias rightGridScale: rightGridScale
     property alias precipitationScale: precipitationScale
@@ -70,16 +69,10 @@ Canvas {
     property alias xIndexScale: xIndexScale
     property alias timeScale: timeScale
     property alias xAxisScale: xAxisScale
-    property alias yAxisScale: yAxisScale
 
     LinearScale {
         id: temperatureScale
         range: [height, 0]
-    }
-
-    LinearScale {
-        id: temperatureAxisScale
-        range: [1, 0]
     }
 
     LinearScale {
@@ -118,11 +111,6 @@ Canvas {
     LinearScale {
         id: xAxisScale
         range: [0, width]
-    }
-
-    LinearScale {
-        id: yAxisScale
-        range: [0, height]
     }
 
     LinearScale {
@@ -721,8 +709,6 @@ Canvas {
         }
 
         temperatureScale.setDomain(minT, maxT)
-        temperatureAxisScale.setDomain(minT, maxT)
-        temperatureAxisScale.setRange(temperatureYGridCount, 0)
 
         let temperatureYGridCount = maxT - minT
         let temperatureYGridStep = Math.max(1, Math.round(temperatureYGridCount / 10))
@@ -786,7 +772,6 @@ Canvas {
 
         xIndexScale.setDomain(0, meteogramModel.count - 1)
 
-        yAxisScale.setDomain(0, temperatureYGridCount)
         xAxisScale.setDomain(0, root.nHours - 1)
         timeScale.setDomain(startTime.getTime(), endTime.getTime())
         windSpeedArea.setModel(meteogramModel.count)
