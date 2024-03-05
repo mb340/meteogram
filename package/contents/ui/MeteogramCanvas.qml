@@ -804,17 +804,11 @@ Canvas {
             return
         }
 
-        const ONE_HOUR_MS = 60 * 60 * 1000
-
         var startTime = meteogramModel.get(0).from
         var endTime = meteogramModel.get(meteogramModel.count - 1).from
 
-        var dt = endTime.getTime() - startTime.getTime()
-        root.nHours = Math.floor(dt / ONE_HOUR_MS) + 1
-
         precipitationScale.setDomain(0, 50)
         precipitationMaxGraphY = 15
-
 
         xIndexScale.setDomain(0, meteogramModel.count - 1)
 
@@ -870,6 +864,16 @@ Canvas {
     function fullRedraw() {
         if (!available) {
             return
+        }
+
+        if (meteogramModel.count > 0) {
+            const ONE_HOUR_MS = 60 * 60 * 1000
+            let startTime = meteogramModel.get(0).from
+            let endTime = meteogramModel.get(meteogramModel.count - 1).from
+            let dt = endTime.getTime() - startTime.getTime()
+            root.nHours = Math.floor(dt / ONE_HOUR_MS) + 1
+        } else {
+            root.nHours = 0
         }
 
         processMeteogramData()
