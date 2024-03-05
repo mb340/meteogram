@@ -690,9 +690,18 @@ Canvas {
             maxY2 = Math.max(maxY2, obj[y2VarName])
         }
 
+
         minValue = unitUtils.convertTemperature(minValue, temperatureType)
         maxValue = unitUtils.convertTemperature(maxValue, temperatureType)
+
         var [minT, maxT] = computeTemperatureAxisRange(minValue, maxValue)
+
+        // Account for icon height
+        temperatureScale.setDomain(minT, maxT)
+        let heightInT = temperatureScale.invertUnitStep(2 * rectWidth)
+        if ((maxValue + heightInT) - minValue > minTemperatureYGridCount) {
+            maxT = maxT + heightInT
+        }
 
         if (isFinite(minY1) && isFinite(maxY1)) {
             minY1 = unitUtils.convertValue(minY1, y1VarName, unitUtils.getUnitType(y1VarName))
@@ -775,15 +784,7 @@ Canvas {
         var dV = maxValue - minValue
         var mid = minValue + (dV / 2)
 
-        // Pad the window size so the min/max value isn't on the edge of the graph area
-        const coverageRatio = 0.80
         var roundedDv = ChartUtils.ceilBase(dV, 10)
-        var prevRoundedDv = NaN
-        while (dV / roundedDv > coverageRatio && roundedDv !== prevRoundedDv) {
-            roundedDv = ChartUtils.ceilBase(roundedDv + 10, 10)
-            prevRoundedDv = roundedDv
-        }
-
         roundedDv = Math.max(minGridCount, roundedDv)
         roundedDv = ChartUtils.ceilBase(roundedDv, 10)
 
