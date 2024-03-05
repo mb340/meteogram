@@ -661,12 +661,19 @@ Canvas {
         }
     }
 
-    function processMeteogramData() {
+    function computeScales() {
         if (meteogramModel.count === 0) {
             dbgprint('model is empty -> clearing canvas and exiting')
+            root.nHours = 0
             requestPaint()
             return
         }
+
+        const ONE_HOUR_MS = 60 * 60 * 1000
+        let startTime = meteogramModel.get(0).from
+        let endTime = meteogramModel.get(meteogramModel.count - 1).from
+        let dt = endTime.getTime() - startTime.getTime()
+        root.nHours = Math.floor(dt / ONE_HOUR_MS) + 1
 
         var minValue = +Infinity
         var maxValue = -Infinity
@@ -770,6 +777,19 @@ Canvas {
         rightAxisScale.setDomain(minP, maxP)
         rightGridScale.setDomain(minP, maxP)
         rightGridScale.setRange(temperatureYGridCount, 0)
+
+
+        precipitationScale.setDomain(0, 50)
+        precipitationMaxGraphY = 15
+
+        xIndexScale.setDomain(0, meteogramModel.count - 1)
+
+        yAxisScale.setDomain(0, temperatureYGridCount)
+        xAxisScale.setDomain(0, root.nHours - 1)
+        timeScale.setDomain(startTime.getTime(), endTime.getTime())
+        windSpeedArea.setModel(meteogramModel.count)
+        horizontalLines.setModel(temperatureYGridCount)
+        hourGrid2.setModel(startTime)
     }
 
     /*
@@ -799,27 +819,6 @@ Canvas {
         // print("temperatureYGridStep = " + temperatureYGridStep)
 
         return [minValue, maxValue]
-    }
-
-    function buildMetogramData() {
-        if (meteogramModel.count <= 0) {
-            return
-        }
-
-        var startTime = meteogramModel.get(0).from
-        var endTime = meteogramModel.get(meteogramModel.count - 1).from
-
-        precipitationScale.setDomain(0, 50)
-        precipitationMaxGraphY = 15
-
-        xIndexScale.setDomain(0, meteogramModel.count - 1)
-
-        yAxisScale.setDomain(0, temperatureYGridCount)
-        xAxisScale.setDomain(0, root.nHours - 1)
-        timeScale.setDomain(startTime.getTime(), endTime.getTime())
-        windSpeedArea.setModel(meteogramModel.count)
-        horizontalLines.setModel(temperatureYGridCount)
-        hourGrid2.setModel(startTime)
     }
 
     function computeHourStrWidth(font) {
@@ -867,18 +866,7 @@ Canvas {
             return
         }
 
-        if (meteogramModel.count > 0) {
-            const ONE_HOUR_MS = 60 * 60 * 1000
-            let startTime = meteogramModel.get(0).from
-            let endTime = meteogramModel.get(meteogramModel.count - 1).from
-            let dt = endTime.getTime() - startTime.getTime()
-            root.nHours = Math.floor(dt / ONE_HOUR_MS) + 1
-        } else {
-            root.nHours = 0
-        }
-
-        processMeteogramData()
-        buildMetogramData()
+        computeScales()
 
         initialized = true
         requestPaint()
