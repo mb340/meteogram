@@ -31,9 +31,6 @@ Item {
 
     readonly property int minTemperatureYGridCount: 20
 
-    property double temperatureYGridStep: 1.0
-    property int temperatureYGridCount: minTemperatureYGridCount   // Number of vertical grid Temperature elements
-
     // Decimal places for pressure y-axis labels
     property int rightAxisDecimals: 0
 
