@@ -439,11 +439,8 @@ KCM.SimpleKCM {
                     Layout.fillWidth: true
                     implicitHeight: colLabel.height
 
-                    color: selected ? highlightColor : viewBackgroundColor
+                    color: selected ? highlightColor : 'transparent'
 
-
-                    property var viewBackgroundColor: Kirigami.Theme.viewBackgroundColor ?
-                                                        Kirigami.Theme.viewBackgroundColor : 'white'
                     property var highlightColor: Kirigami.Theme.highlightColor ?
                                                         Kirigami.Theme.highlightColor : 'green'
 
