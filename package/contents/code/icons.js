@@ -53,7 +53,7 @@ function getWindSpeedIconResource(windSpeed, iconSetType) {
     if (iconSetType === WindIconSetType.QULLE) {
         return "images/wind-barbs/" + windSpeed.toFixed(0) + ".svg"
     }
-    return "images/dark" + windSpeed.toFixed(0) + ".svg"
+    return "images/light" + windSpeed.toFixed(0) + ".svg"
 }
 
 const IconSetType = {
