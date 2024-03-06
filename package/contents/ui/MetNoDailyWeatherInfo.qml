@@ -16,8 +16,6 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
-// import QtGraphicalEffects 1.0
-import Qt5Compat.GraphicalEffects
 import org.kde.plasma.core as PlasmaCore
 import "../code/icons.js" as IconTools
 import org.kde.kirigami as Kirigami
@@ -26,7 +24,6 @@ import org.kde.kirigami as Kirigami
 Item {
 
     property int nColumns: 5
-    property color lineColor: main.theme.textColor
 
     property var model: null
     property var dayParts: model ? model.models : null
@@ -105,24 +102,12 @@ Item {
                         Layout.leftMargin: Kirigami.Units.smallSpacing
                     }
 
-                    Item {
-                        id: dayTitleLine
-                        height: 1 * 1
-
-                        Layout.fillWidth: true
-
-                        LinearGradient {
-                            anchors.fill: parent
-                            start: Qt.point(0, 0)
-                            end: Qt.point(parent.width, 0)
-                            gradient: Gradient {
-                                GradientStop { position: 0.0; color: Qt.rgba(lineColor.r, lineColor.g, lineColor.b, 0) }
-                                GradientStop { position: 0.1; color: Qt.rgba(lineColor.r, lineColor.g, lineColor.b, 1) }
-                                GradientStop { position: 1.0; color: Qt.rgba(lineColor.r, lineColor.g, lineColor.b, 0) }
-                            }
-                        }
-
+                    GradientUnderline {
+                        lineColor: main.theme.textColor
                         visible: index !== 0
+
+                        Layout.preferredHeight: 1
+                        Layout.fillWidth: true
                     }
                 }
             }
