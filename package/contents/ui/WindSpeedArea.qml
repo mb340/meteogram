@@ -71,7 +71,10 @@ Item {
                 Image {
                     id: wind
                     source: !item || isNaN(item.windSpeed) ? "" :
-                                windStrength(item.windSpeed, windSpeedRepeater.iconSetType)
+                                IconTools.getWindSpeedIconResource(
+                                    unitUtils.convertWindspeed(item.windSpeed,
+                                                               UnitUtils.WindSpeedType.KNOTS),
+                                    windSpeedRepeater.iconSetType)
                     fillMode: Image.PreserveAspectFit
 
                     width: height
@@ -103,11 +106,6 @@ Item {
                     rotation = (Math.round( rotation / 22.5 ) * 22.5)
                     rotation = (rotation >= 180) ? rotation - 180 : rotation + 180
                     return rotation
-                }
-                function windStrength(windspeed, iconSetType) {
-                    windspeed = unitUtils.convertWindspeed(windspeed,
-                                            UnitUtils.WindSpeedType.KNOTS)
-                    return IconTools.getWindSpeedIconResource(windspeed, iconSetType)
                 }
             }
         }
