@@ -704,7 +704,9 @@ Canvas {
             if (minY1 < minT || maxY1 > maxT) {
                 minValue = Math.min(minValue, minY1)
                 maxValue = Math.max(maxValue, maxY1)
-                var [minT, maxT] = computeTemperatureAxisRange(minValue, maxValue)
+                var [_minT, _maxT] = computeTemperatureAxisRange(minValue, maxValue)
+                maxT = Math.max(_maxT, maxT)
+                minT = Math.min(_minT, minT)
             }
         }
 
