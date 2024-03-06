@@ -167,25 +167,25 @@ Item {
         cursorShape: Qt.PointingHandCursor
         anchors.fill: meteogramCanvas
 
-        onPressed: {
+        onPressed: function(mouse) {
             fullRepresentation.showMeteogramInfo = true
             cursorShape = Qt.CrossCursor
             update(mouse)
             meteogramInfoCanvas.requestPaint()
         }
 
-        onReleased: {
+        onReleased: function(mouse) {
             fullRepresentation.showMeteogramInfo = false
             cursorShape = Qt.PointingHandCursor
             meteogramInfoCanvas.requestPaint()
         }
 
-        onExited: {
+        onExited: function(mouse) {
             fullRepresentation.showMeteogramInfo = false
             meteogramInfoCanvas.requestPaint()
         }
 
-        onPositionChanged: {
+        onPositionChanged: function(mouse) {
             update(mouse)
             if (meteogramInfo && meteogramInfo.visible) {
                 meteogramInfoCanvas.requestPaint()
