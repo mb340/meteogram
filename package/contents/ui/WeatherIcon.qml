@@ -79,7 +79,6 @@ Loader {
             DropShadow {
                 anchors.fill: image
                 z: -1
-                scale: 1.05
             }
         }
     }
