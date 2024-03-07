@@ -106,6 +106,7 @@ Loader {
 
             DropShadow {
                 anchors.fill: image
+                z: -1
             }
         }
     }
