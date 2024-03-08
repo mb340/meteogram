@@ -86,9 +86,6 @@ PlasmoidItem {
 
     signal fullRedraw()
 
-    anchors.fill: parent
-
-
     switchWidth: 44 * Kirigami.Units.gridUnit
     switchHeight: 28 * Kirigami.Units.gridUnit
 
