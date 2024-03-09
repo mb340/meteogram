@@ -120,7 +120,6 @@ Item {
 
             Loader {
                 property bool isMidnight: hourFrom === 0
-                property string dayStr: !isMidnight ? "" : Qt.locale().dayName(date.getDay(), Locale.LongFormat)
                 property double itemEndX: !isMidnight ? 0 : timeScale.translate(date) + labelWidth
                 property bool doLoad: isMidnight && (itemEndX < hourGrid.width)
 
@@ -130,7 +129,7 @@ Item {
             Component {
                 id: dayLabel
                 Label {
-                    text: dayStr
+                    text: !isMidnight ? "" : Qt.locale().dayName(date.getDay(), Locale.LongFormat)
                     font.pixelSize: Kirigami.Theme.smallFont.pixelSize
                     font.pointSize: -1
 
