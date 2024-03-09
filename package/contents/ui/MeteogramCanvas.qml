@@ -778,7 +778,7 @@ Canvas {
         timeScale.setDomain(startTime.getTime(), endTime.getTime())
         windSpeedArea.setModel(meteogramModel.count)
         horizontalLines.setModel(temperatureYGridCount, temperatureYGridStep, maxT)
-        hourGrid2.setModel(startTime)
+        hourGrid2.setModel(startTime, endTime)
     }
 
     /*

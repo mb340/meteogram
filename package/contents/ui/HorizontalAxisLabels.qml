@@ -15,19 +15,32 @@ Item {
         id: hourGridModel2
     }
 
-    function setModel(startTime) {
-        hourGrid.startTime = startTime
-        let hour = startTime.getHours()
-        let rem = hour % meteogramCanvas.hourStep
-        if (rem != 0) {
-            rem = meteogramCanvas.hourStep - rem
+    function setModel(startTime, endTime) {
+        const MS_PER_HOUR = 60 * 60 * 1000
+        let startHour = startTime.getHours()
+
+        let date = new Date(startTime)
+
+        let rem = startHour % meteogramCanvas.hourStep
+        if (rem !== 0) {
+            let step = meteogramCanvas.hourStep - rem
+            date = new Date(Number(date) + (step * MS_PER_HOUR))
         }
-        // print('startTime', startTime, 'hour', hour, 'hourStep', meteogramCanvas.hourStep, 'rem', rem)
 
         hourGridModel2.beginList()
-        let i = rem
-        for (; (i - rem) < root.nHours - rem; i += meteogramCanvas.hourStep) {
-            hourGridModel2.addItem({ index: i })
+        hourGridModel2.addItem({ date: date })
+
+        while (true) {
+            let step = meteogramCanvas.hourStep
+            let rem = date.getHours() % step
+            if (rem !== 0) {
+                step = step - rem
+            }
+            date = new Date(Number(date) + (step * MS_PER_HOUR))
+            if (date > endTime) {
+                break
+            }
+            hourGridModel2.addItem({ date: date })
         }
         hourGridModel2.endList()
     }
@@ -44,19 +57,8 @@ Item {
             height: hourGrid.height
             width: 0
 
-            x: xAxisScale.translate(model.index)
+            x: timeScale.translate(date)
             y: 0
-
-            // function getDate(startTime, index, stepSize) {
-            //     let date =  new Date(Number(startTime) + (index * stepSize))
-            //     print(date)
-            //     return date
-            // }
-            // property date date: getDate(hourGrid.startTime, model.index, hourGridRepeater.oneHourMs)
-
-            property date date: new Date(Number(hourGrid.startTime) +
-                                (model.index * hourGridRepeater.oneHourMs))
-
 
             property int hourFrom: date.getHours()
             property bool dayBegins: hourFrom === 0
