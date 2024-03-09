@@ -191,13 +191,41 @@ Item {
             }
         }
 
+        function search(ts, model, idx, si, ei) {
+            if (idx === undefined) {
+                idx = Math.floor(model.count / 2)
+                si = 0
+                ei = model.count
+            }
+            if (ei - si <= 1) {
+                return idx
+            }
+
+            let data = model.get(idx)
+            let from = data.from
+            if (ts == from) {
+                return idx
+            } else if (ts < from) {
+                ei = idx
+                idx = Math.floor(si + ((ei - si) / 2))
+                return search(ts, model, idx, si, ei)
+            } else if (ts > from) {
+                si = idx
+                idx = Math.floor(si + ((ei - si) / 2))
+                return search(ts, model, idx, si, ei)
+            }
+            return undefined
+        }
+
         function update(mouse) {
             if (!meteogramInfo) {
                 return
             }
 
-            var idx = Math.round(xIndexScale.invert(mouse.x) - 0.5)
-            if (idx < 0 || idx >= meteogramModel.count) {
+            let ts = timeScale.invert(mouse.x)
+            let idx = search(ts, meteogramModel)
+
+            if (idx === undefined) {
                 return
             }
 
