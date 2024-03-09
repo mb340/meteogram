@@ -145,6 +145,9 @@ Item {
         anchors.fill: meteogramCanvas
         z: 4
 
+        property double x0: 0
+        property double x1: 0
+
         onPaint: {
             var context = getContext("2d")
             context.clearRect(0, 0, width, height)
@@ -157,7 +160,6 @@ Item {
                                         main.theme.meteogram.highlightColor.b,
                                         0.25)
 
-            var [x0, x1] = meteogramCanvas.getItemIntervalX(meteogramInfo.idx)
             context.fillRect(x0, 0, x1 - x0, height);
         }
     }
@@ -225,8 +227,11 @@ Item {
                 return
             }
 
-            var [x0, x1] = meteogramCanvas.getItemIntervalX(idx)
+            var [x0, x1] = getItemIntervalX(idx)
             var rectWidth = x1 - x0
+
+            meteogramInfoCanvas.x0 = x0
+            meteogramInfoCanvas.x1 = x1
 
             var globalCoord = mapToItem(fullRepresentation, 0, 0)
             meteogramInfo.x = globalCoord.x + mouse.x
@@ -245,6 +250,30 @@ Item {
             if (meteogramInfo && meteogramInfo.visible) {
                 meteogramInfoCanvas.requestPaint()
             }
+        }
+
+        function getItemIntervalX(index) {
+            /*
+             * Get the x-axis drawing coordinates of a meteogram item.
+             */
+            if (index < 0 || index > meteogramModel.count - 1) {
+                return null
+            }
+
+            var d0 = meteogramModel.get(index)
+            var t0 = d0.from
+
+            var x0 = timeScale.translate(t0)
+            var x1 = NaN
+
+            if (index < meteogramModel.count - 1) {
+                var d1 = meteogramModel.get(index + 1)
+                var t1 = d1.from
+                x1 = timeScale.translate(t1)
+            } else {
+                x1 = meteogramCanvas.width
+            }
+            return [x0, x1]
         }
     }
 
