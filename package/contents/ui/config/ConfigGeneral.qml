@@ -176,6 +176,8 @@ KCM.SimpleKCM {
 
                     MouseArea {
                         anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+
                         onClicked: {
                             let index = tableView.model.index(row, 0)
                             if (!tableView.selectionModel.isSelected(index)) {
