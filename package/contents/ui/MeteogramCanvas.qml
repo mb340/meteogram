@@ -66,7 +66,6 @@ Canvas {
     property alias precipitationScale: precipitationScale
     property alias cloudAreaScale: cloudAreaScale
     property alias humidityScale: humidityScale
-    property alias xIndexScale: xIndexScale
     property alias timeScale: timeScale
 
     LinearScale {
@@ -100,11 +99,6 @@ Canvas {
         id: humidityScale
         domain: [0, 100]
         range: [height, 0]
-    }
-
-    LinearScale {
-        id: xIndexScale
-        range: [0, width]
     }
 
     LinearScale {
@@ -765,8 +759,6 @@ Canvas {
 
         precipitationScale.setDomain(0, 50)
         precipitationMaxGraphY = 15
-
-        xIndexScale.setDomain(0, meteogramModel.count - 1)
 
         timeScale.setDomain(startTime.getTime(), endTime.getTime())
         windSpeedArea.setModel(meteogramModel.count)

@@ -54,7 +54,6 @@ Item {
     property alias precipitationScale: meteogramCanvas.precipitationScale
     property alias cloudAreaScale: meteogramCanvas.cloudAreaScale
     property alias humidityScale: meteogramCanvas.humidityScale
-    property alias xIndexScale: meteogramCanvas.xIndexScale
     property alias timeScale: meteogramCanvas.timeScale
 
     property alias nHours: meteogramCanvas.nHours
