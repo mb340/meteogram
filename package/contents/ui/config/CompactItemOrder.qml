@@ -206,6 +206,8 @@ Column {
             MouseArea {
                 anchors.fill: tableViewItem
 
+                cursorShape: Qt.PointingHandCursor
+
                 onClicked: {
                     if (parentTable != enabledTableView) {
                         enabledTableView.selectionModel.clear()
