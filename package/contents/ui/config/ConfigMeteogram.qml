@@ -450,6 +450,8 @@ KCM.SimpleKCM {
                         width:  parent.width
                         height: colLabel.height
 
+                        cursorShape: Qt.PointingHandCursor
+
                         RowLayout {
                             anchors.left: parent.left
                             anchors.right: parent.right
