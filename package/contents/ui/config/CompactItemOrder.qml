@@ -57,6 +57,7 @@ Column {
 
                 TableView {
                     id: disabledTableView
+                    clip: true
 
                     Layout.preferredWidth: parent.width
                     Layout.preferredHeight: parent.height
@@ -159,6 +160,7 @@ Column {
 
                 TableView {
                     id: enabledTableView
+                    clip: true
 
                     Layout.preferredWidth: parent.width
                     Layout.preferredHeight: parent.height
