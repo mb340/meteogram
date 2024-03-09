@@ -7,9 +7,6 @@ import "data_models"
 Item {
     id: hourGrid
 
-    property double hourItemWidth: nHours < 2 ? 0 : imageWidth / (nHours - 1)
-
-    property var startTime: new Date(0)
 
     ManagedListModel {
         id: hourGridModel2
@@ -50,8 +47,6 @@ Item {
         id: hourGridRepeater
 
         model: fillModels ? hourGridModel2.model : []
-
-        readonly property int oneHourMs: 60 * 60 * 1000
 
         delegate: Item {
             height: hourGrid.height
