@@ -68,7 +68,6 @@ Canvas {
     property alias humidityScale: humidityScale
     property alias xIndexScale: xIndexScale
     property alias timeScale: timeScale
-    property alias xAxisScale: xAxisScale
 
     LinearScale {
         id: temperatureScale
@@ -105,11 +104,6 @@ Canvas {
 
     LinearScale {
         id: xIndexScale
-        range: [0, width]
-    }
-
-    LinearScale {
-        id: xAxisScale
         range: [0, width]
     }
 
@@ -774,7 +768,6 @@ Canvas {
 
         xIndexScale.setDomain(0, meteogramModel.count - 1)
 
-        xAxisScale.setDomain(0, root.nHours - 1)
         timeScale.setDomain(startTime.getTime(), endTime.getTime())
         windSpeedArea.setModel(meteogramModel.count)
         horizontalLines.setModel(temperatureYGridCount, temperatureYGridStep, maxT)
