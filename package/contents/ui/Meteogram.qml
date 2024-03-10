@@ -169,8 +169,7 @@ Item {
         onPressed: function(mouse) {
             fullRepresentation.showMeteogramInfo = true
             cursorShape = Qt.CrossCursor
-            update(mouse)
-            meteogramInfoCanvas.requestPaint()
+            Qt.callLater(() => update(mouse))
         }
 
         onReleased: function(mouse) {
@@ -185,10 +184,7 @@ Item {
         }
 
         onPositionChanged: function(mouse) {
-            update(mouse)
-            if (meteogramInfo && meteogramInfo.visible) {
-                meteogramInfoCanvas.requestPaint()
-            }
+            Qt.callLater(() => update(mouse))
         }
 
         function search(ts, model, idx, si, ei) {
@@ -244,6 +240,10 @@ Item {
 
                 meteogramInfo.idx = idx
                 meteogramInfo.hourModel = meteogramModel.get(idx)
+            }
+
+            if (meteogramInfo && meteogramInfo.visible) {
+                meteogramInfoCanvas.requestPaint()
             }
         }
     }
