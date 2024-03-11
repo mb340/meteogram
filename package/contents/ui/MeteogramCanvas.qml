@@ -681,7 +681,7 @@ Canvas {
         // Account for icon height
         temperatureScale.setDomain(minT, maxT)
         let heightInT = temperatureScale.invertUnitStep(2.5 * rectWidth)
-        if ((maxValue + heightInT) - minValue > minTemperatureYGridCount) {
+        if ((maxValue + heightInT) > maxT) {
             maxT = Math.ceil(maxT + heightInT)
         }
 
