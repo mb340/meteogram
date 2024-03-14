@@ -67,7 +67,8 @@ Item {
         text: sizerText
 
         color: Qt.rgba(0, 1, 0, 1)
-        opacity: 0
+
+        visible: false
 
         // font.family: theme.defaultFont
         // font.pointSize: fontPointSize

@@ -55,7 +55,8 @@ Item {
         verticalAlignment: Text.AlignVCenter
 
         color: Qt.rgba(1, 0, 0, 1)
-        opacity: 0
+
+        visible: false
 
         FontMetrics {
             id: temperatureIconMetrics
