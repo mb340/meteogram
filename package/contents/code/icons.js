@@ -327,6 +327,8 @@ var WeatherFont = {
         'wi-day-snow-thunderstorm': '\uf06b',
         'wi-night-snow-thunderstorm': '\uf06c',
         'wi-dust': '\uf063',
+        'wi-day-sleet': '\uf0b2',
+        'wi-night-sleet': '\ufb03',
         'wi-day-sleet-storm': '\uf068',
         'wi-night-sleet-storm': '\uf069',
         'wi-storm-showers': '\uf01d',
