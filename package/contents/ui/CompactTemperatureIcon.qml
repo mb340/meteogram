@@ -168,8 +168,6 @@ Item {
 
                 fontSizeMode: Text.Fit
                 font.pixelSize: 1024
-
-                visible: true
             }
         }
 
