@@ -147,7 +147,7 @@ Item {
                         anchors.fill: parent
                         onClicked: main.setNextPlace(modelData.previous)
                         onEntered: parent.color = main.theme.highlightColor
-                        onExited: parent.color = main.theme.textColor
+                        onExited: parent.color = Qt.binding(() => main.theme.textColor)
                     }
                 }
             }
