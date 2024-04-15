@@ -14,9 +14,12 @@ Loader {
             colorization: 1.0
             colorizationColor: !main.theme?.isDarkMode ? "#80000000" : "#80ffffff"
 
-            blurEnabled: true
-            blur: 0.1
-            blurMax: 4
+            scale: 1.1
+            opacity: !main.theme?.isDarkMode ? 0.25 : 1.0
+
+            // blurEnabled: true
+            // blur: 0.1
+            // blurMax: 4
         }
     }
 }
